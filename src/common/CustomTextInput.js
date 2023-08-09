@@ -1,16 +1,35 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {TextInput} from 'react-native-paper';
+import {Controller} from 'react-hook-form';
 
-const CustomTextInput = ({label, value, onChangeText, mode, keyboardType}) => {
+const CustomTextInput = ({
+  label,
+  mode,
+  keyboardType,
+  secureTextEntry,
+  name,
+  rules,
+  control,
+}) => {
   return (
-    <TextInput
-      label={label}
-      value={value}
-      onChangeText={text => onChangeText(text)}
-      mode={mode}
-      keyboardType={keyboardType}
-    />
+    <>
+      <Controller
+        control={control}
+        render={({field: {onChange, onBlur, value}}) => (
+          <TextInput
+            onChangeText={onChange}
+            value={value}
+            label={label}
+            mode={mode}
+            keyboardType={keyboardType}
+            secureTextEntry={secureTextEntry}
+          />
+        )}
+        name={name}
+        rules={rules}
+      />
+    </>
   );
 };
 

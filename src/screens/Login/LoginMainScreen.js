@@ -4,10 +4,30 @@ import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../common/CustomButton';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginMainScreen = () => {
   const [loginType, setLoginType] = useState('customer');
   const navigation = useNavigation();
+
+  const LoginPageNavigate = async () => {
+    try {
+      await AsyncStorage.setItem('loginType', loginType);
+      console.log('Data successfully stored.');
+      navigation.navigate('Login');
+    } catch (error) {
+      console.error('Error storing data:', error);
+    }
+  };
+  const SignUpPageNavigate = async () => {
+    try {
+      await AsyncStorage.setItem('loginType', loginType);
+      console.log('Data successfully stored.');
+      navigation.navigate('SignUp');
+    } catch (error) {
+      console.error('Error storing data:', error);
+    }
+  };
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
@@ -61,19 +81,17 @@ const LoginMainScreen = () => {
               styles.businessMain,
               {
                 borderColor:
-                  loginType === 'business'
-                    ? '#29977E'
-                    : 'rgba(21, 24, 39, 0.10)',
+                  loginType === 'vendor' ? '#29977E' : 'rgba(21, 24, 39, 0.10)',
               },
             ]}>
-            <TouchableOpacity onPress={() => setLoginType('business')}>
+            <TouchableOpacity onPress={() => setLoginType('vendor')}>
               <View style={styles.icons}>
                 <Icon
                   name="male"
                   size={20}
-                  color={loginType === 'business' ? 'green' : 'gray'}
+                  color={loginType === 'vendor' ? 'green' : 'gray'}
                 />
-                {loginType === 'business' && (
+                {loginType === 'vendor' && (
                   <Icon name="check-circle" size={25} color="green" />
                 )}
               </View>
@@ -93,7 +111,7 @@ const LoginMainScreen = () => {
               name="Login"
               color="#FFFFFF"
               backgroundColor="#151827"
-              onPress={() => navigation.navigate('Login')}
+              onPress={() => LoginPageNavigate()}
             />
           </View>
           <View style={{marginTop: 16, width: 340}}>
@@ -102,7 +120,7 @@ const LoginMainScreen = () => {
               color="#151827"
               backgroundColor="#FFFFFF"
               borderColor="#151827"
-              onPress={() => navigation.navigate('SignUp')}
+              onPress={() => SignUpPageNavigate()}
             />
           </View>
         </View>

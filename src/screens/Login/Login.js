@@ -1,15 +1,48 @@
 import {Image, StyleSheet, Text, ScrollView, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomButton from '../../common/CustomButton';
 import CustomTextInput from '../../common/CustomTextInput';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {Controller, useForm} from 'react-hook-form';
+import {TextInput} from 'react-native-paper';
 
 const Login = () => {
   const navigation = useNavigation();
+  const [loginType, setLoginType] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
+
+  const onError = errors => console.log('Errors Occurred !! :', errors);
+
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('loginType');
+      if (value !== null) {
+        setLoginType(value);
+      } else {
+        console.log('Value not found in storage.');
+      }
+    } catch (error) {
+      console.error('Error retrieving data:', error);
+    }
+  };
+
+  const onSubmit = data => {
+    console.log('ddddddddd', data);
+  };
+
+  useEffect(() => {
+    retrieveData();
+  }, []);
+
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
-      <ScrollView style={styles.main}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
         <View style={{alignSelf: 'center'}}>
           <Image
             source={require('../../images/logo.png')}
@@ -17,25 +50,48 @@ const Login = () => {
           />
         </View>
 
-        <Text style={styles.joinText}>Login as a customer</Text>
+        <Text style={styles.joinText}>
+          Login as a {loginType === 'customer' ? 'customer' : 'vendor'}
+        </Text>
         <Text style={styles.childText}>
           Please login or sign up to continue our app
         </Text>
 
         <View>
           <CustomTextInput
-            label="Phone Number"
-            onChangeText={() => {}}
+            label={
+              loginType === 'customer'
+                ? 'Contact Number'
+                : 'Email/Contact Number'
+            }
             mode="outlined"
-            keyboardType="phone-pad"
+            keyboardType={
+              loginType === 'customer' ? 'phone-pad' : 'email-address'
+            }
+            name="username"
+            control={control}
+            rules={{required: 'Username is required *'}}
           />
+          {errors?.username && (
+            <Text style={{color: 'red', marginTop: 4}}>
+              {errors.username.message}
+            </Text>
+          )}
         </View>
         <View style={{marginTop: 26}}>
           <CustomTextInput
             label="Password"
-            onChangeText={() => {}}
             mode="outlined"
+            name="password"
+            secureTextEntry={true}
+            control={control}
+            rules={{required: 'Password is required *'}}
           />
+          {errors?.password && (
+            <Text style={{color: 'red', marginTop: 4}}>
+              {errors.password.message}
+            </Text>
+          )}
         </View>
 
         <Text style={styles.fpText}>Forgot Password?</Text>
@@ -45,7 +101,7 @@ const Login = () => {
             name="Login"
             color="#FFFFFF"
             backgroundColor="#151827"
-            onPress={() => {}}
+            onPress={handleSubmit(onSubmit, onError)}
           />
         </View>
         <Text style={styles.orText}>Or</Text>
