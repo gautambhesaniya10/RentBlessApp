@@ -6,6 +6,7 @@ import CustomTextInput from '../../common/CustomTextInput';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
+import {signUp} from '../../graphql/mutations/authMutations';
 
 const SignUp = () => {
   const {
@@ -19,6 +20,7 @@ const SignUp = () => {
 
   const navigation = useNavigation();
   const [loginType, setLoginType] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const retrieveData = async () => {
     try {
@@ -34,7 +36,39 @@ const SignUp = () => {
   };
 
   const onSubmit = data => {
-    console.log('ddddddddd', data);
+    setLoading(true);
+    signUp(
+      loginType === 'vendor'
+        ? {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            user_contact: data.user_contact,
+            user_password: data.user_password,
+            user_type: 'vendor',
+            user_email: data.user_email,
+          }
+        : {
+            first_name: data.first_name,
+            last_name: data.last_name,
+            user_contact: data.user_contact,
+            user_password: data.user_password,
+            user_type: 'customer',
+          },
+    ).then(
+      async res => {
+        setLoading(false);
+        //   dispatch(loginUserId(res.data.signUp.user));
+        //   dispatch(loadUserProfileStart({ id: res.data.signUp.user }));
+        await AsyncStorage.setItem('token', res.data.signUp.token);
+        //   localStorage.setItem("userId", res.data.signUp.user);
+        // alert(res.data.signUp.message);
+        navigation.navigate('UserHomeScreen');
+      },
+      error => {
+        console.log('eeeee', error);
+        setLoading(false);
+      },
+    );
   };
 
   useEffect(() => {
@@ -176,6 +210,7 @@ const SignUp = () => {
             color="#FFFFFF"
             backgroundColor="#151827"
             onPress={handleSubmit(onSubmit, onError)}
+            loading={loading}
           />
         </View>
         <Text style={styles.orText}>Or</Text>

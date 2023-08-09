@@ -13,7 +13,6 @@ const LoginMainScreen = () => {
   const LoginPageNavigate = async () => {
     try {
       await AsyncStorage.setItem('loginType', loginType);
-      console.log('Data successfully stored.');
       navigation.navigate('Login');
     } catch (error) {
       console.error('Error storing data:', error);
@@ -22,7 +21,6 @@ const LoginMainScreen = () => {
   const SignUpPageNavigate = async () => {
     try {
       await AsyncStorage.setItem('loginType', loginType);
-      console.log('Data successfully stored.');
       navigation.navigate('SignUp');
     } catch (error) {
       console.error('Error storing data:', error);

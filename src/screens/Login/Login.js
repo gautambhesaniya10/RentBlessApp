@@ -5,12 +5,13 @@ import CustomButton from '../../common/CustomButton';
 import CustomTextInput from '../../common/CustomTextInput';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Controller, useForm} from 'react-hook-form';
-import {TextInput} from 'react-native-paper';
+import {useForm} from 'react-hook-form';
+import {signIn} from '../../graphql/mutations/authMutations';
 
 const Login = () => {
   const navigation = useNavigation();
   const [loginType, setLoginType] = useState('');
+  const [loading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -31,10 +32,52 @@ const Login = () => {
       console.error('Error retrieving data:', error);
     }
   };
-
   const onSubmit = data => {
-    console.log('ddddddddd', data);
+    setLoading(true);
+    signIn({
+      username: data.username,
+      password: data.password,
+      type: loginType === 'vendor' ? 'vendor' : 'customer',
+    })
+      .then(
+        async res => {
+          console.log('reslogin', res);
+          setLoading(false);
+          // dispatch(loginUserId(res.data.signIn.user));
+          // dispatch(loadUserProfileStart({ id: res.data.signIn.user }));
+          // localStorage.setItem("userId", res.data.signIn.user);
+          await AsyncStorage.setItem('token', res.data.signIn.token);
+          navigation.navigate('UserHomeScreen');
+        },
+        error => {
+          setLoading(false);
+          console.log('login____Error', error.message);
+        },
+      )
+      .catch(error => {
+        setLoading(false);
+        console.log('login____Error', error.message);
+      });
   };
+
+  // const onSubmit = async data => {
+  //   setLoading(true);
+  //   try {
+  //     const res = await signIn({
+  //       username: data.username,
+  //       password: data.password,
+  //       type: loginType === 'vendor' ? 'vendor' : 'customer',
+  //     });
+
+  //     console.log('res11111111', res);
+  //     setLoading(false);
+  //     await AsyncStorage.setItem('token', res.data.signIn.token);
+  //     navigation.navigate('UserHomeScreen');
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.log('login____Error', error.message);
+  //   }
+  // };
 
   useEffect(() => {
     retrieveData();
@@ -102,6 +145,7 @@ const Login = () => {
             color="#FFFFFF"
             backgroundColor="#151827"
             onPress={handleSubmit(onSubmit, onError)}
+            loading={loading}
           />
         </View>
         <Text style={styles.orText}>Or</Text>
