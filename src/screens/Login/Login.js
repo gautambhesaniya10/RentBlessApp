@@ -7,9 +7,13 @@ import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
 import {signIn} from '../../graphql/mutations/authMutations';
+import {useSelector, useDispatch} from 'react-redux';
+import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 
 const Login = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [loginType, setLoginType] = useState('');
   const [loading, setLoading] = useState(false);
   const {
@@ -43,11 +47,12 @@ const Login = () => {
         async res => {
           console.log('reslogin', res);
           setLoading(false);
-          // dispatch(loginUserId(res.data.signIn.user));
-          // dispatch(loadUserProfileStart({ id: res.data.signIn.user }));
-          // localStorage.setItem("userId", res.data.signIn.user);
           await AsyncStorage.setItem('token', res.data.signIn.token);
-          navigation.navigate('UserHomeScreen');
+          await AsyncStorage.setItem('userId', res.data.signIn.user);
+          // dispatch(loginUserId(res.data.signIn.user));
+          dispatch(loadUserProfileStart());
+          // localStorage.setItem("userId", res.data.signIn.user);
+          navigation.navigate('VendorMain');
         },
         error => {
           setLoading(false);
@@ -59,25 +64,6 @@ const Login = () => {
         console.log('login____Error', error.message);
       });
   };
-
-  // const onSubmit = async data => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await signIn({
-  //       username: data.username,
-  //       password: data.password,
-  //       type: loginType === 'vendor' ? 'vendor' : 'customer',
-  //     });
-
-  //     console.log('res11111111', res);
-  //     setLoading(false);
-  //     await AsyncStorage.setItem('token', res.data.signIn.token);
-  //     navigation.navigate('UserHomeScreen');
-  //   } catch (error) {
-  //     setLoading(false);
-  //     console.log('login____Error', error.message);
-  //   }
-  // };
 
   useEffect(() => {
     retrieveData();
@@ -114,6 +100,7 @@ const Login = () => {
             name="username"
             control={control}
             rules={{required: 'Username is required *'}}
+            activeOutlineColor="#151827"
           />
           {errors?.username && (
             <Text style={{color: 'red', marginTop: 4}}>
@@ -129,6 +116,7 @@ const Login = () => {
             secureTextEntry={true}
             control={control}
             rules={{required: 'Password is required *'}}
+            activeOutlineColor="#151827"
           />
           {errors?.password && (
             <Text style={{color: 'red', marginTop: 4}}>

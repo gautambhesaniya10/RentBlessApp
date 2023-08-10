@@ -7,6 +7,8 @@ import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
 import {signUp} from '../../graphql/mutations/authMutations';
+import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
+import {useSelector, useDispatch} from 'react-redux';
 
 const SignUp = () => {
   const {
@@ -19,6 +21,8 @@ const SignUp = () => {
   const onError = errors => console.log('Errors Occurred !! :', errors);
 
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
   const [loginType, setLoginType] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -57,12 +61,14 @@ const SignUp = () => {
     ).then(
       async res => {
         setLoading(false);
-        //   dispatch(loginUserId(res.data.signUp.user));
-        //   dispatch(loadUserProfileStart({ id: res.data.signUp.user }));
         await AsyncStorage.setItem('token', res.data.signUp.token);
+        await AsyncStorage.setItem('userId', res.data.signUp.user);
+
+        //   dispatch(loginUserId(res.data.signUp.user));
+        dispatch(loadUserProfileStart());
         //   localStorage.setItem("userId", res.data.signUp.user);
         // alert(res.data.signUp.message);
-        navigation.navigate('UserHomeScreen');
+        navigation.navigate('VendorMain');
       },
       error => {
         console.log('eeeee', error);
@@ -92,6 +98,7 @@ const SignUp = () => {
 
         <View style={{marginTop: 26}}>
           <CustomTextInput
+            activeOutlineColor="#151827"
             label="First Name"
             mode="outlined"
             name="first_name"
@@ -106,6 +113,7 @@ const SignUp = () => {
         </View>
         <View style={{marginTop: 26}}>
           <CustomTextInput
+            activeOutlineColor="#151827"
             label="Last Name"
             mode="outlined"
             name="last_name"
@@ -120,6 +128,7 @@ const SignUp = () => {
         </View>
         <View style={{marginTop: 26}}>
           <CustomTextInput
+            activeOutlineColor="#151827"
             label="Contact Number"
             mode="outlined"
             keyboardType="phone-pad"
@@ -146,6 +155,7 @@ const SignUp = () => {
         {loginType === 'vendor' && (
           <View style={{marginTop: 26}}>
             <CustomTextInput
+              activeOutlineColor="#151827"
               label="Email"
               mode="outlined"
               name="user_email"
@@ -169,6 +179,7 @@ const SignUp = () => {
 
         <View style={{marginTop: 26}}>
           <CustomTextInput
+            activeOutlineColor="#151827"
             label="Password"
             mode="outlined"
             name="user_password"
@@ -184,6 +195,7 @@ const SignUp = () => {
         </View>
         <View style={{marginTop: 26}}>
           <CustomTextInput
+            activeOutlineColor="#151827"
             label="Confirmed Password"
             mode="outlined"
             name="confirm_password"

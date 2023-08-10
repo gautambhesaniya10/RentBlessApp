@@ -1,0 +1,61 @@
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {getUserProfile} from '../../graphql/mutations/userProfile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const loadUserProfileStart = createAsyncThunk(
+  'user/fetchUser',
+  async () => {
+    const response = await getUserProfile();
+    // localStorage.setItem("loginType", response?.data?.user?.user_type);
+    // localStorage.setItem(
+    //   "userHaveAnyShop",
+    //   String(response?.data?.user?.userHaveAnyShop)
+    // );
+    AsyncStorage.setItem(
+      'userHaveAnyShop',
+      JSON.stringify(response?.data?.user?.userHaveAnyShop),
+    );
+    return response;
+  },
+);
+
+const userProfileSlice = createSlice({
+  name: 'user',
+  initialState: {
+    userProfile: {},
+    isAuthenticate: false,
+    userLoading: false,
+    error: '',
+  },
+  reducers: {
+    // increment: state => {
+    //   state.value += 1;
+    // },
+  },
+  extraReducers: builder => {
+    builder.addCase(loadUserProfileStart.pending, state => {
+      return {
+        ...state,
+        userLoading: true,
+      };
+    });
+    builder.addCase(loadUserProfileStart.fulfilled, (state, action) => {
+      return {
+        ...state,
+        userLoading: false,
+        userProfile: action.payload.data.user,
+        isAuthenticate: true,
+      };
+    });
+    builder.addCase(loadUserProfileStart.rejected, (state, action) => {
+      return {
+        ...state,
+        userLoading: false,
+        error: action.payload,
+      };
+    });
+  },
+});
+
+export const {increment, decrement} = userProfileSlice.actions;
+export default userProfileSlice.reducer;

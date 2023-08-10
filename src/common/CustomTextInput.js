@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
-import {TextInput} from 'react-native-paper';
+import {DefaultTheme, TextInput} from 'react-native-paper';
 import {Controller} from 'react-hook-form';
 
 const CustomTextInput = ({
@@ -11,7 +11,16 @@ const CustomTextInput = ({
   name,
   rules,
   control,
+  activeOutlineColor,
 }) => {
+  const customTheme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: 'white',
+    },
+  };
+
   return (
     <>
       <Controller
@@ -24,6 +33,9 @@ const CustomTextInput = ({
             mode={mode}
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
+            outlineColor="rgba(21, 24, 39, 0.10)"
+            activeOutlineColor={activeOutlineColor}
+            theme={customTheme}
           />
         )}
         name={name}
