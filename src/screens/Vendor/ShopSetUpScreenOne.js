@@ -7,19 +7,9 @@ import {FontStyle} from '../../../CommonStyle';
 import CustomButton from '../../common/CustomButton';
 import ActionButton from './ActionButton';
 
-const ShopSetUpScreenOne = ({setCurrentPosition}) => {
-  const {
-    control,
-    handleSubmit,
-    formState: {errors},
-  } = useForm();
-
+const ShopSetUpScreenOne = ({control, handleSubmit, errors, onSubmit}) => {
   const [ownerDetailShow, setOwnerDetailShow] = useState(true);
   const [shopInfoShow, setShopInfoShow] = useState(true);
-
-  const onSubmit = data => {
-    setCurrentPosition(1);
-  };
 
   return (
     <View style={{marginHorizontal: 16}}>
@@ -190,11 +180,6 @@ const ShopSetUpScreenOne = ({setCurrentPosition}) => {
           onPress={handleSubmit(onSubmit)}
         />
       </View>
-      {/* <ActionButton
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmit}
-        setCurrentPosition={setCurrentPosition}
-      /> */}
     </View>
   );
 };

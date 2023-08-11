@@ -55,6 +55,13 @@ const ShopSetUp = () => {
     formState: {errors},
   } = useForm();
 
+  const onSubmit = data => {
+    console.log('data++++++', data);
+    if (currentPosition !== 2) {
+      setCurrentPosition(currentPosition + 1);
+    }
+  };
+
   return (
     <View
       style={{
@@ -150,10 +157,23 @@ const ShopSetUp = () => {
               />
             </View>
             {currentPosition === 0 && (
-              <ShopSetUpScreenOne setCurrentPosition={setCurrentPosition} />
+              <ShopSetUpScreenOne
+                control={control}
+                handleSubmit={handleSubmit}
+                errors={errors}
+                onSubmit={onSubmit}
+                setCurrentPosition={setCurrentPosition}
+              />
             )}
             {currentPosition === 1 && (
-              <ShopSetUpScreenTwo setCurrentPosition={setCurrentPosition} />
+              <ShopSetUpScreenTwo
+                control={control}
+                handleSubmit={handleSubmit}
+                errors={errors}
+                onSubmit={onSubmit}
+                currentPosition={currentPosition}
+                setCurrentPosition={setCurrentPosition}
+              />
             )}
           </View>
         </View>
