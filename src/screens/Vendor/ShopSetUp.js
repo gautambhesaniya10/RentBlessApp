@@ -120,6 +120,7 @@ const ShopSetUp = () => {
               {
                 backgroundColor: 'white',
                 marginHorizontal: 20,
+                paddingBottom: 30,
               },
             ]}>
             <View style={styles.labelContainer}>

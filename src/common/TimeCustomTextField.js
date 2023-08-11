@@ -1,0 +1,29 @@
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {DefaultTheme, TextInput} from 'react-native-paper';
+
+const TimeCustomTextField = ({value, label, editable}) => {
+  const customStyle = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      background: 'white',
+    },
+  };
+  return (
+    <TextInput
+      value={value}
+      label={label}
+      editable={editable}
+      mode="outlined"
+      outlineColor="rgba(21, 24, 39, 0.10)"
+      activeOutlineColor="#29977E"
+      theme={customStyle}
+      style={{fontSize: 13, fontWeight: '700'}}
+    />
+  );
+};
+
+export default TimeCustomTextField;
+
+const styles = StyleSheet.create({});
