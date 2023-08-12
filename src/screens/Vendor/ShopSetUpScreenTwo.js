@@ -37,7 +37,7 @@ const ShopSetUpScreenTwo = ({
         style={{
           display: 'flex',
           flexDirection: 'row',
-          gap: 12,
+          gap: 9,
         }}>
         {['One', 'Two', 'Three']?.map((item, index) => {
           return (
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   shopImagesMain: {
     backgroundColor: '#FFF',
     alignItems: 'center',
-    width: 105,
+    width: 102,
     height: 100,
     justifyContent: 'center',
     borderRadius: 10,

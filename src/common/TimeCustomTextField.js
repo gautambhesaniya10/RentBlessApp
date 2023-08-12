@@ -19,7 +19,7 @@ const TimeCustomTextField = ({value, label, editable}) => {
       outlineColor="rgba(21, 24, 39, 0.10)"
       activeOutlineColor="#29977E"
       theme={customStyle}
-      style={{fontSize: 13, fontWeight: '700'}}
+      style={{fontSize: 12, fontWeight: '700', paddingLeft: 2}}
       textColor={
         value === 'Open 24 hours'
           ? 'green'

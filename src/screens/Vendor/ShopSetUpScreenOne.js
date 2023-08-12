@@ -374,7 +374,7 @@ const hourModelStyles = StyleSheet.create({
   },
   daysAll: {
     color: '#151827',
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: '600',
   },
   editDayHour: {
@@ -400,22 +400,21 @@ const hourModelStyles = StyleSheet.create({
   },
   bottomThreeButton: {
     backgroundColor: '#FFF',
-    justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 6,
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.10)',
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    gap: 5,
+    justifyContent: 'space-between',
+    gap: 3,
     flexDirection: 'row',
     paddingHorizontal: 6,
   },
   bottomThreeButtonText: {
     paddingVertical: 14,
     color: 'rgba(21, 24, 39, 0.56)',
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: '600',
     fontFamily: FontStyle,
   },
@@ -552,7 +551,7 @@ const HoursModal = ({
                     }}>
                     <Icon
                       name="pencil"
-                      size={13}
+                      size={12}
                       color="rgba(21, 24, 39, 0.56)"
                     />
                     <Text style={hourModelStyles.bottomThreeButtonText}>
@@ -575,7 +574,7 @@ const HoursModal = ({
                     }}>
                     <Icon
                       name="pencil"
-                      size={13}
+                      size={12}
                       color="rgba(21, 24, 39, 0.56)"
                     />
                     <Text style={hourModelStyles.bottomThreeButtonText}>
@@ -595,7 +594,7 @@ const HoursModal = ({
                     }}>
                     <Icon
                       name="pencil"
-                      size={13}
+                      size={12}
                       color="rgba(21, 24, 39, 0.56)"
                     />
                     <Text style={hourModelStyles.bottomThreeButtonText}>
