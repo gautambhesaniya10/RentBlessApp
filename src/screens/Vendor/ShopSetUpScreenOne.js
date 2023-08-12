@@ -27,9 +27,11 @@ const ShopSetUpScreenOne = ({control, handleSubmit, errors, onSubmit}) => {
 
   const [daysTimeModalOpen, setDaysTimeModalOpen] = useState(false);
   const [selectedDay, setSelectedDay] = useState();
+  const [selectedWeek, setSelectedWeek] = useState();
+  const [selectedAllHours, setSelectedAllHours] = useState();
 
   const [hours, setHours] = useState([
-    {key: 'Sunday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Sunday', value: ['09:00 AM - 10:00 PM']},
     {key: 'Monday', value: ['09:00 AM - 10:00 PM']},
     {key: 'Tuesday', value: ['07:00 AM - 08:00 PM']},
     {key: 'Wednesday', value: ['09:00 AM - 08:00 PM']},
@@ -269,18 +271,22 @@ const ShopSetUpScreenOne = ({control, handleSubmit, errors, onSubmit}) => {
         windowHeight={windowHeight}
         setDaysTimeModalOpen={setDaysTimeModalOpen}
         setSelectedDay={setSelectedDay}
+        setSelectedWeek={setSelectedWeek}
+        // selectedWeek={selectedWeek}
+        // selectedAllHours={selectedAllHours}
+        setSelectedAllHours={setSelectedAllHours}
       />
       <DaysTimeModal
         daysTimeModalOpen={daysTimeModalOpen}
         setDaysTimeModalOpen={setDaysTimeModalOpen}
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
-        // hours={hours}
-        // setHours={setHours}
-        // setSelectedWeek={setSelectedWeek}
-        // selectedWeek={selectedWeek}
-        // selectedAllHours={selectedAllHours}
-        // setSelectedAllHours={setSelectedAllHours}
+        hours={hours}
+        setHours={setHours}
+        setSelectedWeek={setSelectedWeek}
+        selectedWeek={selectedWeek}
+        selectedAllHours={selectedAllHours}
+        setSelectedAllHours={setSelectedAllHours}
       />
     </View>
   );
@@ -399,6 +405,16 @@ const hourModelStyles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: FontStyle,
   },
+  openEveryDaysText: {
+    color: 'green',
+    fontWeight: '700',
+    fontSize: 18,
+  },
+  closeEveryDaysText: {
+    color: 'red',
+    fontWeight: '700',
+    fontSize: 18,
+  },
 });
 
 const HoursModal = ({
@@ -408,6 +424,8 @@ const HoursModal = ({
   windowHeight,
   setDaysTimeModalOpen,
   setSelectedDay,
+  setSelectedAllHours,
+  setSelectedWeek,
 }) => {
   return (
     <>
@@ -452,23 +470,35 @@ const HoursModal = ({
                     </View>
                     {day['value'].map((time, index1) => (
                       <View style={hourModelStyles.timeLeftMain} key={index1}>
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 10,
-                          }}>
-                          <TimeCustomTextField
-                            value={time.split(' - ')[0]}
-                            label="Start"
-                            editable={false}
-                          />
-                          <TimeCustomTextField
-                            value={time.split(' - ')[1]}
-                            label="End"
-                            editable={false}
-                          />
-                        </View>
+                        {time === 'Closed' || time === 'Open 24 hours' ? (
+                          <Text
+                            style={
+                              time === 'Open 24 hours'
+                                ? hourModelStyles.openEveryDaysText
+                                : hourModelStyles.closeEveryDaysText
+                            }>
+                            {time}
+                          </Text>
+                        ) : (
+                          <View
+                            style={{
+                              display: 'flex',
+                              flexDirection: 'row',
+                              gap: 10,
+                            }}>
+                            <TimeCustomTextField
+                              value={time.split(' - ')[0]}
+                              label="Start"
+                              editable={false}
+                            />
+                            <TimeCustomTextField
+                              value={time.split(' - ')[1]}
+                              label="End"
+                              editable={false}
+                            />
+                          </View>
+                        )}
+
                         <TouchableOpacity
                           onPress={() => {
                             setDaysTimeModalOpen(true);
@@ -493,7 +523,19 @@ const HoursModal = ({
                   }}>
                   <TouchableOpacity
                     style={hourModelStyles.bottomThreeButton}
-                    onPress={() => {}}>
+                    onPress={() => {
+                      setDaysTimeModalOpen(true);
+
+                      setSelectedAllHours([
+                        'Sunday',
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                      ]);
+                    }}>
                     <Icon
                       name="pencil"
                       size={13}
@@ -505,7 +547,18 @@ const HoursModal = ({
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={hourModelStyles.bottomThreeButton}
-                    onPress={() => {}}>
+                    onPress={() => {
+                      setDaysTimeModalOpen(true);
+
+                      setSelectedWeek([
+                        'Monday',
+                        'Tuesday',
+                        'Wednesday',
+                        'Thursday',
+                        'Friday',
+                        'Saturday',
+                      ]);
+                    }}>
                     <Icon
                       name="pencil"
                       size={13}
@@ -517,7 +570,15 @@ const HoursModal = ({
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={hourModelStyles.bottomThreeButton}
-                    onPress={() => {}}>
+                    onPress={() => {
+                      setDaysTimeModalOpen(true);
+                      setSelectedDay(
+                        'Sunday' +
+                          ' - ' +
+                          hours[hours.findIndex(item => item.key === 'Sunday')]
+                            .value,
+                      );
+                    }}>
                     <Icon
                       name="pencil"
                       size={13}
@@ -534,7 +595,7 @@ const HoursModal = ({
                     name="Save"
                     color="#FFFFFF"
                     backgroundColor="#29977E"
-                    onPress={() => {}}
+                    onPress={handleCloseBottomSheet}
                   />
                 </View>
               </ScrollView>
@@ -581,7 +642,7 @@ const daysStyles = StyleSheet.create({
     marginBottom: 20,
   },
   charMainDiv: {
-    backgroundColor: '#bdbbbb',
+    // backgroundColor: '#bdbbbb',
     width: 28,
     height: 28,
     borderRadius: 14,
@@ -618,6 +679,14 @@ const daysStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '700',
   },
+  bottomButtonMain: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 20,
+    marginRight: 30,
+    marginBottom: 16,
+  },
 });
 
 const DaysTimeModal = ({
@@ -625,63 +694,203 @@ const DaysTimeModal = ({
   setDaysTimeModalOpen,
   setSelectedDay,
   selectedDay,
+  hours,
+  setHours,
+  setSelectedWeek,
+  selectedWeek,
+  selectedAllHours,
+  setSelectedAllHours,
 }) => {
   const [startTime, setStartTime] = useState();
   const [closeTime, setCloseTime] = useState();
   const [closed, setClosed] = useState(false);
   const [open24Hours, setOpen24Hours] = useState(false);
 
+  const currentDate = new Date();
+
+  // Calculate the date and time 12 hours from now
+  const futureDate = new Date(currentDate.getTime() + 12 * 60 * 60 * 1000);
   const [selectedStartTime, setSelectedStartTime] = useState(new Date());
-  const [selectedEndTime, setSelectedEndTime] = useState(new Date());
+  const [selectedEndTime, setSelectedEndTime] = useState(futureDate);
 
   const handleCloseDaysTimeModal = () => {
     setDaysTimeModalOpen(false);
     setSelectedDay();
+
+    setSelectedWeek();
+    setSelectedAllHours();
+    setClosed(false);
+    setOpen24Hours(false);
+    setStartTime();
+    setCloseTime();
+  };
+
+  const saveDaysTimeData = () => {
+    if ((closed || open24Hours) && selectedDay) {
+      const index = hours?.findIndex(
+        item => item.key === selectedDay?.split(' - ')[0],
+      );
+      if (hours[index]?.value) {
+        hours[index].value = open24Hours ? ['Open 24 hours'] : ['Closed'];
+        setHours(hours);
+      }
+      handleCloseDaysTimeModal();
+    }
+
+    if (
+      hours &&
+      !closed &&
+      !open24Hours &&
+      selectedWeek === undefined &&
+      selectedAllHours === undefined
+    ) {
+      const index = hours.findIndex(
+        item => item.key === selectedDay?.split(' - ')[0],
+      );
+      if (hours[index]?.value && startTime && closeTime) {
+        hours[index].value = [`${startTime} - ${closeTime}`];
+        setHours(hours);
+      }
+      handleCloseDaysTimeModal();
+    }
+
+    if ((closed || open24Hours) && selectedAllHours) {
+      hours?.map(itm =>
+        selectedAllHours?.map(day => {
+          if (day === itm.key) {
+            return (itm.value = open24Hours ? ['Open 24 hours'] : ['Closed']);
+          }
+          return itm;
+        }),
+      );
+      handleCloseDaysTimeModal();
+    }
+
+    const formatStartTime = moment(selectedStartTime).format('hh:mm A');
+    const formatEndTime = moment(selectedEndTime).format('hh:mm A');
+    if (hours && !closed && !open24Hours && selectedAllHours) {
+      hours?.map(itm =>
+        selectedAllHours?.map(day => {
+          if (day === itm.key) {
+            return (itm.value = [
+              `${startTime === undefined ? formatStartTime : startTime} - ${
+                closeTime === undefined ? formatEndTime : closeTime
+              }`,
+            ]);
+          }
+          return itm;
+        }),
+      );
+
+      handleCloseDaysTimeModal();
+    }
+
+    if ((closed || open24Hours) && selectedWeek) {
+      hours?.map(itm =>
+        selectedWeek?.map(day => {
+          if (day === itm.key) {
+            return (itm.value = open24Hours ? ['Open 24 hours'] : ['Closed']);
+          }
+          return itm;
+        }),
+      );
+      handleCloseDaysTimeModal();
+    }
+
+    if (hours && !closed && !open24Hours && selectedWeek) {
+      hours?.map(itm =>
+        selectedWeek?.map(day => {
+          if (day === itm.key) {
+            return (itm.value = [
+              `${startTime === undefined ? formatStartTime : startTime} - ${
+                closeTime === undefined ? formatEndTime : closeTime
+              }`,
+            ]);
+          }
+          return itm;
+        }),
+      );
+
+      handleCloseDaysTimeModal();
+    }
   };
 
   useEffect(() => {
     if (selectedDay) {
       const timeString = selectedDay?.split(' - ')[1];
+      if (timeString === 'Closed' || timeString === 'Open 24 hours') {
+        const formattedTimeNew = moment(new Date()).format('hh:mm A');
+        setStartTime(formattedTimeNew);
+        setSelectedStartTime(new Date());
+      } else {
+        const [time, period] = timeString?.split(' ');
+        const [hours, minutes] = time?.split(':')?.map(Number);
 
-      const [time, period] = timeString?.split(' ');
-      const [hours, minutes] = time?.split(':')?.map(Number);
-
-      const currentDate = new Date();
-      const newDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        currentDate.getDate(),
-        hours,
-        minutes,
-      );
-      if (period === 'PM') {
-        newDate.setHours(newDate.getHours() + 12);
+        const currentDate = new Date();
+        const newDate = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
+          hours,
+          minutes,
+        );
+        if (period === 'PM') {
+          newDate.setHours(newDate.getHours() + 12);
+        }
+        setStartTime(timeString);
+        setSelectedStartTime(newDate);
       }
-      setSelectedStartTime(newDate);
     }
   }, [selectedDay]);
 
-  // useEffect(() => {
-  //   if (selectedDay) {
-  //     const EndTimeString = selectedDay?.split(' - ')[0];
+  useEffect(() => {
+    if (selectedDay) {
+      const openClosedString = selectedDay?.split(' - ')[1];
 
-  //     const [timeEnd, periodEnd] = EndTimeString?.split(' ');
-  //     const [hoursEnd, minutesEnd] = timeEnd?.split(':')?.map(Number);
-  //     const currentDate = new Date();
+      if (
+        openClosedString === 'Closed' ||
+        openClosedString === 'Open 24 hours'
+      ) {
+        const formattedTimeNew = moment(new Date(futureDate)).format('hh:mm A');
+        setCloseTime(formattedTimeNew);
+        setSelectedEndTime(futureDate);
+      } else {
+        const EndTimeString = selectedDay?.split(' - ')[2];
 
-  //     const newDateEnd = new Date(
-  //       currentDate.getFullYear(),
-  //       currentDate.getMonth(),
-  //       currentDate.getDate(),
-  //       hoursEnd,
-  //       minutesEnd,
-  //     );
-  //     if (periodEnd === 'PM') {
-  //       newDateEnd.setHours(newDateEnd.getHours() + 12);
-  //     }
-  //     setSelectedEndTime(newDateEnd);
-  //   }
-  // }, [selectedDay]);
+        const [timeEnd, periodEnd] = EndTimeString?.split(' ');
+        const [hoursEnd, minutesEnd] = timeEnd?.split(':')?.map(Number);
+        const currentDate = new Date();
+
+        const newDateEnd = new Date(
+          currentDate.getFullYear(),
+          currentDate.getMonth(),
+          currentDate.getDate(),
+          hoursEnd,
+          minutesEnd,
+        );
+        if (periodEnd === 'PM') {
+          newDateEnd.setHours(newDateEnd.getHours() + 12);
+        }
+        setCloseTime(EndTimeString);
+
+        setSelectedEndTime(newDateEnd);
+      }
+    }
+  }, [selectedDay]);
+
+  useEffect(() => {
+    if (selectedDay?.split(' - ')[1] === 'Closed') {
+      setClosed(true);
+    } else {
+      setClosed(false);
+    }
+
+    if (selectedDay?.split(' - ')[1] === 'Open 24 hours') {
+      setOpen24Hours(true);
+    } else {
+      setOpen24Hours(false);
+    }
+  }, [selectedDay]);
 
   const handleStartTimeChange = newTime => {
     const formattedTime = moment(newTime).format('hh:mm A');
@@ -705,11 +914,7 @@ const DaysTimeModal = ({
         }}>
         <View style={daysStyles.centeredView}>
           <View style={daysStyles.modalView}>
-            <Text
-              style={daysStyles.headerText}
-              onPress={() => handleCloseDaysTimeModal()}>
-              Select days & time
-            </Text>
+            <Text style={daysStyles.headerText}>Select days & time</Text>
             <View style={daysStyles.daysNameFirstMain}>
               {[
                 'Sunday',
@@ -722,9 +927,17 @@ const DaysTimeModal = ({
               ].map((itm, index) => (
                 <TouchableOpacity
                   style={[
-                    selectedDay?.split(' - ')[0] === itm
-                      ? daysStyles.charMainDiv
-                      : daysStyles.charUnSelectedMainDiv,
+                    daysStyles.charMainDiv,
+                    {
+                      backgroundColor:
+                        selectedDay?.split(' - ')[0] === itm
+                          ? '#bdbbbb'
+                          : selectedWeek?.find(day => day === itm)
+                          ? '#bdbbbb'
+                          : selectedAllHours?.find(day => day === itm)
+                          ? '#bdbbbb'
+                          : 'white',
+                    },
                   ]}
                   key={index}>
                   <Text style={{color: 'black'}}>{itm?.charAt(0)}</Text>
@@ -770,25 +983,48 @@ const DaysTimeModal = ({
               </View>
             </View>
 
-            <View style={daysStyles.mainTimeDiv}>
-              <View>
-                <Text style={daysStyles.startEndText}>Start Time</Text>
-                <DatePicker
-                  style={{width: 150, height: 100}}
-                  mode="time"
-                  date={selectedStartTime}
-                  onDateChange={handleStartTimeChange}
-                  is24hourSource="locale"
+            {!(closed || open24Hours) && (
+              <View style={daysStyles.mainTimeDiv}>
+                <View>
+                  <Text style={daysStyles.startEndText}>Start Time</Text>
+                  <DatePicker
+                    style={{width: 150, height: 100}}
+                    mode="time"
+                    date={selectedStartTime}
+                    onDateChange={handleStartTimeChange}
+                    is24hourSource="locale"
+                  />
+                </View>
+                <View>
+                  <Text style={daysStyles.startEndText}>Start Time</Text>
+                  <DatePicker
+                    style={{width: 150, height: 100}}
+                    mode="time"
+                    date={selectedEndTime}
+                    onDateChange={handleEndTimeChange}
+                    is24hourSource="locale"
+                  />
+                </View>
+              </View>
+            )}
+
+            <View style={daysStyles.bottomButtonMain}>
+              <View style={{width: '30%'}}>
+                <CustomButton
+                  name="Cancel"
+                  color="#29977E"
+                  backgroundColor="white"
+                  borderColor="#29977E"
+                  onPress={() => handleCloseDaysTimeModal()}
                 />
               </View>
-              <View>
-                <Text style={daysStyles.startEndText}>Start Time</Text>
-                <DatePicker
-                  style={{width: 150, height: 100}}
-                  mode="time"
-                  date={selectedEndTime}
-                  onDateChange={handleEndTimeChange}
-                  is24hourSource="locale"
+              <View style={{width: '30%'}}>
+                <CustomButton
+                  name="Save"
+                  color="white"
+                  backgroundColor="#29977E"
+                  borderColor="#29977E"
+                  onPress={() => saveDaysTimeData()}
                 />
               </View>
             </View>

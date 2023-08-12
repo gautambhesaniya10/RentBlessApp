@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import VendorHeader from '../../components/VendorHeader';
@@ -53,6 +53,7 @@ const ShopSetUp = () => {
     control,
     handleSubmit,
     formState: {errors},
+    setValue,
   } = useForm();
 
   const onSubmit = data => {

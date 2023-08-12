@@ -20,6 +20,13 @@ const TimeCustomTextField = ({value, label, editable}) => {
       activeOutlineColor="#29977E"
       theme={customStyle}
       style={{fontSize: 13, fontWeight: '700'}}
+      textColor={
+        value === 'Open 24 hours'
+          ? 'green'
+          : value === 'Closed'
+          ? 'red'
+          : 'black'
+      }
     />
   );
 };
