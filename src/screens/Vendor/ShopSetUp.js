@@ -55,7 +55,7 @@ const ShopSetUp = () => {
     setValue,
   } = useForm();
 
-  const [currentPosition, setCurrentPosition] = useState(0);
+  const [currentPosition, setCurrentPosition] = useState(1);
   const [individual, setIndividual] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Shop');
 

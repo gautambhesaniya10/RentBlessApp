@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React, {useState} from 'react';
 import CustomTextInput from '../../common/CustomTextInput';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,39 +13,52 @@ const ShopSetUpScreenTwo = ({
   setCurrentPosition,
   currentPosition,
 }) => {
-  const [ownerDetailShow, setOwnerDetailShow] = useState(true);
-
   return (
     <View style={{marginHorizontal: 16}}>
-      <TouchableOpacity
-        onPress={() => setOwnerDetailShow(!ownerDetailShow)}
-        style={styles.labelMain}>
-        <Icon
-          name={ownerDetailShow ? 'angle-up' : 'angle-down'}
-          size={32}
-          color="black"
-        />
-        <Text style={styles.labelStyle}>Owner Details</Text>
+      <TouchableOpacity style={styles.logoMainDiv}>
+        <Icon name="image" size={25} color="black" />
+        <Text style={styles.uploadText}>Click to Upload </Text>
+        <Text style={styles.uploadTextInner}>Logo </Text>
       </TouchableOpacity>
 
-      {ownerDetailShow && (
-        <View>
-          <View style={{marginBottom: 15}}>
-            <CustomTextInput
-              label="my Name"
-              mode="outlined"
-              control={control}
-              name="myName"
-              rules={{required: 'myName is required *'}}
-              activeOutlineColor="#29977E"
-            />
-            {errors?.myName && (
-              <Text style={{color: 'red'}}>{errors?.myName?.message}</Text>
-            )}
-          </View>
-        </View>
-      )}
+      <TouchableOpacity style={styles.coverMainDiv}>
+        <Icon name="image" size={25} color="black" />
+        <Text style={styles.uploadText}>Click to Upload </Text>
+        <Text style={styles.uploadTextInner}>Cover Image </Text>
+        {/* <Image
+          source={require('../../images/banner.jpg')}
+          style={{width: '100%', height: 148}}
+        /> */}
+      </TouchableOpacity>
 
+      <Text style={styles.shopImgText}>Shop Images</Text>
+
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 12,
+        }}>
+        {['One', 'Two', 'Three']?.map((item, index) => {
+          return (
+            <>
+              <TouchableOpacity key={index} style={styles.shopImagesMain}>
+                <Icon name="image" size={23} color="black" />
+                <Text style={[styles.uploadText, {fontSize: 12}]}>
+                  Click to Upload
+                </Text>
+                <Text style={styles.uploadTextInner}>Shop Image </Text>
+              </TouchableOpacity>
+            </>
+          );
+        })}
+      </View>
+      <Text style={styles.shopImgText}>Shop Video</Text>
+      <TouchableOpacity style={[styles.coverMainDiv, {marginTop: 0}]}>
+        <Icon name="image" size={25} color="black" />
+        <Text style={styles.uploadText}>Click to Upload </Text>
+        <Text style={styles.uploadTextInner}>Shop Video </Text>
+      </TouchableOpacity>
       <View
         style={{
           marginTop: 40,
@@ -79,17 +92,54 @@ const ShopSetUpScreenTwo = ({
 export default ShopSetUpScreenTwo;
 
 const styles = StyleSheet.create({
-  labelStyle: {
-    color: '#151827',
-    fontWeight: '600',
-    fontSize: 18,
+  logoMainDiv: {
+    backgroundColor: '#FFF',
+    marginTop: 25,
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: 150,
+    height: 150,
+    justifyContent: 'center',
+    borderRadius: 100,
+    elevation: 2,
+  },
+  uploadText: {
+    color: '#29977E',
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: FontStyle,
+    paddingTop: 6,
+  },
+  uploadTextInner: {
+    color: 'rgba(21, 24, 39, 0.40)',
+    fontSize: 14,
+    fontWeight: '700',
     fontFamily: FontStyle,
   },
-  labelMain: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 10,
+  coverMainDiv: {
+    backgroundColor: '#FFF',
+    marginTop: 25,
     alignItems: 'center',
-    marginVertical: 16,
+    alignSelf: 'center',
+    width: '100%',
+    height: 150,
+    justifyContent: 'center',
+    elevation: 2,
+    borderRadius: 10,
+  },
+  shopImgText: {
+    color: '#151827',
+    fontSize: 16,
+    fontWeight: '700',
+    paddingVertical: 16,
+  },
+  shopImagesMain: {
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    width: 105,
+    height: 100,
+    justifyContent: 'center',
+    borderRadius: 10,
+    elevation: 2,
   },
 });
