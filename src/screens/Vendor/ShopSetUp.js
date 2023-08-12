@@ -48,7 +48,6 @@ const customStyles = {
 
 const ShopSetUp = () => {
   const navigation = useNavigation();
-  const [currentPosition, setCurrentPosition] = useState(0);
   const {
     control,
     handleSubmit,
@@ -56,8 +55,17 @@ const ShopSetUp = () => {
     setValue,
   } = useForm();
 
+  const [currentPosition, setCurrentPosition] = useState(0);
+  const [individual, setIndividual] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('Shop');
+
+  const handleClickIndividual = (option, active) => {
+    setSelectedOption(option);
+    setIndividual(active);
+  };
+
   const onSubmit = data => {
-    console.log('data++++++', data);
+    // console.log('data++++++', data);
     if (currentPosition !== 2) {
       setCurrentPosition(currentPosition + 1);
     }
@@ -97,18 +105,28 @@ const ShopSetUp = () => {
                   <CustomButton
                     name="Shop"
                     color="white"
-                    backgroundColor="#29977E"
-                    borderColor="#29977E"
-                    onPress={() => {}}
+                    backgroundColor={
+                      selectedOption === 'Shop'
+                        ? '#29977E'
+                        : 'rgba(255, 255, 255, 0.00)'
+                    }
+                    borderColor={selectedOption === 'Shop' ? '#29977E' : 'gray'}
+                    onPress={() => handleClickIndividual('Shop', false)}
                   />
                 </View>
                 <View style={{width: '50%'}}>
                   <CustomButton
                     name="Individual"
-                    color="rgba(255, 255, 255, 0.56)"
-                    backgroundColor="rgba(255, 255, 255, 0.00)"
-                    borderColor="rgba(255, 255, 255, 0.56)"
-                    onPress={() => {}}
+                    color="white"
+                    backgroundColor={
+                      selectedOption === 'Individual'
+                        ? '#29977E'
+                        : 'rgba(255, 255, 255, 0.00)'
+                    }
+                    borderColor={
+                      selectedOption === 'Individual' ? '#29977E' : 'gray'
+                    }
+                    onPress={() => handleClickIndividual('Individual', true)}
                   />
                 </View>
               </View>
@@ -165,6 +183,7 @@ const ShopSetUp = () => {
                 errors={errors}
                 onSubmit={onSubmit}
                 setCurrentPosition={setCurrentPosition}
+                individual={individual}
               />
             )}
             {currentPosition === 1 && (
