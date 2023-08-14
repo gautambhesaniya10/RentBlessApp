@@ -9,12 +9,12 @@ import {
   Image,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import CustomTextInput from '../../common/CustomTextInput';
+import CustomTextInput from '../../../common/CustomTextInput';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {FontStyle} from '../../../CommonStyle';
-import CustomButton from '../../common/CustomButton';
+import {FontStyle} from '../../../../CommonStyle';
+import CustomButton from '../../../common/CustomButton';
 import {Divider} from 'react-native-paper';
-import TimeCustomTextField from '../../common/TimeCustomTextField';
+import TimeCustomTextField from '../../../common/TimeCustomTextField';
 import {ScrollView} from 'react-native-gesture-handler';
 import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-date-picker';

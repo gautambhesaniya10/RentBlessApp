@@ -1,9 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import ShopSetUp from './ShopSetUp';
 import VendorDashboard from './VendorDashboard';
 import {useIsFocused} from '@react-navigation/native';
+import ShopSetUp from './shopSetup/ShopSetUp';
 
 const VendorMain = () => {
   const [shop, setShop] = useState(false);

@@ -9,16 +9,14 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import VendorHeader from '../../components/VendorHeader';
-import {FontStyle} from '../../../CommonStyle';
-import CustomButton from '../../common/CustomButton';
+import VendorHeader from '../../../components/VendorHeader';
+import {FontStyle} from '../../../../CommonStyle';
+import CustomButton from '../../../common/CustomButton';
 import StepIndicator from 'react-native-step-indicator';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomTextInput from '../../common/CustomTextInput';
 import {useForm} from 'react-hook-form';
 import ShopSetUpScreenOne from './ShopSetUpScreenOne';
 import ShopSetUpScreenTwo from './ShopSetUpScreenTwo';
+import ShopSetUpScreenThree from './ShopSetUpScreenThree';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -55,9 +53,14 @@ const ShopSetUp = () => {
     setValue,
   } = useForm();
 
-  const [currentPosition, setCurrentPosition] = useState(1);
+  const [currentPosition, setCurrentPosition] = useState(2);
   const [individual, setIndividual] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Shop');
+
+  const [uploadShopLogo, setUploadShopLogo] = useState('');
+  const [uploadShopBackground, setUploadShopBackground] = useState('');
+  const [uploadShopImages, setUploadShopImages] = useState([]);
+  const [uploadShopVideo, setUploadShopVideo] = useState('');
 
   const handleClickIndividual = (option, active) => {
     setSelectedOption(option);
@@ -77,11 +80,11 @@ const ShopSetUp = () => {
         flex: 1,
       }}>
       <VendorHeader />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{position: 'relative'}}>
           <View style={styles.imageContainer}>
             <Image
-              source={require('../../images/banner.jpg')}
+              source={require('../../../images/banner.jpg')}
               style={[styles.imageDark, {width: '100%', height: 250}]}
             />
             <View style={styles.overlay}></View>
@@ -188,12 +191,24 @@ const ShopSetUp = () => {
             )}
             {currentPosition === 1 && (
               <ShopSetUpScreenTwo
+                setUploadShopLogo={setUploadShopLogo}
+                setUploadShopBackground={setUploadShopBackground}
+                uploadShopImages={uploadShopImages}
+                setUploadShopImages={setUploadShopImages}
+                setUploadShopVideo={setUploadShopVideo}
+                currentPosition={currentPosition}
+                setCurrentPosition={setCurrentPosition}
+              />
+            )}
+            {currentPosition === 2 && (
+              <ShopSetUpScreenThree
                 control={control}
                 handleSubmit={handleSubmit}
                 errors={errors}
                 onSubmit={onSubmit}
                 currentPosition={currentPosition}
                 setCurrentPosition={setCurrentPosition}
+                individual={individual}
               />
             )}
           </View>
