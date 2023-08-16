@@ -268,15 +268,6 @@ const ShopSetUpScreenOne = ({
             )}
           </>
         )}
-
-        <View style={{marginTop: 40, width: '100%'}}>
-          <CustomButton
-            name="Next"
-            color="#FFFFFF"
-            backgroundColor="#29977E"
-            onPress={handleSubmit(onSubmit)}
-          />
-        </View>
       </View>
       <HoursModal
         isBottomSheetOpen={isBottomSheetOpen}

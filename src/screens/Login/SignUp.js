@@ -68,7 +68,9 @@ const SignUp = () => {
         dispatch(loadUserProfileStart());
         //   localStorage.setItem("userId", res.data.signUp.user);
         // alert(res.data.signUp.message);
-        navigation.navigate('VendorMain');
+        setTimeout(() => {
+          navigation.navigate('VendorMain');
+        }, 1000);
       },
       error => {
         console.log('eeeee', error);

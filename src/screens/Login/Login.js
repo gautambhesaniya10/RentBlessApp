@@ -52,7 +52,9 @@ const Login = () => {
           // dispatch(loginUserId(res.data.signIn.user));
           dispatch(loadUserProfileStart());
           // localStorage.setItem("userId", res.data.signIn.user);
-          navigation.navigate('VendorMain');
+          setTimeout(() => {
+            navigation.navigate('VendorMain');
+          }, 1000);
         },
         error => {
           setLoading(false);

@@ -289,34 +289,6 @@ const ShopSetUpScreenTwo = ({
           />
         )}
       </TouchableOpacity>
-      <View
-        style={{
-          marginTop: 40,
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'row',
-          gap: 20,
-          justifyContent: 'space-around',
-        }}>
-        <View style={{width: '50%'}}>
-          <CustomButton
-            name="Back"
-            color="#29977E"
-            backgroundColor="white"
-            borderColor="#29977E"
-            onPress={() => setCurrentPosition(currentPosition - 1)}
-          />
-        </View>
-        <View style={{width: '50%'}}>
-          <CustomButton
-            name="Next"
-            color="#FFFFFF"
-            backgroundColor="#29977E"
-            borderColor="#29977E"
-            onPress={() => HandleNextScreen()}
-          />
-        </View>
-      </View>
     </View>
   );
 };

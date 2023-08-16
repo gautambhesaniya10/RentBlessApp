@@ -12,6 +12,7 @@ const CustomTextInput = ({
   rules,
   control,
   activeOutlineColor,
+  disabled,
 }) => {
   const customTheme = {
     ...DefaultTheme,
@@ -36,6 +37,7 @@ const CustomTextInput = ({
             outlineColor="rgba(21, 24, 39, 0.10)"
             activeOutlineColor={activeOutlineColor}
             theme={customTheme}
+            disabled={disabled}
           />
         )}
         name={name}

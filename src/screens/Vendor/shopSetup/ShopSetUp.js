@@ -51,9 +51,10 @@ const ShopSetUp = () => {
     handleSubmit,
     formState: {errors},
     setValue,
+    getValues,
   } = useForm();
 
-  const [currentPosition, setCurrentPosition] = useState(2);
+  const [currentPosition, setCurrentPosition] = useState(0);
   const [individual, setIndividual] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Shop');
 
@@ -68,9 +69,10 @@ const ShopSetUp = () => {
   };
 
   const onSubmit = data => {
-    // console.log('data++++++', data);
     if (currentPosition !== 2) {
       setCurrentPosition(currentPosition + 1);
+    } else {
+      console.log('data++++++', data);
     }
   };
 
@@ -205,12 +207,45 @@ const ShopSetUp = () => {
                 control={control}
                 handleSubmit={handleSubmit}
                 errors={errors}
+                getValues={getValues}
+                setValue={setValue}
                 onSubmit={onSubmit}
                 currentPosition={currentPosition}
                 setCurrentPosition={setCurrentPosition}
                 individual={individual}
               />
             )}
+            <View
+              style={{
+                marginTop: 40,
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                paddingHorizontal: 10,
+              }}>
+              {currentPosition !== 0 && (
+                <View style={{width: '45%'}}>
+                  <CustomButton
+                    name="Back"
+                    color="#29977E"
+                    backgroundColor="white"
+                    borderColor="#29977E"
+                    onPress={() => setCurrentPosition(currentPosition - 1)}
+                  />
+                </View>
+              )}
+
+              <View style={{width: '45%'}}>
+                <CustomButton
+                  name={currentPosition === 2 ? 'Save' : 'Next'}
+                  color="#FFFFFF"
+                  backgroundColor="#29977E"
+                  borderColor="#29977E"
+                  onPress={handleSubmit(onSubmit)}
+                />
+              </View>
+            </View>
           </View>
         </View>
       </ScrollView>
