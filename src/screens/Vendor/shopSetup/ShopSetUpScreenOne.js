@@ -129,6 +129,7 @@ const ShopSetUpScreenOne = ({
                   },
                 }}
                 activeOutlineColor="#29977E"
+                keyboardType="number-pad"
               />
               {errors?.user_contact && (
                 <Text style={{color: 'red'}}>
