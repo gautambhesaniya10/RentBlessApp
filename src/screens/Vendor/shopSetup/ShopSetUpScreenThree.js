@@ -24,44 +24,14 @@ const ShopSetUpScreenThree = ({
   individual,
   setCurrentPosition,
   currentPosition,
+  subBranch,
+  setSubBranch,
 }) => {
   const [mainBranchShow, setMainBranchShow] = useState(true);
   const [managerShow, setManagerShow] = useState(true);
   const [managerSubBranchShow, setManagerSubBranchShow] = useState(true);
   const [sameAsOwner, setSameAsOwner] = useState('False');
 
-  const [subBranch, setSubBranch] = useState([
-    {
-      id: 1,
-      subManagerAddress: 'godhanidenis@gmail.com',
-      subManagerCity: 'surat',
-      subManagerPinCode: '520147',
-      subManagerFirstName: 'Denis',
-      subManagerLastName: 'Godhani',
-      subManagerEmail: 'godhanidenis@gmail.com',
-      subManagerPhone: '9537256159',
-    },
-    {
-      id: 2,
-      subManagerAddress: 'godhanidenis@gmail.com',
-      subManagerCity: 'surat',
-      subManagerPinCode: '520147',
-      subManagerFirstName: 'Denis',
-      subManagerLastName: 'Godhani',
-      subManagerEmail: 'godhanidenis@gmail.com',
-      subManagerPhone: '9537256159',
-    },
-    {
-      id: 3,
-      subManagerAddress: 'godhanidenis@gmail.com',
-      subManagerCity: 'surat',
-      subManagerPinCode: '520147',
-      subManagerFirstName: 'Denis',
-      subManagerLastName: 'Godhani',
-      subManagerEmail: 'godhanidenis@gmail.com',
-      subManagerPhone: '9537256159',
-    },
-  ]);
   const [subBranchEdit, setSubBranchEdit] = useState();
 
   useEffect(() => {

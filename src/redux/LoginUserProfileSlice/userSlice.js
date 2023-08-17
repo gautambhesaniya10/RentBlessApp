@@ -28,9 +28,16 @@ const userProfileSlice = createSlice({
     error: '',
   },
   reducers: {
-    // increment: state => {
-    //   state.value += 1;
-    // },
+    setShopRegisterId: (state, action) => {
+      console.log('action', action);
+      return {
+        ...state,
+        userProfile: {
+          ...state.userProfile,
+          ['userCreatedShopId']: action.payload,
+        },
+      };
+    },
   },
   extraReducers: builder => {
     builder.addCase(loadUserProfileStart.pending, state => {
@@ -57,5 +64,5 @@ const userProfileSlice = createSlice({
   },
 });
 
-export const {increment, decrement} = userProfileSlice.actions;
+export const {setShopRegisterId} = userProfileSlice.actions;
 export default userProfileSlice.reducer;

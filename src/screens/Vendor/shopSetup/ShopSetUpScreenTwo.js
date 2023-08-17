@@ -85,7 +85,7 @@ const ShopSetUpScreenTwo = ({
         alert(response.customButton);
       } else {
         setShopLogo(response.assets[0].uri);
-        setUploadShopLogo(response.assets[0].fileName);
+        setUploadShopLogo(response.assets[0]);
         setError({...error, shopLogo: ''});
       }
     });
@@ -113,7 +113,7 @@ const ShopSetUpScreenTwo = ({
         alert(response.customButton);
       } else {
         setShopBackground(response.assets[0].uri);
-        setUploadShopBackground(response.assets[0].fileName);
+        setUploadShopBackground(response.assets[0]);
         setError({...error, shopBackground: ''});
       }
     });
@@ -144,7 +144,7 @@ const ShopSetUpScreenTwo = ({
         setShopImages(newImage);
 
         const newImageFile = [...uploadShopImages]; // Create a copy of the array
-        newImageFile[index] = response.assets[0].fileName; // Update value at the specified index
+        newImageFile[index] = response.assets[0]; // Update value at the specified index
         setUploadShopImages(newImageFile);
       }
     });
@@ -174,7 +174,7 @@ const ShopSetUpScreenTwo = ({
         alert(response.customButton);
       } else {
         setShopVideo(response.assets[0].uri);
-        setUploadShopVideo(response.assets[0].fileName);
+        setUploadShopVideo(response.assets[0]);
       }
     });
   };

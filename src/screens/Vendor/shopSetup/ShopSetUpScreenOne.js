@@ -26,6 +26,8 @@ const ShopSetUpScreenOne = ({
   errors,
   onSubmit,
   individual,
+  hours,
+  setHours,
 }) => {
   const [ownerDetailShow, setOwnerDetailShow] = useState(true);
   const [shopInfoShow, setShopInfoShow] = useState(true);
@@ -35,16 +37,6 @@ const ShopSetUpScreenOne = ({
   const [selectedDay, setSelectedDay] = useState();
   const [selectedWeek, setSelectedWeek] = useState();
   const [selectedAllHours, setSelectedAllHours] = useState();
-
-  const [hours, setHours] = useState([
-    {key: 'Sunday', value: ['09:00 AM - 10:00 PM']},
-    {key: 'Monday', value: ['09:00 AM - 10:00 PM']},
-    {key: 'Tuesday', value: ['07:00 AM - 08:00 PM']},
-    {key: 'Wednesday', value: ['09:00 AM - 08:00 PM']},
-    {key: 'Thursday', value: ['09:00 AM - 08:00 PM']},
-    {key: 'Friday', value: ['09:00 AM - 08:00 PM']},
-    {key: 'Saturday', value: ['09:00 AM - 08:00 PM']},
-  ]);
 
   const windowHeight = Dimensions.get('window').height;
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);

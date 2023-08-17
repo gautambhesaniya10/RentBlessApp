@@ -35,6 +35,5 @@ export const signIn = async payload => {
       userInfo: payload,
     },
   });
-  console.log('resultsresults', results);
   return results;
 };

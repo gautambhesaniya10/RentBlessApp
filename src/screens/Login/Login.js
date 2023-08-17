@@ -45,7 +45,6 @@ const Login = () => {
     })
       .then(
         async res => {
-          console.log('reslogin', res);
           setLoading(false);
           await AsyncStorage.setItem('token', res.data.signIn.token);
           await AsyncStorage.setItem('userId', res.data.signIn.user);
