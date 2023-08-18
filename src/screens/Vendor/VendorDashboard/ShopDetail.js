@@ -1,14 +1,63 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import OwnerDetail from './AllTabs/OwnerDetail';
+import {useForm} from 'react-hook-form';
+import {shopUpdate} from '../../../graphql/mutations/shops';
+import {useToast} from 'native-base';
+import ShopInfo from './AllTabs/ShopInfo';
 
 const ShopDetail = () => {
+  const toast = useToast();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
+  const useProfileData = useSelector(state => state?.user.userProfile);
   const [activeTab, setActiveTab] = useState(0);
+
+  const [shopOwnerId, setShopOwnerId] = useState('');
+  const [ownerLoading, setOwnerLoading] = useState(false);
+
+  const {
+    handleSubmit: ownerInfoHandleSubmit,
+    formState: {errors: ownerInfoErrors},
+    setValue: ownerInfoSetValue,
+    getValues: ownerInfoGetValue,
+    reset: ownerInfoReset,
+    control,
+  } = useForm();
+
+  const ownerInfoOnSubmit = data => {
+    setOwnerLoading(true);
+    shopUpdate({
+      ownerInfo: {
+        id: shopOwnerId,
+        owner_firstName: data.first_name,
+        owner_lastName: data.last_name,
+        owner_email: data.user_email,
+        owner_contact: data.user_contact,
+      },
+    }).then(
+      res => {
+        toast.show({
+          title: res.data.updateShop.message,
+          placement: 'top',
+          backgroundColor: 'green.600',
+          variant: 'solid',
+        });
+        setOwnerLoading(false);
+      },
+      error => {
+        setOwnerLoading(false);
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          backgroundColor: 'red.600',
+          variant: 'solid',
+        });
+      },
+    );
+  };
 
   return (
     <ScrollView
@@ -59,7 +108,20 @@ const ShopDetail = () => {
           ))}
         </ScrollView>
       </View>
-      {activeTab === 0 && <OwnerDetail />}
+      {activeTab === 0 && (
+        <OwnerDetail
+          vendorShopDetails={vendorShopDetails}
+          useProfileData={useProfileData}
+          control={control}
+          ownerInfoSetValue={ownerInfoSetValue}
+          ownerInfoErrors={ownerInfoErrors}
+          ownerInfoHandleSubmit={ownerInfoHandleSubmit}
+          ownerInfoOnSubmit={ownerInfoOnSubmit}
+          setShopOwnerId={setShopOwnerId}
+          ownerLoading={ownerLoading}
+        />
+      )}
+      {activeTab === 1 && <ShopInfo />}
     </ScrollView>
   );
 };

@@ -20,15 +20,7 @@ import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 
-const ShopSetUpScreenOne = ({
-  control,
-  handleSubmit,
-  errors,
-  onSubmit,
-  individual,
-  hours,
-  setHours,
-}) => {
+const ShopSetUpScreenOne = ({control, errors, individual, hours, setHours}) => {
   const [ownerDetailShow, setOwnerDetailShow] = useState(true);
   const [shopInfoShow, setShopInfoShow] = useState(true);
   const [shopTimeDetails, setShopTimeDetails] = useState(true);

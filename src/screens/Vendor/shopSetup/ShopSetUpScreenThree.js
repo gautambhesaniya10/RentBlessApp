@@ -16,9 +16,7 @@ import VendorSubBranchTextField from '../../../common/VendorSubBranchTextField';
 
 const ShopSetUpScreenThree = ({
   control,
-  handleSubmit,
   errors,
-  onSubmit,
   getValues,
   setValue,
   individual,
