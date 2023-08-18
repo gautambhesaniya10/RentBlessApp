@@ -9,10 +9,12 @@ import {useForm} from 'react-hook-form';
 import {signIn} from '../../graphql/mutations/authMutations';
 import {useSelector, useDispatch} from 'react-redux';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
+import {useToast} from 'native-base';
 
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const toast = useToast();
 
   const [loginType, setLoginType] = useState('');
   const [loading, setLoading] = useState(false);
@@ -48,9 +50,13 @@ const Login = () => {
           setLoading(false);
           await AsyncStorage.setItem('token', res.data.signIn.token);
           await AsyncStorage.setItem('userId', res.data.signIn.user);
-          // dispatch(loginUserId(res.data.signIn.user));
           dispatch(loadUserProfileStart());
-          // localStorage.setItem("userId", res.data.signIn.user);
+          toast.show({
+            title: res.data.signIn.message,
+            placement: 'top',
+            backgroundColor: 'green.600',
+            variant: 'solid',
+          });
           setTimeout(() => {
             navigation.navigate('VendorMain');
           }, 1000);

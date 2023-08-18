@@ -24,6 +24,7 @@ import {shopRegistration} from '../../../graphql/mutations/shops';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {setShopRegisterId} from '../../../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import {useToast} from 'native-base';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -52,6 +53,7 @@ const customStyles = {
 };
 
 const ShopSetUp = () => {
+  const toast = useToast();
   const navigation = useNavigation();
   const userProfile = useSelector(state => state?.user.userProfile);
   const dispatch = useDispatch();
@@ -228,6 +230,12 @@ const ShopSetUp = () => {
                                 ),
                               );
                               setLoading(false);
+                              toast.show({
+                                title: res.data.createShop.message,
+                                placement: 'top',
+                                backgroundColor: 'green.600',
+                                variant: 'solid',
+                              });
                               setTimeout(() => {
                                 navigation.navigate('VendorDashboard');
                               }, 1000);
@@ -235,8 +243,12 @@ const ShopSetUp = () => {
                             },
                             error => {
                               setLoading(false);
-                              console.log('eee', error.message);
-                              // toast.error(error.message, {theme: 'colored'});
+                              toast.show({
+                                title: error.message,
+                                placement: 'top',
+                                backgroundColor: 'red.600',
+                                variant: 'solid',
+                              });
                             },
                           );
                         })
@@ -318,18 +330,25 @@ const ShopSetUp = () => {
                                 res.data.createShop.shopInfo.id,
                               ),
                             );
-                            // toast.success(res.data.createShop.message, {
-                            //   theme: 'colored',
-                            // });
                             setLoading(false);
+                            toast.show({
+                              title: res.data.createShop.message,
+                              placement: 'top',
+                              backgroundColor: 'green.600',
+                              variant: 'solid',
+                            });
                             setTimeout(() => {
                               navigation.navigate('VendorDashboard');
                             }, 1000);
-                            // router.push('/vendor/dashboard');
                           },
                           error => {
                             setLoading(false);
-                            console.log('eee', error);
+                            toast.show({
+                              title: error.message,
+                              placement: 'top',
+                              backgroundColor: 'red.600',
+                              variant: 'solid',
+                            });
                           },
                         );
                   },

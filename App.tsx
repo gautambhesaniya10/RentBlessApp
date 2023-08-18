@@ -3,12 +3,18 @@ import React from 'react';
 import 'react-native-gesture-handler';
 import AppNavigator from './AppNavigator';
 import {PaperProvider} from 'react-native-paper';
+import {NativeBaseProvider, ToastProvider} from 'native-base';
 
 const App = () => {
   return (
     <>
       {/* <PaperProvider> */}
-      <AppNavigator />
+      <NativeBaseProvider>
+        <ToastProvider>
+          <AppNavigator />
+        </ToastProvider>
+      </NativeBaseProvider>
+
       {/* </PaperProvider> */}
     </>
   );

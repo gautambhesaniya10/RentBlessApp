@@ -9,8 +9,10 @@ import {useForm} from 'react-hook-form';
 import {signUp} from '../../graphql/mutations/authMutations';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 import {useSelector, useDispatch} from 'react-redux';
+import {useToast} from 'native-base';
 
 const SignUp = () => {
+  const toast = useToast();
   const {
     control,
     handleSubmit,
@@ -68,6 +70,12 @@ const SignUp = () => {
         dispatch(loadUserProfileStart());
         //   localStorage.setItem("userId", res.data.signUp.user);
         // alert(res.data.signUp.message);
+        toast.show({
+          title: res.data.signUp.message,
+          placement: 'top',
+          backgroundColor: 'green.600',
+          variant: 'solid',
+        });
         setTimeout(() => {
           navigation.navigate('VendorMain');
         }, 1000);
