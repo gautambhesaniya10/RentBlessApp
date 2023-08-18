@@ -1,12 +1,19 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import VendorHeader from '../../../components/VendorHeader';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import VendorTab from './VendorTab';
+import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 
 const MainDashboard = () => {
+  const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
-  console.log('++userrrrrrrrrrrrr', useProfileData);
+
+  useEffect(() => {
+    if (useProfileData?.userCreatedShopId) {
+      dispatch(loadVendorShopDetailsStart(useProfileData?.userCreatedShopId));
+    }
+  }, [useProfileData]);
 
   return (
     <View style={{flex: 1}}>

@@ -1,9 +1,20 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useSelector} from 'react-redux';
 
 const Home = () => {
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
+  const [totalProducts, setTotalProducts] = useState(0);
+
+  useEffect(() => {
+    var count = 0;
+    vendorShopDetails?.branch_info?.map(itm =>
+      setTotalProducts((count += itm.product_info?.length)),
+    );
+  }, [vendorShopDetails]);
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -13,7 +24,7 @@ const Home = () => {
       </View>
       <View style={styles.shopImageMain}>
         <Image
-          source={require('../../../images/banner.jpg')}
+          source={{uri: vendorShopDetails?.shop_logo}}
           style={styles.shopImg}
         />
         <Text style={styles.shopNameStyle}>GJ5 Fashion</Text>
@@ -23,7 +34,7 @@ const Home = () => {
         <View style={styles.boxMain}>
           <View>
             <Text style={styles.totalText}>Total Products</Text>
-            <Text style={styles.TotalNumberText}>1056</Text>
+            <Text style={styles.TotalNumberText}>{totalProducts}</Text>
           </View>
           <View style={styles.iconParent}>
             <Icon name="shopping-cart" color="black" size={22} />
@@ -33,7 +44,9 @@ const Home = () => {
         <View style={styles.boxMain}>
           <View>
             <Text style={styles.totalText}>Followers</Text>
-            <Text style={styles.TotalNumberText}>150 K</Text>
+            <Text style={styles.TotalNumberText}>
+              {vendorShopDetails?.shopFollowerCount}
+            </Text>
           </View>
           <View style={styles.iconParent}>
             <Icon name="user" color="black" size={22} />
@@ -43,7 +56,9 @@ const Home = () => {
         <View style={styles.boxMain}>
           <View>
             <Text style={styles.totalText}>Reviews</Text>
-            <Text style={styles.TotalNumberText}>56</Text>
+            <Text style={styles.TotalNumberText}>
+              {vendorShopDetails?.shopReviewCount}
+            </Text>
           </View>
           <View style={styles.iconParent}>
             <Icon name="edit" color="black" size={22} />
