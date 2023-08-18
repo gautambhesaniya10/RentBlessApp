@@ -8,6 +8,7 @@ import {useForm} from 'react-hook-form';
 import {shopUpdate} from '../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import ShopInfo from './AllTabs/ShopInfo';
+import VendorLogoAndName from '../../../components/VendorLogoAndName';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -67,13 +68,9 @@ const ShopDetail = () => {
         {/* <Icon name="chevron-left" size={20} color="black" /> */}
         <Text style={styles.headerText}>Shop Details</Text>
       </View>
-      <View style={styles.shopImageMain}>
-        <Image
-          source={{uri: vendorShopDetails?.shop_logo}}
-          style={styles.shopImg}
-        />
-        <Text style={styles.shopNameStyle}>GJ5 Fashion</Text>
-      </View>
+
+      <VendorLogoAndName vendorShopDetails={vendorShopDetails} />
+
       <View style={styles.sliderMain}>
         <ScrollView
           horizontal
@@ -142,24 +139,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     fontFamily: FontStyle,
-  },
-  shopImageMain: {
-    alignSelf: 'center',
-    gap: 15,
-    marginBottom: 20,
-  },
-  shopImg: {
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-    objectFit: 'fill',
-  },
-  shopNameStyle: {
-    color: '#151827',
-    fontWeight: '700',
-    fontSize: 16,
-    fontFamily: FontStyle,
-    textAlign: 'center',
   },
   sliderMain: {
     marginLeft: 22,

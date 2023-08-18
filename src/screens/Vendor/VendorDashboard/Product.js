@@ -2,8 +2,12 @@ import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
+import VendorLogoAndName from '../../../components/VendorLogoAndName';
+import {useSelector} from 'react-redux';
 
 const Product = () => {
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -12,13 +16,7 @@ const Product = () => {
         <Icon name="chevron-left" size={20} color="black" />
         <Text style={styles.headerText}>Add Product</Text>
       </View>
-      <View style={styles.shopImageMain}>
-        <Image
-          source={require('../../../images/banner.jpg')}
-          style={styles.shopImg}
-        />
-        <Text style={styles.shopNameStyle}>GJ5 Fashion</Text>
-      </View>
+      <VendorLogoAndName vendorShopDetails={vendorShopDetails} />
     </ScrollView>
   );
 };
@@ -39,23 +37,5 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     fontFamily: FontStyle,
-  },
-  shopImageMain: {
-    alignSelf: 'center',
-    gap: 15,
-    marginBottom: 20,
-  },
-  shopImg: {
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-    objectFit: 'fill',
-  },
-  shopNameStyle: {
-    color: '#151827',
-    fontWeight: '700',
-    fontSize: 16,
-    fontFamily: FontStyle,
-    textAlign: 'center',
   },
 });

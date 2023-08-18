@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
+import VendorLogoAndName from '../../../components/VendorLogoAndName';
 
 const Home = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
@@ -22,13 +23,8 @@ const Home = () => {
       <View style={styles.hederMain}>
         <Text style={styles.headerText}>Dashboard</Text>
       </View>
-      <View style={styles.shopImageMain}>
-        <Image
-          source={{uri: vendorShopDetails?.shop_logo}}
-          style={styles.shopImg}
-        />
-        <Text style={styles.shopNameStyle}>GJ5 Fashion</Text>
-      </View>
+
+      <VendorLogoAndName vendorShopDetails={vendorShopDetails} />
 
       <View style={{paddingBottom: 15}}>
         <View style={styles.boxMain}>
@@ -86,24 +82,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: FontStyle,
   },
-  shopImageMain: {
-    alignSelf: 'center',
-    gap: 15,
-    marginBottom: 20,
-  },
-  shopImg: {
-    height: 140,
-    width: 140,
-    borderRadius: 70,
-    objectFit: 'fill',
-  },
-  shopNameStyle: {
-    color: '#151827',
-    fontWeight: '700',
-    fontSize: 16,
-    fontFamily: FontStyle,
-    textAlign: 'center',
-  },
+
   boxMain: {
     width: 280,
     height: 75,
