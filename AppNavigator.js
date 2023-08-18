@@ -7,7 +7,7 @@ import LoginMainScreen from './src/screens/Login/LoginMainScreen';
 import Login from './src/screens/Login/Login';
 import SignUp from './src/screens/Login/SignUp';
 import VendorMain from './src/screens/Vendor/VendorMain';
-import VendorDashboard from './src/screens/Vendor/VendorDashboard';
+import MainDashboard from './src/screens/Vendor/VendorDashboard/MainDashboard';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -40,8 +40,8 @@ const AppNavigator = () => {
           options={{headerShown: false}}
         />
         <Stack.Screen
-          name="VendorDashboard"
-          component={VendorDashboard}
+          name="MainDashboard"
+          component={MainDashboard}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

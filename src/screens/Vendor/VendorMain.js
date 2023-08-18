@@ -1,9 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import VendorDashboard from './VendorDashboard';
 import {useIsFocused} from '@react-navigation/native';
 import ShopSetUp from './shopSetup/ShopSetUp';
+import MainDashboard from './VendorDashboard/MainDashboard';
 
 const VendorMain = () => {
   const [shop, setShop] = useState(false);
@@ -20,7 +20,7 @@ const VendorMain = () => {
     getUserHaveAnyShop();
   }, [isFocus]);
 
-  return <>{shop ? <VendorDashboard /> : <ShopSetUp />}</>;
+  return <>{shop ? <MainDashboard /> : <ShopSetUp />}</>;
 };
 
 export default VendorMain;

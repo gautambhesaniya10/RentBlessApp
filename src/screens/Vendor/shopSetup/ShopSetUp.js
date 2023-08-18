@@ -237,7 +237,7 @@ const ShopSetUp = () => {
                                 variant: 'solid',
                               });
                               setTimeout(() => {
-                                navigation.navigate('VendorDashboard');
+                                navigation.navigate('MainDashboard');
                               }, 1000);
                               // router.push('/vendor/dashboard');
                             },
@@ -338,7 +338,7 @@ const ShopSetUp = () => {
                               variant: 'solid',
                             });
                             setTimeout(() => {
-                              navigation.navigate('VendorDashboard');
+                              navigation.navigate('MainDashboard');
                             }, 1000);
                           },
                           error => {
