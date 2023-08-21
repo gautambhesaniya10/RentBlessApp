@@ -985,7 +985,7 @@ const DaysTimeModal = ({
                   />
                 </View>
                 <View>
-                  <Text style={daysStyles.startEndText}>Start Time</Text>
+                  <Text style={daysStyles.startEndText}>End Time</Text>
                   <DatePicker
                     style={{width: 150, height: 100}}
                     mode="time"

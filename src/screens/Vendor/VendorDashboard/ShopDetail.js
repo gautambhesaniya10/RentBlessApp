@@ -1,5 +1,5 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -12,13 +12,6 @@ import VendorLogoAndName from '../../../components/VendorLogoAndName';
 
 const ShopDetail = () => {
   const toast = useToast();
-  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
-  const useProfileData = useSelector(state => state?.user.userProfile);
-  const [activeTab, setActiveTab] = useState(0);
-
-  const [shopOwnerId, setShopOwnerId] = useState('');
-  const [ownerLoading, setOwnerLoading] = useState(false);
-
   const {
     handleSubmit: ownerInfoHandleSubmit,
     formState: {errors: ownerInfoErrors},
@@ -27,6 +20,32 @@ const ShopDetail = () => {
     reset: ownerInfoReset,
     control,
   } = useForm();
+
+  const {
+    handleSubmit: shopInfoHandleSubmit,
+    formState: {errors: shopInfoErrors},
+    setValue: shopInfoSetValue,
+    reset: shopInfoReset,
+    control: shopInfoControl,
+  } = useForm();
+
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
+  const useProfileData = useSelector(state => state?.user.userProfile);
+  const [activeTab, setActiveTab] = useState(0);
+  const [individual, setIndividual] = useState(false);
+  const [shopOwnerId, setShopOwnerId] = useState('');
+  const [ownerLoading, setOwnerLoading] = useState(false);
+  const [shopLoading, setShopLoading] = useState(false);
+
+  const [hours, setHours] = useState([
+    {key: 'Sunday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Monday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Tuesday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Wednesday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Thursday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Friday', value: ['09:00 AM - 08:00 PM']},
+    {key: 'Saturday', value: ['09:00 AM - 08:00 PM']},
+  ]);
 
   const ownerInfoOnSubmit = data => {
     setOwnerLoading(true);
@@ -60,6 +79,100 @@ const ShopDetail = () => {
     );
   };
 
+  const shopInfoOnSubmit = data => {
+    setShopLoading(true);
+    shopUpdate({
+      shopInfo: {
+        id: useProfileData?.userCreatedShopId,
+        form_steps: '3',
+        shop_social_link: {
+          facebook: individual ? '' : data?.facebook_link,
+          instagram: individual ? '' : data?.instagram_link,
+          website: individual ? '' : data?.personal_website,
+        },
+        shop_name: data?.shop_name,
+        shop_email: data?.shop_email,
+        shop_type: individual ? 'individual' : 'shop',
+        shop_time: hours?.map(day => {
+          return {
+            week: day['key'],
+            open_time: individual
+              ? '-'
+              : day['value'][0] === 'Closed' ||
+                day['value'][0] === 'Open 24 hours'
+              ? '-'
+              : day['value'][0].split(' - ')[0],
+            close_time: individual
+              ? '-'
+              : day['value'][0] === 'Closed' ||
+                day['value'][0] === 'Open 24 hours'
+              ? '-'
+              : day['value'][0].split(' - ')[1],
+            is_close: individual
+              ? false
+              : day['value'][0] === 'Closed'
+              ? true
+              : false,
+            is_24Hours_open: individual
+              ? true
+              : day['value'][0] === 'Open 24 hours'
+              ? true
+              : false,
+          };
+        }),
+      },
+    }).then(
+      res => {
+        toast.show({
+          title: res.data.updateShop.message,
+          placement: 'top',
+          backgroundColor: 'green.600',
+          variant: 'solid',
+        });
+        setShopLoading(false);
+      },
+      error => {
+        setShopLoading(false);
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          backgroundColor: 'red.600',
+          variant: 'solid',
+        });
+      },
+    );
+  };
+
+  useEffect(() => {
+    if (useProfileData?.userCreatedShopId) {
+      vendorShopDetails?.shop_time?.map(time => {
+        hours?.map(itm => {
+          if (time.is_24Hours_open) {
+            if (itm.key === time.week) {
+              itm.value = ['Open 24 hours'];
+            }
+          } else if (time.is_close) {
+            if (itm.key === time.week) {
+              itm.value = ['Closed'];
+            }
+          } else {
+            if (itm.key === time.week) {
+              itm.value = [`${time.open_time} - ${time.close_time}`];
+            }
+          }
+
+          return itm;
+        });
+        setHours(hours);
+      });
+      if (vendorShopDetails?.shop_type === 'shop') {
+        setIndividual(false);
+      } else {
+        setIndividual(true);
+      }
+    }
+  }, [hours, vendorShopDetails, useProfileData]);
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -91,7 +204,7 @@ const ShopDetail = () => {
               onPress={() => setActiveTab(index)}
               style={[
                 styles.sliderTabsMain,
-                {backgroundColor: activeTab === index ? '#151827' : 'white'},
+                {backgroundColor: activeTab === index ? '#151827' : '#FAFCFC'},
               ]}
               key={index}>
               <Text
@@ -118,7 +231,20 @@ const ShopDetail = () => {
           ownerLoading={ownerLoading}
         />
       )}
-      {activeTab === 1 && <ShopInfo />}
+      {activeTab === 1 && (
+        <ShopInfo
+          shopInfoHandleSubmit={shopInfoHandleSubmit}
+          shopInfoErrors={shopInfoErrors}
+          shopInfoSetValue={shopInfoSetValue}
+          shopInfoOnSubmit={shopInfoOnSubmit}
+          shopLoading={shopLoading}
+          shopInfoControl={shopInfoControl}
+          useProfileData={useProfileData}
+          vendorShopDetails={vendorShopDetails}
+          hours={hours}
+          setHours={setHours}
+        />
+      )}
     </ScrollView>
   );
 };

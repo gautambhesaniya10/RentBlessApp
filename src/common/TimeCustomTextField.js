@@ -7,7 +7,7 @@ const TimeCustomTextField = ({value, label, editable}) => {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: 'white',
+      background: '#FAFCFC',
     },
   };
   return (

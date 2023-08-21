@@ -24,40 +24,42 @@ const Home = () => {
         <Text style={styles.headerText}>Dashboard</Text>
       </View>
 
-      <VendorLogoAndName vendorShopDetails={vendorShopDetails} />
+      <View style={{marginTop: 40}}>
+        <VendorLogoAndName vendorShopDetails={vendorShopDetails} />
 
-      <View style={{paddingBottom: 15}}>
-        <View style={styles.boxMain}>
-          <View>
-            <Text style={styles.totalText}>Total Products</Text>
-            <Text style={styles.TotalNumberText}>{totalProducts}</Text>
+        <View style={{paddingBottom: 15}}>
+          <View style={styles.boxMain}>
+            <View>
+              <Text style={styles.totalText}>Total Products</Text>
+              <Text style={styles.TotalNumberText}>{totalProducts}</Text>
+            </View>
+            <View style={styles.iconParent}>
+              <Icon name="shopping-cart" color="black" size={22} />
+            </View>
           </View>
-          <View style={styles.iconParent}>
-            <Icon name="shopping-cart" color="black" size={22} />
-          </View>
-        </View>
 
-        <View style={styles.boxMain}>
-          <View>
-            <Text style={styles.totalText}>Followers</Text>
-            <Text style={styles.TotalNumberText}>
-              {vendorShopDetails?.shopFollowerCount}
-            </Text>
+          <View style={styles.boxMain}>
+            <View>
+              <Text style={styles.totalText}>Followers</Text>
+              <Text style={styles.TotalNumberText}>
+                {vendorShopDetails?.shopFollowerCount}
+              </Text>
+            </View>
+            <View style={styles.iconParent}>
+              <Icon name="user" color="black" size={22} />
+            </View>
           </View>
-          <View style={styles.iconParent}>
-            <Icon name="user" color="black" size={22} />
-          </View>
-        </View>
 
-        <View style={styles.boxMain}>
-          <View>
-            <Text style={styles.totalText}>Reviews</Text>
-            <Text style={styles.TotalNumberText}>
-              {vendorShopDetails?.shopReviewCount}
-            </Text>
-          </View>
-          <View style={styles.iconParent}>
-            <Icon name="edit" color="black" size={22} />
+          <View style={styles.boxMain}>
+            <View>
+              <Text style={styles.totalText}>Reviews</Text>
+              <Text style={styles.TotalNumberText}>
+                {vendorShopDetails?.shopReviewCount}
+              </Text>
+            </View>
+            <View style={styles.iconParent}>
+              <Icon name="edit" color="black" size={22} />
+            </View>
           </View>
         </View>
       </View>

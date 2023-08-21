@@ -18,7 +18,7 @@ const CustomTextInput = ({
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: 'white',
+      background: '#FAFCFC',
     },
   };
 

@@ -133,7 +133,9 @@ const styles = StyleSheet.create({
   main: {
     alignItems: 'center',
     marginHorizontal: 20,
-    marginTop: 50,
+    justifyContent: 'center',
+    display: 'flex',
+    height: '100%',
   },
   joinText: {
     color: '#151827',
