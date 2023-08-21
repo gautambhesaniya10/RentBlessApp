@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, ScrollView, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  ScrollView,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomButton from '../../common/CustomButton';
@@ -10,6 +17,7 @@ import {signUp} from '../../graphql/mutations/authMutations';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 import {useSelector, useDispatch} from 'react-redux';
 import {useToast} from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SignUp = () => {
   const toast = useToast();
@@ -27,6 +35,8 @@ const SignUp = () => {
 
   const [loginType, setLoginType] = useState('');
   const [loading, setLoading] = useState(false);
+  const [passwordHide, setPasswordHide] = useState(true);
+  const [confirmPasswordHide, setConfirmPasswordHide] = useState(true);
 
   const retrieveData = async () => {
     try {
@@ -187,30 +197,39 @@ const SignUp = () => {
           </View>
         )}
 
-        <View style={{marginTop: 26}}>
+        <View style={{marginTop: 26, position: 'relative'}}>
           <CustomTextInput
             activeOutlineColor="#151827"
             label="Password"
             mode="outlined"
             name="user_password"
             control={control}
-            secureTextEntry={true}
+            secureTextEntry={passwordHide}
             rules={{required: 'Password is required *'}}
           />
+          <TouchableOpacity
+            onPress={() => setPasswordHide(!passwordHide)}
+            style={{position: 'absolute', right: 18, top: 20, zIndex: 1}}>
+            <Icon
+              name={passwordHide ? 'eye-slash' : 'eye'}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
           {errors?.user_password && (
             <Text style={{color: 'red', marginTop: 4}}>
               {errors.user_password.message}
             </Text>
           )}
         </View>
-        <View style={{marginTop: 26}}>
+        <View style={{marginTop: 26, position: 'relative'}}>
           <CustomTextInput
             activeOutlineColor="#151827"
             label="Confirmed Password"
             mode="outlined"
             name="confirm_password"
             control={control}
-            secureTextEntry={true}
+            secureTextEntry={confirmPasswordHide}
             rules={{
               required: 'Confirmed Password is required *',
               validate: value => {
@@ -219,6 +238,15 @@ const SignUp = () => {
               },
             }}
           />
+          <TouchableOpacity
+            onPress={() => setConfirmPasswordHide(!confirmPasswordHide)}
+            style={{position: 'absolute', right: 18, top: 20, zIndex: 1}}>
+            <Icon
+              name={confirmPasswordHide ? 'eye-slash' : 'eye'}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
           {errors?.confirm_password && (
             <Text style={{color: 'red', marginTop: 4}}>
               {errors.confirm_password.message}

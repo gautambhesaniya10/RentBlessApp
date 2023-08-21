@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, ScrollView, View} from 'react-native';
+import {
+  Image,
+  StyleSheet,
+  Text,
+  ScrollView,
+  View,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomButton from '../../common/CustomButton';
@@ -10,19 +17,21 @@ import {signIn} from '../../graphql/mutations/authMutations';
 import {useSelector, useDispatch} from 'react-redux';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 import {useToast} from 'native-base';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const toast = useToast();
-
-  const [loginType, setLoginType] = useState('');
-  const [loading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm();
+
+  const [loginType, setLoginType] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [passwordHide, setPasswordHide] = useState(true);
 
   const onError = errors => console.log('Errors Occurred !! :', errors);
 
@@ -115,16 +124,25 @@ const Login = () => {
             </Text>
           )}
         </View>
-        <View style={{marginTop: 26}}>
+        <View style={{marginTop: 26, position: 'relative'}}>
           <CustomTextInput
             label="Password"
             mode="outlined"
             name="password"
-            secureTextEntry={true}
+            secureTextEntry={passwordHide}
             control={control}
             rules={{required: 'Password is required *'}}
             activeOutlineColor="#151827"
           />
+          <TouchableOpacity
+            onPress={() => setPasswordHide(!passwordHide)}
+            style={{position: 'absolute', right: 18, top: 20, zIndex: 1}}>
+            <Icon
+              name={passwordHide ? 'eye-slash' : 'eye'}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
           {errors?.password && (
             <Text style={{color: 'red', marginTop: 4}}>
               {errors.password.message}
