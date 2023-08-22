@@ -14,7 +14,6 @@ const MainBranchTab = ({
   mainBranchInfoErrors,
   mainBranchInfoHandleSubmit,
   setMainBranch,
-  mainBranch,
   mainBranchControl,
   ownerInfoGetValue,
 }) => {

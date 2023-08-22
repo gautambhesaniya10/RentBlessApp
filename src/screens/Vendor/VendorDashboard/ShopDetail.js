@@ -48,7 +48,6 @@ const ShopDetail = () => {
   const [shopLoading, setShopLoading] = useState(false);
   const [mainBranchLoading, setMainBranchLoading] = useState(false);
   const [mainBranch, setMainBranch] = useState();
-  console.log('mainBranchmainBranch', mainBranch);
 
   const [hours, setHours] = useState([
     {key: 'Sunday', value: ['09:00 AM - 08:00 PM']},
@@ -307,7 +306,6 @@ const ShopDetail = () => {
           mainBranchInfoErrors={mainBranchInfoErrors}
           mainBranchInfoHandleSubmit={mainBranchInfoHandleSubmit}
           setMainBranch={setMainBranch}
-          mainBranch={mainBranch}
           mainBranchControl={mainBranchControl}
           ownerInfoGetValue={ownerInfoGetValue}
         />
