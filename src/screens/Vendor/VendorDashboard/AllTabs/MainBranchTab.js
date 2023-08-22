@@ -6,63 +6,14 @@ import {FontStyle} from '../../../../../CommonStyle';
 import {RadioButton} from 'react-native-paper';
 
 const MainBranchTab = ({
-  vendorShopDetails,
-  useProfileData,
   mainBranchLoading,
   mainBranchInfoOnSubmit,
-  mainBranchInfoSetValue,
   mainBranchInfoErrors,
   mainBranchInfoHandleSubmit,
-  setMainBranch,
   mainBranchControl,
-  ownerInfoGetValue,
+  setSameAsOwner,
+  sameAsOwner,
 }) => {
-  const [sameAsOwner, setSameAsOwner] = useState('False');
-
-  useEffect(() => {
-    if (sameAsOwner === 'True') {
-      mainBranchInfoSetValue(
-        'manager_first_name',
-        ownerInfoGetValue('first_name'),
-      );
-      mainBranchInfoSetValue(
-        'manager_last_name',
-        ownerInfoGetValue('last_name'),
-      );
-      mainBranchInfoSetValue(
-        'manager_user_email',
-        ownerInfoGetValue('user_email'),
-      );
-      mainBranchInfoSetValue(
-        'manager_user_contact',
-        ownerInfoGetValue('user_contact'),
-      );
-    } else {
-      const mainBranches = vendorShopDetails?.branch_info?.find(
-        itm => itm.branch_type === 'main',
-      );
-      setMainBranch(mainBranches);
-
-      mainBranchInfoSetValue('address', mainBranches?.branch_address);
-      mainBranchInfoSetValue('pin_code', mainBranches?.branch_pinCode);
-
-      mainBranchInfoSetValue(
-        'manager_first_name',
-        mainBranches?.manager_name.split(' ')[0],
-      );
-      mainBranchInfoSetValue(
-        'manager_last_name',
-        mainBranches?.manager_name.split(' ')[1],
-      );
-      mainBranchInfoSetValue(
-        'manager_user_contact',
-        mainBranches?.manager_contact,
-      );
-      mainBranchInfoSetValue('city', mainBranches?.branch_city);
-      mainBranchInfoSetValue('manager_user_email', mainBranches?.manager_email);
-    }
-  }, [sameAsOwner, mainBranchInfoSetValue, ownerInfoGetValue]);
-
   return (
     <View style={{flex: 1}}>
       <View style={styles.mainContainer}>

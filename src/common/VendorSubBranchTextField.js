@@ -18,7 +18,7 @@ const VendorSubBranchTextField = ({
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: 'white',
+      background: '#FAFCFC',
     },
   };
 
