@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {FontStyle} from '../../CommonStyle';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const CustomButton = ({
   name,
@@ -14,6 +15,8 @@ const CustomButton = ({
   borderColor,
   onPress,
   loading,
+  icon,
+  iconName,
 }) => {
   const styles = StyleSheet.create({
     main: {
@@ -40,6 +43,7 @@ const CustomButton = ({
 
   return (
     <TouchableOpacity style={styles.main} onPress={() => onPress()}>
+      {icon && <Icon name={iconName} size={18} color={color} />}
       {loading && <ActivityIndicator color="white" />}
       <Text style={styles.loginBtn}>{name}</Text>
     </TouchableOpacity>

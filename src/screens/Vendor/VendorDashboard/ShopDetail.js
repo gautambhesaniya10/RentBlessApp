@@ -10,6 +10,7 @@ import {useToast} from 'native-base';
 import ShopInfo from './AllTabs/ShopInfo';
 import VendorLogoAndName from '../../../components/VendorLogoAndName';
 import MainBranchTab from './AllTabs/MainBranchTab';
+import SubBranchTab from './AllTabs/SubBranchTab';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -308,6 +309,12 @@ const ShopDetail = () => {
           setMainBranch={setMainBranch}
           mainBranchControl={mainBranchControl}
           ownerInfoGetValue={ownerInfoGetValue}
+        />
+      )}
+      {activeTab === 3 && (
+        <SubBranchTab
+          useProfileData={useProfileData}
+          vendorShopDetails={vendorShopDetails}
         />
       )}
     </ScrollView>
