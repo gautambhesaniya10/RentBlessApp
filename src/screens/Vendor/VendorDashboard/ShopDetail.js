@@ -9,6 +9,7 @@ import {shopUpdate} from '../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import ShopInfo from './AllTabs/ShopInfo';
 import VendorLogoAndName from '../../../components/VendorLogoAndName';
+import MainBranchTab from './AllTabs/MainBranchTab';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -29,6 +30,15 @@ const ShopDetail = () => {
     control: shopInfoControl,
   } = useForm();
 
+  const {
+    handleSubmit: mainBranchInfoHandleSubmit,
+    formState: {errors: mainBranchInfoErrors},
+    setValue: mainBranchInfoSetValue,
+    getValues: mainBranchInfoGetValue,
+    reset: mainBranchInfoReset,
+    control: mainBranchControl,
+  } = useForm();
+
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const useProfileData = useSelector(state => state?.user.userProfile);
   const [activeTab, setActiveTab] = useState(0);
@@ -36,6 +46,9 @@ const ShopDetail = () => {
   const [shopOwnerId, setShopOwnerId] = useState('');
   const [ownerLoading, setOwnerLoading] = useState(false);
   const [shopLoading, setShopLoading] = useState(false);
+  const [mainBranchLoading, setMainBranchLoading] = useState(false);
+  const [mainBranch, setMainBranch] = useState();
+  console.log('mainBranchmainBranch', mainBranch);
 
   const [hours, setHours] = useState([
     {key: 'Sunday', value: ['09:00 AM - 08:00 PM']},
@@ -133,6 +146,45 @@ const ShopDetail = () => {
       },
       error => {
         setShopLoading(false);
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          backgroundColor: 'red.600',
+          variant: 'solid',
+        });
+      },
+    );
+  };
+
+  const mainBranchInfoOnSubmit = data => {
+    console.log('data', data);
+
+    setMainBranchLoading(true);
+    shopUpdate({
+      branchInfo: [
+        {
+          id: mainBranch.id,
+          branch_address: data.address,
+          branch_pinCode: data.pin_code,
+          branch_city: data.city,
+          manager_name: data.manager_first_name + ' ' + data.manager_last_name,
+          manager_contact: data.manager_user_contact,
+          manager_email: data.manager_user_email,
+          branch_type: mainBranch.branch_type,
+        },
+      ],
+    }).then(
+      res => {
+        toast.show({
+          title: res?.data.updateShop.message,
+          placement: 'top',
+          backgroundColor: 'green.600',
+          variant: 'solid',
+        });
+        setMainBranchLoading(false);
+      },
+      error => {
+        setMainBranchLoading(false);
         toast.show({
           title: error.message,
           placement: 'top',
@@ -243,6 +295,21 @@ const ShopDetail = () => {
           vendorShopDetails={vendorShopDetails}
           hours={hours}
           setHours={setHours}
+        />
+      )}
+      {activeTab === 2 && (
+        <MainBranchTab
+          useProfileData={useProfileData}
+          vendorShopDetails={vendorShopDetails}
+          mainBranchLoading={mainBranchLoading}
+          mainBranchInfoOnSubmit={mainBranchInfoOnSubmit}
+          mainBranchInfoSetValue={mainBranchInfoSetValue}
+          mainBranchInfoErrors={mainBranchInfoErrors}
+          mainBranchInfoHandleSubmit={mainBranchInfoHandleSubmit}
+          setMainBranch={setMainBranch}
+          mainBranch={mainBranch}
+          mainBranchControl={mainBranchControl}
+          ownerInfoGetValue={ownerInfoGetValue}
         />
       )}
     </ScrollView>
