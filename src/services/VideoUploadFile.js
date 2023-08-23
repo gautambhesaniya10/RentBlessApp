@@ -9,8 +9,6 @@ export const VideoUploadFile = async data => {
     size: data.fileSize,
     type: data.type,
     uri: data.uri,
-    // width: data.width,
-    // height: data.height,
   };
   const uploadFile = newData;
 

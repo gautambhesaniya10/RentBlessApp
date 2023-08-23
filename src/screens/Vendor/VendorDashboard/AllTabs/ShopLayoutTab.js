@@ -28,7 +28,6 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
   const [uploadShopBackground, setUploadShopBackground] = useState('');
   const [uploadShopImages, setUploadShopImages] = useState([]);
   const [uploadShopVideo, setUploadShopVideo] = useState('');
-  const [getUploadShopImages, setGetUploadShopImages] = useState([]);
   const [shopLayoutAllMediaImages, setShopLayoutAllMediaImages] = useState([]);
   const [shopLayoutAllMediaVideos, setShopLayoutAllMediaVideos] = useState();
 
@@ -40,17 +39,26 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
     const buf = await response.blob();
     const file = new File([buf], fileName, {type: mimeType});
 
-    // let LinkImg = src;
-    // const myArrayLink = LinkImg.split('/');
-    // let FileName = myArrayLink[myArrayLink.length - 1];
-    // const UrlLink = `file:///data/user/0/com.rentblessapp/cache/${FileName}`;
-    console.log('file88888888*******', file?._data);
+    let ext = '';
+    if (mimeType === 'image/png') {
+      ext = 'jpg';
+    } else if (mimeType === 'video') {
+      ext = 'mp4';
+    }
+    const storeLocalUrl = await RNFetchBlob.config({
+      fileCache: true,
+      appendExt: ext,
+    }).fetch('GET', src);
+    const imagePath = storeLocalUrl.path();
+    const imagePathModify = `file://${imagePath}`;
+
     const reFactorFile = {
       ...file?._data,
       fileName: file?._data?.name,
       fileSize: file?._data?.size,
-      uri: src,
+      uri: imagePathModify,
     };
+
     return reFactorFile;
   };
 
@@ -97,11 +105,13 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
 
       {
         vendorShopDetails?.shop_video &&
-          srcToFile(vendorShopDetails?.shop_video, 'profile.mp4', 'video').then(
-            function (file) {
-              setUploadShopVideo(file);
-            },
-          );
+          srcToFile(
+            vendorShopDetails?.shop_video,
+            'shopVideo.mp4',
+            'video',
+          ).then(function (file) {
+            setUploadShopVideo(file);
+          });
       }
 
       vendorShopDetails?.shop_video &&

@@ -23,8 +23,6 @@ export const MultipleImageUploadFile = async data => {
         size: file.fileSize,
         type: file.type,
         uri: file.uri,
-        // width: file.width,
-        // height: file.height,
       };
       formData.append(`${i}`, newData);
     });
