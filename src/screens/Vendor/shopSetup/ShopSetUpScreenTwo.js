@@ -231,7 +231,7 @@ const ShopSetUpScreenTwo = ({
         style={{
           display: 'flex',
           flexDirection: 'row',
-          gap: 9,
+          justifyContent: 'space-between',
           flexWrap: 'wrap',
         }}>
         {['One', 'Two', 'Three']?.map((item, index) => {
@@ -245,7 +245,7 @@ const ShopSetUpScreenTwo = ({
                   <Image
                     resizeMode="cover"
                     source={{uri: shopImages[index]}}
-                    style={{width: 102, height: 100, borderRadius: 10}}
+                    style={{width: 112, height: 112, borderRadius: 10}}
                   />
                 </TouchableOpacity>
               ) : (
@@ -341,8 +341,8 @@ const styles = StyleSheet.create({
   shopImagesMain: {
     backgroundColor: '#FFF',
     alignItems: 'center',
-    width: 102,
-    height: 100,
+    width: 112,
+    height: 112,
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,

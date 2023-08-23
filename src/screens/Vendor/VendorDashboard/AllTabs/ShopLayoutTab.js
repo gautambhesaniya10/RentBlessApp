@@ -73,11 +73,9 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
             'profileLogo.png',
             'image/png',
           ).then(function (file) {
-            // console.log('f++++++++++', file);
             setUploadShopLogo(file);
           });
       }
-
       setShopLogo(vendorShopDetails?.shop_logo);
 
       {
@@ -90,7 +88,6 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
             setUploadShopBackground(file);
           });
       }
-
       setShopBackground(vendorShopDetails?.shop_cover_image);
 
       vendorShopDetails?.shop_images?.map(img => {
@@ -363,6 +360,11 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                 style={{width: 150, height: 150, borderRadius: 100}}
               />
             )}
+            <TouchableOpacity
+              onPress={() => ChooseShopLogoImage()}
+              style={styles.editIconMain}>
+              <Icon name="pencil" size={16} color="white" />
+            </TouchableOpacity>
           </TouchableOpacity>
           {error?.shopLogo && (
             <Text style={[styles.errorText, {alignSelf: 'center'}]}>
@@ -386,6 +388,11 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                 style={{width: '100%', height: 148, borderRadius: 10}}
               />
             )}
+            <TouchableOpacity
+              onPress={() => ChooseShopCoverImage()}
+              style={[styles.editIconMain, {top: 10, right: 10}]}>
+              <Icon name="pencil" size={16} color="white" />
+            </TouchableOpacity>
           </TouchableOpacity>
 
           {error?.shopBackground && (
@@ -398,7 +405,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              gap: 9,
+              justifyContent: 'space-between',
               flexWrap: 'wrap',
             }}>
             {shopImages?.map((item, index) => {
@@ -412,8 +419,13 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                       <Image
                         resizeMode="cover"
                         source={{uri: shopImages[index]}}
-                        style={{width: 102, height: 100, borderRadius: 10}}
+                        style={{width: 112, height: 112, borderRadius: 10}}
                       />
+                      <TouchableOpacity
+                        onPress={() => ChooseShopImages(index)}
+                        style={[styles.editIconMain, {top: 5, right: 5}]}>
+                        <Icon name="pencil" size={16} color="white" />
+                      </TouchableOpacity>
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
@@ -456,6 +468,11 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                 resizeMode="cover"
               />
             )}
+            <TouchableOpacity
+              onPress={() => ChooseShopVideo()}
+              style={[styles.editIconMain, {top: 10, right: 10}]}>
+              <Icon name="pencil" size={16} color="white" />
+            </TouchableOpacity>
           </TouchableOpacity>
         </View>
 
@@ -491,6 +508,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 100,
     elevation: 2,
+    position: 'relative',
   },
   uploadText: {
     color: '#29977E',
@@ -506,6 +524,7 @@ const styles = StyleSheet.create({
     fontFamily: FontStyle,
   },
   coverMainDiv: {
+    position: 'relative',
     backgroundColor: '#FFF',
     marginTop: 25,
     alignItems: 'center',
@@ -523,13 +542,25 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
   },
   shopImagesMain: {
+    position: 'relative',
     backgroundColor: '#FFF',
     alignItems: 'center',
-    width: 102,
-    height: 100,
+    width: 112,
+    height: 112,
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,
+  },
+  editIconMain: {
+    backgroundColor: 'black',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
   },
   errorText: {
     color: 'red',
