@@ -232,6 +232,7 @@ const ShopSetUpScreenTwo = ({
           display: 'flex',
           flexDirection: 'row',
           gap: 9,
+          flexWrap: 'wrap',
         }}>
         {['One', 'Two', 'Three']?.map((item, index) => {
           return (

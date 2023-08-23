@@ -11,6 +11,7 @@ import ShopInfo from './AllTabs/ShopInfo';
 import VendorLogoAndName from '../../../components/VendorLogoAndName';
 import MainBranchTab from './AllTabs/MainBranchTab';
 import SubBranchTab from './AllTabs/SubBranchTab';
+import ShopLayoutTab from './AllTabs/ShopLayoutTab';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -359,6 +360,12 @@ const ShopDetail = () => {
           vendorShopDetails={vendorShopDetails}
           mainBranchInfoGetValue={mainBranchInfoGetValue}
           ownerInfoGetValue={ownerInfoGetValue}
+        />
+      )}
+      {activeTab === 4 && (
+        <ShopLayoutTab
+          useProfileData={useProfileData}
+          vendorShopDetails={vendorShopDetails}
         />
       )}
     </ScrollView>

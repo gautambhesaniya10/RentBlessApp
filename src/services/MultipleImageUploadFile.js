@@ -23,8 +23,8 @@ export const MultipleImageUploadFile = async data => {
         size: file.fileSize,
         type: file.type,
         uri: file.uri,
-        width: file.width,
-        height: file.height,
+        // width: file.width,
+        // height: file.height,
       };
       formData.append(`${i}`, newData);
     });
@@ -38,7 +38,7 @@ export const MultipleImageUploadFile = async data => {
     });
     return response;
   } catch (error) {
-    console.error('Axios Error:', error);
+    console.error('Axios Error23:', error);
     throw error;
   }
 };
