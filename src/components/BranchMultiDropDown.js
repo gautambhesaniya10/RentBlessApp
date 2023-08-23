@@ -8,11 +8,20 @@ const BranchMultiDropDown = ({
   cardTitle,
   bottomComponent,
   onDeleteBranch,
+  onEditBranch,
 }) => {
   const [show, setShow] = useState(false);
   return (
     <View key={index} style={styles.branchesMainContainer}>
-      <View style={styles.BranchListHeaderMain}>
+      <View
+        style={[
+          styles.BranchListHeaderMain,
+          {
+            borderRadius: show ? 0 : 20,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+          },
+        ]}>
         <TouchableOpacity
           onPress={() => setShow(!show)}
           style={styles.leftMain}>
@@ -25,7 +34,9 @@ const BranchMultiDropDown = ({
         </TouchableOpacity>
 
         <View style={styles.leftMain}>
-          <TouchableOpacity style={styles.editPencil}>
+          <TouchableOpacity
+            onPress={() => onEditBranch(item)}
+            style={styles.editPencil}>
             <Icon name="pencil" size={13} color="white" />
           </TouchableOpacity>
 
@@ -64,7 +75,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: '#F3F6F6',
-    borderRadius: 20,
+    // borderRadius: 20,
+    // borderTopRightRadius: 20,
+    // borderTopLeftRadius: 20,
   },
   textBranchName: {
     color: '#151827',

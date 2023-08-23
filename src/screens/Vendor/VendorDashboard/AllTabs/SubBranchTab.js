@@ -18,7 +18,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import BranchMultiDropDown from '../../../../components/BranchMultiDropDown';
 import {FontStyle} from '../../../../../CommonStyle';
 import {NativeBaseProvider, Select, useToast} from 'native-base';
-import {createBranch, deleteBranch} from '../../../../graphql/mutations/branch';
+import {
+  createBranch,
+  deleteBranch,
+  updateBranch,
+} from '../../../../graphql/mutations/branch';
 import VendorSubBranchTextField from '../../../../common/VendorSubBranchTextField';
 
 const SubBranchTab = ({
@@ -46,6 +50,10 @@ const SubBranchTab = ({
   const onDeleteBranch = deleteItem => {
     setDeleteBranchId(deleteItem?.id);
     setBranchDeleteModalOpen(true);
+  };
+  const onEditBranch = editItem => {
+    setEditSubBranchId(editItem?.id);
+    setSubBranchModalOpen(true);
   };
 
   useEffect(() => {
@@ -90,6 +98,7 @@ const SubBranchTab = ({
                 index={index}
                 cardTitle={`Branch ${index + 1}`}
                 onDeleteBranch={onDeleteBranch}
+                onEditBranch={onEditBranch}
                 bottomComponent={
                   <View>
                     <View style={styles.listMain}>
@@ -299,6 +308,13 @@ const AddEditModelStyles = StyleSheet.create({
     width: '100%',
     justifyContent: 'space-between',
   },
+  buttonMain: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 20,
+    justifyContent: 'flex-end',
+    marginTop: 20,
+  },
 });
 
 const SubBranchModal = ({
@@ -360,19 +376,19 @@ const SubBranchModal = ({
     }
   }, [error, mainBranchInfoGetValue, managerValue, ownerInfoGetValue]);
 
-  //   useEffect(() => {
-  //     if (editSubBranchId !== undefined) {
-  //       getSingleBranchDetails({ id: editSubBranchId }).then((res) => {
-  //         setSubManagerAddress(res.data.branch.branch_address);
-  //         setSubManagerCity(res.data.branch.branch_city);
-  //         setSubManagerPinCode(res.data.branch.branch_pinCode);
-  //         setSubManagerFirstName(res.data.branch.manager_name.split(" ")[0]);
-  //         setSubManagerLastName(res.data.branch.manager_name.split(" ")[1]);
-  //         setSubManagerEmail(res.data.branch.manager_email);
-  //         setSubManagerPhone(res.data.branch.manager_contact);
-  //       });
-  //     }
-  //   }, [editSubBranchId]);
+  useEffect(() => {
+    if (editSubBranchId !== undefined) {
+      getSingleBranchDetails({id: editSubBranchId}).then(res => {
+        setSubManagerAddress(res.data.branch.branch_address);
+        setSubManagerCity(res.data.branch.branch_city);
+        setSubManagerPinCode(res.data.branch.branch_pinCode);
+        setSubManagerFirstName(res.data.branch.manager_name.split(' ')[0]);
+        setSubManagerLastName(res.data.branch.manager_name.split(' ')[1]);
+        setSubManagerEmail(res.data.branch.manager_email);
+        setSubManagerPhone(res.data.branch.manager_contact);
+      });
+    }
+  }, [editSubBranchId]);
 
   const subBranchSubmit = () => {
     let allError = {};
@@ -467,31 +483,41 @@ const SubBranchModal = ({
           },
         );
       } else {
-        // updateBranch({
-        //   id: editSubBranchId,
-        //   branchInfo: {
-        //     branch_address: subManagerAddress,
-        //     branch_city: subManagerCity,
-        //     branch_pinCode: subManagerPinCode,
-        //     manager_name: subManagerFirstName + " " + subManagerLastName,
-        //     manager_contact: subManagerPhone,
-        //     manager_email: subManagerEmail,
-        //     branch_type: "sub",
-        //     shop_id: ShopId,
-        //   },
-        // }).then(
-        //   (res) => {
-        //     console.log("main res:::", res);
-        //     toast.success(res.data.updateBranch.message, {
-        //       theme: "colored",
-        //     });
-        //     getAllSubBranchList();
-        //     handleSubBranchModalClose();
-        //   },
-        //   (error) => {
-        //     toast.error(error.message, { theme: "colored" });
-        //   }
-        // );
+        setLoading(true);
+        updateBranch({
+          id: editSubBranchId,
+          branchInfo: {
+            branch_address: subManagerAddress,
+            branch_city: subManagerCity,
+            branch_pinCode: subManagerPinCode,
+            manager_name: subManagerFirstName + ' ' + subManagerLastName,
+            manager_contact: subManagerPhone,
+            manager_email: subManagerEmail,
+            branch_type: 'sub',
+            shop_id: ShopId,
+          },
+        }).then(
+          res => {
+            toast.show({
+              title: res.data.updateBranch.message,
+              placement: 'top',
+              backgroundColor: 'green.600',
+              variant: 'solid',
+            });
+            setLoading(false);
+            getAllSubBranchList();
+            handleSubBranchModalClose();
+          },
+          error => {
+            toast.show({
+              title: error.message,
+              placement: 'top',
+              backgroundColor: 'red.600',
+              variant: 'solid',
+            });
+            setLoading(false);
+          },
+        );
       }
     }
   };
@@ -726,15 +752,26 @@ const SubBranchModal = ({
               )}
             </View>
           </View>
-          <View style={{width: '100%'}}>
-            <CustomButton
-              name={editSubBranchId === undefined ? 'Save' : 'Update'}
-              color="#FFFFFF"
-              backgroundColor="#29977E"
-              borderColor="#29977E"
-              onPress={() => subBranchSubmit()}
-              loading={loading}
-            />
+          <View style={AddEditModelStyles.buttonMain}>
+            <View style={{width: '30%'}}>
+              <CustomButton
+                name="Cancel"
+                color="#29977E"
+                backgroundColor="white"
+                borderColor="#29977E"
+                onPress={() => handleSubBranchModalClose()}
+              />
+            </View>
+            <View style={{width: '30%'}}>
+              <CustomButton
+                name={editSubBranchId === undefined ? 'Save' : 'Update'}
+                color="#FFFFFF"
+                backgroundColor="#29977E"
+                borderColor="#29977E"
+                onPress={() => subBranchSubmit()}
+                loading={loading}
+              />
+            </View>
           </View>
         </View>
       </View>
