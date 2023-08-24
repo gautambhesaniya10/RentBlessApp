@@ -1,15 +1,22 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTextInput from '../../../../common/CustomTextInput';
 import {Controller, useForm} from 'react-hook-form';
 import CustomButton from '../../../../common/CustomButton';
-import {NativeBaseProvider, Select} from 'native-base';
+import {NativeBaseProvider, Select, useToast} from 'native-base';
 import AddProductDropDown from '../../../../common/AddProductDropDown';
 import {getBranchLists} from '../../../../graphql/queries/branchListsQueries';
 import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
+import {FontStyle} from '../../../../../CommonStyle';
+import {launchImageLibrary} from 'react-native-image-picker';
+import Video from 'react-native-video';
+import {MultipleImageUploadFile} from '../../../../services/MultipleImageUploadFile';
+import {createProduct} from '../../../../graphql/mutations/products';
 
 const AddEditProduct = ({categories, userProfile}) => {
+  const toast = useToast();
+
   const {
     handleSubmit,
     formState: {errors},
@@ -26,6 +33,15 @@ const AddEditProduct = ({categories, userProfile}) => {
   const [editorDescriptionContent, setEditorDescriptionContent] = useState('');
   const [errorDescription, setErrorDescription] = useState('');
 
+  const [productImages, setProductImages] = useState([]);
+  const [uploadProductImages, setUploadProductImages] = useState([]);
+  const ProductImgError = productImages?.filter(item => item !== undefined);
+  const [productVideo, setProductVideo] = useState('');
+  const [uploadProductVideo, setUploadProductVideo] = useState();
+  const [error, setError] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [editProductId, setEditProductId] = useState();
+
   const richtext = useRef(null);
 
   const colorsList = [
@@ -41,6 +57,25 @@ const AddEditProduct = ({categories, userProfile}) => {
     'black',
   ];
   const productTypeData = ['Men', 'Women'];
+
+  const Validate = () => {
+    let isValid = true;
+    const error = {};
+
+    if (ProductImgError.length !== 3) {
+      isValid = false;
+      error['productImages'] = 'Please Select Product images*';
+    }
+
+    setError(error);
+    return isValid;
+  };
+
+  useEffect(() => {
+    if (ProductImgError?.length === 3) {
+      setError({...error, productImages: ''});
+    }
+  }, [ProductImgError?.length]);
 
   useEffect(() => {
     setMenCategoryLabel(
@@ -78,12 +113,162 @@ const AddEditProduct = ({categories, userProfile}) => {
   //     richtext.current?.setContentHTML('<p>Hello, Rich Editor!</p>');
   //   }, []);
 
+  const ChooseProductImages = index => {
+    let options = {
+      title: 'Select Product Image',
+      customButtons: [
+        {name: 'customOptionKey', title: 'Choose image from Custom Option'},
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      } else {
+        const newImage = [...productImages]; // Create a copy of the array
+        newImage[index] = response.assets[0].uri; // Update value at the specified index
+        setProductImages(newImage);
+
+        const newImageFile = [...uploadProductImages]; // Create a copy of the array
+        newImageFile[index] = response.assets[0]; // Update value at the specified index
+        setUploadProductImages(newImageFile);
+      }
+    });
+  };
+
+  const ChooseProductVideo = () => {
+    let options = {
+      title: 'Select Product Video',
+      customButtons: [
+        {name: 'customOptionKey', title: 'Choose video from Custom Option'},
+      ],
+      storageOptions: {
+        skipBackup: true,
+        path: 'images',
+      },
+      mediaType: 'video',
+      videoQuality: 'high',
+    };
+
+    launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+        alert(response.customButton);
+      } else {
+        setProductVideo(response.assets[0].uri);
+        setUploadProductVideo(response.assets[0]);
+      }
+    });
+  };
+
   const onSubmitProduct = data => {
-    console.log('datapppppp', data);
     if (editorDescriptionContent === '') {
       setErrorDescription('Product description is required');
-    } else {
+    } else if (Validate()) {
+      setErrorDescription('');
+      setLoading(true);
+      if (editProductId === undefined) {
+        MultipleImageUploadFile(uploadProductImages).then(res => {
+          uploadProductVideo !== undefined
+            ? VideoUploadFile(uploadProductVideo).then(videoResponse => {
+                createProduct({
+                  productInfo: {
+                    branch_id: data.product_branch,
+                    category_id: data.product_category,
+                    product_color: data.product_color,
+                    product_description: editorDescriptionContent,
+                    product_name: data.product_name,
+                    product_type: data.product_type,
+                    product_image: {
+                      front: res.data.data.multipleUpload[0],
+                      back: res.data.data.multipleUpload[1],
+                      side: res.data.data.multipleUpload[2],
+                    },
+                    product_video: videoResponse.data.data.singleUpload,
+                  },
+                }).then(
+                  res => {
+                    toast.show({
+                      title: res.data.createProduct.message,
+                      placement: 'top',
+                      backgroundColor: 'green.600',
+                      variant: 'solid',
+                    });
+                    setLoading(false);
+                    handleProductListingModalClose();
+                  },
+                  error => {
+                    setLoading(false);
+                    toast.show({
+                      title: error.message,
+                      placement: 'top',
+                      backgroundColor: 'red.600',
+                      variant: 'solid',
+                    });
+                  },
+                );
+              })
+            : createProduct({
+                productInfo: {
+                  branch_id: data.product_branch,
+                  category_id: data.product_category,
+                  product_color: data.product_color,
+                  product_description: editorDescriptionContent,
+                  product_name: data.product_name,
+                  product_type: data.product_type,
+                  product_image: {
+                    front: res.data.data.multipleUpload[0],
+                    back: res.data.data.multipleUpload[1],
+                    side: res.data.data.multipleUpload[2],
+                  },
+                },
+              }).then(
+                res => {
+                  console.log('res:::', res);
+                  toast.show({
+                    title: res.data.createProduct.message,
+                    placement: 'top',
+                    backgroundColor: 'green.600',
+                    variant: 'solid',
+                  });
+                  setLoading(false);
+                  handleProductListingModalClose();
+                },
+                error => {
+                  setLoading(false);
+                  toast.show({
+                    title: rerror.message,
+                    placement: 'top',
+                    backgroundColor: 'red.600',
+                    variant: 'solid',
+                  });
+                },
+              );
+        });
+      }
     }
+  };
+
+  const handleProductListingModalClose = () => {
+    reset();
+    setProductType();
+    setProductImages([]);
+    setUploadProductImages([]);
+    setProductVideo();
+    setUploadProductVideo();
+    setEditProductId();
   };
 
   return (
@@ -248,6 +433,7 @@ const AddEditProduct = ({categories, userProfile}) => {
             <RichEditor
               ref={richtext}
               onChange={des => handleEditorChange(des)}
+              style={styles.richEditor}
             />
           </View>
           {errorDescription && (
@@ -255,14 +441,92 @@ const AddEditProduct = ({categories, userProfile}) => {
           )}
         </View>
 
-        <View style={{width: '100%'}}>
+        <Text style={styles.shopImgText}>Product Images</Text>
+
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}>
+          {['One', 'Two', 'Three']?.map((item, index) => {
+            return (
+              <>
+                {productImages[index] ? (
+                  <TouchableOpacity
+                    onPress={() => ChooseProductImages(index)}
+                    key={index}
+                    style={styles.shopImagesMain}>
+                    <Image
+                      resizeMode="cover"
+                      source={{uri: productImages[index]}}
+                      style={{width: 112, height: 112, borderRadius: 10}}
+                    />
+                    <TouchableOpacity
+                      onPress={() => ChooseProductImages(index)}
+                      style={[styles.editIconMain, {top: 5, right: 5}]}>
+                      <Icon name="pencil" size={16} color="white" />
+                    </TouchableOpacity>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => ChooseProductImages(index)}
+                    key={index}
+                    style={styles.shopImagesMain}>
+                    <Icon name="image" size={23} color="black" />
+                    <Text style={[styles.uploadText, {fontSize: 12}]}>
+                      Click to Upload
+                    </Text>
+                    <Text style={styles.uploadTextInner}>Product Image </Text>
+                  </TouchableOpacity>
+                )}
+              </>
+            );
+          })}
+        </View>
+
+        {error?.productImages && (
+          <Text style={styles.errorText}>{error?.productImages}</Text>
+        )}
+
+        <Text style={styles.shopImgText}>Product Video</Text>
+        <TouchableOpacity
+          onPress={() => ChooseProductVideo()}
+          style={[styles.coverMainDiv, {marginTop: 0}]}>
+          {productVideo === '' ? (
+            <>
+              <Icon name="image" size={25} color="black" />
+              <Text style={styles.uploadText}>Click to Upload </Text>
+              <Text style={styles.uploadTextInner}>Product Video </Text>
+            </>
+          ) : (
+            <Video
+              source={{
+                uri: productVideo,
+              }}
+              style={{width: '100%', height: 150, borderRadius: 10}}
+              // controls={true}
+              resizeMode="cover"
+            />
+          )}
+          {productVideo && (
+            <TouchableOpacity
+              onPress={() => ChooseProductVideo()}
+              style={[styles.editIconMain, {top: 10, right: 10}]}>
+              <Icon name="pencil" size={16} color="white" />
+            </TouchableOpacity>
+          )}
+        </TouchableOpacity>
+
+        <View style={{width: '100%', marginTop: 20}}>
           <CustomButton
             name="Add Product"
             color="#FFFFFF"
             backgroundColor="#151827"
             borderColor="#29977E"
             onPress={handleSubmit(onSubmitProduct)}
-            // loading={ownerLoading}
+            loading={loading}
           />
         </View>
       </View>
@@ -290,7 +554,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderWidth: 1,
     borderColor: 'gray',
-    height: 160,
+    height: 190,
+  },
+  richEditor: {
+    minHeight: 100, // Set the desired height here
+    // You can also use maxHeight or height with percentages or flex values
+    // height: '50%',
+    // height: 300,
+    borderWidth: 1,
+    borderColor: 'gray',
   },
   richToolbar: {
     borderTopWidth: 1,
@@ -301,5 +573,64 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     padding: 6,
+  },
+
+  shopImgText: {
+    color: '#151827',
+    fontSize: 16,
+    fontWeight: '700',
+    paddingVertical: 16,
+  },
+  shopImagesMain: {
+    position: 'relative',
+    backgroundColor: '#FFF',
+    alignItems: 'center',
+    width: 112,
+    height: 112,
+    justifyContent: 'center',
+    borderRadius: 10,
+    elevation: 2,
+  },
+  editIconMain: {
+    backgroundColor: 'black',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
+    position: 'absolute',
+    bottom: 10,
+    right: 10,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 14,
+    fontWeight: '600',
+    paddingTop: 6,
+  },
+  uploadText: {
+    color: '#29977E',
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: FontStyle,
+    paddingTop: 6,
+  },
+  uploadTextInner: {
+    color: 'rgba(21, 24, 39, 0.40)',
+    fontSize: 14,
+    fontWeight: '700',
+    fontFamily: FontStyle,
+  },
+  coverMainDiv: {
+    position: 'relative',
+    backgroundColor: '#FFF',
+    marginTop: 25,
+    alignItems: 'center',
+    alignSelf: 'center',
+    width: '100%',
+    height: 150,
+    justifyContent: 'center',
+    elevation: 2,
+    borderRadius: 10,
   },
 });

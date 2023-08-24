@@ -21,7 +21,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
   const [shopLogo, setShopLogo] = useState('');
   const [shopBackground, setShopBackground] = useState('');
   const [shopImages, setShopImages] = useState([]);
-  const ShopImgsError = shopImages?.filter(item => item !== undefined);
+  // const ShopImgsError = shopImages?.filter(item => item !== undefined);
   const [shopVideo, setShopVideo] = useState('');
 
   const [uploadShopLogo, setUploadShopLogo] = useState('');
@@ -198,6 +198,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
         skipBackup: true,
         path: 'images',
       },
+      // selectionLimit: 10
     };
 
     launchImageLibrary(options, response => {
