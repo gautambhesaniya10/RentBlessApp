@@ -14,7 +14,7 @@ import Video from 'react-native-video';
 import {MultipleImageUploadFile} from '../../../../services/MultipleImageUploadFile';
 import {createProduct} from '../../../../graphql/mutations/products';
 
-const AddEditProduct = ({categories, userProfile}) => {
+const AddEditProduct = ({categories, userProfile, setOpenAddEditProduct}) => {
   const toast = useToast();
 
   const {
@@ -269,63 +269,123 @@ const AddEditProduct = ({categories, userProfile}) => {
     setProductVideo();
     setUploadProductVideo();
     setEditProductId();
+    setOpenAddEditProduct(false);
   };
 
   return (
     <View style={{flex: 1}}>
-      <View style={styles.addBranchHeader}>
-        <Icon onPress={() => {}} name="arrow-left" size={20} color="black" />
-        <Text style={styles.addBranchText}>Add Product</Text>
-      </View>
-      <View>
-        <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="Product Name"
-            mode="outlined"
-            control={control}
-            name="product_name"
-            rules={{
-              required: 'Product Name is required *',
-            }}
-            activeOutlineColor="#29977E"
+      <View style={styles.mainContainer}>
+        <View style={styles.addBranchHeader}>
+          <Icon
+            onPress={() => setOpenAddEditProduct(false)}
+            name="arrow-left"
+            size={20}
+            color="black"
           />
-          {errors?.product_name && (
-            <Text style={{color: 'red'}}>{errors?.product_name?.message}</Text>
-          )}
+          <Text style={styles.addBranchText}>Back To All Products</Text>
         </View>
+        <View>
+          <View style={{marginBottom: 15}}>
+            <CustomTextInput
+              label="Product Name"
+              mode="outlined"
+              control={control}
+              name="product_name"
+              rules={{
+                required: 'Product Name is required *',
+              }}
+              activeOutlineColor="#29977E"
+            />
+            {errors?.product_name && (
+              <Text style={{color: 'red'}}>
+                {errors?.product_name?.message}
+              </Text>
+            )}
+          </View>
 
-        <View style={{marginBottom: 15}}>
-          <AddProductDropDown
-            name="product_color"
-            label="Product Color"
-            rules={{
-              required: 'Product Color is required *',
-            }}
-            listData={colorsList}
-            control={control}
-          />
-          {errors?.product_color && (
-            <Text style={{color: 'red'}}>{errors?.product_color?.message}</Text>
-          )}
-        </View>
-        <View style={{marginBottom: 15}}>
-          <AddProductDropDown
-            name="product_type"
-            label="Product Type"
-            rules={{
-              required: 'Product Type is required *',
-            }}
-            listData={productTypeData}
-            control={control}
-            setProductType={setProductType}
-            AllowGetProductType={true}
-          />
-          {errors?.product_type && (
-            <Text style={{color: 'red'}}>{errors?.product_type?.message}</Text>
-          )}
-        </View>
+          <View style={{marginBottom: 15}}>
+            <AddProductDropDown
+              name="product_color"
+              label="Product Color"
+              rules={{
+                required: 'Product Color is required *',
+              }}
+              listData={colorsList}
+              control={control}
+            />
+            {errors?.product_color && (
+              <Text style={{color: 'red'}}>
+                {errors?.product_color?.message}
+              </Text>
+            )}
+          </View>
+          <View style={{marginBottom: 15}}>
+            <AddProductDropDown
+              name="product_type"
+              label="Product Type"
+              rules={{
+                required: 'Product Type is required *',
+              }}
+              listData={productTypeData}
+              control={control}
+              setProductType={setProductType}
+              AllowGetProductType={true}
+            />
+            {errors?.product_type && (
+              <Text style={{color: 'red'}}>
+                {errors?.product_type?.message}
+              </Text>
+            )}
+          </View>
 
-        {productType && (
+          {productType && (
+            <View style={{marginBottom: 15}}>
+              <Controller
+                control={control}
+                render={({field: {onChange, onBlur, value}}) => {
+                  return (
+                    <NativeBaseProvider>
+                      <Select
+                        selectedValue={value}
+                        height="50"
+                        placeholder="Product Category"
+                        _selectedItem={{
+                          bg: 'green.200',
+                        }}
+                        style={{fontSize: 16}}
+                        onValueChange={onChange}>
+                        {productType === 'Men'
+                          ? menCategoryLabel?.map((item, index) => (
+                              <Select.Item
+                                key={index}
+                                label={item?.category_name}
+                                value={item?.id}
+                              />
+                            ))
+                          : womenCategoryLabel?.map((item, index) => (
+                              <Select.Item
+                                key={index}
+                                label={item?.category_name}
+                                value={item?.id}
+                              />
+                            ))}
+                      </Select>
+                    </NativeBaseProvider>
+                  );
+                }}
+                name="product_category"
+                rules={{
+                  required: 'Product Category is required *',
+                }}
+              />
+              {errors?.product_category && (
+                <Text style={{color: 'red'}}>
+                  {errors?.product_category?.message}
+                </Text>
+              )}
+            </View>
+          )}
+
           <View style={{marginBottom: 15}}>
             <Controller
               control={control}
@@ -335,199 +395,153 @@ const AddEditProduct = ({categories, userProfile}) => {
                     <Select
                       selectedValue={value}
                       height="50"
-                      placeholder="Product Category"
+                      placeholder="Branch"
                       _selectedItem={{
                         bg: 'green.200',
                       }}
                       style={{fontSize: 16}}
                       onValueChange={onChange}>
-                      {productType === 'Men'
-                        ? menCategoryLabel?.map((item, index) => (
-                            <Select.Item
-                              key={index}
-                              label={item?.category_name}
-                              value={item?.id}
-                            />
-                          ))
-                        : womenCategoryLabel?.map((item, index) => (
-                            <Select.Item
-                              key={index}
-                              label={item?.category_name}
-                              value={item?.id}
-                            />
-                          ))}
+                      {branchList?.map((item, index) => (
+                        <Select.Item
+                          key={index}
+                          label={
+                            item?.branch_address +
+                            ' ' +
+                            '(' +
+                            item?.branch_type +
+                            ')'
+                          }
+                          value={item?.id}
+                        />
+                      ))}
                     </Select>
                   </NativeBaseProvider>
                 );
               }}
-              name="product_category"
+              name="product_branch"
               rules={{
-                required: 'Product Category is required *',
+                required: 'Branch is required *',
               }}
             />
-            {errors?.product_category && (
+            {errors?.product_branch && (
               <Text style={{color: 'red'}}>
-                {errors?.product_category?.message}
+                {errors?.product_branch?.message}
               </Text>
             )}
           </View>
-        )}
-
-        <View style={{marginBottom: 15}}>
-          <Controller
-            control={control}
-            render={({field: {onChange, onBlur, value}}) => {
-              return (
-                <NativeBaseProvider>
-                  <Select
-                    selectedValue={value}
-                    height="50"
-                    placeholder="Branch"
-                    _selectedItem={{
-                      bg: 'green.200',
-                    }}
-                    style={{fontSize: 16}}
-                    onValueChange={onChange}>
-                    {branchList?.map((item, index) => (
-                      <Select.Item
-                        key={index}
-                        label={
-                          item?.branch_address +
-                          ' ' +
-                          '(' +
-                          item?.branch_type +
-                          ')'
-                        }
-                        value={item?.id}
-                      />
-                    ))}
-                  </Select>
-                </NativeBaseProvider>
-              );
-            }}
-            name="product_branch"
-            rules={{
-              required: 'Branch is required *',
-            }}
-          />
-          {errors?.product_branch && (
-            <Text style={{color: 'red'}}>
-              {errors?.product_branch?.message}
-            </Text>
-          )}
-        </View>
-        <View style={{marginBottom: 15}}>
-          <View style={styles.container}>
-            <Text style={styles.desText}>Description</Text>
-            <RichToolbar
-              style={styles.richToolbar}
-              editor={richtext}
-              actions={[
-                actions.setBold,
-                actions.setItalic,
-                actions.setUnderline,
-                actions.undo,
-                actions.redo,
-              ]}
-            />
-            <RichEditor
-              ref={richtext}
-              onChange={des => handleEditorChange(des)}
-              style={styles.richEditor}
-            />
+          <View style={{marginBottom: 15}}>
+            <View style={styles.container}>
+              <Text style={styles.desText}>Description</Text>
+              <RichToolbar
+                style={styles.richToolbar}
+                editor={richtext}
+                actions={[
+                  actions.setBold,
+                  actions.setItalic,
+                  actions.setUnderline,
+                  actions.undo,
+                  actions.redo,
+                ]}
+              />
+              <RichEditor
+                ref={richtext}
+                onChange={des => handleEditorChange(des)}
+                style={styles.richEditor}
+              />
+            </View>
+            {errorDescription && (
+              <Text style={{color: 'red'}}>{errorDescription}</Text>
+            )}
           </View>
-          {errorDescription && (
-            <Text style={{color: 'red'}}>{errorDescription}</Text>
-          )}
-        </View>
 
-        <Text style={styles.shopImgText}>Product Images</Text>
+          <Text style={styles.shopImgText}>Product Images</Text>
 
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-          }}>
-          {['One', 'Two', 'Three']?.map((item, index) => {
-            return (
-              <>
-                {productImages[index] ? (
-                  <TouchableOpacity
-                    onPress={() => ChooseProductImages(index)}
-                    key={index}
-                    style={styles.shopImagesMain}>
-                    <Image
-                      resizeMode="cover"
-                      source={{uri: productImages[index]}}
-                      style={{width: 112, height: 112, borderRadius: 10}}
-                    />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+            }}>
+            {['One', 'Two', 'Three']?.map((item, index) => {
+              return (
+                <>
+                  {productImages[index] ? (
                     <TouchableOpacity
                       onPress={() => ChooseProductImages(index)}
-                      style={[styles.editIconMain, {top: 5, right: 5}]}>
-                      <Icon name="pencil" size={16} color="white" />
+                      key={index}
+                      style={styles.shopImagesMain}>
+                      <Image
+                        resizeMode="cover"
+                        source={{uri: productImages[index]}}
+                        style={{width: 112, height: 112, borderRadius: 10}}
+                      />
+                      <TouchableOpacity
+                        onPress={() => ChooseProductImages(index)}
+                        style={[styles.editIconMain, {top: 5, right: 5}]}>
+                        <Icon name="pencil" size={16} color="white" />
+                      </TouchableOpacity>
                     </TouchableOpacity>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() => ChooseProductImages(index)}
-                    key={index}
-                    style={styles.shopImagesMain}>
-                    <Icon name="image" size={23} color="black" />
-                    <Text style={[styles.uploadText, {fontSize: 12}]}>
-                      Click to Upload
-                    </Text>
-                    <Text style={styles.uploadTextInner}>Product Image </Text>
-                  </TouchableOpacity>
-                )}
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => ChooseProductImages(index)}
+                      key={index}
+                      style={styles.shopImagesMain}>
+                      <Icon name="image" size={23} color="black" />
+                      <Text style={[styles.uploadText, {fontSize: 12}]}>
+                        Click to Upload
+                      </Text>
+                      <Text style={styles.uploadTextInner}>Product Image </Text>
+                    </TouchableOpacity>
+                  )}
+                </>
+              );
+            })}
+          </View>
+
+          {error?.productImages && (
+            <Text style={styles.errorText}>{error?.productImages}</Text>
+          )}
+
+          <Text style={styles.shopImgText}>Product Video</Text>
+          <TouchableOpacity
+            onPress={() => ChooseProductVideo()}
+            style={[styles.coverMainDiv, {marginTop: 0}]}>
+            {productVideo === '' ? (
+              <>
+                <Icon name="image" size={25} color="black" />
+                <Text style={styles.uploadText}>Click to Upload </Text>
+                <Text style={styles.uploadTextInner}>Product Video </Text>
               </>
-            );
-          })}
-        </View>
+            ) : (
+              <Video
+                source={{
+                  uri: productVideo,
+                }}
+                style={{width: '100%', height: 150, borderRadius: 10}}
+                // controls={true}
+                resizeMode="cover"
+              />
+            )}
+            {productVideo && (
+              <TouchableOpacity
+                onPress={() => ChooseProductVideo()}
+                style={[styles.editIconMain, {top: 10, right: 10}]}>
+                <Icon name="pencil" size={16} color="white" />
+              </TouchableOpacity>
+            )}
+          </TouchableOpacity>
 
-        {error?.productImages && (
-          <Text style={styles.errorText}>{error?.productImages}</Text>
-        )}
-
-        <Text style={styles.shopImgText}>Product Video</Text>
-        <TouchableOpacity
-          onPress={() => ChooseProductVideo()}
-          style={[styles.coverMainDiv, {marginTop: 0}]}>
-          {productVideo === '' ? (
-            <>
-              <Icon name="image" size={25} color="black" />
-              <Text style={styles.uploadText}>Click to Upload </Text>
-              <Text style={styles.uploadTextInner}>Product Video </Text>
-            </>
-          ) : (
-            <Video
-              source={{
-                uri: productVideo,
-              }}
-              style={{width: '100%', height: 150, borderRadius: 10}}
-              // controls={true}
-              resizeMode="cover"
+          <View style={{width: '100%', marginTop: 20}}>
+            <CustomButton
+              name="Add Product"
+              color="#FFFFFF"
+              backgroundColor="#151827"
+              borderColor="#29977E"
+              onPress={handleSubmit(onSubmitProduct)}
+              loading={loading}
             />
-          )}
-          {productVideo && (
-            <TouchableOpacity
-              onPress={() => ChooseProductVideo()}
-              style={[styles.editIconMain, {top: 10, right: 10}]}>
-              <Icon name="pencil" size={16} color="white" />
-            </TouchableOpacity>
-          )}
-        </TouchableOpacity>
-
-        <View style={{width: '100%', marginTop: 20}}>
-          <CustomButton
-            name="Add Product"
-            color="#FFFFFF"
-            backgroundColor="#151827"
-            borderColor="#29977E"
-            onPress={handleSubmit(onSubmitProduct)}
-            loading={loading}
-          />
+          </View>
         </View>
       </View>
     </View>
@@ -537,6 +551,10 @@ const AddEditProduct = ({categories, userProfile}) => {
 export default AddEditProduct;
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    marginHorizontal: 22,
+    marginVertical: 30,
+  },
   addBranchHeader: {
     display: 'flex',
     flexDirection: 'row',

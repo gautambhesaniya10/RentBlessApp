@@ -1,5 +1,5 @@
 import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import VendorLogoAndName from '../../../components/VendorLogoAndName';
@@ -12,6 +12,8 @@ const Product = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const {userProfile} = useSelector(state => state?.user);
   const {categories} = useSelector(state => state?.categories);
+
+  const [openAddEditProduct, setOpenAddEditProduct] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -28,20 +30,26 @@ const Product = () => {
         <Text style={styles.headerText}>Add Product</Text>
       </View>
       {/* <VendorLogoAndName vendorShopDetails={vendorShopDetails} /> */}
-      <View style={styles.mainContainer}>
-        <View style={{width: '100%', marginBottom: 20}}>
-          <CustomButton
-            name="Add Product"
-            color="#29977E"
-            backgroundColor="#FAFCFC"
-            borderColor="#29977E"
-            onPress={() => {}}
-            icon={true}
-            iconName="plus"
-          />
-        </View>
-        <AddEditProduct categories={categories} userProfile={userProfile} />
+      <View style={{width: '90%', marginHorizontal: 22, marginTop: 20}}>
+        <CustomButton
+          name="Add Product"
+          color="#29977E"
+          backgroundColor="#FAFCFC"
+          borderColor="#29977E"
+          onPress={() => setOpenAddEditProduct(true)}
+          icon={true}
+          iconName="plus"
+        />
       </View>
+      {openAddEditProduct ? (
+        <AddEditProduct
+          categories={categories}
+          userProfile={userProfile}
+          setOpenAddEditProduct={setOpenAddEditProduct}
+        />
+      ) : (
+        <Text>List Of Products</Text>
+      )}
     </ScrollView>
   );
 };
