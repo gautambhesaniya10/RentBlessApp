@@ -33,6 +33,10 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
 
   const [error, setError] = useState({});
   const [shopLayoutLoading, setShopLayoutLoading] = useState(false);
+  console.log(
+    'shopImagesshopImagesshopImagesshopImagesshopImagesshopImagesshopImages',
+    shopImages,
+  );
 
   const srcToFile = async (src, fileName, mimeType) => {
     const response = await RNFetchBlob.fetch('GET', src);
