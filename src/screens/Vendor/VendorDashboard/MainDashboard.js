@@ -2,8 +2,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import VendorHeader from '../../../components/VendorHeader';
 import {useDispatch, useSelector} from 'react-redux';
-import VendorTab from './VendorTab';
 import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
+import VendorTab from '../../../TabNavigation/VendorTab';
 
 const MainDashboard = () => {
   const dispatch = useDispatch();

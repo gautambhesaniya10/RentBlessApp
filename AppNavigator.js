@@ -8,6 +8,7 @@ import Login from './src/screens/Login/Login';
 import SignUp from './src/screens/Login/SignUp';
 import VendorMain from './src/screens/Vendor/VendorMain';
 import MainDashboard from './src/screens/Vendor/VendorDashboard/MainDashboard';
+import AddEditProduct from './src/screens/Vendor/VendorDashboard/AddEditProduct/AddEditProduct';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -42,6 +43,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="MainDashboard"
           component={MainDashboard}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="VendorAddEditProduct"
+          component={AddEditProduct}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

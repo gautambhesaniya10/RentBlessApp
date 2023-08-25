@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from './Home';
-import ShopDetail from './ShopDetail';
-import Product from './Product';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Home from '../screens/Vendor/VendorDashboard/Home';
+import ShopDetail from '../screens/Vendor/VendorDashboard/ShopDetail';
+import Product from '../screens/Vendor/VendorDashboard/Product';
 
 const VendorTab = () => {
   const Tab = createBottomTabNavigator();
@@ -28,6 +28,7 @@ const VendorTab = () => {
           ),
         }}
       />
+
       <Tab.Screen
         name="ShopDetail"
         component={ShopDetail}
