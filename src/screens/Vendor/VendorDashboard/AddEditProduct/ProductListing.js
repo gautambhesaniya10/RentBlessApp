@@ -64,11 +64,8 @@ const ProductListing = () => {
             </View>
           )}
         </View> */}
-        <View style={{marginTop: 50}}>
-          <Text>gdfhgjfd</Text>
-          <Text>gdfhgjfd</Text>
-          <Text>gdfhgjfd</Text>
-          <Text>gdfhgjfd</Text>
+        <View style={{marginTop: 20}}>
+          <Text>This is product listing page.</Text>
         </View>
       </View>
     </View>

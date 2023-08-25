@@ -4,10 +4,12 @@ import VendorHeader from '../../../components/VendorHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import VendorTab from '../../../TabNavigation/VendorTab';
+import DrawerVendor from '../../../DrowerNavigation/DrawerVendor';
 
 const MainDashboard = () => {
   const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
 
   useEffect(() => {
     if (useProfileData?.userCreatedShopId) {
@@ -17,8 +19,7 @@ const MainDashboard = () => {
 
   return (
     <View style={{flex: 1}}>
-      <VendorHeader />
-      <VendorTab />
+      <DrawerVendor vendorShopDetails={vendorShopDetails} />
     </View>
   );
 };

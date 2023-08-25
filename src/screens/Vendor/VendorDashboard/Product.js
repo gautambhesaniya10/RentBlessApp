@@ -6,6 +6,7 @@ import CustomButton from '../../../common/CustomButton';
 import {loadCategoriesStart} from '../../../redux/CategorySlice/CategoryListSlice';
 import ProductListing from './AddEditProduct/ProductListing';
 import {useNavigation} from '@react-navigation/native';
+import VendorHeader from '../../../components/VendorHeader';
 
 const Product = () => {
   const navigation = useNavigation();
@@ -18,22 +19,25 @@ const Product = () => {
   }, [dispatch, userProfile]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{flex: 1, backgroundColor: BackGroundStyle}}>
-      <View style={{width: '90%', marginHorizontal: 22, marginTop: 20}}>
-        <CustomButton
-          name="Add Product"
-          color="#29977E"
-          backgroundColor="#FAFCFC"
-          borderColor="#29977E"
-          onPress={() => navigation.navigate('VendorAddEditProduct')}
-          icon={true}
-          iconName="plus"
-        />
-      </View>
-      <ProductListing />
-    </ScrollView>
+    <View style={{flex: 1}}>
+      <VendorHeader />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1, backgroundColor: BackGroundStyle}}>
+        <View style={{width: '90%', marginHorizontal: 22, marginTop: 20}}>
+          <CustomButton
+            name="Add Product"
+            color="#29977E"
+            backgroundColor="#FAFCFC"
+            borderColor="#29977E"
+            onPress={() => navigation.navigate('VendorAddEditProduct')}
+            icon={true}
+            iconName="plus"
+          />
+        </View>
+        <ProductListing />
+      </ScrollView>
+    </View>
   );
 };
 

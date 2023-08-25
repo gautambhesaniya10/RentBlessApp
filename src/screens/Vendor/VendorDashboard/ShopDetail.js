@@ -12,6 +12,7 @@ import VendorLogoAndName from '../../../components/VendorLogoAndName';
 import MainBranchTab from './AllTabs/MainBranchTab';
 import SubBranchTab from './AllTabs/SubBranchTab';
 import ShopLayoutTab from './AllTabs/ShopLayoutTab';
+import VendorHeader from '../../../components/VendorHeader';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -272,128 +273,110 @@ const ShopDetail = () => {
   }, [hours, vendorShopDetails, useProfileData]);
 
   return (
-    <ScrollView
-      showsVerticalScrollIndicator={false}
-      style={{flex: 1, backgroundColor: BackGroundStyle}}>
-      {/* <View style={styles.hederMain}>
-        <Icon name="chevron-left" size={20} color="black" />
-        <Text style={styles.headerText}>Shop Details</Text>
-      </View> */}
-
-      {/* <VendorLogoAndName vendorShopDetails={vendorShopDetails} /> */}
-
-      <View style={{marginTop: 20}}>
-        <View style={styles.sliderMain}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{
-              flexDirection: 'row',
-              gap: 15,
-              alignItems: 'center',
-            }}>
-            {[
-              'Owner Details',
-              'Shop Info',
-              'Main Branch',
-              'Sub Branch',
-              'Shop Layout',
-            ]?.map((item, index) => (
-              <TouchableOpacity
-                onPress={() => setActiveTab(index)}
-                style={[
-                  styles.sliderTabsMain,
-                  {
-                    backgroundColor:
-                      activeTab === index ? '#151827' : '#FAFCFC',
-                  },
-                ]}
-                key={index}>
-                <Text
+    <View style={{flex: 1}}>
+      <VendorHeader />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{flex: 1, backgroundColor: BackGroundStyle}}>
+        <View style={{marginTop: 20}}>
+          <View style={styles.sliderMain}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{
+                flexDirection: 'row',
+                gap: 15,
+                alignItems: 'center',
+              }}>
+              {[
+                'Owner Details',
+                'Shop Info',
+                'Main Branch',
+                'Sub Branch',
+                'Shop Layout',
+              ]?.map((item, index) => (
+                <TouchableOpacity
+                  onPress={() => setActiveTab(index)}
                   style={[
-                    styles.sliderText,
-                    {color: activeTab === index ? 'white' : '#151827'},
-                  ]}>
-                  {item}
-                </Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+                    styles.sliderTabsMain,
+                    {
+                      backgroundColor:
+                        activeTab === index ? '#151827' : '#FAFCFC',
+                    },
+                  ]}
+                  key={index}>
+                  <Text
+                    style={[
+                      styles.sliderText,
+                      {color: activeTab === index ? 'white' : '#151827'},
+                    ]}>
+                    {item}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+          {activeTab === 0 && (
+            <OwnerDetail
+              vendorShopDetails={vendorShopDetails}
+              useProfileData={useProfileData}
+              control={control}
+              ownerInfoSetValue={ownerInfoSetValue}
+              ownerInfoErrors={ownerInfoErrors}
+              ownerInfoHandleSubmit={ownerInfoHandleSubmit}
+              ownerInfoOnSubmit={ownerInfoOnSubmit}
+              setShopOwnerId={setShopOwnerId}
+              ownerLoading={ownerLoading}
+            />
+          )}
+          {activeTab === 1 && (
+            <ShopInfo
+              shopInfoHandleSubmit={shopInfoHandleSubmit}
+              shopInfoErrors={shopInfoErrors}
+              shopInfoSetValue={shopInfoSetValue}
+              shopInfoOnSubmit={shopInfoOnSubmit}
+              shopLoading={shopLoading}
+              shopInfoControl={shopInfoControl}
+              useProfileData={useProfileData}
+              vendorShopDetails={vendorShopDetails}
+              hours={hours}
+              setHours={setHours}
+            />
+          )}
+          {activeTab === 2 && (
+            <MainBranchTab
+              mainBranchLoading={mainBranchLoading}
+              mainBranchInfoOnSubmit={mainBranchInfoOnSubmit}
+              mainBranchInfoErrors={mainBranchInfoErrors}
+              mainBranchInfoHandleSubmit={mainBranchInfoHandleSubmit}
+              mainBranchControl={mainBranchControl}
+              setSameAsOwner={setSameAsOwner}
+              sameAsOwner={sameAsOwner}
+            />
+          )}
+          {activeTab === 3 && (
+            <SubBranchTab
+              useProfileData={useProfileData}
+              vendorShopDetails={vendorShopDetails}
+              mainBranchInfoGetValue={mainBranchInfoGetValue}
+              ownerInfoGetValue={ownerInfoGetValue}
+            />
+          )}
+          {activeTab === 4 && (
+            <ShopLayoutTab
+              useProfileData={useProfileData}
+              vendorShopDetails={vendorShopDetails}
+            />
+          )}
         </View>
-        {activeTab === 0 && (
-          <OwnerDetail
-            vendorShopDetails={vendorShopDetails}
-            useProfileData={useProfileData}
-            control={control}
-            ownerInfoSetValue={ownerInfoSetValue}
-            ownerInfoErrors={ownerInfoErrors}
-            ownerInfoHandleSubmit={ownerInfoHandleSubmit}
-            ownerInfoOnSubmit={ownerInfoOnSubmit}
-            setShopOwnerId={setShopOwnerId}
-            ownerLoading={ownerLoading}
-          />
-        )}
-        {activeTab === 1 && (
-          <ShopInfo
-            shopInfoHandleSubmit={shopInfoHandleSubmit}
-            shopInfoErrors={shopInfoErrors}
-            shopInfoSetValue={shopInfoSetValue}
-            shopInfoOnSubmit={shopInfoOnSubmit}
-            shopLoading={shopLoading}
-            shopInfoControl={shopInfoControl}
-            useProfileData={useProfileData}
-            vendorShopDetails={vendorShopDetails}
-            hours={hours}
-            setHours={setHours}
-          />
-        )}
-        {activeTab === 2 && (
-          <MainBranchTab
-            mainBranchLoading={mainBranchLoading}
-            mainBranchInfoOnSubmit={mainBranchInfoOnSubmit}
-            mainBranchInfoErrors={mainBranchInfoErrors}
-            mainBranchInfoHandleSubmit={mainBranchInfoHandleSubmit}
-            mainBranchControl={mainBranchControl}
-            setSameAsOwner={setSameAsOwner}
-            sameAsOwner={sameAsOwner}
-          />
-        )}
-        {activeTab === 3 && (
-          <SubBranchTab
-            useProfileData={useProfileData}
-            vendorShopDetails={vendorShopDetails}
-            mainBranchInfoGetValue={mainBranchInfoGetValue}
-            ownerInfoGetValue={ownerInfoGetValue}
-          />
-        )}
-        {activeTab === 4 && (
-          <ShopLayoutTab
-            useProfileData={useProfileData}
-            vendorShopDetails={vendorShopDetails}
-          />
-        )}
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 
 export default ShopDetail;
 
 const styles = StyleSheet.create({
-  hederMain: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 25,
-    marginLeft: 26,
-    gap: 15,
-  },
-  headerText: {
-    color: '#151827',
-    fontSize: 22,
-    fontWeight: '700',
-    fontFamily: FontStyle,
-  },
   sliderMain: {
     marginLeft: 22,
 
