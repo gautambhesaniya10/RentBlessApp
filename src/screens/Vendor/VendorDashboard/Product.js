@@ -7,6 +7,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../../../common/CustomButton';
 import AddEditProduct from './AddEditProduct/AddEditProduct';
 import {loadCategoriesStart} from '../../../redux/CategorySlice/CategoryListSlice';
+import ProductListing from './AddEditProduct/ProductListing';
 
 const Product = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
@@ -48,7 +49,7 @@ const Product = () => {
           setOpenAddEditProduct={setOpenAddEditProduct}
         />
       ) : (
-        <Text>List Of Products</Text>
+        <ProductListing />
       )}
     </ScrollView>
   );
