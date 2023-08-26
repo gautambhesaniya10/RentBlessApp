@@ -66,9 +66,15 @@ const Login = () => {
             backgroundColor: 'green.600',
             variant: 'solid',
           });
-          setTimeout(() => {
-            navigation.navigate('VendorMain');
-          }, 1000);
+          if (loginType === 'vendor') {
+            setTimeout(() => {
+              navigation.navigate('VendorMain');
+            }, 1000);
+          } else if (loginType === 'customer') {
+            setTimeout(() => {
+              navigation.navigate('CustomerMain');
+            }, 1000);
+          }
         },
         error => {
           setLoading(false);

@@ -4,7 +4,7 @@ import VendorHeader from '../../../components/VendorHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import VendorTab from '../../../TabNavigation/VendorTab';
-import DrawerVendor from '../../../DrowerNavigation/DrawerVendor';
+import DrawerVendor from '../../../DrawerNavigation/DrawerVendor';
 
 const MainDashboard = () => {
   const dispatch = useDispatch();

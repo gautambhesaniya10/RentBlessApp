@@ -11,6 +11,7 @@ const Splash = () => {
   const retrieveLocalData = async () => {
     const loginType = await AsyncStorage.getItem('loginType');
     const Token = await AsyncStorage.getItem('token');
+    console.log('TokenToken', Token);
 
     if (loginType === 'vendor' && Token) {
       setTimeout(() => {
@@ -18,7 +19,7 @@ const Splash = () => {
       }, 2000);
     } else {
       setTimeout(() => {
-        navigation.navigate('LoginMainScreen');
+        navigation.navigate('CustomerMain');
       }, 2000);
     }
   };
