@@ -6,6 +6,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {RadioButton} from 'react-native-paper';
 import {Button, Popover} from 'native-base';
+import ProductCard from '../../components/ProductCard/ProductCard';
+import {useSelector} from 'react-redux';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
@@ -13,6 +15,10 @@ const HomePage = () => {
   const [SearchText, setSearchText] = useState('');
   const [genderFilter, setGenderFilter] = useState('men');
   const [oldLatestValue, setOldLatestValue] = useState('new');
+
+  const productsFiltersReducer = useSelector(
+    state => state.productsFiltersReducer,
+  );
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
@@ -27,7 +33,7 @@ const HomePage = () => {
           />
         </View>
       </View>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
           <View style={{display: 'flex', flexDirection: 'row', gap: 20}}>
             <View style={styles.maleMain}>
@@ -139,7 +145,13 @@ const HomePage = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={{marginTop: 6}}>
+          <View
+            style={{
+              marginTop: 6,
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+            }}>
             <ScrollView
               horizontal
               showsHorizontalScrollIndicator={false}
@@ -163,10 +175,16 @@ const HomePage = () => {
                   </TouchableOpacity>
                 </View>
               ))}
-              <TouchableOpacity>
-                <Text style={styles.clearAllText}>Clear All</Text>
-              </TouchableOpacity>
             </ScrollView>
+            <TouchableOpacity>
+              <Text style={styles.clearAllText}>Clear All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.productCardMain}>
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
           </View>
         </View>
       </ScrollView>
@@ -271,5 +289,14 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '700',
     fontSize: 14,
+  },
+
+  productCardMain: {
+    marginTop: 15,
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 19,
+    marginBottom: 20,
   },
 });
