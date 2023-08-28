@@ -8,6 +8,53 @@ export const loadProductsStart = createAsyncThunk(
     return response?.data?.productList;
   },
 );
+export const loadMoreProductsStart = createAsyncThunk(
+  'productMore/loadMoreProducts',
+  async payload => {
+    const response = await getProducts(payload);
+    return response?.data?.productList;
+  },
+);
+
+const handleProductLoading = (state, action) => {
+  return {
+    ...state,
+    productLoading: true,
+  };
+};
+
+const handleProductFulfilled = (state, action) => {
+  const {limit, count, noOfPages, data} = action.payload;
+
+  return {
+    ...state,
+    productLoading: false,
+    productsLimit: limit,
+    productsCount: count,
+    numOfPages: noOfPages,
+    productsData: data,
+  };
+};
+const handleMoreProductFulfilled = (state, action) => {
+  const {limit, count, noOfPages, data} = action.payload;
+  const mergedData = [...state.productsData, ...data];
+  return {
+    ...state,
+    productLoading: false,
+    productsLimit: limit,
+    productsCount: count,
+    numOfPages: noOfPages,
+    productsData: mergedData,
+  };
+};
+
+const handleProductRejected = (state, action) => {
+  return {
+    ...state,
+    productLoading: false,
+    error: action.payload,
+  };
+};
 
 const productSlice = createSlice({
   name: 'product',
@@ -32,29 +79,13 @@ const productSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(loadProductsStart.pending, state => {
-      return {
-        ...state,
-        productLoading: true,
-      };
-    });
-    builder.addCase(loadProductsStart.fulfilled, (state, action) => {
-      return {
-        ...state,
-        productLoading: false,
-        productsLimit: action.payload.limit,
-        productsCount: action.payload.count,
-        numOfPages: action.payload.noOfPages,
-        productsData: [...state.productsData, ...action.payload.data],
-      };
-    });
-    builder.addCase(loadProductsStart.rejected, (state, action) => {
-      return {
-        ...state,
-        productLoading: false,
-        error: action.payload,
-      };
-    });
+    builder
+      .addCase(loadProductsStart.pending, handleProductLoading)
+      .addCase(loadProductsStart.fulfilled, handleProductFulfilled)
+      .addCase(loadProductsStart.rejected, handleProductRejected)
+      .addCase(loadMoreProductsStart.pending, handleProductLoading)
+      .addCase(loadMoreProductsStart.fulfilled, handleMoreProductFulfilled)
+      .addCase(loadMoreProductsStart.rejected, handleProductRejected);
   },
 });
 

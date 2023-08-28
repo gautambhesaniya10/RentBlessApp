@@ -5,24 +5,25 @@ import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {ActivityIndicator, RadioButton} from 'react-native-paper';
-import {Button, Popover} from 'native-base';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   emptyProductState,
+  loadMoreProductsStart,
   loadProductsStart,
 } from '../../redux/ProductSlice/ProductSlice';
-import {useIsFocused} from '@react-navigation/native';
+import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
+import UpperFilter from '../../common/Customer/UpperFilter';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
 
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
   );
+
   const {
     productsLimit,
     productsCount,
@@ -32,20 +33,17 @@ const HomePage = () => {
     error,
   } = useSelector(state => state.productsData);
 
-  const [SearchText, setSearchText] = useState('');
   const [genderFilter, setGenderFilter] = useState('men');
-  const [oldLatestValue, setOldLatestValue] = useState('new');
 
-  const [productPageSkip, setProductPageSkip] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [productDataLimit, setProductDataLimit] = useState(0);
 
-  const getAllProducts = () => {
+  const getAllMoreProducts = () => {
     dispatch(
-      loadProductsStart({
+      loadMoreProductsStart({
         pageData: {
           skip: productDataLimit,
-          limit: 8,
+          limit: 5,
         },
         filter: {
           category_id:
@@ -63,20 +61,43 @@ const HomePage = () => {
     );
   };
 
-  const handleScroll = event => {
+  const getAllProducts = () => {
+    dispatch(
+      loadProductsStart({
+        pageData: {
+          skip: 0,
+          limit: 5,
+        },
+        filter: {
+          category_id:
+            productsFiltersReducer.appliedProductsFilters.categoryId
+              .selectedValue,
+          product_color:
+            productsFiltersReducer.appliedProductsFilters.productColor
+              .selectedValue,
+        },
+        shopId:
+          productsFiltersReducer.appliedProductsFilters.shopId.selectedValue,
+        sort: productsFiltersReducer.sortFilters.sortType.selectedValue,
+        search: productsFiltersReducer.searchBarData,
+      }),
+    );
+  };
+
+  const handleProductScroll = event => {
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
     const isEndReached =
       layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
 
     if (isEndReached && !productLoading) {
-      loadMoreData();
+      loadProductMoreData();
     }
   };
 
-  const loadMoreData = () => {
+  const loadProductMoreData = () => {
     if (currentPage < numOfPages) {
       setCurrentPage(currentPage + 1);
-      setProductDataLimit(productDataLimit + 8);
+      setProductDataLimit(productDataLimit + 5);
     }
   };
 
@@ -95,8 +116,13 @@ const HomePage = () => {
     productsFiltersReducer.appliedProductsFilters,
     productsFiltersReducer.sortFilters,
     productsFiltersReducer.searchBarData,
-    productDataLimit,
   ]);
+
+  useEffect(() => {
+    if (productDataLimit > 0) {
+      getAllMoreProducts();
+    }
+  }, [dispatch, productDataLimit]);
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
@@ -105,14 +131,23 @@ const HomePage = () => {
         <View style={styles.searchTextMain}>
           <Icon name="search" size={18} color="black" />
           <TextInput
-            onChangeText={value => setSearchText(value)}
+            onChangeText={value => {
+              dispatch(
+                changeProductsSearchBarData({
+                  key: 'searchBarData',
+                  value: value,
+                }),
+              );
+              setCurrentPage(0);
+              setProductDataLimit(0);
+            }}
             style={{width: '100%'}}
             placeholder="Search  Hear.."
           />
         </View>
       </View>
       <ScrollView
-        onScroll={handleScroll}
+        onScroll={handleProductScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
@@ -158,72 +193,10 @@ const HomePage = () => {
           <Text style={styles.productText}>Product</Text>
 
           <View style={{alignSelf: 'flex-start', marginLeft: -12}}>
-            <TouchableOpacity>
-              <Popover
-                trigger={triggerProps => {
-                  return (
-                    <Button
-                      style={{backgroundColor: 'transparent'}}
-                      {...triggerProps}>
-                      <View style={styles.sortFilMain}>
-                        <Text
-                          style={[
-                            styles.latestText,
-                            {color: 'rgba(21, 24, 39, 0.40)'},
-                          ]}>
-                          Sort by:
-                        </Text>
-                        <Text style={styles.latestText}>
-                          Latest{' '}
-                          <Icon name="angle-down" size={16} color="black" />
-                        </Text>
-                      </View>
-                    </Button>
-                  );
-                }}>
-                <Popover.Content>
-                  {/* <Popover.Arrow /> */}
-                  <View style={styles.radioTopMain}>
-                    <RadioButton.Group
-                      onValueChange={newValue => setOldLatestValue(newValue)}
-                      value={oldLatestValue}>
-                      <View style={styles.radioParent}>
-                        <View style={styles.radioMain}>
-                          <RadioButton color="#29977E" value="new" />
-                          <Text
-                            style={[
-                              styles.radioText,
-                              {
-                                color:
-                                  oldLatestValue === 'new'
-                                    ? '#151827'
-                                    : 'rgba(21, 24, 39, 0.56)',
-                              },
-                            ]}>
-                            Latest
-                          </Text>
-                        </View>
-                        <View style={styles.radioMain}>
-                          <RadioButton color="#29977E" value="old" />
-                          <Text
-                            style={[
-                              styles.radioText,
-                              {
-                                color:
-                                  oldLatestValue === 'old'
-                                    ? '#151827'
-                                    : 'rgba(21, 24, 39, 0.56)',
-                              },
-                            ]}>
-                            Oldest
-                          </Text>
-                        </View>
-                      </View>
-                    </RadioButton.Group>
-                  </View>
-                </Popover.Content>
-              </Popover>
-            </TouchableOpacity>
+            <UpperFilter
+              setCurrentPage={setCurrentPage}
+              setProductDataLimit={setProductDataLimit}
+            />
           </View>
 
           <View
@@ -334,42 +307,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingTop: 18,
     paddingBottom: 10,
-  },
-  sortFilMain: {
-    display: 'flex',
-    flexDirection: 'row',
-    gap: 5,
-    alignItems: 'center',
-    padding: 10,
-    justifyContent: 'center',
-    borderRadius: 63,
-    borderWidth: 1,
-    borderColor: 'rgba(21, 24, 39, 0.10)',
-  },
-  latestText: {
-    color: '#151827',
-    fontSize: 14,
-    fontWeight: '700',
-    fontFamily: FontStyle,
-  },
-  radioTopMain: {
-    width: '100%',
-  },
-  radioParent: {
-    backgroundColor: 'white',
-    elevation: 3,
-    borderRadius: 8,
-  },
-  radioMain: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  radioText: {
-    fontSize: 16,
-    fontWeight: '700',
-    fontFamily: FontStyle,
-    paddingRight: 10,
   },
   filterItemText: {
     color: 'rgba(21, 24, 39, 0.56)',
