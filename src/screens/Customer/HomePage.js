@@ -1,24 +1,102 @@
-import {StyleSheet, Text, View, TextInput} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, Text, View, TextInput, FlatList} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import CustomerHeader from '../../components/CustomerHeader';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {RadioButton} from 'react-native-paper';
+import {ActivityIndicator, RadioButton} from 'react-native-paper';
 import {Button, Popover} from 'native-base';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  emptyProductState,
+  loadProductsStart,
+} from '../../redux/ProductSlice/ProductSlice';
+import {useIsFocused} from '@react-navigation/native';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
 const HomePage = () => {
-  const [SearchText, setSearchText] = useState('');
-  const [genderFilter, setGenderFilter] = useState('men');
-  const [oldLatestValue, setOldLatestValue] = useState('new');
+  const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
   );
+  const {
+    productsLimit,
+    productsCount,
+    numOfPages,
+    productsData,
+    productLoading,
+    error,
+  } = useSelector(state => state.productsData);
+
+  const [SearchText, setSearchText] = useState('');
+  const [genderFilter, setGenderFilter] = useState('men');
+  const [oldLatestValue, setOldLatestValue] = useState('new');
+
+  const [productPageSkip, setProductPageSkip] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [productDataLimit, setProductDataLimit] = useState(0);
+
+  const getAllProducts = () => {
+    dispatch(
+      loadProductsStart({
+        pageData: {
+          skip: productDataLimit,
+          limit: 8,
+        },
+        filter: {
+          category_id:
+            productsFiltersReducer.appliedProductsFilters.categoryId
+              .selectedValue,
+          product_color:
+            productsFiltersReducer.appliedProductsFilters.productColor
+              .selectedValue,
+        },
+        shopId:
+          productsFiltersReducer.appliedProductsFilters.shopId.selectedValue,
+        sort: productsFiltersReducer.sortFilters.sortType.selectedValue,
+        search: productsFiltersReducer.searchBarData,
+      }),
+    );
+  };
+
+  const handleScroll = event => {
+    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
+    const isEndReached =
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+
+    if (isEndReached && !productLoading) {
+      loadMoreData();
+    }
+  };
+
+  const loadMoreData = () => {
+    if (currentPage < numOfPages) {
+      setCurrentPage(currentPage + 1);
+      setProductDataLimit(productDataLimit + 8);
+    }
+  };
+
+  const EmptyProduct = () => {
+    dispatch(emptyProductState());
+  };
+
+  useEffect(() => {
+    EmptyProduct();
+  }, []);
+
+  useEffect(() => {
+    getAllProducts();
+  }, [
+    dispatch,
+    productsFiltersReducer.appliedProductsFilters,
+    productsFiltersReducer.sortFilters,
+    productsFiltersReducer.searchBarData,
+    productDataLimit,
+  ]);
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
@@ -33,7 +111,10 @@ const HomePage = () => {
           />
         </View>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
           <View style={{display: 'flex', flexDirection: 'row', gap: 20}}>
             <View style={styles.maleMain}>
@@ -181,11 +262,22 @@ const HomePage = () => {
             </TouchableOpacity>
           </View>
 
-          <View style={styles.productCardMain}>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-          </View>
+          {productLoading && productsData?.length === 0 ? (
+            <View style={styles.loaderDiv}>
+              <ActivityIndicator />
+            </View>
+          ) : (
+            <View style={styles.productCardMain}>
+              {productsData?.map((product, index) => (
+                <ProductCard key={index} product={product} />
+              ))}
+              {productLoading && productsData?.length > 0 && (
+                <View style={styles.loaderBottomDiv}>
+                  <ActivityIndicator />
+                </View>
+              )}
+            </View>
+          )}
         </View>
       </ScrollView>
     </View>
@@ -290,13 +382,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 14,
   },
-
   productCardMain: {
     marginTop: 15,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 19,
-    marginBottom: 20,
+    marginBottom: 30,
+    justifyContent: 'space-between',
+  },
+  loaderDiv: {
+    marginVertical: 100,
+  },
+  loaderBottomDiv: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: 5,
   },
 });

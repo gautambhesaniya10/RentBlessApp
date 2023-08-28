@@ -3,9 +3,15 @@ import React from 'react';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const ProductCard = () => {
+const ProductCard = ({product}) => {
+  const ProductImages = [
+    product?.product_image?.front,
+    product?.product_image?.back,
+    product?.product_image?.side,
+  ];
+
   return (
-    <TouchableOpacity style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <View style={{position: 'relative'}}>
         <ScrollView
           horizontal
@@ -13,16 +19,19 @@ const ProductCard = () => {
           contentContainerStyle={{
             flexDirection: 'row',
           }}>
-          <Image
-            source={require('../../images/menTshirt.png')}
-            style={{
-              height: 128,
-              width: 170,
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-            }}
-          />
-          <Image
+          {ProductImages?.map((img, index) => (
+            <Image
+              source={{uri: img}}
+              style={{
+                height: 128,
+                width: 170,
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+              }}
+            />
+          ))}
+
+          {/* <Image
             source={require('../../images/banner.jpg')}
             style={{
               height: 128,
@@ -30,7 +39,7 @@ const ProductCard = () => {
               borderTopLeftRadius: 8,
               borderTopRightRadius: 8,
             }}
-          />
+          /> */}
         </ScrollView>
         <View style={styles.heartIcon}>
           <TouchableOpacity>
@@ -39,19 +48,21 @@ const ProductCard = () => {
         </View>
       </View>
 
-      <Text style={styles.productNameText} numberOfLines={2}>
-        Men Pink Textured Single...
-      </Text>
-      <View style={styles.shopMain}>
-        <Image
-          source={require('../../images/facebook.png')}
-          style={{width: 25, height: 25}}
-        />
-        <Text style={styles.shopNameText} numberOfLines={1}>
-          Fashion Bazar
+      <TouchableOpacity>
+        <Text style={styles.productNameText} numberOfLines={2}>
+          {product?.product_name}
         </Text>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.shopMain}>
+          <Image
+            source={{uri: product?.branchInfo?.shop_info?.shop_logo}}
+            style={{width: 25, height: 25, borderRadius: 12}}
+          />
+          <Text style={styles.shopNameText} numberOfLines={1}>
+            {product?.branchInfo?.shop_info?.shop_name}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -64,6 +75,7 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 8,
     elevation: 2,
+    marginTop: 20,
   },
   productNameText: {
     color: '#151827',

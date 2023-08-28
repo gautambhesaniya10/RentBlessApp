@@ -4,6 +4,7 @@ import ShopDetailSlice from './vendorShopDetailsSlice/ShopDetailSlice';
 import CategoryListSlice from './CategorySlice/CategoryListSlice';
 import AreaListSlice from './AreaSlice/AreaListSlice';
 import ProductFilterSlice from './ProductFilter/ProductFilterSlice';
+import ProductSlice from './ProductSlice/ProductSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     categories: CategoryListSlice,
     areaLists: AreaListSlice,
     productsFiltersReducer: ProductFilterSlice,
+    productsData: ProductSlice,
   },
 });
 
