@@ -14,6 +14,12 @@ import {
 } from '../../redux/ProductSlice/ProductSlice';
 import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
 import UpperFilter from '../../common/Customer/UpperFilter';
+import {
+  emptyShopState,
+  loadMoreShopStart,
+  loadShopsStart,
+} from '../../redux/ShopSlice/ShopSlice';
+import ShopCard from '../../components/ShopCard/ShopCard';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
@@ -24,6 +30,8 @@ const HomePage = () => {
     state => state.productsFiltersReducer,
   );
 
+  const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
+
   const {
     productsLimit,
     productsCount,
@@ -33,9 +41,22 @@ const HomePage = () => {
     error,
   } = useSelector(state => state.productsData);
 
+  const {
+    shopsLimit,
+    shopsCount,
+    numOfPages: shopNumOfPages,
+    shopsData,
+    loading: shopLoading,
+    error: shopError,
+  } = useSelector(state => state?.shops);
+
   const [genderFilter, setGenderFilter] = useState('men');
   const [currentPage, setCurrentPage] = useState(0);
   const [productDataLimit, setProductDataLimit] = useState(0);
+
+  const [shopCurrentPage, setShopCurrentPage] = useState(0);
+  const [shopDataLimit, setShopDataLimit] = useState(0);
+
   const [byShop, setByShop] = useState(false);
 
   const getAllMoreProducts = () => {
@@ -89,24 +110,74 @@ const HomePage = () => {
     const isEndReached =
       layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
 
-    if (isEndReached && !productLoading) {
-      loadProductMoreData();
-    }
-  };
-
-  const loadProductMoreData = () => {
-    if (currentPage < numOfPages) {
-      setCurrentPage(currentPage + 1);
-      setProductDataLimit(productDataLimit + 5);
+    if (!byShop) {
+      if (isEndReached && !productLoading) {
+        if (currentPage < numOfPages) {
+          setCurrentPage(currentPage + 1);
+          setProductDataLimit(productDataLimit + 5);
+        }
+      }
+    } else {
+      if (isEndReached && !shopLoading) {
+        if (shopCurrentPage < shopNumOfPages) {
+          setShopCurrentPage(shopCurrentPage + 1);
+          setShopDataLimit(shopDataLimit + 5);
+        }
+      }
     }
   };
 
   const EmptyProduct = () => {
     dispatch(emptyProductState());
   };
+  const EmptyShop = () => {
+    dispatch(emptyShopState());
+  };
+
+  const getAllMoreShops = () => {
+    dispatch(
+      loadMoreShopStart({
+        pageData: {
+          skip: shopDataLimit,
+          limit: 5,
+        },
+        area: shopsFiltersReducer.appliedShopsFilters.locations.selectedValue,
+        sort: shopsFiltersReducer.sortFilters.sortType.selectedValue,
+        stars: shopsFiltersReducer.appliedShopsFilters.stars.selectedValue,
+      }),
+    );
+  };
+  const getAllShops = () => {
+    dispatch(
+      loadShopsStart({
+        pageData: {
+          skip: 0,
+          limit: 5,
+        },
+        area: shopsFiltersReducer.appliedShopsFilters.locations.selectedValue,
+        sort: shopsFiltersReducer.sortFilters.sortType.selectedValue,
+        stars: shopsFiltersReducer.appliedShopsFilters.stars.selectedValue,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    getAllShops();
+  }, [
+    dispatch,
+    shopsFiltersReducer.appliedShopsFilters,
+    shopsFiltersReducer.sortFilters,
+  ]);
+
+  useEffect(() => {
+    if (shopDataLimit > 0) {
+      getAllMoreShops();
+    }
+  }, [dispatch, shopDataLimit]);
 
   useEffect(() => {
     EmptyProduct();
+    EmptyShop();
   }, []);
 
   useEffect(() => {
@@ -194,13 +265,20 @@ const HomePage = () => {
 
           <View style={{alignSelf: 'flex-start', marginLeft: -12}}>
             <UpperFilter
+              byShop={byShop}
               setCurrentPage={setCurrentPage}
               setProductDataLimit={setProductDataLimit}
+              setShopCurrentPage={setShopCurrentPage}
+              setShopDataLimit={setShopDataLimit}
             />
           </View>
           <View style={styles.toggleSwitchMain}>
             <Text style={styles.switchText}>Product</Text>
-            <Switch value={byShop} onValueChange={() => setByShop(!byShop)} />
+            <Switch
+              value={byShop}
+              onValueChange={() => setByShop(!byShop)}
+              color="#29977E"
+            />
             <Text style={styles.switchText}>Shop</Text>
           </View>
           <View
@@ -242,22 +320,39 @@ const HomePage = () => {
           {!byShop ? (
             productLoading && productsData?.length === 0 ? (
               <View style={styles.loaderDiv}>
-                <ActivityIndicator />
+                <ActivityIndicator color="green" />
               </View>
             ) : (
               <View style={styles.productCardMain}>
                 {productsData?.map((product, index) => (
                   <ProductCard key={index} product={product} />
                 ))}
-                {productLoading && productsData?.length > 0 && (
-                  <View style={styles.loaderBottomDiv}>
-                    <ActivityIndicator />
-                  </View>
-                )}
+                {productLoading &&
+                  productsData?.length > 0 &&
+                  currentPage !== numOfPages && (
+                    <View style={styles.loaderBottomDiv}>
+                      <ActivityIndicator color="green" />
+                    </View>
+                  )}
               </View>
             )
+          ) : shopLoading && shopsData?.length === 0 ? (
+            <View style={styles.loaderDiv}>
+              <ActivityIndicator color="green" />
+            </View>
           ) : (
-            <Text>This is Shop cart</Text>
+            <View style={styles.productCardMain}>
+              {shopsData?.map((shop, index) => (
+                <ShopCard key={index} shop={shop} />
+              ))}
+              {shopLoading &&
+                shopsData?.length > 0 &&
+                shopCurrentPage !== shopNumOfPages && (
+                  <View style={styles.loaderBottomDiv}>
+                    <ActivityIndicator color="green" />
+                  </View>
+                )}
+            </View>
           )}
         </View>
       </ScrollView>

@@ -1,29 +1,66 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Button, Popover} from 'native-base';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {FontStyle} from '../../../CommonStyle';
 import {RadioButton} from 'react-native-paper';
 import {changeSortProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {changeSortShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
 
-const UpperFilter = ({setCurrentPage, setProductDataLimit}) => {
+const UpperFilter = ({
+  byShop,
+  setCurrentPage,
+  setProductDataLimit,
+  setShopCurrentPage,
+  setShopDataLimit,
+}) => {
   const dispatch = useDispatch();
+
+  const productsFiltersReducer = useSelector(
+    state => state.productsFiltersReducer,
+  );
+  const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
+
   const [oldLatestValue, setOldLatestValue] = useState('new');
 
+  useEffect(() => {
+    if (!byShop) {
+      setOldLatestValue(
+        productsFiltersReducer?.sortFilters?.sortType?.selectedValue,
+      );
+    } else {
+      setOldLatestValue(
+        shopsFiltersReducer?.sortFilters?.sortType?.selectedValue,
+      );
+    }
+  }, [byShop, productsFiltersReducer, shopsFiltersReducer]);
+
   const onChangeSortFilter = newValue => {
-    setCurrentPage(0);
-    setProductDataLimit(0);
-    setOldLatestValue(newValue);
-    dispatch(
-      changeSortProductsFilters({
-        key: 'sortType',
-        value: {
-          selectedValue: newValue,
-        },
-      }),
-    );
+    if (!byShop) {
+      setCurrentPage(0);
+      setProductDataLimit(0);
+      dispatch(
+        changeSortProductsFilters({
+          key: 'sortType',
+          value: {
+            selectedValue: newValue,
+          },
+        }),
+      );
+    } else {
+      setShopCurrentPage(0);
+      setShopDataLimit(0);
+      dispatch(
+        changeSortShopsFilters({
+          key: 'sortType',
+          value: {
+            selectedValue: newValue,
+          },
+        }),
+      );
+    }
   };
 
   return (
