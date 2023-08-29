@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {getShops} from '../../graphql/queries/shopQueries';
+import {getAllShopsList, getShops} from '../../graphql/queries/shopQueries';
 
 export const loadShopsStart = createAsyncThunk(
   'shop/fetchShops',
@@ -13,6 +13,14 @@ export const loadMoreShopStart = createAsyncThunk(
   async payload => {
     const response = await getShops(payload);
     return response?.data?.shopList;
+  },
+);
+
+export const loadAllShopsListsStart = createAsyncThunk(
+  'getAllShop/loadGetAllShops',
+  async () => {
+    const response = await getAllShopsList();
+    return response?.data?.getAllShops;
   },
 );
 
@@ -53,6 +61,38 @@ const handleShopRejected = (state, action) => {
     ...state,
     loading: false,
     error: action.payload,
+  };
+};
+
+const loadGetAllShopsListsStart = (state, action) => {
+  return {
+    ...state,
+    allShopsLists: {
+      ...state.allShopsLists,
+      loading: true,
+    },
+  };
+};
+
+const handleGetAllShopFulfilled = (state, action) => {
+  return {
+    ...state,
+    allShopsLists: {
+      ...state.allShopsLists,
+      loading: false,
+      data: action.payload,
+    },
+  };
+};
+
+const handleGetAllShopRejected = (state, action) => {
+  return {
+    ...state,
+    allShopsLists: {
+      ...state.allShopsLists,
+      loading: false,
+      error: action.payload,
+    },
   };
 };
 
@@ -97,7 +137,10 @@ const shopSlice = createSlice({
       .addCase(loadShopsStart.rejected, handleShopRejected)
       .addCase(loadMoreShopStart.pending, handleShopLoading)
       .addCase(loadMoreShopStart.fulfilled, handleMoreShopFulfilled)
-      .addCase(loadMoreShopStart.rejected, handleShopRejected);
+      .addCase(loadMoreShopStart.rejected, handleShopRejected)
+      .addCase(loadAllShopsListsStart.pending, loadGetAllShopsListsStart)
+      .addCase(loadAllShopsListsStart.fulfilled, handleGetAllShopFulfilled)
+      .addCase(loadAllShopsListsStart.rejected, handleGetAllShopRejected);
   },
 });
 
