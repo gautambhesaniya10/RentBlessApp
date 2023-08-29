@@ -31,16 +31,6 @@ const ProductCard = ({product}) => {
               }}
             />
           ))}
-
-          {/* <Image
-            source={require('../../images/banner.jpg')}
-            style={{
-              height: 128,
-              width: 170,
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-            }}
-          /> */}
         </ScrollView>
         <View style={styles.heartIcon}>
           <TouchableOpacity>

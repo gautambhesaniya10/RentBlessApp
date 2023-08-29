@@ -222,7 +222,13 @@ const HomePage = () => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
-          <View style={{display: 'flex', flexDirection: 'row', gap: 20}}>
+          {/* <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 20,
+              marginTop: 20,
+            }}>
             <View style={styles.maleMain}>
               <TouchableOpacity
                 onPress={() => setGenderFilter('men')}
@@ -259,9 +265,9 @@ const HomePage = () => {
               </TouchableOpacity>
               <Text style={styles.menText}>Women</Text>
             </View>
-          </View>
+          </View> */}
 
-          <Text style={styles.productText}>Product</Text>
+          <Text style={styles.productText}>{byShop ? 'Shop' : 'Product'}</Text>
 
           <View style={{alignSelf: 'flex-start', marginLeft: -12}}>
             <UpperFilter
@@ -381,7 +387,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     marginHorizontal: 20,
-    marginTop: 50,
+    marginTop: 25,
   },
   maleMain: {
     display: 'flex',
