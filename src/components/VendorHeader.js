@@ -3,19 +3,34 @@ import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {loadUserProfileStart} from '../redux/LoginUserProfileSlice/userSlice';
+import {
+  loadUserProfileStart,
+  userLogout,
+} from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Button, Popover} from 'native-base';
+import {Button, Popover, useToast} from 'native-base';
 
 const VendorHeader = () => {
+  const toast = useToast();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
 
   const LogOut = async () => {
     AsyncStorage.clear();
-    navigation.navigate('Splash');
+    dispatch(userLogout());
+
+    toast.show({
+      title: 'Logout Successfully ! ',
+      placement: 'top',
+      backgroundColor: 'green.600',
+      variant: 'solid',
+    });
+
+    setTimeout(() => {
+      navigation.navigate('CustomerHomePage');
+    }, 1000);
   };
 
   useEffect(() => {

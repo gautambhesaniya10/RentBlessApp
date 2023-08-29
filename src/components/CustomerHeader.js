@@ -3,12 +3,16 @@ import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {loadUserProfileStart} from '../redux/LoginUserProfileSlice/userSlice';
+import {
+  loadUserProfileStart,
+  userLogout,
+} from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Button, Popover} from 'native-base';
+import {Button, Popover, useToast} from 'native-base';
 
-const CustomerHeader = () => {
+const CustomerHeader = ({homeScreen}) => {
+  const toast = useToast();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
@@ -17,7 +21,17 @@ const CustomerHeader = () => {
 
   const LogOut = async () => {
     AsyncStorage.clear();
-    navigation.navigate('Splash');
+    dispatch(userLogout());
+    setAccessToken('');
+    toast.show({
+      title: 'Logout Successfully ! ',
+      placement: 'top',
+      backgroundColor: 'green.600',
+      variant: 'solid',
+    });
+    setTimeout(() => {
+      navigation.navigate('CustomerHomePage');
+    }, 1000);
   };
 
   const retrieveLocalData = async () => {
@@ -35,7 +49,7 @@ const CustomerHeader = () => {
   }, [isFocused]);
 
   return (
-    <View style={styles.mainDiv}>
+    <View style={homeScreen ? styles.mainDiv : styles.mainDivOther}>
       <View style={styles.innerMain}>
         <View style={styles.leftMainDiv}>
           {/* {useProfileData?.userCreatedShopId &&
@@ -84,7 +98,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#151827',
     width: '100%',
     height: 96,
-    // justifyContent: 'center',
+    paddingTop: 20,
+  },
+  mainDivOther: {
+    backgroundColor: '#151827',
+    width: '100%',
+    paddingVertical: 20,
   },
   leftMainDiv: {
     display: 'flex',
@@ -97,7 +116,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginHorizontal: 26,
-    paddingTop: 20,
   },
   leftText: {
     color: 'white',

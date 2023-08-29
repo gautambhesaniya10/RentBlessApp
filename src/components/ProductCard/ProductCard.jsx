@@ -1,14 +1,84 @@
 import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useDispatch, useSelector} from 'react-redux';
+import {productLike} from '../../graphql/mutations/products';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useToast} from 'native-base';
+import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 
 const ProductCard = ({product}) => {
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
   const ProductImages = [
     product?.product_image?.front,
     product?.product_image?.back,
     product?.product_image?.side,
   ];
+  const {userProfile, isAuthenticate} = useSelector(state => state?.user);
+
+  const [productLikeByUser, setProductLikeByUser] = useState(false);
+
+  const clickedByLike = () => {
+    if (isAuthenticate) {
+      productLike({
+        productInfo: {
+          product_id: product?.id,
+          user_id: userProfile?.id,
+        },
+      }).then(
+        res => {
+          dispatch(
+            !productLikeByUser
+              ? productLikeToggle({
+                  productInfo: {
+                    key: 'like',
+                    value: res.data.productLike.data,
+                  },
+                })
+              : productLikeToggle({
+                  productInfo: {
+                    key: 'disLike',
+                    value: product.id,
+                  },
+                }),
+          );
+          toast.show({
+            title: res.data.productLike.message,
+            placement: 'top',
+            backgroundColor: 'green.600',
+            variant: 'solid',
+          });
+        },
+        error => {
+          toast.show({
+            title: error.message,
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        },
+      );
+    } else {
+      navigation.navigate('LoginMainScreen');
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthenticate) {
+      setProductLikeByUser(false);
+    }
+
+    const likedProductByUser = userProfile?.product_like_list?.find(
+      itm => itm?.id === product?.id,
+    );
+
+    likedProductByUser
+      ? setProductLikeByUser(true)
+      : setProductLikeByUser(false);
+  }, [isAuthenticate, product?.id, userProfile]);
 
   return (
     <View style={styles.mainContainer}>
@@ -33,8 +103,12 @@ const ProductCard = ({product}) => {
           ))}
         </ScrollView>
         <View style={styles.heartIcon}>
-          <TouchableOpacity>
-            <Icon name="heart-o" size={18} color="black" />
+          <TouchableOpacity onPress={() => clickedByLike()}>
+            <Icon
+              name={productLikeByUser ? 'heart' : 'heart-o'}
+              size={18}
+              color={productLikeByUser ? 'red' : 'black'}
+            />
           </TouchableOpacity>
         </View>
       </View>

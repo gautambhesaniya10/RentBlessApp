@@ -112,24 +112,7 @@ const shopSlice = createSlice({
       error: '',
     },
   },
-  reducers: {
-    emptyShopState: (state, action) => {
-      return {
-        shopsLimit: 0,
-        shopsCount: 0,
-        numOfPages: 0,
-        shopsData: [],
-        loading: false,
-        error: '',
-
-        allShopsLists: {
-          data: [],
-          loading: false,
-          error: '',
-        },
-      };
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(loadShopsStart.pending, handleShopLoading)

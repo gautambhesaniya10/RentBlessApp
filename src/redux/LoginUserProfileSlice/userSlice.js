@@ -24,12 +24,38 @@ const userProfileSlice = createSlice({
     error: '',
   },
   reducers: {
+    userLogout: (state, action) => {
+      return {
+        userProfile: {},
+        isAuthenticate: false,
+        userLoading: false,
+        error: '',
+      };
+    },
     setShopRegisterId: (state, action) => {
       return {
         ...state,
         userProfile: {
           ...state.userProfile,
           ['userCreatedShopId']: action.payload,
+        },
+      };
+    },
+    productLikeToggle: (state, action) => {
+      return {
+        ...state,
+        userProfile: {
+          ...state.userProfile,
+          ['product_like_list']:
+            action.payload.productInfo.key === 'like'
+              ? [
+                  ...state.userProfile.product_like_list.concat(
+                    action.payload.productInfo.value,
+                  ),
+                ]
+              : state.userProfile.product_like_list.filter(
+                  product => product.id !== action.payload.productInfo.value,
+                ),
         },
       };
     },
@@ -59,5 +85,6 @@ const userProfileSlice = createSlice({
   },
 });
 
-export const {setShopRegisterId} = userProfileSlice.actions;
+export const {setShopRegisterId, productLikeToggle, userLogout} =
+  userProfileSlice.actions;
 export default userProfileSlice.reducer;

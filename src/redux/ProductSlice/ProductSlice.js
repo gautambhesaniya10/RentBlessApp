@@ -66,18 +66,7 @@ const productSlice = createSlice({
     productLoading: false,
     error: '',
   },
-  reducers: {
-    emptyProductState: (state, action) => {
-      return {
-        productsLimit: 0,
-        productsCount: 0,
-        numOfPages: 0,
-        productsData: [],
-        productLoading: false,
-        error: '',
-      };
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder
       .addCase(loadProductsStart.pending, handleProductLoading)

@@ -127,13 +127,6 @@ const HomePage = () => {
     }
   };
 
-  const EmptyProduct = () => {
-    dispatch(emptyProductState());
-  };
-  const EmptyShop = () => {
-    dispatch(emptyShopState());
-  };
-
   const getAllMoreShops = () => {
     dispatch(
       loadMoreShopStart({
@@ -176,11 +169,6 @@ const HomePage = () => {
   }, [dispatch, shopDataLimit]);
 
   useEffect(() => {
-    EmptyProduct();
-    EmptyShop();
-  }, []);
-
-  useEffect(() => {
     getAllProducts();
   }, [
     dispatch,
@@ -198,10 +186,11 @@ const HomePage = () => {
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={{position: 'relative'}}>
-        <CustomerHeader />
+        <CustomerHeader homeScreen={true} />
         <View style={styles.searchTextMain}>
           <Icon name="search" size={18} color="black" />
           <TextInput
+            value={productsFiltersReducer.searchBarData}
             onChangeText={value => {
               dispatch(
                 changeProductsSearchBarData({
