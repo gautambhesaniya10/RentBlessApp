@@ -4,7 +4,7 @@ import CustomerHeader from '../../components/CustomerHeader';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {ActivityIndicator, RadioButton} from 'react-native-paper';
+import {ActivityIndicator, RadioButton, Switch} from 'react-native-paper';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -34,9 +34,9 @@ const HomePage = () => {
   } = useSelector(state => state.productsData);
 
   const [genderFilter, setGenderFilter] = useState('men');
-
   const [currentPage, setCurrentPage] = useState(0);
   const [productDataLimit, setProductDataLimit] = useState(0);
+  const [byShop, setByShop] = useState(false);
 
   const getAllMoreProducts = () => {
     dispatch(
@@ -198,7 +198,11 @@ const HomePage = () => {
               setProductDataLimit={setProductDataLimit}
             />
           </View>
-
+          <View style={styles.toggleSwitchMain}>
+            <Text style={styles.switchText}>Product</Text>
+            <Switch value={byShop} onValueChange={() => setByShop(!byShop)} />
+            <Text style={styles.switchText}>Shop</Text>
+          </View>
           <View
             style={{
               marginTop: 6,
@@ -235,21 +239,25 @@ const HomePage = () => {
             </TouchableOpacity>
           </View>
 
-          {productLoading && productsData?.length === 0 ? (
-            <View style={styles.loaderDiv}>
-              <ActivityIndicator />
-            </View>
+          {!byShop ? (
+            productLoading && productsData?.length === 0 ? (
+              <View style={styles.loaderDiv}>
+                <ActivityIndicator />
+              </View>
+            ) : (
+              <View style={styles.productCardMain}>
+                {productsData?.map((product, index) => (
+                  <ProductCard key={index} product={product} />
+                ))}
+                {productLoading && productsData?.length > 0 && (
+                  <View style={styles.loaderBottomDiv}>
+                    <ActivityIndicator />
+                  </View>
+                )}
+              </View>
+            )
           ) : (
-            <View style={styles.productCardMain}>
-              {productsData?.map((product, index) => (
-                <ProductCard key={index} product={product} />
-              ))}
-              {productLoading && productsData?.length > 0 && (
-                <View style={styles.loaderBottomDiv}>
-                  <ActivityIndicator />
-                </View>
-              )}
-            </View>
+            <Text>This is Shop cart</Text>
           )}
         </View>
       </ScrollView>
@@ -335,5 +343,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingVertical: 5,
+  },
+  toggleSwitchMain: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginBottom: 8,
+  },
+  switchText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
