@@ -41,7 +41,7 @@ const ProductCard = ({product}) => {
               : productLikeToggle({
                   productInfo: {
                     key: 'disLike',
-                    value: product.id,
+                    value: product?.id,
                   },
                 }),
           );
@@ -113,7 +113,14 @@ const ProductCard = ({product}) => {
         </View>
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ProductDetail', {
+            state: {
+              productId: product?.id,
+            },
+          })
+        }>
         <Text style={styles.productNameText} numberOfLines={2}>
           {product?.product_name}
         </Text>

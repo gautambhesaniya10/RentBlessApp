@@ -11,6 +11,7 @@ import MainDashboard from './src/screens/Vendor/VendorDashboard/MainDashboard';
 import AddEditProduct from './src/screens/Vendor/VendorDashboard/AddEditProduct/AddEditProduct';
 import HomePage from './src/screens/Customer/HomePage';
 import CustomerMain from './src/screens/Customer/CustomerMain';
+import ProductDetail from './src/screens/Customer/pages/ProductDetail';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -60,6 +61,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="VendorAddEditProduct"
           component={AddEditProduct}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ProductDetail"
+          component={ProductDetail}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

@@ -24,6 +24,7 @@ const UpperFilter = ({
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
 
   const [oldLatestValue, setOldLatestValue] = useState('new');
+  const [isOpenPopOver, setIsOpenPopOver] = useState(false);
 
   useEffect(() => {
     if (!byShop) {
@@ -38,6 +39,7 @@ const UpperFilter = ({
   }, [byShop, productsFiltersReducer, shopsFiltersReducer]);
 
   const onChangeSortFilter = newValue => {
+    setIsOpenPopOver(false);
     if (!byShop) {
       setCurrentPage(0);
       setProductDataLimit(0);
@@ -68,7 +70,10 @@ const UpperFilter = ({
       <Popover
         trigger={triggerProps => {
           return (
-            <Button style={{backgroundColor: 'transparent'}} {...triggerProps}>
+            <Button
+              style={{backgroundColor: 'transparent'}}
+              {...triggerProps}
+              onPress={() => setIsOpenPopOver(true)}>
               <View style={styles.sortFilMain}>
                 <Text
                   style={[
@@ -84,7 +89,9 @@ const UpperFilter = ({
               </View>
             </Button>
           );
-        }}>
+        }}
+        isOpen={isOpenPopOver}
+        onClose={() => setIsOpenPopOver(!isOpenPopOver)}>
         <Popover.Content>
           {/* <Popover.Arrow /> */}
           <View style={styles.radioTopMain}>

@@ -59,6 +59,25 @@ const userProfileSlice = createSlice({
         },
       };
     },
+    shopFollowToggle: (state, action) => {
+      return {
+        ...state,
+
+        userProfile: {
+          ...state.userProfile,
+          ['shop_follower_list']:
+            action.payload.shopInfo.key === 'follow'
+              ? [
+                  ...state.userProfile.shop_follower_list.concat(
+                    action.payload.shopInfo.value,
+                  ),
+                ]
+              : state.userProfile.shop_follower_list.filter(
+                  shop => shop.shop_id !== action.payload.shopInfo.value,
+                ),
+        },
+      };
+    },
   },
   extraReducers: builder => {
     builder.addCase(loadUserProfileStart.pending, state => {
@@ -85,6 +104,10 @@ const userProfileSlice = createSlice({
   },
 });
 
-export const {setShopRegisterId, productLikeToggle, userLogout} =
-  userProfileSlice.actions;
+export const {
+  setShopRegisterId,
+  productLikeToggle,
+  shopFollowToggle,
+  userLogout,
+} = userProfileSlice.actions;
 export default userProfileSlice.reducer;
