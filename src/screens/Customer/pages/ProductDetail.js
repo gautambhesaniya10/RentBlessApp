@@ -1,4 +1,11 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -21,7 +28,6 @@ import {Button, Popover, useToast} from 'native-base';
 import {shopFollow} from '../../../graphql/mutations/shops';
 import {Modal} from 'react-native';
 import {Share} from 'react-native';
-
 const ProductDetail = () => {
   const route = useRoute();
   const toast = useToast();
@@ -178,12 +184,18 @@ const ProductDetail = () => {
   const shareContent = async () => {
     try {
       const result = await Share.share({
-        message: 'Check out this awesome content!',
-        url: `https://rentbless.com/product/${productId}/`,
+        message: `https://rentbless.com/product/${productId}/`,
+        // url: `https://rentbless.com/product/${productId}/`,
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);
     }
+  };
+
+  const openWhatsAppChat = async () => {
+    const phoneNumber = `+91${productDetails?.data?.product?.data?.branchInfo?.manager_contact}`; // Replace with the desired phone number
+    const url = `https://api.whatsapp.com/send?phone=${phoneNumber}`;
+    Linking.openURL(url);
   };
 
   return (
@@ -350,7 +362,7 @@ const ProductDetail = () => {
                   name="Send Messages"
                   color="#FFFFFF"
                   backgroundColor="#29977E"
-                  onPress={() => shareContent()}
+                  onPress={openWhatsAppChat}
                   borderColor="#29977E"
                   icon={true}
                   iconName="whatsapp"
