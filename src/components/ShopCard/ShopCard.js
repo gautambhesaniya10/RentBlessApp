@@ -2,8 +2,10 @@ import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {useNavigation} from '@react-navigation/native';
 
 const ShopCard = ({shop}) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.mainContainer}>
       <View style={{position: 'relative'}}>
@@ -28,7 +30,10 @@ const ShopCard = ({shop}) => {
         </ScrollView>
       </View>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate('ShopIndividual', {state: {shopId: shop?.id}})
+        }>
         <View style={styles.shopMain}>
           <Image
             source={{uri: shop?.shop_logo}}

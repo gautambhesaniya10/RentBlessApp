@@ -12,7 +12,10 @@ import {
   loadMoreProductsStart,
   loadProductsStart,
 } from '../../redux/ProductSlice/ProductSlice';
-import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
+import {
+  changeProductsSearchBarData,
+  emptyProductFilter,
+} from '../../redux/ProductFilter/ProductFilterSlice';
 import UpperFilter from '../../common/Customer/UpperFilter';
 import {
   emptyShopState,
@@ -20,12 +23,13 @@ import {
   loadShopsStart,
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
+import {useIsFocused} from '@react-navigation/native';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
 const HomePage = () => {
   const dispatch = useDispatch();
-
+  const isFocused = useIsFocused();
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
   );
@@ -81,6 +85,21 @@ const HomePage = () => {
       }),
     );
   };
+
+  useEffect(() => {
+    if (
+      productsFiltersReducer.appliedProductsFilters.categoryId.selectedValue
+        ?.length > 0 ||
+      productsFiltersReducer.appliedProductsFilters.productColor.selectedValue
+        ?.length > 0 ||
+      productsFiltersReducer.appliedProductsFilters.shopId.selectedValue
+        ?.length > 0 ||
+      productsFiltersReducer.sortFilters.sortType.selectedValue === 'old' ||
+      productsFiltersReducer.searchBarData !== ''
+    ) {
+      dispatch(emptyProductFilter());
+    }
+  }, [!byShop && isFocused]);
 
   const getAllProducts = () => {
     dispatch(

@@ -33,9 +33,9 @@ const CustomButton = ({
       flexDirection: 'row',
     },
     loginBtn: {
-      paddingVertical: 10,
+      paddingVertical: 8,
       color: color,
-      fontSize: 18,
+      fontSize: 16,
       fontWeight: '600',
       fontFamily: FontStyle,
     },
@@ -43,7 +43,7 @@ const CustomButton = ({
 
   return (
     <TouchableOpacity style={styles.main} onPress={() => onPress()}>
-      {icon && <Icon name={iconName} size={18} color={color} />}
+      {icon && <Icon name={iconName} size={16} color={color} />}
       {loading && <ActivityIndicator color="white" />}
       <Text style={styles.loginBtn}>{name}</Text>
     </TouchableOpacity>

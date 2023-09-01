@@ -46,6 +46,25 @@ const productFilterSlice = createSlice({
         [`${action.payload.key}`]: `${action.payload.value}`,
       };
     },
+    emptyProductFilter: (state, action) => {
+      return {
+        appliedProductsFilters: {
+          categoryId: {
+            selectedValue: [],
+          },
+          productColor: {
+            selectedValue: [],
+          },
+          shopId: {
+            selectedValue: [],
+          },
+        },
+        sortFilters: {
+          sortType: {selectedValue: 'new'},
+        },
+        searchBarData: '',
+      };
+    },
   },
   extraReducers: builder => {},
 });
@@ -54,5 +73,6 @@ export const {
   changeAppliedProductsFilters,
   changeSortProductsFilters,
   changeProductsSearchBarData,
+  emptyProductFilter,
 } = productFilterSlice.actions;
 export default productFilterSlice.reducer;
