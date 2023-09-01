@@ -17,17 +17,17 @@ import {SliderBox} from 'react-native-image-slider-box';
 import ProductCard from '../../../components/ProductCard/ProductCard';
 import {getProductDetails} from '../../../graphql/queries/productQueries';
 import RenderHTML from 'react-native-render-html';
-import {useWindowDimensions} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {productLike} from '../../../graphql/mutations/products';
 import {
   productLikeToggle,
   shopFollowToggle,
 } from '../../../redux/LoginUserProfileSlice/userSlice';
-import {Button, Popover, useToast} from 'native-base';
+import {useToast} from 'native-base';
 import {shopFollow} from '../../../graphql/mutations/shops';
 import {Modal} from 'react-native';
 import {Share} from 'react-native';
+
 const ProductDetail = () => {
   const route = useRoute();
   const toast = useToast();
@@ -37,7 +37,6 @@ const ProductDetail = () => {
   const [productDetails, setProductDetails] = useState({});
   const [productLikeByUser, setProductLikeByUser] = useState(false);
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
   const [showContactModalOpen, setShowContactModalOpen] = useState(false);
   const getProductDetail = async () => {
