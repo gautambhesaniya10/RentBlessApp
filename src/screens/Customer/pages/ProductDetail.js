@@ -19,6 +19,8 @@ import {
 } from '../../../redux/LoginUserProfileSlice/userSlice';
 import {Button, Popover, useToast} from 'native-base';
 import {shopFollow} from '../../../graphql/mutations/shops';
+import {Modal} from 'react-native';
+import {Share} from 'react-native';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -31,7 +33,7 @@ const ProductDetail = () => {
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
-
+  const [showContactModalOpen, setShowContactModalOpen] = useState(false);
   const getProductDetail = async () => {
     const productDetails = await getProductDetails({id: productId});
     setProductDetails(productDetails);
@@ -173,6 +175,17 @@ const ProductDetail = () => {
     productDetails?.data?.product?.data?.product_image?.side,
   ];
 
+  const shareContent = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Check out this awesome content!',
+        url: `https://rentbless.com/product/${productId}/`,
+      });
+    } catch (error) {
+      console.error('Error sharing content:', error.message);
+    }
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.productHeaderMain}>
@@ -275,7 +288,9 @@ const ProductDetail = () => {
                   color={productLikeByUser ? 'red' : 'black'}
                 />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.iconBG}>
+              <TouchableOpacity
+                onPress={() => shareContent()}
+                style={styles.iconBG}>
                 <Icon name="share-alt" size={22} color="black" />
               </TouchableOpacity>
               <TouchableOpacity style={styles.iconBG}>
@@ -285,34 +300,6 @@ const ProductDetail = () => {
           </View>
 
           <View style={styles.mainContainer}>
-            {/* <Popover
-              placement="left"
-              trigger={triggerProps => {
-                return (
-                  <Button
-                    colorScheme="danger"
-                    alignSelf="center"
-                    {...triggerProps}
-                    onPress={() => setIsOpen(true)}>
-                    Delete Customer
-                  </Button>
-                );
-              }}
-              isOpen={isOpen}
-              onClose={() => setIsOpen(!isOpen)}>
-              <Popover.Content>
-                <Popover.Arrow />
-                <View style={styles.radioTopMain}>
-                  <Text onPress={() => setIsOpen(false)}>GBBBBBBBBB</Text>
-                  <Button
-                    colorScheme="coolGray"
-                    variant="ghost"
-                    onPress={() => setIsOpen(false)}>
-                    Cancel
-                  </Button>
-                </View>
-              </Popover.Content>
-            </Popover> */}
             <Text style={styles.proNameText}>
               {productDetails?.data?.product?.data?.product_name}
             </Text>
@@ -363,7 +350,7 @@ const ProductDetail = () => {
                   name="Send Messages"
                   color="#FFFFFF"
                   backgroundColor="#29977E"
-                  onPress={() => {}}
+                  onPress={() => shareContent()}
                   borderColor="#29977E"
                   icon={true}
                   iconName="whatsapp"
@@ -374,7 +361,7 @@ const ProductDetail = () => {
                   name="Show Contact"
                   color="#151827"
                   backgroundColor="rgba(21, 24, 39, 0.10)"
-                  onPress={() => {}}
+                  onPress={() => setShowContactModalOpen(true)}
                   borderColor="rgba(21, 24, 39, 0.10)"
                   icon={true}
                   iconName="user-circle-o"
@@ -396,6 +383,71 @@ const ProductDetail = () => {
           </View>
         </View>
       </ScrollView>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showContactModalOpen}
+        onRequestClose={() => {
+          setShowContactModalOpen(!showContactModalOpen);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity
+              onPress={() => setShowContactModalOpen(false)}
+              style={styles.modelClose}>
+              <Icon name="close" size={22} color="black" />
+            </TouchableOpacity>
+            <View style={{padding: 20}}>
+              <View style={{flexDirection: 'row', gap: 15, marginBottom: 18}}>
+                <Image
+                  source={{
+                    uri: productDetails?.data?.product?.data?.branchInfo
+                      ?.shop_info?.shop_logo,
+                  }}
+                  style={{width: 50, height: 50, borderRadius: 25}}
+                />
+                <View>
+                  <Text style={styles.modelTitleName}>
+                    {
+                      productDetails?.data?.product?.data?.branchInfo?.shop_info
+                        ?.shop_name
+                    }
+                  </Text>
+                  <Text>
+                    {
+                      productDetails?.data?.product?.data?.branchInfo
+                        ?.branch_address
+                    }
+                  </Text>
+                </View>
+              </View>
+              <View style={{flexDirection: 'row', gap: 15}}>
+                <Image
+                  source={require('../../../images/profileImg.png')}
+                  style={{width: 50, height: 50, borderRadius: 25}}
+                />
+                <View>
+                  <Text style={styles.modelTitleName}>
+                    {
+                      productDetails?.data?.product?.data?.branchInfo
+                        ?.manager_name
+                    }
+                  </Text>
+                  <Text style={[styles.modelTitleName, {paddingLeft: 60}]}>
+                    - Manager
+                  </Text>
+                  <Text>
+                    {
+                      productDetails?.data?.product?.data?.branchInfo
+                        ?.manager_contact
+                    }
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -467,6 +519,7 @@ const styles = StyleSheet.create({
     right: 20,
     top: 20,
     gap: 10,
+    alignItems: 'center',
   },
   iconBG: {
     backgroundColor: 'white',
@@ -476,6 +529,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 16,
     elevation: 3,
+  },
+  shareMainContent: {
+    flexDirection: 'row',
+    gap: 12,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    elevation: 3,
+    padding: 10,
   },
   mainContainer: {
     paddingHorizontal: 20,
@@ -519,5 +580,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+  },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    // padding: 35,
+    elevation: 5,
+  },
+  modelTitleName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: 'black',
+  },
+  modelClose: {
+    alignItems: 'flex-end',
+    paddingTop: 15,
+    paddingRight: 15,
   },
 });
