@@ -99,6 +99,7 @@ const SubBranchTab = ({
                 cardTitle={`Branch ${index + 1}`}
                 onDeleteBranch={onDeleteBranch}
                 onEditBranch={onEditBranch}
+                onEditDelShow={true}
                 bottomComponent={
                   <View>
                     <View style={styles.listMain}>

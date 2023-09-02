@@ -249,7 +249,11 @@ const ShopIndividual = () => {
                       color="white"
                       borderColor="white"
                       backgroundColor="#151827"
-                      onPress={() => {}}
+                      onPress={() =>
+                        navigation.navigate('Branches', {
+                          state: {shopDetails: shopDetails},
+                        })
+                      }
                       iconName="plus"
                     />
                   </View>

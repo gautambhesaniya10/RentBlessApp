@@ -9,6 +9,7 @@ const BranchMultiDropDown = ({
   bottomComponent,
   onDeleteBranch,
   onEditBranch,
+  onEditDelShow,
 }) => {
   const [show, setShow] = useState(false);
   return (
@@ -33,19 +34,21 @@ const BranchMultiDropDown = ({
           <Text style={styles.textBranchName}>{cardTitle}</Text>
         </TouchableOpacity>
 
-        <View style={styles.leftMain}>
-          <TouchableOpacity
-            onPress={() => onEditBranch(item)}
-            style={styles.editPencil}>
-            <Icon name="pencil" size={13} color="white" />
-          </TouchableOpacity>
+        {onEditDelShow && (
+          <View style={styles.leftMain}>
+            <TouchableOpacity
+              onPress={() => onEditBranch(item)}
+              style={styles.editPencil}>
+              <Icon name="pencil" size={13} color="white" />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => onDeleteBranch(item)}
-            style={styles.delIcon}>
-            <Icon name="trash" size={14} color="white" />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              onPress={() => onDeleteBranch(item)}
+              style={styles.delIcon}>
+              <Icon name="trash" size={14} color="white" />
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
       {show && <View>{bottomComponent}</View>}
     </View>
