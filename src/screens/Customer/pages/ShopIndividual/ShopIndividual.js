@@ -2,6 +2,7 @@ import {
   ActivityIndicator,
   Image,
   ScrollView,
+  Share,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,7 +18,16 @@ import CustomButton from '../../../../common/CustomButton';
 import ProductCard from '../../../../components/ProductCard/ProductCard';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {changeAppliedProductsFilters} from '../../../../redux/ProductFilter/ProductFilterSlice';
-import {getShopDetails} from '../../../../graphql/queries/shopQueries';
+import {
+  getShopDetails,
+  getShopFollowers,
+  getShopReviews,
+} from '../../../../graphql/queries/shopQueries';
+import {shopFollow} from '../../../../graphql/mutations/shops';
+import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
+import StarRating from 'react-native-star-rating-widget';
+import {Divider} from 'react-native-paper';
+import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -41,33 +51,33 @@ const ShopIndividual = () => {
   );
 
   const [shopDetails, setShopDetails] = useState({});
+  const [totalFollowers, setTotalFollowers] = useState(0);
+  const [shopReviews, setShopReviews] = useState([]);
+  const [shopFollowByUser, setShopFollowByUser] = useState(false);
+
+  const getAllFollowers = () => {
+    getShopFollowers({id: shopId}).then(res =>
+      setTotalFollowers(res?.data?.shopFollower?.length),
+    );
+  };
+
+  const getAllReviews = () => {
+    getShopReviews({id: shopId}).then(res =>
+      setShopReviews(res.data.shopReview),
+    );
+  };
 
   const getShopDetailFromApi = async () => {
     const shopDetails = await getShopDetails({id: shopId});
-    setShopDetails(shopDetails);
+    setShopDetails(shopDetails?.data?.shop);
   };
-
-  useEffect(() => {
-    getShopDetailFromApi();
-  }, [shopId]);
-
-  useEffect(() => {
-    dispatch(
-      changeAppliedProductsFilters({
-        key: 'shopId',
-        value: {
-          selectedValue: [shopId],
-        },
-      }),
-    );
-  }, [dispatch, shopId]);
 
   const getAllProducts = () => {
     dispatch(
       loadProductsStart({
         pageData: {
           skip: 0,
-          limit: 6,
+          limit: productsCount,
         },
         filter: {
           category_id:
@@ -84,6 +94,98 @@ const ShopIndividual = () => {
       }),
     );
   };
+
+  const shareContent = async () => {
+    try {
+      const result = await Share.share({
+        message: `https://rentbless.com/shop/${shopId}/`,
+        // url: `https://rentbless.com/product/${productId}/`,
+      });
+    } catch (error) {
+      console.error('Error sharing content:', error.message);
+    }
+  };
+
+  const clickedByFollow = () => {
+    if (isAuthenticate) {
+      shopFollow({
+        shopInfo: {
+          shop_id: shopId,
+          user_id: userProfile?.id,
+        },
+      }).then(
+        res => {
+          dispatch(
+            !shopFollowByUser
+              ? shopFollowToggle({
+                  shopInfo: {
+                    key: 'follow',
+                    value: res?.data?.shopFollower?.data,
+                  },
+                })
+              : shopFollowToggle({
+                  shopInfo: {
+                    key: 'unFollow',
+                    value: shopId,
+                  },
+                }),
+          );
+          toast.show({
+            title: res?.data?.shopFollower?.message,
+            placement: 'top',
+            backgroundColor: 'green.600',
+            variant: 'solid',
+          });
+        },
+        error => {
+          toast.show({
+            title: error.message,
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        },
+      );
+    } else {
+      navigation.navigate('LoginMainScreen');
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthenticate) {
+      setShopFollowByUser(false);
+    }
+
+    const followedShopsByUser = userProfile?.shop_follower_list?.find(
+      itm => itm?.shop_id === shopId,
+    );
+
+    followedShopsByUser
+      ? setShopFollowByUser(true)
+      : setShopFollowByUser(false);
+  }, [isAuthenticate, shopId, userProfile]);
+
+  useEffect(() => {
+    getShopDetailFromApi();
+  }, [shopId]);
+
+  useEffect(() => {
+    dispatch(
+      changeAppliedProductsFilters({
+        key: 'shopId',
+        value: {
+          selectedValue: [shopId],
+        },
+      }),
+    );
+  }, [dispatch, shopId]);
+
+  useEffect(() => {
+    getAllReviews();
+    getAllFollowers();
+    // dispatch(loadCategoriesStart());
+    // dispatch(loadAreaListsStart());
+  }, [dispatch, userProfile]);
 
   useEffect(() => {
     if (
@@ -110,28 +212,34 @@ const ShopIndividual = () => {
           <View style={styles.mainHeaderContainer}>
             <View style={styles.topInnerMain}>
               <Image
-                source={require('../../../../images/menTshirt.png')}
+                source={{uri: shopDetails?.shop_logo}}
                 style={{width: 64, height: 64, borderRadius: 32}}
               />
               <View>
-                <Text style={styles.firstText}>Fashion Bazar</Text>
-                <Text style={styles.secText}>Contourz by Taruna Manchanda</Text>
+                <Text style={styles.firstText}>{shopDetails?.shop_name}</Text>
+                <Text numberOfLines={1} style={styles.secText}>
+                  {
+                    "Let's be Effortlessly Cool: Embrace Your Signature Style with Us"
+                  }
+                </Text>
                 <Text style={styles.thirdText}>
                   <Image
                     source={require('../../../../images/locationIcon.png')}
                     style={{width: 10, height: 10, tintColor: 'white'}}
                   />{' '}
-                  Yogi Chowk
+                  {shopDetails?.branch_info?.map(
+                    itm => itm?.branch_type === 'main' && itm?.branch_address,
+                  )}
                 </Text>
 
                 <View style={styles.followBtnMain}>
                   <View style={{width: '40%'}}>
                     <CustomButton
-                      name="Follow"
+                      name={shopFollowByUser ? 'UnFollow' : 'Follow'}
                       color="black"
                       backgroundColor="#FFF"
-                      onPress={() => {}}
-                      icon={true}
+                      onPress={() => clickedByFollow()}
+                      icon={!shopFollowByUser && true}
                       iconName="plus"
                     />
                   </View>
@@ -153,26 +261,27 @@ const ShopIndividual = () => {
                 <Text style={styles.bottomTitleText}>
                   <Icon name="shopping-cart" size={16} color="white" /> Product
                 </Text>
-                <Text style={styles.numText}>10</Text>
+                <Text style={styles.numText}>{productsCount}</Text>
               </View>
               <View style={styles.bottomItemDiv}>
                 <Text style={styles.bottomTitleText}>
                   <Icon name="user-o" size={16} color="white" /> Followers
                 </Text>
-                <Text style={styles.numText}>10</Text>
+                <Text style={styles.numText}>{totalFollowers}</Text>
               </View>
               <View style={styles.bottomItemDiv}>
                 <Text style={styles.bottomTitleText}>
                   <Icon name="pencil-square-o" size={16} color="white" />{' '}
                   Reviews
                 </Text>
-                <Text style={styles.numText}>10</Text>
+                <Text style={styles.numText}>{shopReviews?.length}</Text>
               </View>
               <View style={styles.bottomItemDiv}>
-                <Text style={styles.bottomTitleText}>
-                  <Icon name="share" size={16} color="white" /> Share
-                </Text>
-                <Text style={styles.numText}>10</Text>
+                <TouchableOpacity onPress={() => shareContent()}>
+                  <Text style={styles.bottomTitleText}>
+                    <Icon name="share" size={16} color="white" /> Share
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -197,8 +306,11 @@ const ShopIndividual = () => {
             </View>
           )}
 
-          <Text>fdsfiudshfiu</Text>
-          <Text>fdsfiudshfiu</Text>
+          <ShopAllReviewSection
+            shopReviews={shopReviews}
+            viewAllBtn={true}
+            shopDetails={shopDetails}
+          />
         </View>
       </ScrollView>
     </View>
@@ -235,6 +347,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     fontFamily: FontStyle,
+    width: 230,
   },
   thirdText: {
     color: 'rgba(255, 255, 255, 0.64)',

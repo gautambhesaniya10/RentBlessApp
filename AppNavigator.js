@@ -13,6 +13,7 @@ import HomePage from './src/screens/Customer/HomePage';
 import CustomerMain from './src/screens/Customer/CustomerMain';
 import ProductDetail from './src/screens/Customer/pages/ProductDetail';
 import ShopIndividual from './src/screens/Customer/pages/ShopIndividual/ShopIndividual';
+import ShopReviewAll from './src/screens/Customer/pages/ShopIndividual/ShopReviewAll';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -72,6 +73,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="ShopIndividual"
           component={ShopIndividual}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="ShopReviewAll"
+          component={ShopReviewAll}
           options={{headerShown: false}}
         />
       </Stack.Navigator>
