@@ -25,8 +25,6 @@ import {
 } from '../../../../graphql/queries/shopQueries';
 import {shopFollow} from '../../../../graphql/mutations/shops';
 import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
-import StarRating from 'react-native-star-rating-widget';
-import {Divider} from 'react-native-paper';
 import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
 
 const ShopIndividual = () => {

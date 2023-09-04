@@ -23,9 +23,6 @@ const WriteReview = () => {
 
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
 
-  //   console.log('userProfile', userProfile);
-  console.log('shopID', shopDetails?.id);
-
   const OnSubmitReview = () => {
     if (!submitButtonDisable) {
       if (isAuthenticate) {
@@ -113,9 +110,9 @@ const WriteReview = () => {
         <View style={{paddingBottom: 20}}>
           <Text style={styles.yourRevText}>Your Review*</Text>
           <TextArea
-            style={{backgroundColor: 'white'}}
+            style={{backgroundColor: 'white', fontSize: 16}}
             h={150}
-            placeholder="Text Area Placeholder"
+            placeholder="Tell us about experience"
             w="100%"
             onChangeText={value => setMessage(value)}
           />

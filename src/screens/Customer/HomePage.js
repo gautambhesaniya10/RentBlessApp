@@ -54,7 +54,6 @@ const HomePage = () => {
     error: shopError,
   } = useSelector(state => state?.shops);
 
-  const [genderFilter, setGenderFilter] = useState('men');
   const [currentPage, setCurrentPage] = useState(0);
   const [productDataLimit, setProductDataLimit] = useState(0);
 
@@ -230,71 +229,33 @@ const HomePage = () => {
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
-          {/* <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              gap: 20,
-              marginTop: 20,
-            }}>
-            <View style={styles.maleMain}>
-              <TouchableOpacity
-                onPress={() => setGenderFilter('men')}
-                style={[
-                  styles.manIcon,
-                  {
-                    backgroundColor:
-                      genderFilter === 'men' ? '#151827' : 'white',
-                  },
-                ]}>
-                <Icon
-                  name="male"
-                  size={18}
-                  color={genderFilter === 'men' ? 'white' : 'black'}
-                />
-              </TouchableOpacity>
-              <Text style={styles.menText}>Men</Text>
-            </View>
-            <View style={styles.maleMain}>
-              <TouchableOpacity
-                onPress={() => setGenderFilter('women')}
-                style={[
-                  styles.manIcon,
-                  {
-                    backgroundColor:
-                      genderFilter === 'women' ? '#151827' : 'white',
-                  },
-                ]}>
-                <Icon
-                  name="female"
-                  size={18}
-                  color={genderFilter === 'women' ? 'white' : 'black'}
-                />
-              </TouchableOpacity>
-              <Text style={styles.menText}>Women</Text>
-            </View>
-          </View> */}
-
           <Text style={styles.productText}>{byShop ? 'Shop' : 'Product'}</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
+            <View style={{marginLeft: -12}}>
+              <UpperFilter
+                byShop={byShop}
+                setCurrentPage={setCurrentPage}
+                setProductDataLimit={setProductDataLimit}
+                setShopCurrentPage={setShopCurrentPage}
+                setShopDataLimit={setShopDataLimit}
+              />
+            </View>
+            <View style={styles.toggleSwitchMain}>
+              <Text style={styles.switchText}>Product</Text>
+              <Switch
+                value={byShop}
+                onValueChange={() => setByShop(!byShop)}
+                color="#29977E"
+              />
+              <Text style={styles.switchText}>Shop</Text>
+            </View>
+          </View>
 
-          <View style={{alignSelf: 'flex-start', marginLeft: -12}}>
-            <UpperFilter
-              byShop={byShop}
-              setCurrentPage={setCurrentPage}
-              setProductDataLimit={setProductDataLimit}
-              setShopCurrentPage={setShopCurrentPage}
-              setShopDataLimit={setShopDataLimit}
-            />
-          </View>
-          <View style={styles.toggleSwitchMain}>
-            <Text style={styles.switchText}>Product</Text>
-            <Switch
-              value={byShop}
-              onValueChange={() => setByShop(!byShop)}
-              color="#29977E"
-            />
-            <Text style={styles.switchText}>Shop</Text>
-          </View>
           <View
             style={{
               marginTop: 6,
@@ -396,27 +357,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 20,
     marginTop: 25,
-  },
-  maleMain: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 15,
-  },
-
-  menText: {
-    color: '#151827',
-    fontSize: 18,
-    fontFamily: FontStyle,
-  },
-  manIcon: {
-    width: 35,
-    height: 35,
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderColor: '#D9D9D9',
-    borderWidth: 1,
   },
   productText: {
     color: '#151827',
