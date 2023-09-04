@@ -24,6 +24,7 @@ import {
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
 import {useIsFocused} from '@react-navigation/native';
+import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
@@ -54,13 +55,15 @@ const HomePage = () => {
     error: shopError,
   } = useSelector(state => state?.shops);
 
+  const {byShop} = useSelector(state => state?.shopsFiltersReducer);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [productDataLimit, setProductDataLimit] = useState(0);
 
   const [shopCurrentPage, setShopCurrentPage] = useState(0);
   const [shopDataLimit, setShopDataLimit] = useState(0);
 
-  const [byShop, setByShop] = useState(false);
+  // const [byShop, setByShop] = useState(false);
 
   const getAllMoreProducts = () => {
     dispatch(
@@ -249,7 +252,7 @@ const HomePage = () => {
               <Text style={styles.switchText}>Product</Text>
               <Switch
                 value={byShop}
-                onValueChange={() => setByShop(!byShop)}
+                onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
                 color="#29977E"
               />
               <Text style={styles.switchText}>Shop</Text>

@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import VendorLogoAndName from '../../../components/VendorLogoAndName';
 import {useNavigation} from '@react-navigation/native';
 import VendorHeader from '../../../components/VendorHeader';
 
@@ -26,7 +25,6 @@ const Home = ({}) => {
         showsVerticalScrollIndicator={false}
         style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={{marginTop: 40}}>
-          <VendorLogoAndName vendorShopDetails={vendorShopDetails} />
           <View style={{paddingBottom: 15}}>
             <View style={styles.boxMain}>
               <View>

@@ -14,6 +14,7 @@ const ShopFilterSlice = createSlice({
     sortFilters: {
       sortType: {selectedValue: 'new'},
     },
+    byShop: false,
   },
   reducers: {
     changeAppliedShopsFilters: (state, action) => {
@@ -36,10 +37,19 @@ const ShopFilterSlice = createSlice({
         },
       };
     },
+    shopProductButtonChange: (state, action) => {
+      return {
+        ...state,
+        byShop: action.payload,
+      };
+    },
   },
   extraReducers: builder => {},
 });
 
-export const {changeAppliedShopsFilters, changeSortShopsFilters} =
-  ShopFilterSlice.actions;
+export const {
+  changeAppliedShopsFilters,
+  changeSortShopsFilters,
+  shopProductButtonChange,
+} = ShopFilterSlice.actions;
 export default ShopFilterSlice.reducer;
