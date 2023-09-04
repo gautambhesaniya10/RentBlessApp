@@ -15,6 +15,7 @@ import ProductDetail from './src/screens/Customer/pages/ProductDetail';
 import ShopIndividual from './src/screens/Customer/pages/ShopIndividual/ShopIndividual';
 import ShopReviewAll from './src/screens/Customer/pages/ShopIndividual/ShopReviewAll';
 import Branches from './src/screens/Customer/pages/ShopIndividual/Branches';
+import WriteReview from './src/screens/Customer/pages/ShopIndividual/WriteReview';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -84,6 +85,11 @@ const AppNavigator = () => {
         <Stack.Screen
           name="Branches"
           component={Branches}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="WriteReview"
+          component={WriteReview}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

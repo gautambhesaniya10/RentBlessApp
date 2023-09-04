@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../../CommonStyle';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import {useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -34,6 +34,7 @@ const ShopIndividual = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const {shopId} = route?.params?.state;
 
   const {
@@ -185,7 +186,7 @@ const ShopIndividual = () => {
     getAllFollowers();
     // dispatch(loadCategoriesStart());
     // dispatch(loadAreaListsStart());
-  }, [dispatch, userProfile]);
+  }, [dispatch, userProfile, isFocused]);
 
   useEffect(() => {
     if (

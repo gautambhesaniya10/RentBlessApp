@@ -21,7 +21,15 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
             Last Review Updated on 20 Dec 2023
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('WriteReview', {
+              state: {
+                shopDetails: shopDetails,
+                shopReviews: shopReviews,
+              },
+            })
+          }>
           <Text style={styles.writeReText}>
             {' '}
             <Icon name="edit" size={20} color="#3346BD" /> Write a Review
@@ -81,7 +89,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
         </View>
       ))}
 
-      {viewAllBtn && (
+      {viewAllBtn && shopReviews?.length > 0 && (
         <View style={{width: '100%'}}>
           <CustomButton
             name="View All Reviews"

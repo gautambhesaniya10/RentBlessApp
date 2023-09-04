@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -7,16 +8,30 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import {BackGroundStyle} from '../../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ProgressBar} from 'react-native-paper';
+import {getShopReviews} from '../../../../graphql/queries/shopQueries';
 
 const ShopReviewAll = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const {shopReviews} = route?.params?.state;
+  const isFocused = useIsFocused();
   const {shopDetails} = route?.params?.state;
+  // const {shopReviews} = route?.params?.state;
+
+  const [shopReviews, setShopReviews] = useState([]);
+
+  const getAllReviews = () => {
+    getShopReviews({id: shopDetails?.id}).then(res =>
+      setShopReviews(res?.data?.shopReview),
+    );
+  };
+
+  useEffect(() => {
+    getAllReviews();
+  }, [shopDetails, route, isFocused]);
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
@@ -31,28 +46,37 @@ const ShopReviewAll = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginTop: 28}}>
             <Text style={styles.DistributionText}>Rating Distribution</Text>
-            {[5, 4, 3, 2, 1]?.map?.((star, index) => (
-              <View style={styles.progressBarMain}>
-                <Text>
-                  {star} <Icon name="star" size={12} color="black" />
-                </Text>
-                <ProgressBar
-                  style={{width: 240}}
-                  progress={
-                    shopReviews?.filter(itm => itm?.stars === star)?.length /
-                    shopReviews?.length
-                  }
-                  color="green"
-                />
-                <Text>
-                  {shopReviews?.filter(itm => itm.stars === star)?.length}{' '}
-                  Reviews
-                </Text>
+            {shopReviews?.length > 0 ? (
+              [5, 4, 3, 2, 1]?.map?.((star, index) => (
+                <View style={styles.progressBarMain}>
+                  <Text>
+                    {star} <Icon name="star" size={12} color="black" />
+                  </Text>
+                  <ProgressBar
+                    style={{width: 240}}
+                    progress={
+                      shopReviews?.filter(itm => itm?.stars === star)?.length /
+                      shopReviews?.length
+                    }
+                    color="green"
+                  />
+                  <Text>
+                    {shopReviews?.filter(itm => itm.stars === star)?.length}{' '}
+                    Reviews
+                  </Text>
+                </View>
+              ))
+            ) : (
+              <View style={{paddingVertical: 40}}>
+                <ActivityIndicator />
               </View>
-            ))}
+            )}
           </View>
 
-          <ShopAllReviewSection shopReviews={shopReviews} />
+          <ShopAllReviewSection
+            shopReviews={shopReviews}
+            shopDetails={shopDetails}
+          />
         </ScrollView>
       </View>
     </View>
