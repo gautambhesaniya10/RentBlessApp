@@ -5,6 +5,7 @@ import {useSelector} from 'react-redux';
 import {ScrollView} from 'react-native';
 import MenWomenTabs from './ProductFilterSubTab/MenWomenTabs';
 import CustomButton from '../../common/CustomButton';
+import ProductByShopFilter from './ProductFilterSubTab/ProductByShopFilter';
 
 const ProductApplyFilter = () => {
   const AllCateGory = ['Men', 'Women', 'Shops', 'Color'];
@@ -19,6 +20,8 @@ const ProductApplyFilter = () => {
   const [menSelectedData, setMenSelectedData] = useState([]);
   const [womenSelectedData, setWomenSelectedData] = useState([]);
 
+  const [selectedShopData, setSelectedShopData] = useState([]);
+
   const ClearParticularTab = () => {
     if (selectedCategory === 'Men') {
       setSelectedMenCat([]);
@@ -26,6 +29,8 @@ const ProductApplyFilter = () => {
     } else if (selectedCategory === 'Women') {
       setSelectedWomenCat([]);
       setWomenSelectedData([]);
+    } else if (selectedCategory === 'Shops') {
+      setSelectedShopData([]);
     }
   };
   const clearAllFilter = () => {
@@ -33,6 +38,7 @@ const ProductApplyFilter = () => {
     setMenSelectedData([]);
     setSelectedWomenCat([]);
     setWomenSelectedData([]);
+    setSelectedShopData([]);
   };
 
   return (
@@ -76,6 +82,12 @@ const ProductApplyFilter = () => {
                   setSelectedWomenCat={setSelectedWomenCat}
                   setMenSelectedData={setMenSelectedData}
                   setWomenSelectedData={setWomenSelectedData}
+                />
+              )}
+              {selectedCategory === 'Shops' && (
+                <ProductByShopFilter
+                  selectedShopData={selectedShopData}
+                  setSelectedShopData={setSelectedShopData}
                 />
               )}
             </ScrollView>

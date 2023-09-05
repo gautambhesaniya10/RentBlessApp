@@ -4,6 +4,7 @@ import DrawerCustomer from '../../DrawerNavigation/DrawerCustomer';
 import {loadCategoriesStart} from '../../redux/CategorySlice/CategoryListSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadAreaListsStart} from '../../redux/AreaSlice/AreaListSlice';
+import {loadAllShopsListsStart} from '../../redux/ShopSlice/ShopSlice';
 
 const CustomerMain = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const CustomerMain = () => {
   useEffect(() => {
     dispatch(loadCategoriesStart());
     dispatch(loadAreaListsStart());
+    dispatch(loadAllShopsListsStart());
   }, [dispatch]);
 
   return (

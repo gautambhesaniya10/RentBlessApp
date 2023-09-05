@@ -32,9 +32,7 @@ const FilterScreen = () => {
         <Text style={styles.switchText}>Shop</Text>
       </View>
 
-      <View>
-        <ProductApplyFilter />
-      </View>
+      <View>{!byShop ? <ProductApplyFilter /> : <Text>Shop Filter</Text>}</View>
     </View>
   );
 };
