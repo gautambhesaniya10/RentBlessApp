@@ -23,7 +23,7 @@ import {
   loadShopsStart,
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
-import {useIsFocused} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
@@ -31,6 +31,7 @@ const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 const HomePage = () => {
   const dispatch = useDispatch();
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
   );
@@ -227,19 +228,30 @@ const HomePage = () => {
           />
         </View>
       </View>
+      <View style={styles.FilterBtnMain}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('FilterScreen')}
+          style={styles.filterButton}>
+          <Icon name="filter" size={18} color="white" />
+          <Text style={styles.filterBtnText}>Filters</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView
         onScroll={handleProductScroll}
         scrollEventThrottle={16}
         showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
-          <Text style={styles.productText}>{byShop ? 'Shop' : 'Product'}</Text>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <View style={{marginLeft: -12}}>
+            <Text style={styles.productText}>
+              {byShop ? 'Shop' : 'Product'}
+            </Text>
+
+            <View style={{marginRight: -12}}>
               <UpperFilter
                 byShop={byShop}
                 setCurrentPage={setCurrentPage}
@@ -248,17 +260,7 @@ const HomePage = () => {
                 setShopDataLimit={setShopDataLimit}
               />
             </View>
-            <View style={styles.toggleSwitchMain}>
-              <Text style={styles.switchText}>Product</Text>
-              <Switch
-                value={byShop}
-                onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
-                color="#29977E"
-              />
-              <Text style={styles.switchText}>Shop</Text>
-            </View>
           </View>
-
           <View
             style={{
               marginTop: 6,
@@ -294,44 +296,45 @@ const HomePage = () => {
               <Text style={styles.clearAllText}>Clear All</Text>
             </TouchableOpacity>
           </View>
-
-          {!byShop ? (
-            productLoading && productsData?.length === 0 ? (
+          <View style={{position: 'relative'}}>
+            {!byShop ? (
+              productLoading && productsData?.length === 0 ? (
+                <View style={styles.loaderDiv}>
+                  <ActivityIndicator color="green" />
+                </View>
+              ) : (
+                <View style={styles.productCardMain}>
+                  {productsData?.map((product, index) => (
+                    <ProductCard key={index} product={product} />
+                  ))}
+                  {productLoading &&
+                    productsData?.length > 0 &&
+                    currentPage !== numOfPages && (
+                      <View style={styles.loaderBottomDiv}>
+                        <ActivityIndicator color="green" />
+                      </View>
+                    )}
+                </View>
+              )
+            ) : shopLoading && shopsData?.length === 0 ? (
               <View style={styles.loaderDiv}>
                 <ActivityIndicator color="green" />
               </View>
             ) : (
               <View style={styles.productCardMain}>
-                {productsData?.map((product, index) => (
-                  <ProductCard key={index} product={product} />
+                {shopsData?.map((shop, index) => (
+                  <ShopCard key={index} shop={shop} />
                 ))}
-                {productLoading &&
-                  productsData?.length > 0 &&
-                  currentPage !== numOfPages && (
+                {shopLoading &&
+                  shopsData?.length > 0 &&
+                  shopCurrentPage !== shopNumOfPages && (
                     <View style={styles.loaderBottomDiv}>
                       <ActivityIndicator color="green" />
                     </View>
                   )}
               </View>
-            )
-          ) : shopLoading && shopsData?.length === 0 ? (
-            <View style={styles.loaderDiv}>
-              <ActivityIndicator color="green" />
-            </View>
-          ) : (
-            <View style={styles.productCardMain}>
-              {shopsData?.map((shop, index) => (
-                <ShopCard key={index} shop={shop} />
-              ))}
-              {shopLoading &&
-                shopsData?.length > 0 &&
-                shopCurrentPage !== shopNumOfPages && (
-                  <View style={styles.loaderBottomDiv}>
-                    <ActivityIndicator color="green" />
-                  </View>
-                )}
-            </View>
-          )}
+            )}
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -360,6 +363,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 20,
     marginTop: 25,
+    // position: 'relative',
+    // height: '100%',
   },
   productText: {
     color: '#151827',
@@ -395,17 +400,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     paddingVertical: 5,
+    position: 'absolute',
+    bottom: 30,
   },
-  toggleSwitchMain: {
-    display: 'flex',
-    flexDirection: 'row',
+  FilterBtnMain: {
+    position: 'absolute',
+    bottom: 10,
+    zIndex: 1,
+    width: '100%',
+  },
+  filterButton: {
+    backgroundColor: '#29977E',
+    width: '30%',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginBottom: 8,
+    alignSelf: 'center',
+    paddingVertical: 10,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 5,
   },
-  switchText: {
-    color: 'black',
-    fontSize: 16,
+  filterBtnText: {
+    color: 'white',
+    fontSize: 18,
     fontWeight: '600',
   },
 });
