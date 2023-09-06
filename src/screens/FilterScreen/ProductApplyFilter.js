@@ -36,6 +36,62 @@ const ProductApplyFilter = () => {
 
   const [selectedColorData, setSelectedColorData] = useState([]);
 
+  const [clearTextShow, setClearTextShow] = useState(false);
+  const [clearAllBtnShow, setClearAllBtnShow] = useState(false);
+
+  useEffect(() => {
+    if (selectedCategory === 'Men') {
+      if (selectedMenCat?.length > 0) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
+    } else if (selectedCategory === 'Women') {
+      if (selectedWomenCat?.length > 0) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
+    } else if (selectedCategory === 'Shops') {
+      if (selectedShopData?.length > 0) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
+    } else if (selectedCategory === 'Color') {
+      if (selectedColorData?.length > 0) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
+    }
+  }, [
+    selectedMenCat,
+    selectedWomenCat,
+    selectedShopData,
+    selectedColorData,
+    selectedCategory,
+  ]);
+
+  useEffect(() => {
+    if (
+      selectedMenCat?.length > 0 ||
+      selectedWomenCat?.length > 0 ||
+      selectedShopData?.length > 0 ||
+      selectedColorData?.length > 0
+    ) {
+      setClearAllBtnShow(true);
+    } else {
+      setClearAllBtnShow(false);
+    }
+  }, [
+    selectedMenCat,
+    selectedWomenCat,
+    selectedShopData,
+    selectedColorData,
+    selectedCategory,
+  ]);
+
   const ClearParticularTab = () => {
     if (selectedCategory === 'Men') {
       setSelectedMenCat([]);
@@ -150,9 +206,11 @@ const ProductApplyFilter = () => {
         <View style={styles.mainRightList}>
           <View style={styles.chooseMain}>
             <Text style={styles.chooseText}>Choose Categories</Text>
-            <TouchableOpacity onPress={() => ClearParticularTab()}>
-              <Text style={styles.clearText}>Clear</Text>
-            </TouchableOpacity>
+            {clearTextShow && (
+              <TouchableOpacity onPress={() => ClearParticularTab()}>
+                <Text style={styles.clearText}>Clear</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={{marginTop: 10, paddingBottom: 30, height: 430}}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -187,13 +245,15 @@ const ProductApplyFilter = () => {
       </View>
       <View style={styles.bottomButtonMain}>
         <View style={{width: '40%'}}>
-          <CustomButton
-            name="Clear all"
-            color="black"
-            borderColor="black"
-            backgroundColor="#FFF"
-            onPress={() => clearAllFilter()}
-          />
+          {clearAllBtnShow && (
+            <CustomButton
+              name="Clear all"
+              color="black"
+              borderColor="black"
+              backgroundColor="#FFF"
+              onPress={() => clearAllFilter()}
+            />
+          )}
         </View>
         <View style={{width: '40%'}}>
           <CustomButton

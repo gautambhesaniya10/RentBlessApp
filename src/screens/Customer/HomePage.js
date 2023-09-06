@@ -24,9 +24,7 @@ import {
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
-import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
-
-const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
+import UpperAllListFilter from '../../common/Customer/UpperAllListFilter';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -269,40 +267,8 @@ const HomePage = () => {
               />
             </View>
           </View>
-          <View
-            style={{
-              marginTop: 6,
-              display: 'flex',
-              flexDirection: 'row',
-              gap: 10,
-            }}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                flexDirection: 'row',
-                gap: 15,
-                alignItems: 'center',
-              }}>
-              {FilterItemList?.map((item, index) => (
-                <View
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 4,
-                  }}>
-                  <Text style={styles.filterItemText}>{item}</Text>
-                  <TouchableOpacity>
-                    <Icon name="close" size={15} color="gray" />
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </ScrollView>
-            <TouchableOpacity>
-              <Text style={styles.clearAllText}>Clear All</Text>
-            </TouchableOpacity>
+          <View>
+            <UpperAllListFilter showOnlyShopDetailPage={false} />
           </View>
           <View style={{position: 'relative'}}>
             {!byShop ? (
@@ -400,17 +366,7 @@ const styles = StyleSheet.create({
     paddingTop: 18,
     paddingBottom: 10,
   },
-  filterItemText: {
-    color: 'rgba(21, 24, 39, 0.56)',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  clearAllText: {
-    textDecorationLine: 'underline',
-    color: '#151827',
-    fontWeight: '700',
-    fontSize: 14,
-  },
+
   productCardMain: {
     marginTop: 15,
     display: 'flex',
