@@ -147,7 +147,6 @@ const HomePage = () => {
     if (!byShop) {
       if (isEndReached && !productLoading) {
         if (currentPage < numOfPages) {
-          console.log('currentPage==', currentPage, 'ioio', numOfPages);
           setCurrentPage(currentPage + 1);
           setProductDataLimit(productDataLimit + 5);
         }

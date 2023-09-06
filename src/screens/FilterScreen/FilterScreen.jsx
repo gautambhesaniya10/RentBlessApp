@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Switch} from 'react-native-paper';
 import CustomButton from '../../common/CustomButton';
 import ProductApplyFilter from './ProductApplyFilter';
+import ShopApplyFilter from './ShopApplyFilter';
 
 const FilterScreen = () => {
   const navigation = useNavigation();
@@ -37,7 +38,7 @@ const FilterScreen = () => {
         <Text style={styles.switchText}>Shop</Text>
       </View>
 
-      <View>{!byShop ? <ProductApplyFilter /> : <Text>Shop Filter</Text>}</View>
+      <View>{!byShop ? <ProductApplyFilter /> : <ShopApplyFilter />}</View>
     </View>
   );
 };
