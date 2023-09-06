@@ -15,6 +15,7 @@ const UpperFilter = ({
   setProductDataLimit,
   setShopCurrentPage,
   setShopDataLimit,
+  setShowBottomLoader,
 }) => {
   const dispatch = useDispatch();
 
@@ -40,6 +41,7 @@ const UpperFilter = ({
 
   const onChangeSortFilter = newValue => {
     setIsOpenPopOver(false);
+    setShowBottomLoader(false);
     if (!byShop) {
       setCurrentPage(0);
       setProductDataLimit(0);

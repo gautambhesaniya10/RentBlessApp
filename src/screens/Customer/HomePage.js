@@ -23,7 +23,11 @@ import {
   loadShopsStart,
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native';
 import UpperAllListFilter from '../../common/Customer/UpperAllListFilter';
 
 const HomePage = () => {
@@ -64,6 +68,7 @@ const HomePage = () => {
   const [showBottomLoader, setShowBottomLoader] = useState(false);
 
   const getAllMoreProducts = () => {
+    console.log('productDataLimit', productDataLimit);
     dispatch(
       loadMoreProductsStart({
         pageData: {
@@ -123,6 +128,15 @@ const HomePage = () => {
       }),
     );
   };
+  useFocusEffect(
+    React.useCallback(() => {
+      setCurrentPage(0);
+      setShopCurrentPage(0);
+      setShopDataLimit(0);
+      setProductDataLimit(0);
+      setShowBottomLoader(false);
+    }, []),
+  );
 
   const handleProductScroll = event => {
     setShowBottomLoader(true);
@@ -132,8 +146,8 @@ const HomePage = () => {
 
     if (!byShop) {
       if (isEndReached && !productLoading) {
-        console.log('currentPage==', currentPage, 'ioio', numOfPages);
         if (currentPage < numOfPages) {
+          console.log('currentPage==', currentPage, 'ioio', numOfPages);
           setCurrentPage(currentPage + 1);
           setProductDataLimit(productDataLimit + 5);
         }
@@ -233,7 +247,7 @@ const HomePage = () => {
           onPress={() =>
             navigation.navigate('FilterScreen', {
               state: {
-                RedirectRoute: 'HomePage',
+                RedirectRoute: 'CustomerHomePage',
               },
             })
           }
@@ -264,11 +278,19 @@ const HomePage = () => {
                 setProductDataLimit={setProductDataLimit}
                 setShopCurrentPage={setShopCurrentPage}
                 setShopDataLimit={setShopDataLimit}
+                setShowBottomLoader={setShowBottomLoader}
               />
             </View>
           </View>
           <View>
-            <UpperAllListFilter showOnlyShopDetailPage={false} />
+            <UpperAllListFilter
+              showOnlyShopDetailPage={false}
+              setCurrentPage={setCurrentPage}
+              setShopCurrentPage={setShopCurrentPage}
+              setProductDataLimit={setProductDataLimit}
+              setShopDataLimit={setShopDataLimit}
+              setShowBottomLoader={setShowBottomLoader}
+            />
           </View>
           <View style={{position: 'relative'}}>
             {!byShop ? (
@@ -314,17 +336,32 @@ const HomePage = () => {
                 <ActivityIndicator color="green" />
               </View>
             ) : (
-              <View style={styles.productCardMain}>
+              <View
+                style={[
+                  styles.productCardMain,
+                  {
+                    opacity:
+                      shopLoading && shopsData?.length > 0 && !showBottomLoader
+                        ? 0.5
+                        : 1,
+                  },
+                ]}>
                 {shopsData?.map((shop, index) => (
                   <ShopCard key={index} shop={shop} />
                 ))}
                 {shopLoading &&
                   shopsData?.length > 0 &&
-                  shopCurrentPage !== shopNumOfPages && (
+                  shopCurrentPage !== shopNumOfPages &&
+                  showBottomLoader && (
                     <View style={styles.loaderBottomDiv}>
                       <ActivityIndicator color="green" />
                     </View>
                   )}
+                {shopLoading && shopsData?.length > 0 && !showBottomLoader && (
+                  <View style={styles.loaderFilterDiv}>
+                    <ActivityIndicator color="green" />
+                  </View>
+                )}
               </View>
             )}
           </View>

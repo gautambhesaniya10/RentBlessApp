@@ -13,7 +13,14 @@ import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice'
 
 const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
 
-const UpperAllListFilter = ({showOnlyShopDetailPage}) => {
+const UpperAllListFilter = ({
+  showOnlyShopDetailPage,
+  setCurrentPage,
+  setShopCurrentPage,
+  setProductDataLimit,
+  setShopDataLimit,
+  setShowBottomLoader,
+}) => {
   const dispatch = useDispatch();
   const productsFiltersReducer = useSelector(
     state => state?.productsFiltersReducer,
@@ -30,7 +37,10 @@ const UpperAllListFilter = ({showOnlyShopDetailPage}) => {
   const [selectedShopFilters, setSelectedShopFilters] = useState([]);
 
   const handleDeleteParticularFilterBadge = itm => {
+    setShowBottomLoader(false);
     if (byShop) {
+      setShopCurrentPage(0);
+      setShopDataLimit(0);
       dispatch(
         changeAppliedShopsFilters({
           key: itm.type,
@@ -45,6 +55,8 @@ const UpperAllListFilter = ({showOnlyShopDetailPage}) => {
         }),
       );
     } else {
+      setCurrentPage(0);
+      setProductDataLimit(0);
       dispatch(
         changeAppliedProductsFilters({
           key: itm.type,
@@ -164,7 +176,10 @@ const UpperAllListFilter = ({showOnlyShopDetailPage}) => {
           </ScrollView>
           <TouchableOpacity
             onPress={() => {
+              setShowBottomLoader(false);
               if (byShop) {
+                setShopCurrentPage(0);
+                setShopDataLimit(0);
                 ['locations', 'stars'].map(itm =>
                   dispatch(
                     changeAppliedShopsFilters({
@@ -176,6 +191,8 @@ const UpperAllListFilter = ({showOnlyShopDetailPage}) => {
                   ),
                 );
               } else {
+                setCurrentPage(0);
+                setProductDataLimit(0);
                 [
                   'categoryId',
                   'productColor',
