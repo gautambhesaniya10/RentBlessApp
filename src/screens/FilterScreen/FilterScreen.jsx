@@ -2,7 +2,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {BackGroundStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {Switch} from 'react-native-paper';
@@ -11,6 +11,8 @@ import ProductApplyFilter from './ProductApplyFilter';
 
 const FilterScreen = () => {
   const navigation = useNavigation();
+  const router = useRoute();
+
   const dispatch = useDispatch();
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
 
@@ -18,7 +20,10 @@ const FilterScreen = () => {
     <View style={{flex: 1, backgroundColor: '#FFF', position: 'relative'}}>
       <View style={styles.headerMain}>
         <Text style={styles.filterHeaderText}>Filters</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(router?.params?.state?.RedirectRoute)
+          }>
           <Icon name="close" size={20} color="black" />
         </TouchableOpacity>
       </View>

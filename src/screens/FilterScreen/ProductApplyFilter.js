@@ -1,16 +1,26 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {CheckBox} from 'react-native-elements';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {ScrollView} from 'react-native';
 import MenWomenTabs from './ProductFilterSubTab/MenWomenTabs';
 import CustomButton from '../../common/CustomButton';
 import ProductByShopFilter from './ProductFilterSubTab/ProductByShopFilter';
+import ProductColorFilter from './ProductFilterSubTab/ProductColorFilter';
+import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const ProductApplyFilter = () => {
+  const navigation = useNavigation();
+  const router = useRoute();
+
+  const dispatch = useDispatch();
   const AllCateGory = ['Men', 'Women', 'Shops', 'Color'];
 
   const {categories} = useSelector(state => state.categories);
+  const productsFiltersReducer = useSelector(
+    state => state?.productsFiltersReducer,
+  );
 
   const [selectedCategory, setSelectedCategory] = useState('Men');
 
@@ -20,7 +30,11 @@ const ProductApplyFilter = () => {
   const [menSelectedData, setMenSelectedData] = useState([]);
   const [womenSelectedData, setWomenSelectedData] = useState([]);
 
+  const [categoryId, setCategoryId] = useState([]);
+
   const [selectedShopData, setSelectedShopData] = useState([]);
+
+  const [selectedColorData, setSelectedColorData] = useState([]);
 
   const ClearParticularTab = () => {
     if (selectedCategory === 'Men') {
@@ -31,6 +45,8 @@ const ProductApplyFilter = () => {
       setWomenSelectedData([]);
     } else if (selectedCategory === 'Shops') {
       setSelectedShopData([]);
+    } else if (selectedCategory === 'Color') {
+      setSelectedColorData([]);
     }
   };
   const clearAllFilter = () => {
@@ -39,7 +55,75 @@ const ProductApplyFilter = () => {
     setSelectedWomenCat([]);
     setWomenSelectedData([]);
     setSelectedShopData([]);
+    setSelectedColorData([]);
   };
+
+  const handleApplyProductFilter = () => {
+    [
+      {name: 'categoryId', value: categoryId},
+      {name: 'productColor', value: selectedColorData},
+      {name: 'shopId', value: selectedShopData},
+    ]?.map(item =>
+      dispatch(
+        changeAppliedProductsFilters({
+          key: item?.name,
+          value: {
+            selectedValue: item?.value,
+          },
+        }),
+      ),
+    );
+
+    navigation.navigate(router?.params?.state?.RedirectRoute);
+  };
+
+  useEffect(() => {
+    productsFiltersReducer?.appliedProductsFilters &&
+      setSelectedMenCat(
+        productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+          .map(itm => categories?.find(i => i.id === itm))
+          .filter(ele => ele.category_type === 'Men')
+          .map(i => i?.category_name),
+      );
+    setMenSelectedData(
+      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+        .map(itm => categories?.find(i => i.id === itm))
+        .filter(ele => ele.category_type === 'Men')
+        .map(i => i?.id),
+    );
+
+    setSelectedWomenCat(
+      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+        .map(itm => categories?.find(i => i.id === itm))
+        .filter(ele => ele.category_type === 'Women')
+        .map(i => i?.category_name),
+    );
+    setWomenSelectedData(
+      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+        .map(itm => categories?.find(i => i.id === itm))
+        .filter(ele => ele.category_type === 'Women')
+        .map(i => i?.id),
+    );
+  }, [categories, productsFiltersReducer?.appliedProductsFilters]);
+
+  useEffect(() => {
+    setCategoryId([...menSelectedData, ...womenSelectedData]);
+  }, [menSelectedData, setCategoryId, womenSelectedData]);
+
+  useEffect(() => {
+    productsFiltersReducer?.appliedProductsFilters &&
+      setSelectedShopData(
+        productsFiltersReducer?.appliedProductsFilters?.shopId.selectedValue,
+      );
+  }, [productsFiltersReducer?.appliedProductsFilters]);
+
+  useEffect(() => {
+    productsFiltersReducer?.appliedProductsFilters &&
+      setSelectedColorData(
+        productsFiltersReducer?.appliedProductsFilters?.productColor
+          .selectedValue,
+      );
+  }, [productsFiltersReducer?.appliedProductsFilters]);
 
   return (
     <View style={{position: 'relative'}}>
@@ -90,6 +174,13 @@ const ProductApplyFilter = () => {
                   setSelectedShopData={setSelectedShopData}
                 />
               )}
+              {selectedCategory === 'Color' && (
+                <ProductColorFilter
+                  productsFiltersReducer={productsFiltersReducer}
+                  selectedColorData={selectedColorData}
+                  setSelectedColorData={setSelectedColorData}
+                />
+              )}
             </ScrollView>
           </View>
         </View>
@@ -110,7 +201,7 @@ const ProductApplyFilter = () => {
             color="#FFF"
             borderColor="#29977E"
             backgroundColor="#29977E"
-            onPress={() => {}}
+            onPress={() => handleApplyProductFilter()}
           />
         </View>
       </View>

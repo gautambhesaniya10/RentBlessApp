@@ -63,8 +63,7 @@ const HomePage = () => {
 
   const [shopCurrentPage, setShopCurrentPage] = useState(0);
   const [shopDataLimit, setShopDataLimit] = useState(0);
-
-  // const [byShop, setByShop] = useState(false);
+  const [showBottomLoader, setShowBottomLoader] = useState(false);
 
   const getAllMoreProducts = () => {
     dispatch(
@@ -89,20 +88,20 @@ const HomePage = () => {
     );
   };
 
-  useEffect(() => {
-    if (
-      productsFiltersReducer.appliedProductsFilters.categoryId.selectedValue
-        ?.length > 0 ||
-      productsFiltersReducer.appliedProductsFilters.productColor.selectedValue
-        ?.length > 0 ||
-      productsFiltersReducer.appliedProductsFilters.shopId.selectedValue
-        ?.length > 0 ||
-      productsFiltersReducer.sortFilters.sortType.selectedValue === 'old' ||
-      productsFiltersReducer.searchBarData !== ''
-    ) {
-      dispatch(emptyProductFilter());
-    }
-  }, [!byShop && isFocused]);
+  // useEffect(() => {
+  //   if (
+  //     productsFiltersReducer.appliedProductsFilters.categoryId.selectedValue
+  //       ?.length > 0 ||
+  //     productsFiltersReducer.appliedProductsFilters.productColor.selectedValue
+  //       ?.length > 0 ||
+  //     productsFiltersReducer.appliedProductsFilters.shopId.selectedValue
+  //       ?.length > 0 ||
+  //     productsFiltersReducer.sortFilters.sortType.selectedValue === 'old' ||
+  //     productsFiltersReducer.searchBarData !== ''
+  //   ) {
+  //     dispatch(emptyProductFilter());
+  //   }
+  // }, [!byShop && isFocused]);
 
   const getAllProducts = () => {
     dispatch(
@@ -128,12 +127,14 @@ const HomePage = () => {
   };
 
   const handleProductScroll = event => {
+    setShowBottomLoader(true);
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
     const isEndReached =
       layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
 
     if (!byShop) {
       if (isEndReached && !productLoading) {
+        console.log('currentPage==', currentPage, 'ioio', numOfPages);
         if (currentPage < numOfPages) {
           setCurrentPage(currentPage + 1);
           setProductDataLimit(productDataLimit + 5);
@@ -162,6 +163,7 @@ const HomePage = () => {
       }),
     );
   };
+
   const getAllShops = () => {
     dispatch(
       loadShopsStart({
@@ -230,7 +232,13 @@ const HomePage = () => {
       </View>
       <View style={styles.FilterBtnMain}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('FilterScreen')}
+          onPress={() =>
+            navigation.navigate('FilterScreen', {
+              state: {
+                RedirectRoute: 'HomePage',
+              },
+            })
+          }
           style={styles.filterButton}>
           <Icon name="filter" size={18} color="white" />
           <Text style={styles.filterBtnText}>Filters</Text>
@@ -303,14 +311,33 @@ const HomePage = () => {
                   <ActivityIndicator color="green" />
                 </View>
               ) : (
-                <View style={styles.productCardMain}>
+                <View
+                  style={[
+                    styles.productCardMain,
+                    {
+                      opacity:
+                        productLoading &&
+                        productsData?.length > 0 &&
+                        !showBottomLoader
+                          ? 0.5
+                          : 1,
+                    },
+                  ]}>
                   {productsData?.map((product, index) => (
                     <ProductCard key={index} product={product} />
                   ))}
                   {productLoading &&
                     productsData?.length > 0 &&
-                    currentPage !== numOfPages && (
+                    currentPage !== numOfPages &&
+                    showBottomLoader && (
                       <View style={styles.loaderBottomDiv}>
+                        <ActivityIndicator color="green" />
+                      </View>
+                    )}
+                  {productLoading &&
+                    productsData?.length > 0 &&
+                    !showBottomLoader && (
+                      <View style={styles.loaderFilterDiv}>
                         <ActivityIndicator color="green" />
                       </View>
                     )}
@@ -402,6 +429,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     position: 'absolute',
     bottom: 30,
+  },
+  loaderFilterDiv: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: 5,
+    position: 'absolute',
+    top: 150,
+    // left: '50%',
   },
   FilterBtnMain: {
     position: 'absolute',
