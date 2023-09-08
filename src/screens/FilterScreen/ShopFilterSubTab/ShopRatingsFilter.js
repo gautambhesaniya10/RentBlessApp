@@ -2,17 +2,15 @@ import {StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import {Slider} from 'native-base';
 
-const ShopRatingsFilter = () => {
-  const [onChangeValue, setOnChangeValue] = useState(1);
-  console.log('onChangeValue', onChangeValue);
+const ShopRatingsFilter = ({selectedRatingData, setSelectedRatingData}) => {
   return (
     <View style={styles.mainSliderDiv}>
       <Slider
-        defaultValue={onChangeValue}
+        defaultValue={selectedRatingData}
         colorScheme="green"
         maxValue={5}
         onChange={v => {
-          setOnChangeValue(Math.floor(v));
+          setSelectedRatingData(Math.floor(v));
         }}>
         <Slider.Track>
           <Slider.FilledTrack />

@@ -1,26 +1,87 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {CheckBox} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {ScrollView} from 'react-native';
 import CustomButton from '../../common/CustomButton';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import ShopByLocation from './ShopFilterSubTab/ShopByLocation';
 import ShopRatingsFilter from './ShopFilterSubTab/ShopRatingsFilter';
+import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
 
-const ShopApplyFilter = () => {
+const ShopApplyFilter = ({
+  handleFilterModelClose,
+  setShopCurrentPage,
+  setShopDataLimit,
+  setShowBottomLoader,
+}) => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
-  const router = useRoute();
-
   const {areaLists} = useSelector(state => state?.areaLists);
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
 
   const AllCateGory = ['Location', 'Rating'];
   const [selectedCategory, setSelectedCategory] = useState('Location');
-  const [selectedLocationData, setSelectedLocationData] = useState([]);
 
-  const handleApplyShopFilter = () => {};
+  const [selectedLocationData, setSelectedLocationData] = useState([]);
+  const [selectedRatingData, setSelectedRatingData] = useState(0);
+
+  const [clearTextShow, setClearTextShow] = useState(false);
+  const [clearAllBtnShow, setClearAllBtnShow] = useState(false);
+
+  const clearParticularLocation = () => {
+    if (selectedCategory === 'Location') {
+      setSelectedLocationData([]);
+    }
+  };
+  const clearAllShopFilter = () => {
+    setSelectedLocationData([]);
+  };
+
+  useEffect(() => {
+    if (selectedCategory === 'Location') {
+      if (selectedLocationData?.length > 0) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
+    } else if (selectedCategory === 'Rating') {
+      setClearTextShow(false);
+    }
+  }, [selectedCategory, selectedLocationData]);
+
+  useEffect(() => {
+    if (selectedLocationData?.length > 0) {
+      setClearAllBtnShow(true);
+    } else {
+      setClearAllBtnShow(false);
+    }
+  }, [selectedLocationData, selectedCategory]);
+
+  const handleCloseShopFilter = () => {
+    setShopCurrentPage(0);
+    setShopDataLimit(0);
+    setShowBottomLoader(false);
+    handleFilterModelClose();
+  };
+
+  const handleApplyShopFilter = () => {
+    dispatch(
+      changeAppliedShopsFilters({
+        key: 'locations',
+        value: {
+          selectedValue: selectedLocationData,
+        },
+      }),
+    );
+
+    dispatch(
+      changeAppliedShopsFilters({
+        key: 'stars',
+        value: {
+          selectedValue: selectedRatingData.toString(),
+        },
+      }),
+    );
+    handleCloseShopFilter();
+  };
 
   useEffect(() => {
     shopsFiltersReducer?.appliedShopsFilters &&
@@ -28,6 +89,13 @@ const ShopApplyFilter = () => {
         shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue,
       );
   }, [shopsFiltersReducer?.appliedShopsFilters, areaLists]);
+
+  useEffect(() => {
+    shopsFiltersReducer?.appliedShopsFilters &&
+      setSelectedRatingData(
+        Number(shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue),
+      );
+  }, [shopsFiltersReducer.appliedShopsFilters]);
 
   return (
     <View style={{position: 'relative'}}>
@@ -54,10 +122,11 @@ const ShopApplyFilter = () => {
         <View style={styles.mainRightList}>
           <View style={styles.chooseMain}>
             <Text style={styles.chooseText}>Choose Categories</Text>
-
-            <TouchableOpacity onPress={() => {}}>
-              <Text style={styles.clearText}>Clear</Text>
-            </TouchableOpacity>
+            {clearTextShow && (
+              <TouchableOpacity onPress={() => clearParticularLocation()}>
+                <Text style={styles.clearText}>Clear</Text>
+              </TouchableOpacity>
+            )}
           </View>
           <View style={{marginTop: 10, paddingBottom: 30, height: 430}}>
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -68,20 +137,27 @@ const ShopApplyFilter = () => {
                   setSelectedLocationData={setSelectedLocationData}
                 />
               )}
-              {selectedCategory === 'Rating' && <ShopRatingsFilter />}
+              {selectedCategory === 'Rating' && (
+                <ShopRatingsFilter
+                  selectedRatingData={selectedRatingData}
+                  setSelectedRatingData={setSelectedRatingData}
+                />
+              )}
             </ScrollView>
           </View>
         </View>
       </View>
       <View style={styles.bottomButtonMain}>
         <View style={{width: '40%'}}>
-          <CustomButton
-            name="Clear all"
-            color="black"
-            borderColor="black"
-            backgroundColor="#FFF"
-            onPress={() => {}}
-          />
+          {clearAllBtnShow && (
+            <CustomButton
+              name="Clear all"
+              color="black"
+              borderColor="black"
+              backgroundColor="#FFF"
+              onPress={() => clearAllShopFilter()}
+            />
+          )}
         </View>
         <View style={{width: '40%'}}>
           <CustomButton
@@ -102,7 +178,7 @@ export default ShopApplyFilter;
 const styles = StyleSheet.create({
   mainListContainer: {
     width: '100%',
-    height: '100%',
+    height: '85%',
     flexDirection: 'row',
   },
   mainLeftList: {
@@ -154,7 +230,7 @@ const styles = StyleSheet.create({
   },
   bottomButtonMain: {
     position: 'absolute',
-    bottom: 143,
+    bottom: 0,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',

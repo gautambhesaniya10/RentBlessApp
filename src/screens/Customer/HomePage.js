@@ -8,36 +8,24 @@ import {ActivityIndicator, RadioButton, Switch} from 'react-native-paper';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {
-  emptyProductState,
   loadMoreProductsStart,
   loadProductsStart,
 } from '../../redux/ProductSlice/ProductSlice';
-import {
-  changeProductsSearchBarData,
-  emptyProductFilter,
-} from '../../redux/ProductFilter/ProductFilterSlice';
+import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
 import UpperFilter from '../../common/Customer/UpperFilter';
 import {
-  emptyShopState,
   loadMoreShopStart,
   loadShopsStart,
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
-import {
-  useFocusEffect,
-  useIsFocused,
-  useNavigation,
-} from '@react-navigation/native';
-import UpperAllListFilter from '../../common/Customer/UpperAllListFilter';
+import FilterDrawerModel from '../../common/FilterDrawerModel';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-  const navigation = useNavigation();
+
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
   );
-
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
 
   const {
@@ -66,9 +54,9 @@ const HomePage = () => {
   const [shopCurrentPage, setShopCurrentPage] = useState(0);
   const [shopDataLimit, setShopDataLimit] = useState(0);
   const [showBottomLoader, setShowBottomLoader] = useState(false);
+  const [filterModelOpen, setFilterModelOpen] = useState(false);
 
   const getAllMoreProducts = () => {
-    console.log('productDataLimit', productDataLimit);
     dispatch(
       loadMoreProductsStart({
         pageData: {
@@ -90,21 +78,6 @@ const HomePage = () => {
       }),
     );
   };
-
-  // useEffect(() => {
-  //   if (
-  //     productsFiltersReducer.appliedProductsFilters.categoryId.selectedValue
-  //       ?.length > 0 ||
-  //     productsFiltersReducer.appliedProductsFilters.productColor.selectedValue
-  //       ?.length > 0 ||
-  //     productsFiltersReducer.appliedProductsFilters.shopId.selectedValue
-  //       ?.length > 0 ||
-  //     productsFiltersReducer.sortFilters.sortType.selectedValue === 'old' ||
-  //     productsFiltersReducer.searchBarData !== ''
-  //   ) {
-  //     dispatch(emptyProductFilter());
-  //   }
-  // }, [!byShop && isFocused]);
 
   const getAllProducts = () => {
     dispatch(
@@ -128,16 +101,10 @@ const HomePage = () => {
       }),
     );
   };
-  useFocusEffect(
-    React.useCallback(() => {
-      setCurrentPage(0);
-      setShopCurrentPage(0);
-      setShopDataLimit(0);
-      setProductDataLimit(0);
-      setShowBottomLoader(false);
-    }, []),
-  );
-
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //   }, []),
+  // );
   const handleProductScroll = event => {
     setShowBottomLoader(true);
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
@@ -220,6 +187,15 @@ const HomePage = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
+      <FilterDrawerModel
+        filterModelOpen={filterModelOpen}
+        handleFilterModelClose={() => setFilterModelOpen(false)}
+        setCurrentPage={setCurrentPage}
+        setProductDataLimit={setProductDataLimit}
+        setShopCurrentPage={setShopCurrentPage}
+        setShopDataLimit={setShopDataLimit}
+        setShowBottomLoader={setShowBottomLoader}
+      />
       <View style={{position: 'relative'}}>
         <CustomerHeader homeScreen={true} />
         <View style={styles.searchTextMain}>
@@ -243,57 +219,68 @@ const HomePage = () => {
       </View>
       <View style={styles.FilterBtnMain}>
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('FilterScreen', {
-              state: {
-                RedirectRoute: 'CustomerHomePage',
-              },
-            })
-          }
+          onPress={() => setFilterModelOpen(true)}
           style={styles.filterButton}>
           <Icon name="filter" size={18} color="white" />
           <Text style={styles.filterBtnText}>Filters</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView
-        onScroll={handleProductScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}>
-        <View style={styles.mainContainer}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
-            <Text style={styles.productText}>
-              {byShop ? 'Shop' : 'Product'}
-            </Text>
-
-            <View style={{marginRight: -12}}>
-              <UpperFilter
-                byShop={byShop}
-                setCurrentPage={setCurrentPage}
-                setProductDataLimit={setProductDataLimit}
-                setShopCurrentPage={setShopCurrentPage}
-                setShopDataLimit={setShopDataLimit}
-                setShowBottomLoader={setShowBottomLoader}
-              />
-            </View>
-          </View>
-          <View>
-            <UpperAllListFilter
-              showOnlyShopDetailPage={false}
-              setCurrentPage={setCurrentPage}
-              setShopCurrentPage={setShopCurrentPage}
-              setProductDataLimit={setProductDataLimit}
-              setShopDataLimit={setShopDataLimit}
-              setShowBottomLoader={setShowBottomLoader}
-            />
-          </View>
-          <View style={{position: 'relative'}}>
-            {!byShop ? (
-              productLoading && productsData?.length === 0 ? (
+      <View style={{}}>
+        <UpperFilter
+          byShop={byShop}
+          setCurrentPage={setCurrentPage}
+          setProductDataLimit={setProductDataLimit}
+          setShopCurrentPage={setShopCurrentPage}
+          setShopDataLimit={setShopDataLimit}
+          setShowBottomLoader={setShowBottomLoader}
+        />
+      </View>
+      <View style={{flex: 1}}>
+        <ScrollView
+          onScroll={handleProductScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}>
+          <View style={styles.mainContainer}>
+            <View style={{position: 'relative'}}>
+              {!byShop ? (
+                productLoading && productsData?.length === 0 ? (
+                  <View style={styles.loaderDiv}>
+                    <ActivityIndicator color="green" />
+                  </View>
+                ) : (
+                  <View
+                    style={[
+                      styles.productCardMain,
+                      {
+                        opacity:
+                          productLoading &&
+                          productsData?.length > 0 &&
+                          !showBottomLoader
+                            ? 0.5
+                            : 1,
+                      },
+                    ]}>
+                    {productsData?.map((product, index) => (
+                      <ProductCard key={index} product={product} />
+                    ))}
+                    {productLoading &&
+                      productsData?.length > 0 &&
+                      currentPage !== numOfPages &&
+                      showBottomLoader && (
+                        <View style={styles.loaderBottomDiv}>
+                          <ActivityIndicator color="green" />
+                        </View>
+                      )}
+                    {productLoading &&
+                      productsData?.length > 0 &&
+                      !showBottomLoader && (
+                        <View style={styles.loaderFilterDiv}>
+                          <ActivityIndicator color="green" />
+                        </View>
+                      )}
+                  </View>
+                )
+              ) : shopLoading && shopsData?.length === 0 ? (
                 <View style={styles.loaderDiv}>
                   <ActivityIndicator color="green" />
                 </View>
@@ -303,69 +290,37 @@ const HomePage = () => {
                     styles.productCardMain,
                     {
                       opacity:
-                        productLoading &&
-                        productsData?.length > 0 &&
+                        shopLoading &&
+                        shopsData?.length > 0 &&
                         !showBottomLoader
                           ? 0.5
                           : 1,
                     },
                   ]}>
-                  {productsData?.map((product, index) => (
-                    <ProductCard key={index} product={product} />
+                  {shopsData?.map((shop, index) => (
+                    <ShopCard key={index} shop={shop} />
                   ))}
-                  {productLoading &&
-                    productsData?.length > 0 &&
-                    currentPage !== numOfPages &&
+                  {shopLoading &&
+                    shopsData?.length > 0 &&
+                    shopCurrentPage !== shopNumOfPages &&
                     showBottomLoader && (
                       <View style={styles.loaderBottomDiv}>
                         <ActivityIndicator color="green" />
                       </View>
                     )}
-                  {productLoading &&
-                    productsData?.length > 0 &&
+                  {shopLoading &&
+                    shopsData?.length > 0 &&
                     !showBottomLoader && (
                       <View style={styles.loaderFilterDiv}>
                         <ActivityIndicator color="green" />
                       </View>
                     )}
                 </View>
-              )
-            ) : shopLoading && shopsData?.length === 0 ? (
-              <View style={styles.loaderDiv}>
-                <ActivityIndicator color="green" />
-              </View>
-            ) : (
-              <View
-                style={[
-                  styles.productCardMain,
-                  {
-                    opacity:
-                      shopLoading && shopsData?.length > 0 && !showBottomLoader
-                        ? 0.5
-                        : 1,
-                  },
-                ]}>
-                {shopsData?.map((shop, index) => (
-                  <ShopCard key={index} shop={shop} />
-                ))}
-                {shopLoading &&
-                  shopsData?.length > 0 &&
-                  shopCurrentPage !== shopNumOfPages &&
-                  showBottomLoader && (
-                    <View style={styles.loaderBottomDiv}>
-                      <ActivityIndicator color="green" />
-                    </View>
-                  )}
-                {shopLoading && shopsData?.length > 0 && !showBottomLoader && (
-                  <View style={styles.loaderFilterDiv}>
-                    <ActivityIndicator color="green" />
-                  </View>
-                )}
-              </View>
-            )}
+              )}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
   );
 };
@@ -391,7 +346,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     marginHorizontal: 20,
-    marginTop: 25,
+    // marginTop: 25,
     // position: 'relative',
     // height: '100%',
   },
@@ -399,12 +354,12 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     fontSize: 20,
-    paddingTop: 18,
-    paddingBottom: 10,
+    // paddingTop: 18,
+    // paddingBottom: 10,
   },
 
   productCardMain: {
-    marginTop: 15,
+    // marginTop: 15,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',

@@ -93,11 +93,11 @@ const AppNavigator = () => {
           component={WriteReview}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="FilterScreen"
           component={FilterScreen}
           options={{headerShown: false}}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

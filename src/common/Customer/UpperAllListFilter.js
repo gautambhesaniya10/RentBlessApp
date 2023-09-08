@@ -28,6 +28,8 @@ const UpperAllListFilter = ({
   const {categories} = useSelector(state => state?.categories);
   const {allShopsLists, shopsCount} = useSelector(state => state?.shops);
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
+  const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
+  const {areaLists} = useSelector(state => state?.areaLists);
 
   const [selectedProductFilters, setSelectedProductFilters] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -35,6 +37,8 @@ const UpperAllListFilter = ({
   const [selectedColors, setSelectedColors] = useState([]);
 
   const [selectedShopFilters, setSelectedShopFilters] = useState([]);
+  const [selectedLocations, setSelectedLocations] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState([]);
 
   const handleDeleteParticularFilterBadge = itm => {
     setShowBottomLoader(false);
@@ -48,9 +52,9 @@ const UpperAllListFilter = ({
             selectedValue:
               itm.type === 'stars'
                 ? '0'
-                : shopsFiltersReducer.appliedShopsFilters[
-                    itm.type
-                  ].selectedValue.filter(item => item !== itm.value),
+                : shopsFiltersReducer?.appliedShopsFilters[
+                    itm?.type
+                  ].selectedValue?.filter(item => item !== itm.value),
           },
         }),
       );
@@ -136,6 +140,45 @@ const UpperAllListFilter = ({
   }, [
     productsFiltersReducer?.appliedProductsFilters?.productColor?.selectedValue,
   ]);
+
+  useEffect(() => {
+    setSelectedShopFilters([...selectedLocations, ...selectedRatings]);
+  }, [selectedLocations, selectedRatings]);
+
+  useEffect(() => {
+    const selectedLocationPins =
+      shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue;
+
+    const selectedLocations = areaLists?.filter(area =>
+      selectedLocationPins?.includes(area?.pin),
+    );
+
+    const mappedLocations = selectedLocations?.map(location => ({
+      type: 'locations',
+      label: location?.area,
+      value: location?.pin,
+    }));
+
+    setSelectedLocations(mappedLocations);
+  }, [
+    areaLists,
+    shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue,
+  ]);
+
+  useEffect(() => {
+    shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue &&
+    shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue !== '0'
+      ? setSelectedRatings([
+          {
+            type: 'stars',
+            label:
+              shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue,
+            value:
+              shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue,
+          },
+        ])
+      : setSelectedRatings([]);
+  }, [shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue]);
 
   return (
     <View>

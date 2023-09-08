@@ -1,6 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {CheckBox} from 'react-native-elements';
 import {useDispatch, useSelector} from 'react-redux';
 import {ScrollView} from 'react-native';
 import MenWomenTabs from './ProductFilterSubTab/MenWomenTabs';
@@ -8,12 +7,13 @@ import CustomButton from '../../common/CustomButton';
 import ProductByShopFilter from './ProductFilterSubTab/ProductByShopFilter';
 import ProductColorFilter from './ProductFilterSubTab/ProductColorFilter';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
-import {useNavigation, useRoute} from '@react-navigation/native';
 
-const ProductApplyFilter = () => {
-  const navigation = useNavigation();
-  const router = useRoute();
-
+const ProductApplyFilter = ({
+  handleFilterModelClose,
+  setCurrentPage,
+  setProductDataLimit,
+  setShowBottomLoader,
+}) => {
   const dispatch = useDispatch();
   const AllCateGory = ['Men', 'Women', 'Shops', 'Color'];
 
@@ -114,6 +114,13 @@ const ProductApplyFilter = () => {
     setSelectedColorData([]);
   };
 
+  const handleCloseProductFilter = () => {
+    setCurrentPage(0);
+    setProductDataLimit(0);
+    setShowBottomLoader(false);
+    handleFilterModelClose();
+  };
+
   const handleApplyProductFilter = () => {
     [
       {name: 'categoryId', value: categoryId},
@@ -129,8 +136,7 @@ const ProductApplyFilter = () => {
         }),
       ),
     );
-
-    navigation.navigate(router?.params?.state?.RedirectRoute);
+    handleCloseProductFilter();
   };
 
   useEffect(() => {
@@ -274,7 +280,7 @@ export default ProductApplyFilter;
 const styles = StyleSheet.create({
   mainListContainer: {
     width: '100%',
-    height: '100%',
+    height: '85%',
     flexDirection: 'row',
   },
   mainLeftList: {
@@ -326,7 +332,7 @@ const styles = StyleSheet.create({
   },
   bottomButtonMain: {
     position: 'absolute',
-    bottom: 143,
+    bottom: 0,
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
