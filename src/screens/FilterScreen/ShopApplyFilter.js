@@ -6,6 +6,8 @@ import CustomButton from '../../common/CustomButton';
 import ShopByLocation from './ShopFilterSubTab/ShopByLocation';
 import ShopRatingsFilter from './ShopFilterSubTab/ShopRatingsFilter';
 import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
+import {Button} from 'react-native-paper';
+import {arraysHaveSameValues} from '../../utils';
 
 const ShopApplyFilter = ({
   handleFilterModelClose,
@@ -25,6 +27,22 @@ const ShopApplyFilter = ({
 
   const [clearTextShow, setClearTextShow] = useState(false);
   const [clearAllBtnShow, setClearAllBtnShow] = useState(false);
+
+  const [applyBtnDisable, setApplyBtnDisable] = useState(false);
+
+  useEffect(() => {
+    setApplyBtnDisable(
+      arraysHaveSameValues(
+        [...selectedLocationData, selectedRatingData],
+        [
+          ...shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue,
+          Number(
+            shopsFiltersReducer?.appliedShopsFilters?.stars?.selectedValue,
+          ),
+        ],
+      ),
+    );
+  }, [selectedLocationData, selectedRatingData]);
 
   const clearParticularLocation = () => {
     if (selectedCategory === 'Location') {
@@ -160,13 +178,20 @@ const ShopApplyFilter = ({
           )}
         </View>
         <View style={{width: '40%'}}>
-          <CustomButton
-            name="Apply"
-            color="#FFF"
-            borderColor="#29977E"
-            backgroundColor="#29977E"
-            onPress={() => handleApplyShopFilter()}
-          />
+          <TouchableOpacity disabled={applyBtnDisable ? true : false}>
+            <Button
+              disabled={applyBtnDisable ? true : false}
+              style={{
+                backgroundColor: !applyBtnDisable
+                  ? '#29977E'
+                  : 'rgba(21, 24, 39, 0.10)',
+                borderRadius: 8,
+              }}
+              onPress={() => handleApplyShopFilter()}
+              mode="contained">
+              Apply
+            </Button>
+          </TouchableOpacity>
         </View>
       </View>
     </View>

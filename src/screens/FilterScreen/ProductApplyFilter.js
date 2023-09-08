@@ -7,6 +7,8 @@ import CustomButton from '../../common/CustomButton';
 import ProductByShopFilter from './ProductFilterSubTab/ProductByShopFilter';
 import ProductColorFilter from './ProductFilterSubTab/ProductColorFilter';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
+import {Button} from 'react-native-paper';
+import {arraysHaveSameValues} from '../../utils';
 
 const ProductApplyFilter = ({
   handleFilterModelClose,
@@ -39,6 +41,24 @@ const ProductApplyFilter = ({
 
   const [clearTextShow, setClearTextShow] = useState(false);
   const [clearAllBtnShow, setClearAllBtnShow] = useState(false);
+
+  const [applyBtnDisable, setApplyBtnDisable] = useState(false);
+
+  useEffect(() => {
+    setApplyBtnDisable(
+      arraysHaveSameValues(
+        [...categoryId, ...selectedShopData, ...selectedColorData],
+        [
+          ...productsFiltersReducer?.appliedProductsFilters?.categoryId
+            ?.selectedValue,
+          ...productsFiltersReducer?.appliedProductsFilters?.shopId
+            .selectedValue,
+          ...productsFiltersReducer?.appliedProductsFilters?.productColor
+            .selectedValue,
+        ],
+      ),
+    );
+  }, [categoryId, selectedShopData, selectedColorData]);
 
   useEffect(() => {
     if (selectedCategory === 'Men') {
@@ -273,13 +293,20 @@ const ProductApplyFilter = ({
           )}
         </View>
         <View style={{width: '40%'}}>
-          <CustomButton
-            name="Apply"
-            color="#FFF"
-            borderColor="#29977E"
-            backgroundColor="#29977E"
-            onPress={() => handleApplyProductFilter()}
-          />
+          <TouchableOpacity disabled={applyBtnDisable ? true : false}>
+            <Button
+              disabled={applyBtnDisable ? true : false}
+              style={{
+                backgroundColor: !applyBtnDisable
+                  ? '#29977E'
+                  : 'rgba(21, 24, 39, 0.10)',
+                borderRadius: 8,
+              }}
+              onPress={() => handleApplyProductFilter()}
+              mode="contained">
+              Apply
+            </Button>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
