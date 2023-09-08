@@ -18,6 +18,7 @@ const UpperFilter = ({
   setShopCurrentPage,
   setShopDataLimit,
   setShowBottomLoader,
+  showOnlyShopDetailPage,
 }) => {
   const dispatch = useDispatch();
 
@@ -43,10 +44,10 @@ const UpperFilter = ({
 
   const onChangeSortFilter = newValue => {
     setIsOpenPopOver(false);
-    setShowBottomLoader(false);
+    !showOnlyShopDetailPage && setShowBottomLoader(false);
     if (!byShop) {
-      setCurrentPage(0);
-      setProductDataLimit(0);
+      !showOnlyShopDetailPage && setCurrentPage(0);
+      !showOnlyShopDetailPage && setProductDataLimit(0);
       dispatch(
         changeSortProductsFilters({
           key: 'sortType',
@@ -76,7 +77,7 @@ const UpperFilter = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: 30,
+          // paddingTop: 30,
         }}>
         <Text style={styles.productText}>{byShop ? 'Shop' : 'Product'}</Text>
         <TouchableOpacity style={{marginRight: -12}}>
@@ -151,7 +152,7 @@ const UpperFilter = ({
       </View>
       <View>
         <UpperAllListFilter
-          showOnlyShopDetailPage={false}
+          showOnlyShopDetailPage={showOnlyShopDetailPage}
           setCurrentPage={setCurrentPage}
           setShopCurrentPage={setShopCurrentPage}
           setProductDataLimit={setProductDataLimit}
@@ -168,7 +169,7 @@ export default UpperFilter;
 const styles = StyleSheet.create({
   mainContainer: {
     position: 'relative',
-    paddingHorizontal: 20,
+    // paddingHorizontal: 20,
   },
   sortFilMain: {
     display: 'flex',

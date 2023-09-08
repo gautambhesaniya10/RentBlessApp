@@ -26,6 +26,8 @@ import {
 import {shopFollow} from '../../../../graphql/mutations/shops';
 import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
 import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
+import UpperFilter from '../../../../common/Customer/UpperFilter';
+import FilterDrawerModel from '../../../../common/FilterDrawerModel';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -53,6 +55,13 @@ const ShopIndividual = () => {
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [shopReviews, setShopReviews] = useState([]);
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
+
+  const [showBottomLoader, setShowBottomLoader] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [productDataLimit, setProductDataLimit] = useState(0);
+  const [shopCurrentPage, setShopCurrentPage] = useState(0);
+  const [shopDataLimit, setShopDataLimit] = useState(0);
+  const [filterModelOpen, setFilterModelOpen] = useState(false);
 
   const getAllFollowers = () => {
     getShopFollowers({id: shopId}).then(res =>
@@ -203,6 +212,24 @@ const ShopIndividual = () => {
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
+      <FilterDrawerModel
+        filterModelOpen={filterModelOpen}
+        handleFilterModelClose={() => setFilterModelOpen(false)}
+        setCurrentPage={setCurrentPage}
+        setProductDataLimit={setProductDataLimit}
+        setShopCurrentPage={setShopCurrentPage}
+        setShopDataLimit={setShopDataLimit}
+        setShowBottomLoader={setShowBottomLoader}
+        showOnlyShopDetailPage={true}
+      />
+      <View style={styles.FilterBtnMain}>
+        <TouchableOpacity
+          onPress={() => setFilterModelOpen(true)}
+          style={styles.filterButton}>
+          <Icon name="filter" size={18} color="white" />
+          <Text style={styles.filterBtnText}>Filters</Text>
+        </TouchableOpacity>
+      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -288,9 +315,11 @@ const ShopIndividual = () => {
               </View>
             </View>
           </View>
-          <Text style={styles.productTitleDiv}>Product</Text>
+          <View style={{}}>
+            <UpperFilter byShop={false} showOnlyShopDetailPage={true} />
+          </View>
 
-          {productLoading ? (
+          {productLoading && productsData?.length === 0 ? (
             <View style={{marginVertical: 35}}>
               <ActivityIndicator />
             </View>
@@ -300,12 +329,17 @@ const ShopIndividual = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
+                position: 'relative',
+                opacity: productLoading && productsData?.length > 0 ? 0.5 : 1,
               }}>
               {productsData?.map((product, index) => (
-                <>
-                  <ProductCard product={product} key={index} />
-                </>
+                <ProductCard product={product} key={index} />
               ))}
+              {productLoading && productsData?.length > 0 && (
+                <View style={styles.loaderFilterDiv}>
+                  <ActivityIndicator color="green" />
+                </View>
+              )}
             </View>
           )}
 
@@ -389,5 +423,37 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     fontSize: 18,
+  },
+
+  FilterBtnMain: {
+    position: 'absolute',
+    bottom: 10,
+    zIndex: 1,
+    width: '100%',
+  },
+  filterButton: {
+    backgroundColor: '#29977E',
+    width: '30%',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingVertical: 10,
+    borderRadius: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 5,
+  },
+  filterBtnText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  loaderFilterDiv: {
+    display: 'flex',
+    alignItems: 'center',
+    width: '100%',
+    paddingVertical: 5,
+    position: 'absolute',
+    top: 150,
+    // left: '50%',
   },
 });

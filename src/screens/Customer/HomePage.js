@@ -225,7 +225,7 @@ const HomePage = () => {
           <Text style={styles.filterBtnText}>Filters</Text>
         </TouchableOpacity>
       </View>
-      <View style={{}}>
+      <View style={{paddingHorizontal: 20, paddingTop: 30}}>
         <UpperFilter
           byShop={byShop}
           setCurrentPage={setCurrentPage}
@@ -233,6 +233,7 @@ const HomePage = () => {
           setShopCurrentPage={setShopCurrentPage}
           setShopDataLimit={setShopDataLimit}
           setShowBottomLoader={setShowBottomLoader}
+          showOnlyShopDetailPage={false}
         />
       </View>
       <View style={{flex: 1}}>

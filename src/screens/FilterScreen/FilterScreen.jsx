@@ -14,6 +14,7 @@ const FilterScreen = ({
   setShopCurrentPage,
   setShopDataLimit,
   setShowBottomLoader,
+  showOnlyShopDetailPage,
 }) => {
   const dispatch = useDispatch();
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
@@ -26,23 +27,26 @@ const FilterScreen = ({
           <Icon name="close" size={20} color="black" />
         </TouchableOpacity>
       </View>
-      <View style={styles.toggleSwitchMain}>
-        <Text style={styles.switchText}>Product</Text>
-        <Switch
-          value={byShop}
-          onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
-          color="#29977E"
-        />
-        <Text style={styles.switchText}>Shop</Text>
-      </View>
+      {!showOnlyShopDetailPage && (
+        <View style={styles.toggleSwitchMain}>
+          <Text style={styles.switchText}>Product</Text>
+          <Switch
+            value={byShop}
+            onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
+            color="#29977E"
+          />
+          <Text style={styles.switchText}>Shop</Text>
+        </View>
+      )}
 
       <View>
-        {!byShop ? (
+        {!byShop || showOnlyShopDetailPage ? (
           <ProductApplyFilter
             handleFilterModelClose={handleFilterModelClose}
             setCurrentPage={setCurrentPage}
             setProductDataLimit={setProductDataLimit}
             setShowBottomLoader={setShowBottomLoader}
+            showOnlyShopDetailPage={showOnlyShopDetailPage}
           />
         ) : (
           <ShopApplyFilter

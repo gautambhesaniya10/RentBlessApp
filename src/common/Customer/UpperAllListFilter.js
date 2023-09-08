@@ -11,8 +11,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
 
-const FilterItemList = ['Sherwani', 'Blazer', 'Suit', 'Indo'];
-
 const UpperAllListFilter = ({
   showOnlyShopDetailPage,
   setCurrentPage,
@@ -41,8 +39,8 @@ const UpperAllListFilter = ({
   const [selectedRatings, setSelectedRatings] = useState([]);
 
   const handleDeleteParticularFilterBadge = itm => {
-    setShowBottomLoader(false);
-    if (byShop) {
+    !showOnlyShopDetailPage && setShowBottomLoader(false);
+    if (byShop && !showOnlyShopDetailPage) {
       setShopCurrentPage(0);
       setShopDataLimit(0);
       dispatch(
@@ -59,8 +57,8 @@ const UpperAllListFilter = ({
         }),
       );
     } else {
-      setCurrentPage(0);
-      setProductDataLimit(0);
+      !showOnlyShopDetailPage && setCurrentPage(0);
+      !showOnlyShopDetailPage && setProductDataLimit(0);
       dispatch(
         changeAppliedProductsFilters({
           key: itm.type,
@@ -182,7 +180,10 @@ const UpperAllListFilter = ({
 
   return (
     <View>
-      {(byShop ? selectedShopFilters : selectedProductFilters)?.length > 0 && (
+      {(byShop && !showOnlyShopDetailPage
+        ? selectedShopFilters
+        : selectedProductFilters
+      )?.length > 0 && (
         <View
           style={{
             marginTop: 6,
@@ -198,29 +199,30 @@ const UpperAllListFilter = ({
               gap: 15,
               alignItems: 'center',
             }}>
-            {(byShop ? selectedShopFilters : selectedProductFilters)?.map(
-              (item, index) => (
-                <View
-                  key={index}
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 4,
-                  }}>
-                  <Text style={styles.filterItemText}>{item?.label}</Text>
-                  <TouchableOpacity
-                    onPress={() => handleDeleteParticularFilterBadge(item)}>
-                    <Icon name="close" size={15} color="gray" />
-                  </TouchableOpacity>
-                </View>
-              ),
-            )}
+            {(byShop && !showOnlyShopDetailPage
+              ? selectedShopFilters
+              : selectedProductFilters
+            )?.map((item, index) => (
+              <View
+                key={index}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 4,
+                }}>
+                <Text style={styles.filterItemText}>{item?.label}</Text>
+                <TouchableOpacity
+                  onPress={() => handleDeleteParticularFilterBadge(item)}>
+                  <Icon name="close" size={15} color="gray" />
+                </TouchableOpacity>
+              </View>
+            ))}
           </ScrollView>
           <TouchableOpacity
             onPress={() => {
-              setShowBottomLoader(false);
-              if (byShop) {
+              !showOnlyShopDetailPage && setShowBottomLoader(false);
+              if (byShop && !showOnlyShopDetailPage) {
                 setShopCurrentPage(0);
                 setShopDataLimit(0);
                 ['locations', 'stars'].map(itm =>
@@ -234,8 +236,8 @@ const UpperAllListFilter = ({
                   ),
                 );
               } else {
-                setCurrentPage(0);
-                setProductDataLimit(0);
+                !showOnlyShopDetailPage && setCurrentPage(0);
+                !showOnlyShopDetailPage && setProductDataLimit(0);
                 [
                   'categoryId',
                   'productColor',

@@ -13,6 +13,7 @@ const ProductApplyFilter = ({
   setCurrentPage,
   setProductDataLimit,
   setShowBottomLoader,
+  showOnlyShopDetailPage,
 }) => {
   const dispatch = useDispatch();
   const AllCateGory = ['Men', 'Women', 'Shops', 'Color'];
@@ -110,7 +111,7 @@ const ProductApplyFilter = ({
     setMenSelectedData([]);
     setSelectedWomenCat([]);
     setWomenSelectedData([]);
-    setSelectedShopData([]);
+    !showOnlyShopDetailPage && setSelectedShopData([]);
     setSelectedColorData([]);
   };
 
@@ -189,25 +190,34 @@ const ProductApplyFilter = ({
 
   return (
     <View style={{position: 'relative'}}>
-      <View style={styles.mainListContainer}>
+      <View
+        style={[
+          styles.mainListContainer,
+          {height: showOnlyShopDetailPage ? '93.5%' : '85%'},
+        ]}>
         <View style={styles.mainLeftList}>
-          {AllCateGory?.map((cate, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => setSelectedCategory(cate)}
-              style={
-                selectedCategory === cate
-                  ? styles.catSelNameMain
-                  : styles.catNameMain
-              }>
-              <Text
-                style={
-                  selectedCategory === cate ? styles.selCatName : styles.CatName
-                }>
-                {cate}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {AllCateGory?.map(
+            (cate, index) =>
+              (!showOnlyShopDetailPage || cate !== 'Shops') && (
+                <TouchableOpacity
+                  key={index}
+                  onPress={() => setSelectedCategory(cate)}
+                  style={
+                    selectedCategory === cate
+                      ? styles.catSelNameMain
+                      : styles.catNameMain
+                  }>
+                  <Text
+                    style={
+                      selectedCategory === cate
+                        ? styles.selCatName
+                        : styles.CatName
+                    }>
+                    {cate}
+                  </Text>
+                </TouchableOpacity>
+              ),
+          )}
         </View>
         <View style={styles.mainRightList}>
           <View style={styles.chooseMain}>
@@ -232,12 +242,13 @@ const ProductApplyFilter = ({
                   setWomenSelectedData={setWomenSelectedData}
                 />
               )}
-              {selectedCategory === 'Shops' && (
+              {!showOnlyShopDetailPage && selectedCategory === 'Shops' && (
                 <ProductByShopFilter
                   selectedShopData={selectedShopData}
                   setSelectedShopData={setSelectedShopData}
                 />
               )}
+
               {selectedCategory === 'Color' && (
                 <ProductColorFilter
                   productsFiltersReducer={productsFiltersReducer}
@@ -280,7 +291,7 @@ export default ProductApplyFilter;
 const styles = StyleSheet.create({
   mainListContainer: {
     width: '100%',
-    height: '85%',
+    // height: '85%',
     flexDirection: 'row',
   },
   mainLeftList: {

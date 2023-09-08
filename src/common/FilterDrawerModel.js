@@ -17,6 +17,7 @@ const FilterDrawerModel = ({
   setShopCurrentPage,
   setShopDataLimit,
   setShowBottomLoader,
+  showOnlyShopDetailPage,
 }) => {
   const windowHeight = Dimensions.get('window').height;
 
@@ -39,6 +40,7 @@ const FilterDrawerModel = ({
               setShopCurrentPage={setShopCurrentPage}
               setShopDataLimit={setShopDataLimit}
               setShowBottomLoader={setShowBottomLoader}
+              showOnlyShopDetailPage={showOnlyShopDetailPage}
             />
           </View>
         </View>

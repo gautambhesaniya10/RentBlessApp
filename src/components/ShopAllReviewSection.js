@@ -90,7 +90,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
       ))}
 
       {viewAllBtn && shopReviews?.length > 0 && (
-        <View style={{width: '100%'}}>
+        <View style={{width: '100%', paddingBottom: 30}}>
           <CustomButton
             name="View All Reviews"
             color="#151827"
