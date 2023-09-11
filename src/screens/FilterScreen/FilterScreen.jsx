@@ -5,13 +5,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import {Switch} from 'react-native-paper';
+// import {Switch} from 'react-native-paper';
 import ProductApplyFilter from './ProductApplyFilter';
 import ShopApplyFilter from './ShopApplyFilter';
+import {Switch} from 'react-native-switch';
 
 const FilterScreen = ({
   handleFilterModelClose,
@@ -24,7 +25,6 @@ const FilterScreen = ({
 }) => {
   const dispatch = useDispatch();
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
-  const windowHeight = Dimensions.get('window').height;
 
   return (
     <View style={{backgroundColor: '#FFF', position: 'relative'}}>
@@ -36,13 +36,35 @@ const FilterScreen = ({
       </View>
       {!showOnlyShopDetailPage && (
         <View style={styles.toggleSwitchMain}>
-          <Text style={styles.switchText}>Product</Text>
+          {/* <Text style={styles.switchText}>Product</Text>
           <Switch
             value={byShop}
             onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
             color="#29977E"
           />
-          <Text style={styles.switchText}>Shop</Text>
+          <Text style={styles.switchText}>Shop</Text> */}
+
+          <Switch
+            value={byShop}
+            onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
+            activeText={'Shop'}
+            activeTextStyle={{color: 'black'}}
+            inActiveText={'Product'}
+            inactiveTextStyle={{color: 'black'}}
+            circleSize={30}
+            barHeight={27}
+            backgroundActive={'#94cbbe'}
+            backgroundInactive={'rgba(21, 24, 39, 0.10)'}
+            circleActiveColor={'#29977e'}
+            circleInActiveColor={'#ffffff'}
+            innerCircleStyle={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginLeft: byShop ? 0 : 20,
+              marginRight: byShop ? 12 : 0,
+            }}
+            switchWidthMultiplier={3} // multiplied by the `circleSize` prop to calculate total width
+          />
         </View>
       )}
 

@@ -324,6 +324,12 @@ const ProductDetail = () => {
                 source={{
                   html: `${productDetails?.data?.product?.data?.product_description}`,
                 }}
+                tagsStyles={{
+                  p: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  span: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  div: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  b: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                }}
               />
               {/* </Text> */}
             </View>

@@ -212,8 +212,9 @@ const HomePage = () => {
               setCurrentPage(0);
               setProductDataLimit(0);
             }}
-            style={{width: '100%'}}
+            style={{width: '100%', color: 'black'}}
             placeholder="Search  Hear.."
+            placeholderTextColor="rgba(21, 24, 39, 0.40)"
           />
         </View>
       </View>
