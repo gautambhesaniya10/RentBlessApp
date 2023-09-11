@@ -98,7 +98,7 @@ const ProductApplyFilter = ({
     if (
       selectedMenCat?.length > 0 ||
       selectedWomenCat?.length > 0 ||
-      selectedShopData?.length > 0 ||
+      (!showOnlyShopDetailPage && selectedShopData?.length > 0) ||
       selectedColorData?.length > 0
     ) {
       setClearAllBtnShow(true);
@@ -213,7 +213,7 @@ const ProductApplyFilter = ({
       <View
         style={[
           styles.mainListContainer,
-          {height: showOnlyShopDetailPage ? '93.5%' : '85%'},
+          // {height: showOnlyShopDetailPage ? '93.5%' : '85%'},
         ]}>
         <View style={styles.mainLeftList}>
           {AllCateGory?.map(
@@ -248,7 +248,7 @@ const ProductApplyFilter = ({
               </TouchableOpacity>
             )}
           </View>
-          <View style={{marginTop: 10, paddingBottom: 30, height: 430}}>
+          <View style={{marginTop: 10, paddingBottom: 55, height: 400}}>
             <ScrollView showsVerticalScrollIndicator={false}>
               {(selectedCategory === 'Men' || selectedCategory === 'Women') && (
                 <MenWomenTabs
@@ -318,8 +318,9 @@ export default ProductApplyFilter;
 const styles = StyleSheet.create({
   mainListContainer: {
     width: '100%',
-    // height: '85%',
+    // height: '87%',
     flexDirection: 'row',
+    // backgroundColor: 'gray',
   },
   mainLeftList: {
     width: '35%',
@@ -374,9 +375,11 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 20,
+    paddingHorizontal: 20,
     borderTopColor: 'rgba(24, 23, 37, 0.10)',
     borderTopWidth: 1,
     backgroundColor: '#FFF',
+    // backgroundColor: 'yellow',
+    paddingVertical: 15,
   },
 });

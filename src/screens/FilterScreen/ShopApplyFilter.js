@@ -146,7 +146,7 @@ const ShopApplyFilter = ({
               </TouchableOpacity>
             )}
           </View>
-          <View style={{marginTop: 10, paddingBottom: 30, height: 430}}>
+          <View style={{marginTop: 10, paddingBottom: 55, height: 400}}>
             <ScrollView showsVerticalScrollIndicator={false}>
               {selectedCategory === 'Location' && (
                 <ShopByLocation
@@ -203,7 +203,7 @@ export default ShopApplyFilter;
 const styles = StyleSheet.create({
   mainListContainer: {
     width: '100%',
-    height: '85%',
+    // height: '85%',
     flexDirection: 'row',
   },
   mainLeftList: {
@@ -259,9 +259,11 @@ const styles = StyleSheet.create({
     width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 20,
+    paddingHorizontal: 20,
     borderTopColor: 'rgba(24, 23, 37, 0.10)',
     borderTopWidth: 1,
     backgroundColor: '#FFF',
+    // backgroundColor: 'yellow',
+    paddingVertical: 15,
   },
 });

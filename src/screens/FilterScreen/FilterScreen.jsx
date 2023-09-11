@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
@@ -18,6 +24,7 @@ const FilterScreen = ({
 }) => {
   const dispatch = useDispatch();
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
+  const windowHeight = Dimensions.get('window').height;
 
   return (
     <View style={{backgroundColor: '#FFF', position: 'relative'}}>

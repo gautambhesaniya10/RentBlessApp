@@ -28,21 +28,16 @@ const FilterDrawerModel = ({
       visible={filterModelOpen}
       onRequestClose={handleFilterModelClose}>
       <View style={[styles.modalContainer]}>
-        <View style={[styles.bottomSheet, {height: windowHeight}]}>
-          <View
-            style={{
-              width: '100%',
-            }}>
-            <FilterScreen
-              handleFilterModelClose={handleFilterModelClose}
-              setCurrentPage={setCurrentPage}
-              setProductDataLimit={setProductDataLimit}
-              setShopCurrentPage={setShopCurrentPage}
-              setShopDataLimit={setShopDataLimit}
-              setShowBottomLoader={setShowBottomLoader}
-              showOnlyShopDetailPage={showOnlyShopDetailPage}
-            />
-          </View>
+        <View style={[styles.bottomSheet]}>
+          <FilterScreen
+            handleFilterModelClose={handleFilterModelClose}
+            setCurrentPage={setCurrentPage}
+            setProductDataLimit={setProductDataLimit}
+            setShopCurrentPage={setShopCurrentPage}
+            setShopDataLimit={setShopDataLimit}
+            setShowBottomLoader={setShowBottomLoader}
+            showOnlyShopDetailPage={showOnlyShopDetailPage}
+          />
         </View>
       </View>
     </Modal>
@@ -60,8 +55,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    backgroundColor: 'white',
-    paddingVertical: 23,
+    // backgroundColor: 'yellow',
+    // paddingVertical: 23,
     bottom: 0,
+    // top: 0,
+    // height: '100%',
   },
 });
