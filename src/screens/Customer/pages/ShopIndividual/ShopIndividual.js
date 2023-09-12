@@ -331,6 +331,7 @@ const ShopIndividual = () => {
                 flexWrap: 'wrap',
                 position: 'relative',
                 alignSelf: 'center',
+                width: '100%',
                 opacity: productLoading && productsData?.length > 0 ? 0.5 : 1,
               }}>
               {productsData?.map((product, index) => (

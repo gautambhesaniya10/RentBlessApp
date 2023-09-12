@@ -88,6 +88,7 @@ const ProductCard = ({product}) => {
           showsHorizontalScrollIndicator={true}
           contentContainerStyle={{
             flexDirection: 'row',
+            width: '100%',
           }}>
           {ProductImages?.map((img, index) => (
             <Image
@@ -95,7 +96,7 @@ const ProductCard = ({product}) => {
               source={{uri: img}}
               style={{
                 height: 128,
-                width: 165,
+                width: '100%',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
               }}
@@ -143,7 +144,7 @@ export default ProductCard;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
-    width: 165,
+    width: '47%',
     height: 220,
     borderRadius: 8,
     elevation: 2,

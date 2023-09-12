@@ -598,6 +598,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     alignSelf: 'center',
+    width: '100%',
   },
 
   centeredView: {

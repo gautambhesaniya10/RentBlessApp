@@ -1,33 +1,34 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
-import React from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Modal,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
 const ShopCard = ({shop}) => {
   const navigation = useNavigation();
+  const [ShopImagesModelShow, setShopImagesModelShow] = useState(false);
   return (
     <View style={styles.mainContainer}>
       <View style={{position: 'relative'}}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={true}
-          contentContainerStyle={{
-            flexDirection: 'row',
-          }}>
-          {shop?.shop_images?.map((img, index) => (
-            <Image
-              key={index}
-              source={{uri: img?.links}}
-              style={{
-                height: 128,
-                width: 165,
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-              }}
-            />
-          ))}
-        </ScrollView>
+        <TouchableOpacity
+          onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
+          <Image
+            source={{uri: shop?.shop_images[0]?.links}}
+            style={{
+              height: 128,
+              width: '100%',
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+            }}
+          />
+        </TouchableOpacity>
       </View>
 
       <TouchableOpacity
@@ -82,6 +83,11 @@ const ShopCard = ({shop}) => {
           </View>
         </View>
       </TouchableOpacity>
+      <ShopImageModel
+        setShopImagesModelShow={setShopImagesModelShow}
+        ShopImagesModelShow={ShopImagesModelShow}
+        AllImages={shop?.shop_images}
+      />
     </View>
   );
 };
@@ -91,7 +97,7 @@ export default ShopCard;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
-    width: 165,
+    width: '47%',
     height: 220,
     borderRadius: 8,
     elevation: 2,
@@ -153,3 +159,81 @@ const styles = StyleSheet.create({
     fontWeight: '300',
   },
 });
+
+const shopImageModelCss = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    marginTop: 22,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    elevation: 5,
+    height: '80%',
+    width: '90%',
+  },
+  modalText: {
+    fontSize: 18,
+    fontWeight: '600',
+    paddingBottom: 20,
+    color: 'black',
+  },
+  hederMain: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+});
+
+const ShopImageModel = ({
+  setShopImagesModelShow,
+  ShopImagesModelShow,
+  AllImages,
+}) => {
+  return (
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={ShopImagesModelShow}
+      onRequestClose={() => {
+        setShopImagesModelShow(!ShopImagesModelShow);
+      }}>
+      <View style={shopImageModelCss.centeredView}>
+        <View style={shopImageModelCss.modalView}>
+          <View style={shopImageModelCss.hederMain}>
+            <Text style={shopImageModelCss.modalText}>Shop All Images</Text>
+            <TouchableOpacity onPress={() => setShopImagesModelShow(false)}>
+              <Icon name="close" size={22} color="black" />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={true}
+            contentContainerStyle={{
+              flexDirection: 'row',
+              gap: 20,
+            }}>
+            {AllImages?.map((img, index) => (
+              <Image
+                key={index}
+                source={{uri: img?.links}}
+                style={{
+                  height: '90%',
+                  width: 270,
+                  objectFit: 'cover',
+                }}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  );
+};

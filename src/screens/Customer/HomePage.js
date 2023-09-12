@@ -368,6 +368,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     justifyContent: 'space-between',
     alignSelf: 'center',
+    width: '100%',
   },
   loaderDiv: {
     marginVertical: 100,
