@@ -21,7 +21,7 @@ const ShopCard = ({shop}) => {
               source={{uri: img?.links}}
               style={{
                 height: 128,
-                width: 170,
+                width: 165,
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
               }}
@@ -91,7 +91,7 @@ export default ShopCard;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
-    width: 170,
+    width: 165,
     height: 220,
     borderRadius: 8,
     elevation: 2,

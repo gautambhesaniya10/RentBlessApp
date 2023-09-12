@@ -367,6 +367,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     marginBottom: 30,
     justifyContent: 'space-between',
+    alignSelf: 'center',
   },
   loaderDiv: {
     marginVertical: 100,

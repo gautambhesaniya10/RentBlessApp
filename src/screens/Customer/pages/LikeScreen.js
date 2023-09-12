@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginVertical: 10,
     paddingBottom: 3,
+    alignSelf: 'center',
   },
   likeText: {
     marginHorizontal: 20,

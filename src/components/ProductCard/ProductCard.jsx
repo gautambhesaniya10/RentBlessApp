@@ -95,7 +95,7 @@ const ProductCard = ({product}) => {
               source={{uri: img}}
               style={{
                 height: 128,
-                width: 170,
+                width: 165,
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
               }}
@@ -143,7 +143,7 @@ export default ProductCard;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
-    width: 170,
+    width: 165,
     height: 220,
     borderRadius: 8,
     elevation: 2,
@@ -159,6 +159,7 @@ const styles = StyleSheet.create({
     color: 'rgba(21, 24, 39, 0.40)',
     fontWeight: '600',
     fontSize: 14,
+    width: 120,
   },
   shopMain: {
     display: 'flex',

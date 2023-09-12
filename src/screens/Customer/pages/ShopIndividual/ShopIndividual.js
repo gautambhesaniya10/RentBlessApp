@@ -330,6 +330,7 @@ const ShopIndividual = () => {
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
                 position: 'relative',
+                alignSelf: 'center',
                 opacity: productLoading && productsData?.length > 0 ? 0.5 : 1,
               }}>
               {productsData?.map((product, index) => (
