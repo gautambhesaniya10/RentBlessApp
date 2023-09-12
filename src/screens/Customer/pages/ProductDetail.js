@@ -328,6 +328,11 @@ const ProductDetail = () => {
                   p: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
                   span: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
                   div: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  h1: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  h2: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  h3: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  li: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
+                  ul: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
                   b: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
                 }}
               />
