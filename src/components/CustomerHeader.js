@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -10,6 +10,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Button, Popover, useToast} from 'native-base';
+import {Dropdown} from 'react-native-element-dropdown';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
@@ -17,6 +18,8 @@ const CustomerHeader = ({homeScreen}) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
+  const {areaLists} = useSelector(state => state.areaLists);
+
   const [AccessToken, setAccessToken] = useState('');
 
   const LogOut = async () => {
@@ -48,6 +51,20 @@ const CustomerHeader = ({homeScreen}) => {
     AsyncStorage.getItem('userId') && dispatch(loadUserProfileStart());
   }, [isFocused]);
 
+  const [selectedLocation, setSelectedLocation] = useState(null);
+
+  const renderLocationLabel = () => {
+    return (
+      <Text style={[styles.label]}>
+        <Image
+          source={require('../images/locationIcon.png')}
+          style={{width: 12, height: 12, tintColor: 'white'}}
+        />{' '}
+        Location
+      </Text>
+    );
+  };
+
   return (
     <View style={homeScreen ? styles.mainDiv : styles.mainDivOther}>
       <View style={styles.innerMain}>
@@ -56,6 +73,26 @@ const CustomerHeader = ({homeScreen}) => {
             <Icon name="bars" size={22} color="white" />
           </TouchableOpacity>
           <Text style={styles.leftText}>RENTBLESS</Text>
+        </View>
+        <View style={styles.container}>
+          {renderLocationLabel()}
+          <Dropdown
+            style={[styles.dropdown]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            labelField="area"
+            valueField="pin"
+            data={areaLists}
+            search
+            placeholder={'Select item'}
+            searchPlaceholder="Search..."
+            value={selectedLocation}
+            onChange={item => {
+              setSelectedLocation(item.pin);
+            }}
+          />
         </View>
         {AccessToken ? (
           <TouchableOpacity>
@@ -96,12 +133,14 @@ const styles = StyleSheet.create({
     width: '100%',
     // height: 96,
     // paddingTop: 20,
-    paddingVertical: 25,
+    paddingVertical: 10,
+    position: 'relative',
   },
   mainDivOther: {
     backgroundColor: '#151827',
     width: '100%',
-    paddingVertical: 25,
+    paddingVertical: 10,
+    position: 'relative',
   },
   leftMainDiv: {
     display: 'flex',
@@ -113,6 +152,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginHorizontal: 26,
   },
   leftText: {
@@ -128,5 +168,49 @@ const styles = StyleSheet.create({
     padding: 10,
     elevation: 5,
     borderRadius: 6,
+  },
+  locationMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+  },
+
+  container: {
+    position: 'relative',
+  },
+  dropdown: {
+    height: 45,
+    width: 150,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+    paddingHorizontal: 8,
+  },
+
+  label: {
+    position: 'absolute',
+    top: 0,
+    paddingHorizontal: 8,
+    fontSize: 14,
+    color: 'white',
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: 'white',
+    paddingTop: 15,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: 'white',
+    paddingTop: 15,
+  },
+  iconStyle: {
+    width: 30,
+    height: 30,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
   },
 });

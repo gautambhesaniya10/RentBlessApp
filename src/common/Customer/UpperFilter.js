@@ -19,6 +19,8 @@ const UpperFilter = ({
   setShopDataLimit,
   setShowBottomLoader,
   showOnlyShopDetailPage,
+  productsCount,
+  shopsCount,
 }) => {
   const dispatch = useDispatch();
 
@@ -79,7 +81,9 @@ const UpperFilter = ({
           alignItems: 'center',
           // paddingTop: 30,
         }}>
-        <Text style={styles.productText}>{byShop ? 'Shop' : 'Product'}</Text>
+        <Text style={styles.productText}>
+          {byShop ? `Shop (${shopsCount})` : `Product (${productsCount})`}
+        </Text>
         <TouchableOpacity style={{marginRight: -12}}>
           <Popover
             trigger={triggerProps => {
@@ -169,7 +173,6 @@ export default UpperFilter;
 const styles = StyleSheet.create({
   mainContainer: {
     position: 'relative',
-    // paddingHorizontal: 20,
   },
   sortFilMain: {
     display: 'flex',
@@ -178,8 +181,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     justifyContent: 'center',
-    borderRadius: 63,
-    borderWidth: 1,
     borderColor: 'rgba(21, 24, 39, 0.10)',
   },
   latestText: {

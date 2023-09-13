@@ -13,7 +13,7 @@ const CustomerTab = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: 'green',
+        activeTintColor: '#29977E',
         labelStyle: {
           fontSize: 12,
           paddingBottom: 5,

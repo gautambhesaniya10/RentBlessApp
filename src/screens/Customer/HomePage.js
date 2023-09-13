@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TextInput, FlatList} from 'react-native';
+import {StyleSheet, Text, View, TextInput, FlatList, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import CustomerHeader from '../../components/CustomerHeader';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
@@ -207,23 +207,30 @@ const HomePage = () => {
           <Text style={styles.filterBtnText}>Filters</Text>
         </TouchableOpacity>
       </View>
-      <View style={{paddingHorizontal: 20, paddingTop: 30}}>
-        <UpperFilter
-          byShop={byShop}
-          setCurrentPage={setCurrentPage}
-          setProductDataLimit={setProductDataLimit}
-          setShopCurrentPage={setShopCurrentPage}
-          setShopDataLimit={setShopDataLimit}
-          setShowBottomLoader={setShowBottomLoader}
-          showOnlyShopDetailPage={false}
-        />
-      </View>
+
       <View style={{flex: 1}}>
         <ScrollView
           onScroll={handleProductScroll}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>
+          <Image
+            source={require('../../images/banner.jpg')}
+            style={{width: '100%', height: 150, objectFit: 'cover'}}
+          />
           <View style={styles.mainContainer}>
+            <View style={{paddingHorizontal: 0, paddingTop: 0}}>
+              <UpperFilter
+                byShop={byShop}
+                setCurrentPage={setCurrentPage}
+                setProductDataLimit={setProductDataLimit}
+                setShopCurrentPage={setShopCurrentPage}
+                setShopDataLimit={setShopDataLimit}
+                setShowBottomLoader={setShowBottomLoader}
+                showOnlyShopDetailPage={false}
+                shopsCount={shopsCount}
+                productsCount={productsCount}
+              />
+            </View>
             <View style={{position: 'relative'}}>
               {!byShop ? (
                 productLoading && productsData?.length === 0 ? (

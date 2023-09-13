@@ -9,29 +9,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
 import {useDispatch, useSelector} from 'react-redux';
 
-const SideBarContent = () => {
+const SideBarContent = ({AccessToken}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const productsFiltersReducer = useSelector(
     state => state?.productsFiltersReducer,
   );
   const {userProfile} = useSelector(state => state?.user);
-
-  const isFocused = useIsFocused();
-  const [AccessToken, setAccessToken] = useState('');
-
-  const retrieveLocalData = async () => {
-    const Token = await AsyncStorage.getItem('token');
-    if (Token) {
-      setAccessToken(Token);
-    } else {
-      setAccessToken('');
-    }
-  };
-
-  useEffect(() => {
-    retrieveLocalData();
-  }, [isFocused]);
 
   return (
     <View style={styles.sideMainContainer}>
@@ -73,6 +57,14 @@ const SideBarContent = () => {
           placeholderTextColor="rgba(21, 24, 39, 0.40)"
         />
       </View>
+      <Divider bold={true} />
+      <TouchableOpacity
+        onPress={() => navigation.navigate('LikeScreen')}
+        style={styles.wishMain}>
+        <Icon name="heart-o" size={20} color="#151827" />
+        <Text style={styles.wishText}>Wishlist (0)</Text>
+      </TouchableOpacity>
+      <Divider bold={true} />
     </View>
   );
 };
@@ -110,18 +102,38 @@ const styles = StyleSheet.create({
   },
   searchTextMain: {
     backgroundColor: '#FFF',
-    width: '90%',
-    height: 60,
+    height: 50,
     alignSelf: 'center',
-    borderRadius: 6,
-    elevation: 2,
+    borderRadius: 10,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     paddingLeft: 14,
     gap: 5,
-    // position: 'absolute',
-    // top: 60,
-    // zIndex: 1,
+    borderWidth: 0.5,
+    marginHorizontal: 30,
+    marginVertical: 30,
+  },
+  wishMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginHorizontal: 30,
+    marginVertical: 30,
+  },
+  logoutMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    marginHorizontal: 30,
+    marginVertical: 30,
+    bottom: 0,
+    position: 'absolute',
+    // height: '100%',
+  },
+  wishText: {
+    color: '#151827',
+    fontWeight: '400',
+    fontSize: 18,
   },
 });
