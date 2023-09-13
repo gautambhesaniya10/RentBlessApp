@@ -33,7 +33,7 @@ const CustomButton = ({
       flexDirection: 'row',
     },
     loginBtn: {
-      paddingVertical: 8,
+      paddingVertical: 9,
       color: color,
       fontSize: 16,
       fontWeight: '600',

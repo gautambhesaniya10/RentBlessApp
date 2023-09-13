@@ -13,6 +13,7 @@ const CustomTextInput = ({
   control,
   activeOutlineColor,
   disabled,
+  outlineStyle,
 }) => {
   const customTheme = {
     ...DefaultTheme,
@@ -35,6 +36,7 @@ const CustomTextInput = ({
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
             outlineColor="rgba(21, 24, 39, 0.10)"
+            outlineStyle={outlineStyle}
             activeOutlineColor={activeOutlineColor}
             theme={customTheme}
             disabled={disabled}

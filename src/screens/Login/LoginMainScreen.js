@@ -32,18 +32,24 @@ const LoginMainScreen = () => {
       <View style={styles.main}>
         <Image
           source={require('../../images/logo.png')}
-          style={{width: 191, height: 138}}
+          style={{width: 191, height: 138, alignSelf: 'center'}}
         />
-        <Text style={styles.joinText}>Join Our Rentbless App</Text>
-        <Text style={styles.childText}>
-          Choose & Create account as a login or sign up
-        </Text>
+        <View style={{alignSelf: 'center', width: '90%'}}>
+          <Text style={styles.joinText}>How you would like to join us ?</Text>
+          <Text style={styles.childText}>
+            Unlock Fashion Possibilities – Where Customers and Shop Owners
+            Connect, on StyleSwap, Your Trusted Clothing Rental Platform!
+          </Text>
+        </View>
 
         <View
           style={{
             display: 'flex',
             flexDirection: 'row',
-            gap: 15,
+            // gap: 15,
+            justifyContent: 'space-between',
+            width: '90%',
+            alignSelf: 'center',
           }}>
           <View
             style={[
@@ -60,10 +66,10 @@ const LoginMainScreen = () => {
                 <Icon
                   name="users"
                   size={20}
-                  color={loginType === 'customer' ? 'green' : 'gray'}
+                  color={loginType === 'customer' ? '#29977E' : 'gray'}
                 />
                 {loginType === 'customer' && (
-                  <Icon name="check-circle" size={25} color="green" />
+                  <Icon name="check-circle" size={25} color="#29977E" />
                 )}
               </View>
               <View style={styles.bottomMain}>
@@ -84,13 +90,16 @@ const LoginMainScreen = () => {
             ]}>
             <TouchableOpacity onPress={() => setLoginType('vendor')}>
               <View style={styles.icons}>
-                <Icon
-                  name="male"
-                  size={20}
-                  color={loginType === 'vendor' ? 'green' : 'gray'}
+                <Image
+                  source={require('../../images/shopBusinessIcon.png')}
+                  style={{
+                    width: 20,
+                    height: 20,
+                    tintColor: loginType === 'vendor' ? '#29977E' : 'gray',
+                  }}
                 />
                 {loginType === 'vendor' && (
-                  <Icon name="check-circle" size={25} color="green" />
+                  <Icon name="check-circle" size={25} color="#29977E" />
                 )}
               </View>
               <View style={styles.bottomMain}>
@@ -103,23 +112,26 @@ const LoginMainScreen = () => {
           </View>
         </View>
 
-        <View style={{marginTop: 65}}>
-          <View style={{width: 340}}>
+        <View style={{marginTop: 65, alignSelf: 'center', width: '90%'}}>
+          <View style={{marginBottom: 16, width: '100%'}}>
             <CustomButton
-              name="Login"
+              name="Create Account"
               color="#FFFFFF"
               backgroundColor="#151827"
-              onPress={() => LoginPageNavigate()}
-            />
-          </View>
-          <View style={{marginTop: 16, width: 340}}>
-            <CustomButton
-              name="Sign Up"
-              color="#151827"
-              backgroundColor="#FFFFFF"
               borderColor="#151827"
               onPress={() => SignUpPageNavigate()}
             />
+          </View>
+          <View style={{width: '100%'}}>
+            <Text style={styles.loginTextMain}>
+              Already have an account?{' '}
+              <Text
+                onPress={() => LoginPageNavigate()}
+                style={styles.loginTextInner}>
+                {' '}
+                Login
+              </Text>
+            </Text>
           </View>
         </View>
       </View>
@@ -131,7 +143,7 @@ export default LoginMainScreen;
 
 const styles = StyleSheet.create({
   main: {
-    alignItems: 'center',
+    // alignItems: 'center',
     marginHorizontal: 20,
     justifyContent: 'center',
     display: 'flex',
@@ -153,16 +165,17 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 16,
     marginBottom: 40,
+    // paddingHorizontal: 10,
   },
   customerMain: {
-    width: 160,
+    width: '47%',
     height: 104,
     borderWidth: 1,
     // borderColor: '#29977E',
     borderRadius: 16,
   },
   businessMain: {
-    width: 160,
+    width: '47%',
     height: 104,
     borderWidth: 1,
     // borderColor: 'rgba(21, 24, 39, 0.10)',
@@ -192,5 +205,16 @@ const styles = StyleSheet.create({
   bottomMain: {
     marginLeft: 20,
     marginVertical: 15,
+  },
+
+  loginTextMain: {
+    color: 'rgba(21, 24, 39, 0.56)',
+    fontSize: 16,
+    fontWeight: '400',
+    alignSelf: 'center',
+  },
+  loginTextInner: {
+    color: '#151827',
+    fontWeight: '600',
   },
 });
