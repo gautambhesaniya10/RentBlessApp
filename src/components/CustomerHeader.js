@@ -30,7 +30,7 @@ const CustomerHeader = ({homeScreen}) => {
       variant: 'solid',
     });
     setTimeout(() => {
-      navigation.navigate('CustomerHomePage');
+      navigation.navigate('Splash');
     }, 1000);
   };
 
@@ -52,12 +52,9 @@ const CustomerHeader = ({homeScreen}) => {
     <View style={homeScreen ? styles.mainDiv : styles.mainDivOther}>
       <View style={styles.innerMain}>
         <View style={styles.leftMainDiv}>
-          {/* {useProfileData?.userCreatedShopId &&
-            useProfileData?.user_type === 'vendor' && (
-              <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                <Icon name="bars" size={22} color="white" />
-              </TouchableOpacity>
-            )} */}
+          <TouchableOpacity onPress={() => navigation.openDrawer()}>
+            <Icon name="bars" size={22} color="white" />
+          </TouchableOpacity>
           <Text style={styles.leftText}>RENTBLESS</Text>
         </View>
         {AccessToken ? (
@@ -83,7 +80,7 @@ const CustomerHeader = ({homeScreen}) => {
         ) : (
           <TouchableOpacity
             onPress={() => navigation.navigate('LoginMainScreen')}>
-            <Text style={styles.signInText}>SignIn/SignUp</Text>
+            <Icon name="user-plus" size={22} color="white" />
           </TouchableOpacity>
         )}
       </View>
@@ -97,13 +94,14 @@ const styles = StyleSheet.create({
   mainDiv: {
     backgroundColor: '#151827',
     width: '100%',
-    height: 96,
-    paddingTop: 20,
+    // height: 96,
+    // paddingTop: 20,
+    paddingVertical: 25,
   },
   mainDivOther: {
     backgroundColor: '#151827',
     width: '100%',
-    paddingVertical: 20,
+    paddingVertical: 25,
   },
   leftMainDiv: {
     display: 'flex',
@@ -121,12 +119,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
-  },
-  signInText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
-    textDecorationLine: 'underline',
   },
   logoutText: {
     color: 'black',

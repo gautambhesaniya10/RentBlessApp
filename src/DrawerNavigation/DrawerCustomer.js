@@ -9,6 +9,7 @@ import {
 import CustomerTab from '../TabNavigation/CustomerTab';
 import {FontStyle} from '../../CommonStyle';
 import {TouchableOpacity} from 'react-native-gesture-handler';
+import SideBarContent from '../common/Customer/SideBarContent';
 
 const DrawerCustomer = () => {
   const navigation = useNavigation();
@@ -18,16 +19,8 @@ const DrawerCustomer = () => {
   const CustomDrawerContent = props => {
     return (
       <DrawerContentScrollView {...props}>
-        <TouchableOpacity
-          //   onPress={() => navigation.navigate('Home')}
-          style={styles.drawerHeader}>
-          {/* <Image
-            source={{uri: vendorShopDetails?.shop_logo}}
-            style={styles.logo}
-          /> */}
-          <Text style={styles.heading}>Customer</Text>
-        </TouchableOpacity>
-        <DrawerItemList {...props} />
+        <SideBarContent />
+        {/* <DrawerItemList {...props} /> */}
       </DrawerContentScrollView>
     );
   };
@@ -46,25 +39,4 @@ const DrawerCustomer = () => {
 
 export default DrawerCustomer;
 
-const styles = StyleSheet.create({
-  drawerHeader: {
-    alignItems: 'center',
-    padding: 16,
-    marginTop: 50,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#ccc',
-  },
-  logo: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-  },
-  heading: {
-    color: '#151827',
-    fontWeight: '700',
-    fontSize: 22,
-    fontFamily: FontStyle,
-    textAlign: 'center',
-    paddingTop: 25,
-  },
-});
+const styles = StyleSheet.create({});

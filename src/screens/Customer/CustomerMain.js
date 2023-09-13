@@ -19,8 +19,8 @@ const CustomerMain = () => {
 
   return (
     <View style={{flex: 1}}>
-      {/* <DrawerCustomer /> */}
-      <CustomerTab />
+      <DrawerCustomer />
+      {/* <CustomerTab /> */}
     </View>
   );
 };

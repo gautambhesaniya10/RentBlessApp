@@ -198,25 +198,6 @@ const HomePage = () => {
       />
       <View style={{position: 'relative'}}>
         <CustomerHeader homeScreen={true} />
-        <View style={styles.searchTextMain}>
-          <Icon name="search" size={18} color="black" />
-          <TextInput
-            value={productsFiltersReducer.searchBarData}
-            onChangeText={value => {
-              dispatch(
-                changeProductsSearchBarData({
-                  key: 'searchBarData',
-                  value: value,
-                }),
-              );
-              setCurrentPage(0);
-              setProductDataLimit(0);
-            }}
-            style={{width: '100%', color: 'black'}}
-            placeholder="Search  Hear.."
-            placeholderTextColor="rgba(21, 24, 39, 0.40)"
-          />
-        </View>
       </View>
       <View style={styles.FilterBtnMain}>
         <TouchableOpacity
@@ -330,22 +311,6 @@ const HomePage = () => {
 export default HomePage;
 
 const styles = StyleSheet.create({
-  searchTextMain: {
-    backgroundColor: '#FFF',
-    width: '90%',
-    height: 60,
-    alignSelf: 'center',
-    borderRadius: 6,
-    elevation: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 14,
-    gap: 5,
-    position: 'absolute',
-    top: 60,
-    zIndex: 1,
-  },
   mainContainer: {
     marginHorizontal: 20,
     // marginTop: 25,

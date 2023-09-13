@@ -100,117 +100,118 @@ const Login = () => {
         </TouchableOpacity>
         <Text style={styles.appNameText}>Rentbless</Text>
       </View>
-      <View style={{height: '70%'}}>
-        <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
-          {/* <View style={{alignSelf: 'center'}}>
+      {/* <View style={{height: '70%'}}> */}
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
+        {/* <View style={{alignSelf: 'center'}}>
           <Image
             source={require('../../images/logo.png')}
             style={{width: 191, height: 138}}
           />
         </View> */}
 
-          <Text style={styles.joinText}>
-            Login as a {loginType === 'customer' ? 'customer' : 'vendor'} !
-          </Text>
-          <Text style={styles.childText}>
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry.
-          </Text>
-
-          <View style={{marginBottom: 16, width: '100%'}}>
-            <TouchableOpacity style={styles.socialBtnMain}>
-              <Image
-                source={require('../../images/google.png')}
-                style={{width: 20, height: 20}}
-              />
-              <Text style={styles.socialText}>Continue to Google</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{width: '100%'}}>
-            <TouchableOpacity style={styles.socialBtnMain}>
-              <Image
-                source={require('../../images/facebook.png')}
-                style={{width: 22, height: 22}}
-              />
-              <Text style={styles.socialText}>Continue to Facebook</Text>
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.orText}>OR</Text>
-
-          <View>
-            <CustomTextInput
-              label={
-                loginType === 'customer'
-                  ? 'Contact Number'
-                  : 'Email/Contact Number'
-              }
-              mode="outlined"
-              keyboardType={
-                loginType === 'customer' ? 'phone-pad' : 'email-address'
-              }
-              name="username"
-              control={control}
-              rules={{required: 'Username is required *'}}
-              activeOutlineColor="#151827"
-              outlineStyle={{borderRadius: 12}}
-            />
-            {errors?.username && (
-              <Text style={{color: 'red', marginTop: 4}}>
-                {errors.username.message}
-              </Text>
-            )}
-          </View>
-          <View style={{marginTop: 10, position: 'relative'}}>
-            <CustomTextInput
-              label="Password"
-              mode="outlined"
-              name="password"
-              secureTextEntry={passwordHide}
-              control={control}
-              rules={{required: 'Password is required *'}}
-              activeOutlineColor="#151827"
-              outlineStyle={{borderRadius: 12}}
-            />
-            <TouchableOpacity
-              onPress={() => setPasswordHide(!passwordHide)}
-              style={{position: 'absolute', right: 18, top: 20, zIndex: 1}}>
-              <Icon
-                name={passwordHide ? 'eye-slash' : 'eye'}
-                size={22}
-                color="gray"
-              />
-            </TouchableOpacity>
-            {errors?.password && (
-              <Text style={{color: 'red', marginTop: 4}}>
-                {errors.password.message}
-              </Text>
-            )}
-          </View>
-
-          <Text style={styles.fpText}>Forgot Password?</Text>
-        </ScrollView>
-      </View>
-      <View style={styles.buttonMainContainer}>
-        <View style={{width: '100%'}}>
-          <CustomButton
-            name="Login"
-            color="#FFFFFF"
-            backgroundColor="#151827"
-            onPress={handleSubmit(onSubmit, onError)}
-            loading={loading}
-          />
-        </View>
-        <Text style={styles.bottomText}>
-          Don’t have an account?
-          <Text
-            onPress={() => navigation.navigate('SignUp')}
-            style={{color: '#151827', fontWeight: '600'}}>
-            {' '}
-            Sign Up
-          </Text>
+        <Text style={styles.joinText}>
+          Login as a {loginType === 'customer' ? 'customer' : 'vendor'} !
         </Text>
-      </View>
+        <Text style={styles.childText}>
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry.
+        </Text>
+
+        <View style={{marginBottom: 16, width: '100%'}}>
+          <TouchableOpacity style={styles.socialBtnMain}>
+            <Image
+              source={require('../../images/google.png')}
+              style={{width: 20, height: 20}}
+            />
+            <Text style={styles.socialText}>Continue to Google</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{width: '100%'}}>
+          <TouchableOpacity style={styles.socialBtnMain}>
+            <Image
+              source={require('../../images/facebook.png')}
+              style={{width: 22, height: 22}}
+            />
+            <Text style={styles.socialText}>Continue to Facebook</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.orText}>OR</Text>
+
+        <View>
+          <CustomTextInput
+            label={
+              loginType === 'customer'
+                ? 'Contact Number'
+                : 'Email/Contact Number'
+            }
+            mode="outlined"
+            keyboardType={
+              loginType === 'customer' ? 'phone-pad' : 'email-address'
+            }
+            name="username"
+            control={control}
+            rules={{required: 'Username is required *'}}
+            activeOutlineColor="#151827"
+            outlineStyle={{borderRadius: 12}}
+          />
+          {errors?.username && (
+            <Text style={{color: 'red', marginTop: 4}}>
+              {errors.username.message}
+            </Text>
+          )}
+        </View>
+        <View style={{marginTop: 10, position: 'relative'}}>
+          <CustomTextInput
+            label="Password"
+            mode="outlined"
+            name="password"
+            secureTextEntry={passwordHide}
+            control={control}
+            rules={{required: 'Password is required *'}}
+            activeOutlineColor="#151827"
+            outlineStyle={{borderRadius: 12}}
+          />
+          <TouchableOpacity
+            onPress={() => setPasswordHide(!passwordHide)}
+            style={{position: 'absolute', right: 18, top: 20, zIndex: 1}}>
+            <Icon
+              name={passwordHide ? 'eye-slash' : 'eye'}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
+          {errors?.password && (
+            <Text style={{color: 'red', marginTop: 4}}>
+              {errors.password.message}
+            </Text>
+          )}
+        </View>
+
+        <Text style={styles.fpText}>Forgot Password?</Text>
+
+        <View style={styles.buttonMainContainer}>
+          <View style={{width: '100%'}}>
+            <CustomButton
+              name="Login"
+              color="#FFFFFF"
+              backgroundColor="#151827"
+              onPress={handleSubmit(onSubmit, onError)}
+              loading={loading}
+            />
+          </View>
+          <Text style={styles.bottomText}>
+            Don’t have an account?
+            <Text
+              onPress={() => navigation.navigate('SignUp')}
+              style={{color: '#151827', fontWeight: '600'}}>
+              {' '}
+              Sign Up
+            </Text>
+          </Text>
+        </View>
+      </ScrollView>
+      {/* </View> */}
     </View>
   );
 };
@@ -222,10 +223,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   buttonMainContainer: {
-    paddingHorizontal: 20,
-    position: 'absolute',
-    bottom: 0,
     width: '100%',
+    paddingTop: 30,
   },
 
   joinText: {
