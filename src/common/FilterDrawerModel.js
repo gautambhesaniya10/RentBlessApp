@@ -55,10 +55,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    // backgroundColor: 'yellow',
-    // paddingVertical: 23,
     bottom: 0,
-    // top: 0,
-    // height: '100%',
+    height: '100%',
   },
 });

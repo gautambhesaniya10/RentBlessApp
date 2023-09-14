@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {CheckBox} from 'react-native-elements';
+import {capitalizeString} from '../../../common/CapitalizeString';
 
 const ShopByLocation = ({
   areaLists,
@@ -20,7 +21,7 @@ const ShopByLocation = ({
       {areaLists?.map((itm, index) => (
         <View key={index}>
           <CheckBox
-            title={itm?.area}
+            title={capitalizeString(itm?.area)}
             checked={selectedLocationData?.includes(itm?.pin)}
             onPress={() => handleMenCheckboxChange(itm?.pin)}
             containerStyle={{

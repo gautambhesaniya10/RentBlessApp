@@ -1,6 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {CheckBox} from 'react-native-elements';
+import {capitalizeString} from '../../../common/CapitalizeString';
 
 const MenWomenTabs = ({
   categories,
@@ -60,7 +61,7 @@ const MenWomenTabs = ({
           {menCategoryLabel?.map((val, index) => (
             <View key={index}>
               <CheckBox
-                title={val}
+                title={capitalizeString(val)}
                 checked={selectedMenCat?.includes(val)}
                 onPress={() => handleMenCheckboxChange(val)}
                 containerStyle={{
@@ -78,7 +79,7 @@ const MenWomenTabs = ({
           {womenCategoryLabel?.map((val, index) => (
             <View key={index} style={{marginBottom: 0}}>
               <CheckBox
-                title={val}
+                title={capitalizeString(val)}
                 checked={selectedWomenCat?.includes(val)}
                 onPress={() => handleWoMenCheckboxChange(val)}
                 containerStyle={{

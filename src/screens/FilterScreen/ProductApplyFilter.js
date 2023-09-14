@@ -210,11 +210,7 @@ const ProductApplyFilter = ({
 
   return (
     <View style={{position: 'relative'}}>
-      <View
-        style={[
-          styles.mainListContainer,
-          // {height: showOnlyShopDetailPage ? '93.5%' : '85%'},
-        ]}>
+      <View style={[styles.mainListContainer]}>
         <View style={styles.mainLeftList}>
           {AllCateGory?.map(
             (cate, index) =>
@@ -241,14 +237,13 @@ const ProductApplyFilter = ({
         </View>
         <View style={styles.mainRightList}>
           <View style={styles.chooseMain}>
-            <Text style={styles.chooseText}>Choose Categories</Text>
             {clearTextShow && (
               <TouchableOpacity onPress={() => ClearParticularTab()}>
                 <Text style={styles.clearText}>Clear</Text>
               </TouchableOpacity>
             )}
           </View>
-          <View style={{marginTop: 10, paddingBottom: 55, height: 400}}>
+          <View style={{marginTop: 10, paddingBottom: 55, height: '95%'}}>
             <ScrollView showsVerticalScrollIndicator={false}>
               {(selectedCategory === 'Men' || selectedCategory === 'Women') && (
                 <MenWomenTabs
@@ -281,18 +276,18 @@ const ProductApplyFilter = ({
         </View>
       </View>
       <View style={styles.bottomButtonMain}>
-        <View style={{width: '40%'}}>
+        <View style={{width: '36%'}}>
           {clearAllBtnShow && (
             <CustomButton
               name="Clear all"
               color="black"
-              borderColor="black"
+              borderColor="gray"
               backgroundColor="#FFF"
               onPress={() => clearAllFilter()}
             />
           )}
         </View>
-        <View style={{width: '40%'}}>
+        <View style={{width: '60%'}}>
           <TouchableOpacity disabled={applyBtnDisable ? true : false}>
             <Button
               disabled={applyBtnDisable ? true : false}
@@ -301,7 +296,9 @@ const ProductApplyFilter = ({
                   ? '#29977E'
                   : 'rgba(21, 24, 39, 0.10)',
                 borderRadius: 8,
+                paddingVertical: 1,
               }}
+              labelStyle={{fontSize: 16}}
               onPress={() => handleApplyProductFilter()}
               mode="contained">
               Apply
@@ -318,18 +315,19 @@ export default ProductApplyFilter;
 const styles = StyleSheet.create({
   mainListContainer: {
     width: '100%',
-    // height: '87%',
+    height: '100%',
     flexDirection: 'row',
-    // backgroundColor: 'gray',
   },
   mainLeftList: {
     width: '35%',
-    backgroundColor: '#FAFCFC',
+    // backgroundColor: '#FAFCFC',
+    backgroundColor: 'rgba(21, 24, 39, 0.10)',
   },
   mainRightList: {
     width: '65%',
-    paddingVertical: 17,
+    paddingBottom: 17,
     paddingHorizontal: 20,
+    position: 'relative',
   },
   catSelNameMain: {
     paddingVertical: 17,
@@ -354,14 +352,14 @@ const styles = StyleSheet.create({
   },
   chooseMain: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    position: 'absolute',
+    right: 20,
+    top: 18,
+    zIndex: 1,
   },
-  chooseText: {
-    color: '#181725',
-    fontWeight: '600',
-    fontSize: 16,
-  },
+
   clearText: {
     color: '#181725',
     fontWeight: '500',
@@ -379,7 +377,6 @@ const styles = StyleSheet.create({
     borderTopColor: 'rgba(24, 23, 37, 0.10)',
     borderTopWidth: 1,
     backgroundColor: '#FFF',
-    // backgroundColor: 'yellow',
     paddingVertical: 15,
   },
 });

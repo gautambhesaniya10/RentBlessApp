@@ -4,6 +4,7 @@ import {CheckBox} from 'react-native-elements';
 import {colorsList} from '../../../common/Customer/ColorList';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeAppliedProductsFilters} from '../../../redux/ProductFilter/ProductFilterSlice';
+import {capitalizeString} from '../../../common/CapitalizeString';
 
 const ProductColorFilter = ({
   productsFiltersReducer,
@@ -36,7 +37,7 @@ const ProductColorFilter = ({
         colorsList?.map((itm, index) => (
           <View key={index}>
             <CheckBox
-              title={itm}
+              title={capitalizeString(itm)}
               checked={selectedColorData?.includes(itm)}
               onPress={() => OnChangeColor(itm)}
               containerStyle={{

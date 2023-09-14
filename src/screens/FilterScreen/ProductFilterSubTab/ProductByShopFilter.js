@@ -2,6 +2,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {CheckBox} from 'react-native-elements';
+import {capitalizeString} from '../../../common/CapitalizeString';
 
 const ProductByShopFilter = ({selectedShopData, setSelectedShopData}) => {
   const {allShopsLists} = useSelector(state => state?.shops);
@@ -18,7 +19,7 @@ const ProductByShopFilter = ({selectedShopData, setSelectedShopData}) => {
       {allShopsLists?.data?.map((itm, index) => (
         <View key={index}>
           <CheckBox
-            title={itm.shop_name}
+            title={capitalizeString(itm.shop_name)}
             checked={selectedShopData?.includes(itm?.id)}
             onPress={() => onChangeShopSelected(itm?.id)}
             containerStyle={{
