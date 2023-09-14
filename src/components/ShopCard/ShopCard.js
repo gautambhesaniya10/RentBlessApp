@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 8,
     elevation: 2,
-    marginTop: 20,
+    marginBottom: 20,
   },
   shopNameText: {
     color: '#151827',

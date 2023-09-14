@@ -322,15 +322,12 @@ const ShopIndividual = () => {
             </View>
           ) : (
             <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                position: 'relative',
-                alignSelf: 'center',
-                width: '100%',
-                opacity: productLoading && productsData?.length > 0 ? 0.5 : 1,
-              }}>
+              style={[
+                styles.productCardMain,
+                {
+                  opacity: productLoading && productsData?.length > 0 ? 0.5 : 1,
+                },
+              ]}>
               {productsData?.map((product, index) => (
                 <ProductCard product={product} key={index} />
               ))}
@@ -364,7 +361,8 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#151827',
     borderRadius: 20,
-    marginVertical: 20,
+    marginTop: 20,
+    marginBottom: 10,
   },
   topInnerMain: {
     marginHorizontal: 15,
@@ -422,6 +420,16 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     fontSize: 18,
+  },
+
+  productCardMain: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    position: 'relative',
+    alignSelf: 'center',
+    width: '100%',
+    marginTop: 10,
   },
 
   FilterBtnMain: {

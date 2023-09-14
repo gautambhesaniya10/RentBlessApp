@@ -220,7 +220,7 @@ const HomePage = () => {
             style={{width: '100%', height: 150, objectFit: 'cover'}}
           />
           <View style={styles.mainContainer}>
-            <View style={{paddingHorizontal: 0, paddingTop: 0}}>
+            <View style={{paddingHorizontal: 0, paddingTop: 5}}>
               <UpperFilter
                 byShop={byShop}
                 setShowBottomLoader={setShowBottomLoader}
@@ -317,25 +317,20 @@ export default HomePage;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    marginHorizontal: 20,
-    // marginTop: 25,
-    // position: 'relative',
-    // height: '100%',
+    marginHorizontal: 15,
   },
   productText: {
     color: '#151827',
     fontWeight: '600',
     fontSize: 20,
-    // paddingTop: 18,
-    // paddingBottom: 10,
   },
 
   productCardMain: {
-    // marginTop: 15,
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 30,
+    marginTop: 10,
     justifyContent: 'space-between',
     alignSelf: 'center',
     width: '100%',

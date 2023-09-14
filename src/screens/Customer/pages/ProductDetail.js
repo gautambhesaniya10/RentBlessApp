@@ -201,20 +201,38 @@ const ProductDetail = () => {
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.productHeaderMain}>
         <View style={styles.leftMainDiv}>
-          <Icon
-            onPress={() => navigation.goBack()}
-            name="angle-left"
-            size={24}
-            color="white"
-          />
-          <Image
-            source={{
-              uri: productDetails?.data?.product?.data?.branchInfo?.shop_info
-                .shop_logo,
-            }}
-            style={{width: 42, height: 42, borderRadius: 22}}
-          />
-          <View>
+          <TouchableOpacity
+            style={{width: 26, height: 26}}
+            onPress={() => navigation.goBack()}>
+            <Icon name="angle-left" size={24} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('ShopIndividual', {
+                state: {
+                  shopId:
+                    productDetails?.data?.product?.data?.branchInfo?.shop_id,
+                },
+              })
+            }>
+            <Image
+              source={{
+                uri: productDetails?.data?.product?.data?.branchInfo?.shop_info
+                  .shop_logo,
+              }}
+              style={{width: 42, height: 42, borderRadius: 22}}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{marginLeft: 10}}
+            onPress={() =>
+              navigation.navigate('ShopIndividual', {
+                state: {
+                  shopId:
+                    productDetails?.data?.product?.data?.branchInfo?.shop_id,
+                },
+              })
+            }>
             <Text numberOfLines={1} style={styles.productHeadNameText}>
               {
                 productDetails?.data?.product?.data?.branchInfo?.shop_info
@@ -222,12 +240,12 @@ const ProductDetail = () => {
               }
             </Text>
             <Text style={styles.dayText}>25 days ago</Text>
-          </View>
+          </TouchableOpacity>
         </View>
         <View style={styles.rightMainDiv}>
           <View>
             <StarRating
-              starSize={15}
+              starSize={17}
               starStyle={{marginHorizontal: 0}}
               rating={Math.round(
                 productDetails?.data?.product?.data?.branchInfo?.shop_info
@@ -273,7 +291,7 @@ const ProductDetail = () => {
               imageLoadingColor="green"
               dotColor="green"
               images={productImages}
-              sliderBoxHeight={350}
+              sliderBoxHeight={460}
               resizeMethod={'resize'}
               resizeMode={'cover'}
               ImageComponentStyle={{
@@ -285,7 +303,7 @@ const ProductDetail = () => {
               // }}
               paginationBoxStyle={{
                 position: 'absolute',
-                bottom: 35,
+                bottom: 15,
               }}
               autoplay={false}
             />
@@ -368,26 +386,20 @@ const ProductDetail = () => {
 
             <View style={styles.btnMainDev}>
               <View style={{width: '48%'}}>
-                <CustomButton
-                  name="Send Messages"
-                  color="#FFFFFF"
-                  backgroundColor="#29977E"
-                  onPress={openWhatsAppChat}
-                  borderColor="#29977E"
-                  icon={true}
-                  iconName="whatsapp"
-                />
+                <TouchableOpacity
+                  style={styles.wpSendBtnMain}
+                  onPress={openWhatsAppChat}>
+                  <Icon name="whatsapp" size={25} color="#FFFFFF" />
+                  <Text style={styles.wpSendBtnText}>Send Messages</Text>
+                </TouchableOpacity>
               </View>
               <View style={{width: '48%'}}>
-                <CustomButton
-                  name="Show Contact"
-                  color="#151827"
-                  backgroundColor="rgba(21, 24, 39, 0.10)"
-                  onPress={() => setShowContactModalOpen(true)}
-                  borderColor="rgba(21, 24, 39, 0.10)"
-                  icon={true}
-                  iconName="user-circle-o"
-                />
+                <TouchableOpacity
+                  style={styles.showConBtnMain}
+                  onPress={() => setShowContactModalOpen(true)}>
+                  <Icon name="user-circle-o" size={25} color="#151827" />
+                  <Text style={styles.showConBtnText}>Show Contact</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -490,14 +502,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    gap: 12,
   },
   rightMainDiv: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
-    gap: 12,
+    gap: 20,
+    marginRight: 10,
   },
   productHeadNameText: {
     color: 'white',
@@ -564,10 +576,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 25,
     backgroundColor: '#FAFCFC',
-    position: 'relative',
-    top: -25,
+    // position: 'relative',
+    // top: -25,
     width: '100%',
-    zIndex: 999999,
+    // zIndex: 999999,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
@@ -595,7 +607,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 30,
+    paddingBottom: 20,
   },
   productCardMain: {
     display: 'flex',
@@ -604,6 +616,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'center',
     width: '100%',
+    marginTop: 15,
   },
 
   centeredView: {
@@ -628,5 +641,46 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingTop: 15,
     paddingRight: 15,
+  },
+
+  wpSendBtnMain: {
+    backgroundColor: '#29977E',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: '#29977E',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    flexDirection: 'row',
+  },
+  wpSendBtnText: {
+    paddingVertical: 15,
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: FontStyle,
+  },
+  showConBtnMain: {
+    backgroundColor: 'rgba(21, 24, 39, 0.10)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(21, 24, 39, 0.10)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
+    flexDirection: 'row',
+  },
+  showConBtnText: {
+    paddingVertical: 15,
+    color: '#151827',
+    fontSize: 18,
+    fontWeight: '600',
+    fontFamily: FontStyle,
   },
 });

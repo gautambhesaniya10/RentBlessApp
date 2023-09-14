@@ -83,7 +83,7 @@ const ProductCard = ({product}) => {
   return (
     <View style={styles.mainContainer}>
       <View style={{position: 'relative'}}>
-        <ScrollView
+        {/* <ScrollView
           horizontal
           showsHorizontalScrollIndicator={true}
           contentContainerStyle={{
@@ -95,14 +95,27 @@ const ProductCard = ({product}) => {
               key={index}
               source={{uri: img}}
               style={{
-                height: 128,
+                height: 180,
                 width: '100%',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
+                objectFit: 'cover',
               }}
             />
           ))}
-        </ScrollView>
+        </ScrollView> */}
+        <View style={{height: 210, width: '100%'}}>
+          <Image
+            source={{uri: ProductImages[0]}}
+            style={{
+              height: '100%',
+              width: '100%',
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              objectFit: 'cover',
+            }}
+          />
+        </View>
         <View style={styles.heartIcon}>
           <TouchableOpacity onPress={() => clickedByLike()}>
             <Icon
@@ -145,10 +158,11 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
     width: '47%',
-    height: 220,
+    height: 300,
     borderRadius: 8,
     elevation: 2,
-    marginTop: 20,
+    // marginTop: 20,
+    marginBottom: 20,
   },
   productNameText: {
     color: '#151827',
