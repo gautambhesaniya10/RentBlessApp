@@ -49,8 +49,6 @@ const SideBarContent = ({AccessToken}) => {
                 value: value,
               }),
             );
-            //   setCurrentPage(0);
-            //   setProductDataLimit(0);
           }}
           style={{width: '100%', color: 'black'}}
           placeholder="Search  Hear.."

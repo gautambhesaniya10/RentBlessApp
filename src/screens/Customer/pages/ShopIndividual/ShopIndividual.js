@@ -57,8 +57,6 @@ const ShopIndividual = () => {
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
 
   const [showBottomLoader, setShowBottomLoader] = useState(false);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [productDataLimit, setProductDataLimit] = useState(0);
   const [shopCurrentPage, setShopCurrentPage] = useState(0);
   const [shopDataLimit, setShopDataLimit] = useState(0);
   const [filterModelOpen, setFilterModelOpen] = useState(false);
@@ -215,8 +213,6 @@ const ShopIndividual = () => {
       <FilterDrawerModel
         filterModelOpen={filterModelOpen}
         handleFilterModelClose={() => setFilterModelOpen(false)}
-        setCurrentPage={setCurrentPage}
-        setProductDataLimit={setProductDataLimit}
         setShopCurrentPage={setShopCurrentPage}
         setShopDataLimit={setShopDataLimit}
         setShowBottomLoader={setShowBottomLoader}
@@ -316,7 +312,11 @@ const ShopIndividual = () => {
             </View>
           </View>
           <View style={{}}>
-            <UpperFilter byShop={false} showOnlyShopDetailPage={true} />
+            <UpperFilter
+              byShop={false}
+              showOnlyShopDetailPage={true}
+              productsCount={productsCount}
+            />
           </View>
 
           {productLoading && productsData?.length === 0 ? (

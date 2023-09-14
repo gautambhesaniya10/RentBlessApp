@@ -12,8 +12,6 @@ import FilterScreen from '../screens/FilterScreen/FilterScreen';
 const FilterDrawerModel = ({
   filterModelOpen,
   handleFilterModelClose,
-  setCurrentPage,
-  setProductDataLimit,
   setShopCurrentPage,
   setShopDataLimit,
   setShowBottomLoader,
@@ -31,8 +29,6 @@ const FilterDrawerModel = ({
         <View style={[styles.bottomSheet]}>
           <FilterScreen
             handleFilterModelClose={handleFilterModelClose}
-            setCurrentPage={setCurrentPage}
-            setProductDataLimit={setProductDataLimit}
             setShopCurrentPage={setShopCurrentPage}
             setShopDataLimit={setShopDataLimit}
             setShowBottomLoader={setShowBottomLoader}

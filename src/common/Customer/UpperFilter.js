@@ -10,11 +10,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {changeSortShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
 import UpperAllListFilter from './UpperAllListFilter';
 import {useNavigation} from '@react-navigation/native';
+import {
+  changeProductCurrentPage,
+  changeProductDataLimit,
+} from '../../redux/ProductSlice/ProductSlice';
 
 const UpperFilter = ({
   byShop,
-  setCurrentPage,
-  setProductDataLimit,
   setShopCurrentPage,
   setShopDataLimit,
   setShowBottomLoader,
@@ -48,8 +50,6 @@ const UpperFilter = ({
     setIsOpenPopOver(false);
     !showOnlyShopDetailPage && setShowBottomLoader(false);
     if (!byShop) {
-      !showOnlyShopDetailPage && setCurrentPage(0);
-      !showOnlyShopDetailPage && setProductDataLimit(0);
       dispatch(
         changeSortProductsFilters({
           key: 'sortType',
@@ -157,9 +157,7 @@ const UpperFilter = ({
       <View>
         <UpperAllListFilter
           showOnlyShopDetailPage={showOnlyShopDetailPage}
-          setCurrentPage={setCurrentPage}
           setShopCurrentPage={setShopCurrentPage}
-          setProductDataLimit={setProductDataLimit}
           setShopDataLimit={setShopDataLimit}
           setShowBottomLoader={setShowBottomLoader}
         />

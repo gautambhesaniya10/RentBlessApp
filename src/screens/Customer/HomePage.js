@@ -8,6 +8,8 @@ import {ActivityIndicator, RadioButton, Switch} from 'react-native-paper';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {
+  changeProductCurrentPage,
+  changeProductDataLimit,
   loadMoreProductsStart,
   loadProductsStart,
 } from '../../redux/ProductSlice/ProductSlice';
@@ -32,6 +34,8 @@ const HomePage = () => {
     productsLimit,
     productsCount,
     numOfPages,
+    productCurrentPage,
+    productDataLimit,
     productsData,
     productLoading,
     error,
@@ -47,9 +51,6 @@ const HomePage = () => {
   } = useSelector(state => state?.shops);
 
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
-
-  const [currentPage, setCurrentPage] = useState(0);
-  const [productDataLimit, setProductDataLimit] = useState(0);
 
   const [shopCurrentPage, setShopCurrentPage] = useState(0);
   const [shopDataLimit, setShopDataLimit] = useState(0);
@@ -113,9 +114,9 @@ const HomePage = () => {
 
     if (!byShop) {
       if (isEndReached && !productLoading) {
-        if (currentPage < numOfPages) {
-          setCurrentPage(currentPage + 1);
-          setProductDataLimit(productDataLimit + 5);
+        if (productCurrentPage < numOfPages) {
+          dispatch(changeProductCurrentPage(productCurrentPage + 1));
+          dispatch(changeProductDataLimit(productDataLimit + 5));
         }
       }
     } else {
@@ -171,6 +172,8 @@ const HomePage = () => {
   }, [dispatch, shopDataLimit]);
 
   useEffect(() => {
+    dispatch(changeProductCurrentPage(0));
+    dispatch(changeProductDataLimit(0));
     getAllProducts();
   }, [
     dispatch,
@@ -190,8 +193,6 @@ const HomePage = () => {
       <FilterDrawerModel
         filterModelOpen={filterModelOpen}
         handleFilterModelClose={() => setFilterModelOpen(false)}
-        setCurrentPage={setCurrentPage}
-        setProductDataLimit={setProductDataLimit}
         setShopCurrentPage={setShopCurrentPage}
         setShopDataLimit={setShopDataLimit}
         setShowBottomLoader={setShowBottomLoader}
@@ -221,8 +222,6 @@ const HomePage = () => {
             <View style={{paddingHorizontal: 0, paddingTop: 0}}>
               <UpperFilter
                 byShop={byShop}
-                setCurrentPage={setCurrentPage}
-                setProductDataLimit={setProductDataLimit}
                 setShopCurrentPage={setShopCurrentPage}
                 setShopDataLimit={setShopDataLimit}
                 setShowBottomLoader={setShowBottomLoader}
@@ -255,7 +254,7 @@ const HomePage = () => {
                     ))}
                     {productLoading &&
                       productsData?.length > 0 &&
-                      currentPage !== numOfPages &&
+                      productCurrentPage !== numOfPages &&
                       showBottomLoader && (
                         <View style={styles.loaderBottomDiv}>
                           <ActivityIndicator color="green" />

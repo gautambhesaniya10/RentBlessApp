@@ -9,11 +9,13 @@ import ProductColorFilter from './ProductFilterSubTab/ProductColorFilter';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {Button} from 'react-native-paper';
 import {arraysHaveSameValues} from '../../utils';
+import {
+  changeProductCurrentPage,
+  changeProductDataLimit,
+} from '../../redux/ProductSlice/ProductSlice';
 
 const ProductApplyFilter = ({
   handleFilterModelClose,
-  setCurrentPage,
-  setProductDataLimit,
   setShowBottomLoader,
   showOnlyShopDetailPage,
 }) => {
@@ -136,8 +138,6 @@ const ProductApplyFilter = ({
   };
 
   const handleCloseProductFilter = () => {
-    setCurrentPage(0);
-    setProductDataLimit(0);
     setShowBottomLoader(false);
     handleFilterModelClose();
   };

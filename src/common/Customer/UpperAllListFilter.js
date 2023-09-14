@@ -10,12 +10,14 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
+import {
+  changeProductCurrentPage,
+  changeProductDataLimit,
+} from '../../redux/ProductSlice/ProductSlice';
 
 const UpperAllListFilter = ({
   showOnlyShopDetailPage,
-  setCurrentPage,
   setShopCurrentPage,
-  setProductDataLimit,
   setShopDataLimit,
   setShowBottomLoader,
 }) => {
@@ -57,8 +59,6 @@ const UpperAllListFilter = ({
         }),
       );
     } else {
-      !showOnlyShopDetailPage && setCurrentPage(0);
-      !showOnlyShopDetailPage && setProductDataLimit(0);
       dispatch(
         changeAppliedProductsFilters({
           key: itm.type,
@@ -236,8 +236,6 @@ const UpperAllListFilter = ({
                   ),
                 );
               } else {
-                !showOnlyShopDetailPage && setCurrentPage(0);
-                !showOnlyShopDetailPage && setProductDataLimit(0);
                 [
                   'categoryId',
                   'productColor',

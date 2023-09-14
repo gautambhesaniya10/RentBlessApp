@@ -62,11 +62,26 @@ const productSlice = createSlice({
     productsLimit: 0,
     productsCount: 0,
     numOfPages: 0,
+    productCurrentPage: 0,
+    productDataLimit: 0,
     productsData: [],
     productLoading: false,
     error: '',
   },
-  reducers: {},
+  reducers: {
+    changeProductCurrentPage: (state, action) => {
+      return {
+        ...state,
+        productCurrentPage: action.payload,
+      };
+    },
+    changeProductDataLimit: (state, action) => {
+      return {
+        ...state,
+        productDataLimit: action.payload,
+      };
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(loadProductsStart.pending, handleProductLoading)
@@ -78,5 +93,6 @@ const productSlice = createSlice({
   },
 });
 
-export const {emptyProductState} = productSlice.actions;
+export const {changeProductCurrentPage, changeProductDataLimit} =
+  productSlice.actions;
 export default productSlice.reducer;
