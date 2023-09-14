@@ -10,17 +10,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
-import {
-  changeProductCurrentPage,
-  changeProductDataLimit,
-} from '../../redux/ProductSlice/ProductSlice';
 
-const UpperAllListFilter = ({
-  showOnlyShopDetailPage,
-  setShopCurrentPage,
-  setShopDataLimit,
-  setShowBottomLoader,
-}) => {
+const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   const dispatch = useDispatch();
   const productsFiltersReducer = useSelector(
     state => state?.productsFiltersReducer,
@@ -43,8 +34,6 @@ const UpperAllListFilter = ({
   const handleDeleteParticularFilterBadge = itm => {
     !showOnlyShopDetailPage && setShowBottomLoader(false);
     if (byShop && !showOnlyShopDetailPage) {
-      setShopCurrentPage(0);
-      setShopDataLimit(0);
       dispatch(
         changeAppliedShopsFilters({
           key: itm.type,
@@ -223,8 +212,6 @@ const UpperAllListFilter = ({
             onPress={() => {
               !showOnlyShopDetailPage && setShowBottomLoader(false);
               if (byShop && !showOnlyShopDetailPage) {
-                setShopCurrentPage(0);
-                setShopDataLimit(0);
                 ['locations', 'stars'].map(itm =>
                   dispatch(
                     changeAppliedShopsFilters({

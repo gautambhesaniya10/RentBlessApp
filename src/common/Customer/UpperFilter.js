@@ -9,16 +9,9 @@ import {changeSortProductsFilters} from '../../redux/ProductFilter/ProductFilter
 import {useDispatch, useSelector} from 'react-redux';
 import {changeSortShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
 import UpperAllListFilter from './UpperAllListFilter';
-import {useNavigation} from '@react-navigation/native';
-import {
-  changeProductCurrentPage,
-  changeProductDataLimit,
-} from '../../redux/ProductSlice/ProductSlice';
 
 const UpperFilter = ({
   byShop,
-  setShopCurrentPage,
-  setShopDataLimit,
   setShowBottomLoader,
   showOnlyShopDetailPage,
   productsCount,
@@ -59,8 +52,6 @@ const UpperFilter = ({
         }),
       );
     } else {
-      setShopCurrentPage(0);
-      setShopDataLimit(0);
       dispatch(
         changeSortShopsFilters({
           key: 'sortType',
@@ -157,8 +148,6 @@ const UpperFilter = ({
       <View>
         <UpperAllListFilter
           showOnlyShopDetailPage={showOnlyShopDetailPage}
-          setShopCurrentPage={setShopCurrentPage}
-          setShopDataLimit={setShopDataLimit}
           setShowBottomLoader={setShowBottomLoader}
         />
       </View>

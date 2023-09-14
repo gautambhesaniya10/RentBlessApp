@@ -16,8 +16,6 @@ import {Switch} from 'react-native-switch';
 
 const FilterScreen = ({
   handleFilterModelClose,
-  setShopCurrentPage,
-  setShopDataLimit,
   setShowBottomLoader,
   showOnlyShopDetailPage,
 }) => {
@@ -79,8 +77,6 @@ const FilterScreen = ({
         ) : (
           <ShopApplyFilter
             handleFilterModelClose={handleFilterModelClose}
-            setShopCurrentPage={setShopCurrentPage}
-            setShopDataLimit={setShopDataLimit}
             setShowBottomLoader={setShowBottomLoader}
           />
         )}

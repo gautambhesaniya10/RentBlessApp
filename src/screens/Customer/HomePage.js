@@ -13,9 +13,10 @@ import {
   loadMoreProductsStart,
   loadProductsStart,
 } from '../../redux/ProductSlice/ProductSlice';
-import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
 import UpperFilter from '../../common/Customer/UpperFilter';
 import {
+  changeShopCurrentPage,
+  changeShopDataLimit,
   loadMoreShopStart,
   loadShopsStart,
 } from '../../redux/ShopSlice/ShopSlice';
@@ -45,6 +46,8 @@ const HomePage = () => {
     shopsLimit,
     shopsCount,
     numOfPages: shopNumOfPages,
+    shopCurrentPage,
+    shopDataLimit,
     shopsData,
     loading: shopLoading,
     error: shopError,
@@ -52,8 +55,6 @@ const HomePage = () => {
 
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
 
-  const [shopCurrentPage, setShopCurrentPage] = useState(0);
-  const [shopDataLimit, setShopDataLimit] = useState(0);
   const [showBottomLoader, setShowBottomLoader] = useState(false);
   const [filterModelOpen, setFilterModelOpen] = useState(false);
 
@@ -122,8 +123,8 @@ const HomePage = () => {
     } else {
       if (isEndReached && !shopLoading) {
         if (shopCurrentPage < shopNumOfPages) {
-          setShopCurrentPage(shopCurrentPage + 1);
-          setShopDataLimit(shopDataLimit + 5);
+          dispatch(changeShopCurrentPage(shopCurrentPage + 1));
+          dispatch(changeShopDataLimit(shopDataLimit + 5));
         }
       }
     }
@@ -158,6 +159,8 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    dispatch(changeShopCurrentPage(0));
+    dispatch(changeShopDataLimit(0));
     getAllShops();
   }, [
     dispatch,
@@ -193,8 +196,6 @@ const HomePage = () => {
       <FilterDrawerModel
         filterModelOpen={filterModelOpen}
         handleFilterModelClose={() => setFilterModelOpen(false)}
-        setShopCurrentPage={setShopCurrentPage}
-        setShopDataLimit={setShopDataLimit}
         setShowBottomLoader={setShowBottomLoader}
       />
       <View style={{position: 'relative'}}>
@@ -222,8 +223,6 @@ const HomePage = () => {
             <View style={{paddingHorizontal: 0, paddingTop: 0}}>
               <UpperFilter
                 byShop={byShop}
-                setShopCurrentPage={setShopCurrentPage}
-                setShopDataLimit={setShopDataLimit}
                 setShowBottomLoader={setShowBottomLoader}
                 showOnlyShopDetailPage={false}
                 shopsCount={shopsCount}

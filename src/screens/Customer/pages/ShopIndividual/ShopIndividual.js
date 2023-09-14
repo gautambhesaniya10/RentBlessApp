@@ -57,8 +57,7 @@ const ShopIndividual = () => {
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
 
   const [showBottomLoader, setShowBottomLoader] = useState(false);
-  const [shopCurrentPage, setShopCurrentPage] = useState(0);
-  const [shopDataLimit, setShopDataLimit] = useState(0);
+
   const [filterModelOpen, setFilterModelOpen] = useState(false);
 
   const getAllFollowers = () => {
@@ -213,8 +212,6 @@ const ShopIndividual = () => {
       <FilterDrawerModel
         filterModelOpen={filterModelOpen}
         handleFilterModelClose={() => setFilterModelOpen(false)}
-        setShopCurrentPage={setShopCurrentPage}
-        setShopDataLimit={setShopDataLimit}
         setShowBottomLoader={setShowBottomLoader}
         showOnlyShopDetailPage={true}
       />

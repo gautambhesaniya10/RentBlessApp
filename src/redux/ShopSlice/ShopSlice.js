@@ -102,6 +102,8 @@ const shopSlice = createSlice({
     shopsLimit: 0,
     shopsCount: 0,
     numOfPages: 0,
+    shopCurrentPage: 0,
+    shopDataLimit: 0,
     shopsData: [],
     loading: false,
     error: '',
@@ -112,7 +114,20 @@ const shopSlice = createSlice({
       error: '',
     },
   },
-  reducers: {},
+  reducers: {
+    changeShopCurrentPage: (state, action) => {
+      return {
+        ...state,
+        shopCurrentPage: action.payload,
+      };
+    },
+    changeShopDataLimit: (state, action) => {
+      return {
+        ...state,
+        shopDataLimit: action.payload,
+      };
+    },
+  },
   extraReducers: builder => {
     builder
       .addCase(loadShopsStart.pending, handleShopLoading)
@@ -127,5 +142,5 @@ const shopSlice = createSlice({
   },
 });
 
-export const {emptyShopState} = shopSlice.actions;
+export const {changeShopCurrentPage, changeShopDataLimit} = shopSlice.actions;
 export default shopSlice.reducer;

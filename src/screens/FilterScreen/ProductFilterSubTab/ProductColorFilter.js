@@ -2,8 +2,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {CheckBox} from 'react-native-elements';
 import {colorsList} from '../../../common/Customer/ColorList';
-import {useDispatch, useSelector} from 'react-redux';
-import {changeAppliedProductsFilters} from '../../../redux/ProductFilter/ProductFilterSlice';
 import {capitalizeString} from '../../../common/CapitalizeString';
 
 const ProductColorFilter = ({
@@ -11,24 +9,11 @@ const ProductColorFilter = ({
   selectedColorData,
   setSelectedColorData,
 }) => {
-  const dispatch = useDispatch();
-
-  console.log('selectedColorData', selectedColorData);
-
   const OnChangeColor = selColor => {
     const updatedSelection = selectedColorData?.includes(selColor)
       ? selectedColorData?.filter(item => item !== selColor)
       : [...selectedColorData, selColor];
     setSelectedColorData(updatedSelection);
-
-    // dispatch(
-    //   changeAppliedProductsFilters({
-    //     key: 'productColor',
-    //     value: {
-    //       selectedValue: selectedColorData
-    //     },
-    //   }),
-    // );
   };
 
   return (

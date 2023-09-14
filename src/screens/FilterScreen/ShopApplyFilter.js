@@ -9,12 +9,7 @@ import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice'
 import {Button} from 'react-native-paper';
 import {arraysHaveSameValues} from '../../utils';
 
-const ShopApplyFilter = ({
-  handleFilterModelClose,
-  setShopCurrentPage,
-  setShopDataLimit,
-  setShowBottomLoader,
-}) => {
+const ShopApplyFilter = ({handleFilterModelClose, setShowBottomLoader}) => {
   const dispatch = useDispatch();
   const {areaLists} = useSelector(state => state?.areaLists);
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
@@ -74,8 +69,6 @@ const ShopApplyFilter = ({
   }, [selectedLocationData, selectedCategory]);
 
   const handleCloseShopFilter = () => {
-    setShopCurrentPage(0);
-    setShopDataLimit(0);
     setShowBottomLoader(false);
     handleFilterModelClose();
   };
