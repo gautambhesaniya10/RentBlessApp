@@ -659,7 +659,7 @@ const styles = StyleSheet.create({
   wpSendBtnText: {
     paddingVertical: 15,
     color: '#FFFFFF',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '600',
     fontFamily: FontStyle,
   },
@@ -679,7 +679,7 @@ const styles = StyleSheet.create({
   showConBtnText: {
     paddingVertical: 15,
     color: '#151827',
-    fontSize: 18,
+    fontSize: 15,
     fontWeight: '600',
     fontFamily: FontStyle,
   },
