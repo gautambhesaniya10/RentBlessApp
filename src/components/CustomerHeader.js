@@ -9,9 +9,8 @@ import {
 } from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Button, Popover, useToast} from 'native-base';
+import {useToast} from 'native-base';
 import {Dropdown} from 'react-native-element-dropdown';
-import {Tooltip} from 'react-native-elements';
 import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 
