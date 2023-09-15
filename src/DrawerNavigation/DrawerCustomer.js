@@ -14,6 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {userLogout} from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch} from 'react-redux';
 import {useToast} from 'native-base';
+import LandingPage from '../screens/LandingPage/LandingPage';
+import LikeScreen from '../screens/Customer/pages/LikeScreen';
 
 const DrawerCustomer = () => {
   const navigation = useNavigation();
@@ -61,7 +63,7 @@ const DrawerCustomer = () => {
             AccessToken={AccessToken}
             setAccessToken={setAccessToken}
           />
-          {/* <DrawerItemList {...props} /> */}
+          <DrawerItemList {...props} />
         </DrawerContentScrollView>
         {AccessToken && (
           <TouchableOpacity onPress={() => LogOut()} style={styles.logoutMain}>
@@ -75,8 +77,22 @@ const DrawerCustomer = () => {
   return (
     <Drawer.Navigator drawerContent={CustomDrawerContent}>
       <Drawer.Screen
+        name="LandingPage"
+        component={LandingPage}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
         name="Dashboard"
         component={CustomerTab}
+        options={{
+          headerShown: false,
+        }}
+      />
+      <Drawer.Screen
+        name="LikeScreen"
+        component={LikeScreen}
         options={{
           headerShown: false,
         }}

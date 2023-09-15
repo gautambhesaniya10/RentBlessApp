@@ -17,6 +17,7 @@ import ShopReviewAll from './src/screens/Customer/pages/ShopIndividual/ShopRevie
 import Branches from './src/screens/Customer/pages/ShopIndividual/Branches';
 import WriteReview from './src/screens/Customer/pages/ShopIndividual/WriteReview';
 import FilterScreen from './src/screens/FilterScreen/FilterScreen';
+import LandingPage from './src/screens/LandingPage/LandingPage';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -28,6 +29,11 @@ const AppNavigator = () => {
           component={Splash}
           options={{headerShown: false}}
         />
+        {/* <Stack.Screen
+          name="LandingPage"
+          component={LandingPage}
+          options={{headerShown: false}}
+        /> */}
         <Stack.Screen
           name="CustomerMain"
           component={CustomerMain}

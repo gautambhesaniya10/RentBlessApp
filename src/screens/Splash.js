@@ -19,6 +19,7 @@ const Splash = () => {
     } else {
       setTimeout(() => {
         navigation.navigate('CustomerMain');
+        // navigation.navigate('LandingPage');
       }, 2000);
     }
   };
