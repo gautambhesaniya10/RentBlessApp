@@ -63,7 +63,7 @@ const HomePage = () => {
       loadMoreProductsStart({
         pageData: {
           skip: productDataLimit,
-          limit: 5,
+          limit: 10,
         },
         filter: {
           category_id:
@@ -86,7 +86,7 @@ const HomePage = () => {
       loadProductsStart({
         pageData: {
           skip: 0,
-          limit: 5,
+          limit: 10,
         },
         filter: {
           category_id:
@@ -117,14 +117,14 @@ const HomePage = () => {
       if (isEndReached && !productLoading) {
         if (productCurrentPage < numOfPages) {
           dispatch(changeProductCurrentPage(productCurrentPage + 1));
-          dispatch(changeProductDataLimit(productDataLimit + 5));
+          dispatch(changeProductDataLimit(productDataLimit + 10));
         }
       }
     } else {
       if (isEndReached && !shopLoading) {
         if (shopCurrentPage < shopNumOfPages) {
           dispatch(changeShopCurrentPage(shopCurrentPage + 1));
-          dispatch(changeShopDataLimit(shopDataLimit + 5));
+          dispatch(changeShopDataLimit(shopDataLimit + 10));
         }
       }
     }
@@ -135,7 +135,7 @@ const HomePage = () => {
       loadMoreShopStart({
         pageData: {
           skip: shopDataLimit,
-          limit: 5,
+          limit: 10,
         },
         area: shopsFiltersReducer.appliedShopsFilters.locations.selectedValue,
         sort: shopsFiltersReducer.sortFilters.sortType.selectedValue,
@@ -149,7 +149,7 @@ const HomePage = () => {
       loadShopsStart({
         pageData: {
           skip: 0,
-          limit: 5,
+          limit: 10,
         },
         area: shopsFiltersReducer.appliedShopsFilters.locations.selectedValue,
         sort: shopsFiltersReducer.sortFilters.sortType.selectedValue,

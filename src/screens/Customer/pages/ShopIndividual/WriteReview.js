@@ -85,7 +85,9 @@ const WriteReview = () => {
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.mainTopHeader}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={{width: 25, height: 25}}
+          onPress={() => navigation.goBack()}>
           <Icon name="angle-left" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.hederTitleText}>Rate & Review Vendor</Text>
@@ -142,7 +144,7 @@ export default WriteReview;
 const styles = StyleSheet.create({
   mainTopHeader: {
     flexDirection: 'row',
-    gap: 20,
+    gap: 10,
     alignItems: 'center',
     marginTop: 28,
     marginLeft: 20,

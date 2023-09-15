@@ -1,7 +1,13 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import CustomButton from '../common/CustomButton';
-import {Divider} from 'react-native-paper';
+import {Divider, ProgressBar} from 'react-native-paper';
 import {Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StarRating from 'react-native-star-rating-widget';
@@ -52,6 +58,35 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
           </Text>
         </Text>
       </View>
+
+      <View style={{marginTop: 20}}>
+        <Text style={styles.DistributionText}>Rating Distribution</Text>
+        {shopReviews?.length > 0 ? (
+          [5, 4, 3, 2, 1]?.map?.((star, index) => (
+            <View style={styles.progressBarMain}>
+              <Text>
+                {star} {''} <Icon name="star" size={12} color="black" />
+              </Text>
+              <ProgressBar
+                style={{width: 220}}
+                progress={
+                  shopReviews?.filter(itm => itm?.stars === star)?.length /
+                  shopReviews?.length
+                }
+                color="green"
+              />
+              <Text>
+                {shopReviews?.filter(itm => itm.stars === star)?.length} Reviews
+              </Text>
+            </View>
+          ))
+        ) : (
+          <View style={{paddingVertical: 40}}>
+            <ActivityIndicator />
+          </View>
+        )}
+      </View>
+
       <Divider style={{marginVertical: 20}} />
       {shopReviews?.slice(0, displayReview)?.map((review, index) => (
         <View key={index} style={styles.reviewCardContainer}>
@@ -163,5 +198,17 @@ const styles = StyleSheet.create({
   },
   revDesText: {
     paddingTop: 18,
+  },
+  DistributionText: {
+    color: '#31333E',
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 18,
+  },
+  progressBarMain: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 10,
   },
 });

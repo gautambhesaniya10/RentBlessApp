@@ -11,7 +11,7 @@ const BranchMultiDropDown = ({
   onEditBranch,
   onEditDelShow,
 }) => {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   return (
     <View key={index} style={styles.branchesMainContainer}>
       <View

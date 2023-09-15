@@ -20,7 +20,9 @@ const Branches = () => {
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.backMain}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          style={{width: 25, height: 25}}
+          onPress={() => navigation.goBack()}>
           <Icon name="angle-left" size={24} color="black" />
         </TouchableOpacity>
         <Image

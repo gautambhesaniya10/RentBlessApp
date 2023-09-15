@@ -225,8 +225,8 @@ const ShopIndividual = () => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Icon name="angle-left" size={22} color="black" />
+          <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
+            <Icon name="angle-left" size={30} color="black" />
           </TouchableOpacity>
           <View style={styles.mainHeaderContainer}>
             <View style={styles.topInnerMain}>
@@ -236,7 +236,7 @@ const ShopIndividual = () => {
               />
               <View>
                 <Text style={styles.firstText}>{shopDetails?.shop_name}</Text>
-                <Text numberOfLines={1} style={styles.secText}>
+                <Text numberOfLines={2} style={styles.secText}>
                   {
                     "Let's be Effortlessly Cool: Embrace Your Signature Style with Us"
                   }
@@ -244,15 +244,23 @@ const ShopIndividual = () => {
                 <Text style={styles.thirdText}>
                   <Image
                     source={require('../../../../images/locationIcon.png')}
-                    style={{width: 10, height: 10, tintColor: 'white'}}
+                    style={{width: 10, height: 10, tintColor: 'red'}}
                   />{' '}
                   {shopDetails?.branch_info?.map(
                     itm => itm?.branch_type === 'main' && itm?.branch_address,
                   )}
                 </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Branches', {
+                      state: {shopDetails: shopDetails},
+                    })
+                  }>
+                  <Text style={styles.seeBranchLink}>See Branches</Text>
+                </TouchableOpacity>
 
                 <View style={styles.followBtnMain}>
-                  <View style={{width: '40%'}}>
+                  <View style={{width: '50%'}}>
                     <CustomButton
                       name={shopFollowByUser ? 'UnFollow' : 'Follow'}
                       color="black"
@@ -262,7 +270,7 @@ const ShopIndividual = () => {
                       iconName="plus"
                     />
                   </View>
-                  <View style={{width: '40%'}}>
+                  {/* <View style={{width: '40%'}}>
                     <CustomButton
                       name="Branches"
                       color="white"
@@ -273,9 +281,8 @@ const ShopIndividual = () => {
                           state: {shopDetails: shopDetails},
                         })
                       }
-                      iconName="plus"
                     />
-                  </View>
+                  </View> */}
                 </View>
               </View>
             </View>
@@ -341,7 +348,7 @@ const ShopIndividual = () => {
 
           <ShopAllReviewSection
             shopReviews={shopReviews}
-            viewAllBtn={true}
+            viewAllBtn={false}
             shopDetails={shopDetails}
           />
         </View>
@@ -375,6 +382,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
     fontFamily: FontStyle,
+    paddingBottom: 3,
   },
   secText: {
     color: '#FFF',
@@ -382,6 +390,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     fontFamily: FontStyle,
     width: 230,
+    paddingBottom: 3,
   },
   thirdText: {
     color: 'rgba(255, 255, 255, 0.64)',
@@ -462,5 +471,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 150,
     // left: '50%',
+  },
+  seeBranchLink: {
+    color: '#3ac1a8',
+    textDecorationLine: 'underline',
+    fontSize: 17,
+    fontWeight: '500',
+    paddingTop: 5,
   },
 });
