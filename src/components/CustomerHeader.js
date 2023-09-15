@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View, Image, Modal} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,15 +11,19 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {Button, Popover, useToast} from 'native-base';
 import {Dropdown} from 'react-native-element-dropdown';
+import {Tooltip} from 'react-native-elements';
+import {Divider} from 'react-native-paper';
+import {TouchableWithoutFeedback} from 'react-native';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const useProfileData = useSelector(state => state?.user.userProfile);
   const {areaLists} = useSelector(state => state.areaLists);
+  const {userProfile} = useSelector(state => state?.user);
 
+  const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
   const [AccessToken, setAccessToken] = useState('');
 
   const LogOut = async () => {
@@ -95,26 +99,52 @@ const CustomerHeader = ({homeScreen}) => {
           />
         </View>
         {AccessToken ? (
-          <TouchableOpacity>
-            <Popover
-              trigger={triggerProps => {
-                return (
-                  <Button
-                    style={{backgroundColor: 'transparent'}}
-                    {...triggerProps}>
-                    <Icon name="power-off" size={20} color="white" />
-                  </Button>
-                );
-              }}>
-              <Popover.Content>
-                <Popover.Arrow />
-                <Text onPress={() => LogOut()} style={styles.logoutText}>
-                  Logout
-                </Text>
-              </Popover.Content>
-            </Popover>
-          </TouchableOpacity>
+          // <TouchableOpacity>
+          <View>
+            <TouchableOpacity
+              onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
+              <Image
+                source={require('../images/profileImg.png')}
+                style={{
+                  width: 30,
+                  height: 30,
+                }}
+              />
+            </TouchableOpacity>
+
+            <Modal
+              transparent={true}
+              visible={isLogoutTooltipVisible}
+              animationType="fade"
+              onRequestClose={() => setLogoutTooltipVisible(false)}>
+              <TouchableWithoutFeedback
+                onPress={() => setLogoutTooltipVisible(false)}>
+                <View style={{flex: 1, position: 'relative'}}>
+                  <View style={styles.modelLogoutMain}>
+                    <Image
+                      source={require('../images/profileImg.png')}
+                      style={{
+                        width: 40,
+                        height: 40,
+                        // marginLeft: 20,
+                        marginTop: 15,
+                      }}
+                    />
+                    <Text style={[styles.logoutText]}>
+                      {userProfile?.first_name} {userProfile?.last_name}
+                    </Text>
+                    <Divider bold={true} />
+                    <Text onPress={() => LogOut()} style={styles.logoutText}>
+                      <Icon name="power-off" size={14} color="#151827" /> {''}
+                      Logout
+                    </Text>
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
+          </View>
         ) : (
+          // </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('LoginMainScreen')}>
             <Icon name="user-plus" size={22} color="white" />
@@ -162,12 +192,21 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
+    paddingVertical: 10,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+  },
+  modelLogoutMain: {
+    width: '35%',
+    position: 'absolute',
+    top: 52,
+    right: 5,
     backgroundColor: 'white',
-    padding: 10,
     elevation: 5,
     borderRadius: 6,
+    alignItems: 'center',
   },
   locationMain: {
     flexDirection: 'row',

@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import HomePage from '../screens/Customer/HomePage';
 import LikeScreen from '../screens/Customer/pages/LikeScreen';
 import {useSelector} from 'react-redux';
+import CustomCustomerTabBar from './CustomCustomerTabBar';
 
 const CustomerTab = () => {
   const Tab = createBottomTabNavigator();
@@ -12,22 +13,15 @@ const CustomerTab = () => {
 
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: '#29977E',
-        labelStyle: {
-          fontSize: 12,
-          paddingBottom: 5,
-        },
-      }}>
+      tabBar={props => <CustomCustomerTabBar {...props} />}
+      initialRouteName="CustomerHomePage">
       <Tab.Screen
         name="CustomerHomePage"
         component={HomePage}
         options={{
           headerShown: false,
+          tabBarIconName: 'home',
           tabBarLabel: 'Home',
-          tabBarIcon: ({color, size}) => (
-            <Icon name="home" color={color} size={22} />
-          ),
         }}
       />
       <Tab.Screen
@@ -35,19 +29,12 @@ const CustomerTab = () => {
         component={LikeScreen}
         options={{
           headerShown: false,
+          tabBarIconName: 'heart',
           tabBarLabel: 'Like',
-          tabBarIcon: ({color, size}) => (
-            <View style={styles.mainLikeTabDiv}>
-              <Icon name="heart" color={color} size={22} />
-              {userProfile?.product_like_list?.length > 0 && (
-                <View style={styles.likeCountMain}>
-                  <Text style={styles.likeCount}>
-                    {userProfile?.product_like_list?.length}
-                  </Text>
-                </View>
-              )}
-            </View>
-          ),
+          tabBarBadgeLikeCount:
+            userProfile?.product_like_list?.length > 0
+              ? userProfile?.product_like_list?.length.toString()
+              : null,
         }}
       />
     </Tab.Navigator>
@@ -56,24 +43,4 @@ const CustomerTab = () => {
 
 export default CustomerTab;
 
-const styles = StyleSheet.create({
-  mainLikeTabDiv: {
-    position: 'relative',
-  },
-  likeCountMain: {
-    backgroundColor: 'red',
-    width: 16,
-    height: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 8,
-    position: 'absolute',
-    left: 15,
-    bottom: 9,
-  },
-  likeCount: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-});
+const styles = StyleSheet.create({});
