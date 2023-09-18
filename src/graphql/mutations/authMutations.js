@@ -20,7 +20,6 @@ export const signUp = async payload => {
 };
 
 export const signIn = async payload => {
-  console.log('pay======', payload);
   const results = await client.mutate({
     mutation: gql`
       mutation signIn($userInfo: signInInput) {

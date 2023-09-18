@@ -1,4 +1,11 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Modal,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,16 +16,19 @@ import {
 } from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Button, Popover, useToast} from 'native-base';
+import {useToast} from 'native-base';
+import {Divider} from 'react-native-paper';
 
 const VendorHeader = () => {
   const toast = useToast();
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
+  const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
 
   const LogOut = async () => {
     AsyncStorage.clear();
+    setLogoutTooltipVisible(false);
     dispatch(userLogout());
 
     toast.show({
@@ -29,7 +39,8 @@ const VendorHeader = () => {
     });
 
     setTimeout(() => {
-      navigation.navigate('CustomerHomePage');
+      // navigation.navigate('CustomerHomePage');
+      navigation.navigate('Splash');
     }, 1000);
   };
 
@@ -51,25 +62,49 @@ const VendorHeader = () => {
             )}
           <Text style={styles.leftText}>RENTBLESS</Text>
         </View>
-        <TouchableOpacity>
-          <Popover
-            trigger={triggerProps => {
-              return (
-                <Button
-                  style={{backgroundColor: 'transparent'}}
-                  {...triggerProps}>
-                  <Icon name="power-off" size={20} color="white" />
-                </Button>
-              );
-            }}>
-            <Popover.Content>
-              <Popover.Arrow />
-              <Text onPress={() => LogOut()} style={styles.logoutText}>
-                Logout
-              </Text>
-            </Popover.Content>
-          </Popover>
-        </TouchableOpacity>
+        <View>
+          <TouchableOpacity
+            onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
+            <Image
+              source={require('../images/profileImg.png')}
+              style={{
+                width: 30,
+                height: 30,
+              }}
+            />
+          </TouchableOpacity>
+
+          <Modal
+            transparent={true}
+            visible={isLogoutTooltipVisible}
+            animationType="fade"
+            onRequestClose={() => setLogoutTooltipVisible(false)}>
+            <TouchableWithoutFeedback
+              onPress={() => setLogoutTooltipVisible(false)}>
+              <View style={{flex: 1, position: 'relative'}}>
+                <View style={styles.modelLogoutMain}>
+                  <Image
+                    source={require('../images/profileImg.png')}
+                    style={{
+                      width: 40,
+                      height: 40,
+                      // marginLeft: 20,
+                      marginTop: 15,
+                    }}
+                  />
+                  <Text style={[styles.logoutText]}>
+                    {useProfileData?.first_name} {useProfileData?.last_name}
+                  </Text>
+                  <Divider bold={true} />
+                  <Text onPress={() => LogOut()} style={styles.logoutText}>
+                    <Icon name="power-off" size={14} color="#151827" /> {''}
+                    Logout
+                  </Text>
+                </View>
+              </View>
+            </TouchableWithoutFeedback>
+          </Modal>
+        </View>
       </View>
     </View>
   );
@@ -103,11 +138,20 @@ const styles = StyleSheet.create({
   },
   logoutText: {
     color: 'black',
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '600',
+    paddingVertical: 10,
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.5,
+  },
+  modelLogoutMain: {
+    width: '35%',
+    position: 'absolute',
+    top: 52,
+    right: 5,
     backgroundColor: 'white',
-    padding: 10,
     elevation: 5,
     borderRadius: 6,
+    alignItems: 'center',
   },
 });

@@ -27,6 +27,7 @@ const CustomerHeader = ({homeScreen}) => {
 
   const LogOut = async () => {
     AsyncStorage.clear();
+    setLogoutTooltipVisible(false);
     dispatch(userLogout());
     setAccessToken('');
     toast.show({
