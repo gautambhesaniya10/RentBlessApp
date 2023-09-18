@@ -6,6 +6,7 @@ import HomePage from '../screens/Customer/HomePage';
 import LikeScreen from '../screens/Customer/pages/LikeScreen';
 import {useSelector} from 'react-redux';
 import CustomCustomerTabBar from './CustomCustomerTabBar';
+import LandingPage from '../screens/LandingPage/LandingPage';
 
 const CustomerTab = () => {
   const Tab = createBottomTabNavigator();
@@ -14,7 +15,17 @@ const CustomerTab = () => {
   return (
     <Tab.Navigator
       tabBar={props => <CustomCustomerTabBar {...props} />}
-      initialRouteName="CustomerHomePage">
+      initialRouteName="LandingPage">
+      <Tab.Screen
+        name="LandingPage"
+        component={LandingPage}
+        options={{
+          headerShown: false,
+          tabBarIconName: 'home',
+          tabBarLabel: 'Landing',
+          unmountOnBlur: true,
+        }}
+      />
       <Tab.Screen
         name="CustomerHomePage"
         component={HomePage}

@@ -25,26 +25,32 @@ const CustomCustomerTabBar = ({state, descriptors, navigation}) => {
         const iconColor = isFocused ? '#29977E' : 'grey';
 
         return (
-          <TouchableOpacity
-            key={route.key}
-            onPress={onPress}
-            style={styles.tabBarItem}>
-            <View style={styles.mainLikeTabDiv}>
-              <Icon name={options.tabBarIconName} size={24} color={iconColor} />
-              {options.tabBarBadgeLikeCount && (
-                <View style={styles.likeCountMain}>
-                  <Text style={styles.likeCount}>
-                    {options.tabBarBadgeLikeCount}
-                  </Text>
-                </View>
+          !options.unmountOnBlur && (
+            <TouchableOpacity
+              key={route.key}
+              onPress={onPress}
+              style={styles.tabBarItem}>
+              <View style={styles.mainLikeTabDiv}>
+                <Icon
+                  name={options.tabBarIconName}
+                  size={24}
+                  color={iconColor}
+                />
+                {options.tabBarBadgeLikeCount && (
+                  <View style={styles.likeCountMain}>
+                    <Text style={styles.likeCount}>
+                      {options.tabBarBadgeLikeCount}
+                    </Text>
+                  </View>
+                )}
+              </View>
+              {options.tabBarLabel && (
+                <Text style={{color: iconColor, fontSize: 14}}>
+                  {options.tabBarLabel}
+                </Text>
               )}
-            </View>
-            {options.tabBarLabel && (
-              <Text style={{color: iconColor, fontSize: 14}}>
-                {options.tabBarLabel}
-              </Text>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
+          )
         );
       })}
     </View>

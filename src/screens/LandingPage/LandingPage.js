@@ -5,15 +5,44 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomerHeader from '../../components/CustomerHeader';
 import {Image} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import MenCollection from './MenCollection';
+import WomenCollection from './WomenCollection';
+import FeaturedVendors from './FeaturedVendors';
+import {loadProductsStart} from '../../redux/ProductSlice/ProductSlice';
+import {useDispatch} from 'react-redux';
 
 const LandingPage = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('customer');
+
+  // const getAllProducts = () => {
+  //   dispatch(
+  //     loadProductsStart({
+  //       pageData: {
+  //         skip: 0,
+  //         limit: 10,
+  //       },
+  //       filter: {
+  //         category_id: [],
+  //         product_color: [],
+  //       },
+  //       shopId: [],
+  //       sort: 'new',
+  //       search: '',
+  //     }),
+  //   );
+  // };
+
+  // useEffect(() => {
+  //   getAllProducts();
+  // }, []);
+
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <CustomerHeader />
@@ -44,7 +73,7 @@ const LandingPage = () => {
                     <Text style={styles.sliderH1Text}>Men’s Blazer</Text>
                     <Text style={styles.sliderH2Text}>Under ₹699</Text>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate('Dashboard')}>
+                      onPress={() => navigation.navigate('CustomerHomePage')}>
                       <Text style={styles.sliderH2Text}>+ Explore</Text>
                     </TouchableOpacity>
                   </View>
@@ -52,14 +81,12 @@ const LandingPage = () => {
               ))}
             </ScrollView>
           </View>
-
           <View style={styles.worksMain}>
             <Text style={styles.worksH1Text}>How It Works</Text>
             <Text style={styles.worksH2Text}>
               Lorem Ipsum is simply dummy text of the printing
             </Text>
           </View>
-
           <View>
             <View style={styles.tabMain}>
               <TouchableOpacity
@@ -79,7 +106,6 @@ const LandingPage = () => {
                 <Text style={styles.TextTab}>Vendors</Text>
               </TouchableOpacity>
             </View>
-
             {activeTab === 'customer' ? (
               <View style={styles.tabBottomMainDiv}>
                 <View style={styles.tabBottomInnerLeftMainDiv}>
@@ -144,6 +170,9 @@ const LandingPage = () => {
               </View>
             )}
           </View>
+          <MenCollection />
+          <WomenCollection />
+          <FeaturedVendors />
         </View>
       </ScrollView>
     </View>

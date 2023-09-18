@@ -63,7 +63,7 @@ const DrawerCustomer = () => {
             AccessToken={AccessToken}
             setAccessToken={setAccessToken}
           />
-          <DrawerItemList {...props} />
+          {/* <DrawerItemList {...props} /> */}
         </DrawerContentScrollView>
         {AccessToken && (
           <TouchableOpacity onPress={() => LogOut()} style={styles.logoutMain}>
@@ -76,13 +76,13 @@ const DrawerCustomer = () => {
   };
   return (
     <Drawer.Navigator drawerContent={CustomDrawerContent}>
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="LandingPage"
         component={LandingPage}
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
       <Drawer.Screen
         name="Dashboard"
         component={CustomerTab}
@@ -90,13 +90,13 @@ const DrawerCustomer = () => {
           headerShown: false,
         }}
       />
-      <Drawer.Screen
+      {/* <Drawer.Screen
         name="LikeScreen"
         component={LikeScreen}
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
     </Drawer.Navigator>
   );
 };

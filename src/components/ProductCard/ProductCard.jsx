@@ -8,7 +8,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 
-const ProductCard = ({product}) => {
+const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -81,7 +81,11 @@ const ProductCard = ({product}) => {
   }, [isAuthenticate, product?.id, userProfile]);
 
   return (
-    <View style={styles.mainContainer}>
+    <View
+      style={[
+        styles.mainContainer,
+        {width: landingPageCardWith ? 200 : '47%'},
+      ]}>
       <View style={{position: 'relative'}}>
         {/* <ScrollView
           horizontal
@@ -128,7 +132,9 @@ const ProductCard = ({product}) => {
       </View>
 
       <TouchableOpacity
+        disabled={landingPageCardWith ? true : false}
         onPress={() =>
+          !landingPageCardWith &&
           navigation.navigate('ProductDetail', {
             state: {
               productId: product?.id,
@@ -157,7 +163,7 @@ export default ProductCard;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
-    width: '47%',
+    // width: '47%',
     height: 300,
     borderRadius: 8,
     elevation: 2,
