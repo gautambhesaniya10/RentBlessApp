@@ -202,7 +202,11 @@ const ProductDetail = () => {
       <View style={styles.productHeaderMain}>
         <View style={styles.leftMainDiv}>
           <TouchableOpacity
-            style={{width: 26, height: 26}}
+            style={{
+              width: 26,
+              height: 26,
+              paddingLeft: 5,
+            }}
             onPress={() => navigation.goBack()}>
             <Icon name="angle-left" size={24} color="white" />
           </TouchableOpacity>
@@ -242,38 +246,35 @@ const ProductDetail = () => {
             <Text style={styles.dayText}>25 days ago</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.rightMainDiv}>
-          <View>
-            <StarRating
-              starSize={17}
-              starStyle={{marginHorizontal: 0}}
-              rating={Math.round(
-                productDetails?.data?.product?.data?.branchInfo?.shop_info
-                  ?.shop_rating,
-              )}
-              maxStars={5}
-              emptyColor="#CCCFD2"
-              onChange={() => {}}
+        <View style={{width: '30%'}}>
+          <StarRating
+            starSize={17}
+            starStyle={{marginHorizontal: 0}}
+            rating={Math.round(
+              productDetails?.data?.product?.data?.branchInfo?.shop_info
+                ?.shop_rating,
+            )}
+            maxStars={5}
+            emptyColor="#CCCFD2"
+            onChange={() => {}}
+          />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 2,
+            }}>
+            <Image
+              source={require('../../../images/locationIcon.png')}
+              style={{width: 12, height: 12, tintColor: 'white'}}
             />
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 2,
-              }}>
-              <Image
-                source={require('../../../images/locationIcon.png')}
-                style={{width: 12, height: 12, tintColor: 'white'}}
-              />
-              <Text numberOfLines={1} style={styles.locationText}>
-                {
-                  productDetails?.data?.product?.data?.branchInfo
-                    ?.branch_address
-                }
-              </Text>
-            </View>
+            <Text numberOfLines={1} style={styles.locationText}>
+              {productDetails?.data?.product?.data?.branchInfo?.branch_address}
+            </Text>
           </View>
+        </View>
+        <View style={styles.rightMainDiv}>
           <TouchableOpacity
             onPress={() => clickedByFollow()}
             style={styles.followBtn}>
@@ -492,16 +493,17 @@ const styles = StyleSheet.create({
   productHeaderMain: {
     backgroundColor: '#151827',
     width: '100%',
-    paddingHorizontal: 20,
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
+    alignItems: 'center',
   },
   leftMainDiv: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 10,
+    width: '40%',
   },
   rightMainDiv: {
     display: 'flex',
@@ -510,6 +512,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 20,
     marginRight: 10,
+    width: '20%',
   },
   productHeadNameText: {
     color: 'white',
