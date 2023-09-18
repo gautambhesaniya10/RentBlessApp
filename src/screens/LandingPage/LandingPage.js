@@ -58,7 +58,7 @@ const LandingPage = () => {
               }}>
               {[0, 1, 2, 3]?.map((item, index) => (
                 <View key={index} style={styles.sliderMainView}>
-                  <View style={{width: 225}}>
+                  <View style={{width: 210}}>
                     <Image
                       source={require('../../images/ProductIMg.png')}
                       style={{

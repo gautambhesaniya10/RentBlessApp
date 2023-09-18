@@ -75,7 +75,9 @@ const CustomerHeader = ({homeScreen}) => {
           <TouchableOpacity onPress={() => navigation.openDrawer()}>
             <Icon name="bars" size={22} color="white" />
           </TouchableOpacity>
-          <Text style={styles.leftText}>RENTBLESS</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('LandingPage')}>
+            <Text style={styles.leftText}>RENTBLESS</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.container}>
           {renderLocationLabel()}

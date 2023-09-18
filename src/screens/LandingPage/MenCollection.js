@@ -52,7 +52,7 @@ const MenCollection = () => {
   }, [selectedMenCat]);
 
   return (
-    <View style={{marginBottom: 40}}>
+    <View style={{marginBottom: 20}}>
       <Text style={styles.headingText}>Men’s Collections</Text>
       <Text style={styles.descriptionText}>
         Lorem Ipsum is simply dummy text of the printing

@@ -71,55 +71,62 @@ const FeaturedVendors = ({shop}) => {
               //     })
               //   }
             >
-              <View style={styles.shopMain}>
-                <Image
-                  source={{uri: shop?.shop_logo}}
-                  style={{width: 50, height: 50, borderRadius: 25}}
-                />
-                <View>
-                  <Text style={styles.shopNameText} numberOfLines={1}>
-                    {shop.shop_name}
+              {/* <View style={styles.shopMain}> */}
+              <Image
+                source={{uri: shop?.shop_logo}}
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 25,
+                  alignSelf: 'center',
+                  marginBottom: 10,
+                }}
+              />
+              <View>
+                <Text style={styles.shopNameText} numberOfLines={1}>
+                  {shop.shop_name}
+                </Text>
+                <View
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: 2,
+                    alignSelf: 'center',
+                  }}>
+                  <Image
+                    source={require('../../images/locationIcon.png')}
+                    style={{width: 12, height: 12}}
+                  />
+                  <Text style={styles.addressNameText} numberOfLines={1}>
+                    {shop?.branch_info?.length > 1
+                      ? shop?.branch_info?.map(
+                          itm =>
+                            itm.branch_type === 'main' && itm.branch_address,
+                        )
+                      : shop?.branch_info[0]?.branch_address}
                   </Text>
-                  <View
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      gap: 2,
-                    }}>
-                    <Image
-                      source={require('../../images/locationIcon.png')}
-                      style={{width: 12, height: 12}}
-                    />
-                    <Text style={styles.addressNameText} numberOfLines={1}>
-                      {shop?.branch_info?.length > 1
-                        ? shop?.branch_info?.map(
-                            itm =>
-                              itm.branch_type === 'main' && itm.branch_address,
-                          )
-                        : shop?.branch_info[0]?.branch_address}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={styles.cardBottomDivMain}>
-                  <View style={styles.ratingMain}>
-                    <Icon name="star" size={19} color="#F9A23B" />
-                    <Text style={styles.ratingParentText}>
-                      {shop.shop_rating}{' '}
-                      <Text style={styles.ratingChildText}>
-                        ({shop?.shopReviewCount})
-                      </Text>
-                    </Text>
-                  </View>
-                  <View style={styles.ratingMain}>
-                    <Icon name="user" size={18} color="black" />
-                    <Text style={styles.ratingParentText}>
-                      {`${shop?.shopFollowerCount} K`}
-                    </Text>
-                  </View>
                 </View>
               </View>
+
+              <View style={styles.cardBottomDivMain}>
+                <View style={styles.ratingMain}>
+                  <Icon name="star" size={19} color="#F9A23B" />
+                  <Text style={styles.ratingParentText}>
+                    {shop.shop_rating}{' '}
+                    <Text style={styles.ratingChildText}>
+                      ({shop?.shopReviewCount})
+                    </Text>
+                  </Text>
+                </View>
+                <View style={styles.ratingMain}>
+                  <Icon name="user" size={18} color="black" />
+                  <Text style={styles.ratingParentText}>
+                    {`${shop?.shopFollowerCount} K`}
+                  </Text>
+                </View>
+              </View>
+              {/* </View> */}
             </TouchableOpacity>
           </View>
         ))}
@@ -158,7 +165,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
     width: '47%',
-    height: 241,
+    height: 230,
     borderRadius: 8,
     elevation: 2,
     marginBottom: 20,
@@ -168,14 +175,15 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     fontSize: 14,
-    width: 120,
+    // width: 120,
     paddingBottom: 5,
+    alignSelf: 'center',
   },
   addressNameText: {
     color: 'rgba(21, 24, 39, 0.40)',
     fontWeight: '600',
     fontSize: 14,
-    width: 100,
+    // width: 100,
   },
   shopMain: {
     display: 'flex',
@@ -189,7 +197,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    alignSelf: 'center',
     gap: 20,
   },
   ratingMain: {
