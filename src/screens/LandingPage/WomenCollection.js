@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     alignSelf: 'center',
+    textAlign: 'center',
     color: 'rgba(24, 23, 37, 0.56)',
     fontSize: 16,
     fontWeight: '500',

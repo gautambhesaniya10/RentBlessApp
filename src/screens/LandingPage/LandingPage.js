@@ -263,7 +263,8 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   worksH2Text: {
-    alignSelf: 'center',
+    // alignSelf: 'center',
+    textAlign: 'center',
     color: 'rgba(24, 23, 37, 0.56)',
     fontSize: 16,
     fontWeight: '500',
