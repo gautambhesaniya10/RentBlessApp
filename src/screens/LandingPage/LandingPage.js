@@ -15,13 +15,53 @@ import WomenCollection from './WomenCollection';
 import FeaturedVendors from './FeaturedVendors';
 import {loadProductsStart} from '../../redux/ProductSlice/ProductSlice';
 import {useDispatch} from 'react-redux';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {Dimensions} from 'react-native';
 
 const LandingPage = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('customer');
+  const [activeSlide, setActiveSlide] = useState(0);
 
-  const scrollViewRef = useRef(null);
+  const carouselRef = useRef(null);
+  const {width: screenWidth} = Dimensions.get('window');
+
+  const TopCarouselData = [
+    {title: 'Item 1', image: require('../../images/ProductIMg.png')},
+    {title: 'Item 2', image: require('../../images/banner.jpg')},
+    {title: 'Item 3', image: require('../../images/menTshirt.png')},
+  ];
+
+  const autoplayConfig = {
+    autoplay: true,
+    autoplayInterval: 2000,
+    loop: true,
+  };
+
+  const CarouselRenderItem = ({item}) => (
+    <View style={styles.sliderMainView}>
+      <View style={{width: '60%'}}>
+        <Image
+          source={item?.image}
+          style={{
+            height: '100%',
+            width: '100%',
+            borderRadius: 8,
+            objectFit: 'cover',
+          }}
+        />
+      </View>
+      <View style={styles.sliderRightMain}>
+        <Text style={styles.sliderH1Text}>Men’s Blazer</Text>
+        <Text style={styles.sliderH2Text}>Under ₹699</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CustomerHomePage')}>
+          <Text style={styles.sliderH2Text}>+ Explore</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   // const getAllProducts = () => {
   //   dispatch(
@@ -50,39 +90,21 @@ const LandingPage = () => {
       <CustomerHeader />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
-          <View style={{width: '100%'}}>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                flexDirection: 'row',
-                gap: 15,
-              }}
-              ref={scrollViewRef}>
-              {[0, 1, 2, 3]?.map((item, index) => (
-                <View key={index} style={styles.sliderMainView}>
-                  <View style={{width: 210}}>
-                    <Image
-                      source={require('../../images/ProductIMg.png')}
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                        borderRadius: 8,
-                        objectFit: 'cover',
-                      }}
-                    />
-                  </View>
-                  <View style={styles.sliderRightMain}>
-                    <Text style={styles.sliderH1Text}>Men’s Blazer</Text>
-                    <Text style={styles.sliderH2Text}>Under ₹699</Text>
-                    <TouchableOpacity
-                      onPress={() => navigation.navigate('CustomerHomePage')}>
-                      <Text style={styles.sliderH2Text}>+ Explore</Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
-            </ScrollView>
+          <View>
+            <Carousel
+              ref={carouselRef}
+              data={TopCarouselData}
+              renderItem={CarouselRenderItem}
+              sliderWidth={screenWidth - 30}
+              itemWidth={screenWidth - 30}
+              onSnapToItem={index => setActiveSlide(index)} // Update active slide index
+              {...autoplayConfig}
+            />
+            <Pagination
+              dotsLength={TopCarouselData?.length} // Number of dots (usually the length of your data)
+              activeDotIndex={activeSlide}
+              containerStyle={{paddingTop: 10}}
+            />
           </View>
           <View style={styles.worksMain}>
             <Text style={styles.worksH1Text}>How It Works</Text>
@@ -201,7 +223,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   sliderMainView: {
-    // width: '100%',
+    width: '100%',
     height: 200,
     backgroundColor: '#fff',
     marginTop: 20,
@@ -209,7 +231,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   sliderRightMain: {
-    width: 130,
+    width: '40%',
     alignItems: 'center',
     justifyContent: 'center',
   },

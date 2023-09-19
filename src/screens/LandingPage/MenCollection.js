@@ -5,18 +5,24 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {FontStyle} from '../../../CommonStyle';
 import {useSelector} from 'react-redux';
 import {capitalizeString} from '../../common/CapitalizeString';
 import {getProducts} from '../../graphql/queries/productQueries';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useNavigation} from '@react-navigation/native';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 const MenCollection = () => {
   const navigation = useNavigation();
   const {categories} = useSelector(state => state.categories);
-
+  const carouselRef = useRef(null);
+  const autoplayConfig = {
+    autoplay: true,
+    autoplayInterval: 2000,
+    loop: true,
+  };
   const [menCategoryLabel, setMenCategoryLabel] = useState([]);
   const [selectedMenCat, setSelectedMenCat] = useState([]);
   const [menSelectedData, setMenProductData] = useState([]);
@@ -86,22 +92,19 @@ const MenCollection = () => {
         </View>
         <View style={styles.rightSliderMain}>
           {menSelectedData?.length > 0 ? (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{
-                flexDirection: 'row',
-                gap: 20,
-                paddingRight: 20,
-              }}>
-              {menSelectedData?.map((product, index) => (
+            <Carousel
+              ref={carouselRef}
+              data={menSelectedData}
+              renderItem={product => (
                 <ProductCard
-                  key={index}
-                  product={product}
+                  product={product.item}
                   landingPageCardWith={true}
                 />
-              ))}
-            </ScrollView>
+              )}
+              sliderWidth={200}
+              itemWidth={200}
+              {...autoplayConfig}
+            />
           ) : (
             <Text style={styles.noDataText}>No Data</Text>
           )}

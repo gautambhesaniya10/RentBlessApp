@@ -143,7 +143,7 @@ const FeaturedVendors = ({shop}) => {
 
       <View>
         <TouchableOpacity onPress={() => GoToShopList()}>
-          <Text style={styles.viewAllBtn}>ViewAll</Text>
+          <Text style={styles.viewAllBtn}>View All</Text>
         </TouchableOpacity>
       </View>
     </View>
