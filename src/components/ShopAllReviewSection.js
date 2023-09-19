@@ -5,18 +5,33 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import CustomButton from '../common/CustomButton';
 import {Divider, ProgressBar} from 'react-native-paper';
 import {Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StarRating from 'react-native-star-rating-widget';
 import {useNavigation} from '@react-navigation/native';
+import {formatDate, getReviewedTimeString} from '../utils';
 
 const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
   const navigation = useNavigation();
 
   const displayReview = viewAllBtn ? 3 : shopReviews?.length;
+  const [latestReview, setLatestReview] = useState(null);
+
+  useEffect(() => {
+    if (shopReviews?.length > 0) {
+      const sortedReviews = shopReviews
+        ?.map(review => ({
+          ...review,
+          updatedAt: new Date(parseInt(review.updatedAt)),
+        }))
+        .sort((a, b) => b.updatedAt - a.updatedAt);
+      const latest = sortedReviews[0];
+      setLatestReview(latest);
+    }
+  }, [shopReviews]);
 
   return (
     <View>
@@ -24,7 +39,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
         <View>
           <Text style={styles.reText}>Reviews</Text>
           <Text style={styles.reBoText}>
-            Last Review Updated on 20 Dec 2023
+            Last Review Updated on {formatDate(latestReview?.updatedAt)}
           </Text>
         </View>
         <TouchableOpacity
@@ -61,30 +76,30 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
 
       <View style={{marginTop: 20}}>
         <Text style={styles.DistributionText}>Rating Distribution</Text>
-        {shopReviews?.length > 0 ? (
-          [5, 4, 3, 2, 1]?.map?.((star, index) => (
-            <View style={styles.progressBarMain}>
-              <Text>
-                {star} {''} <Icon name="star" size={12} color="black" />
-              </Text>
-              <ProgressBar
-                style={{width: 220}}
-                progress={
-                  shopReviews?.filter(itm => itm?.stars === star)?.length /
-                  shopReviews?.length
-                }
-                color="green"
-              />
-              <Text>
-                {shopReviews?.filter(itm => itm.stars === star)?.length} Reviews
-              </Text>
-            </View>
-          ))
-        ) : (
-          <View style={{paddingVertical: 40}}>
-            <ActivityIndicator />
-          </View>
-        )}
+        {shopReviews?.length > 0
+          ? [5, 4, 3, 2, 1]?.map?.((star, index) => (
+              <View style={styles.progressBarMain}>
+                <Text>
+                  {star} {''} <Icon name="star" size={12} color="black" />
+                </Text>
+                <ProgressBar
+                  style={{width: 220}}
+                  progress={
+                    shopReviews?.filter(itm => itm?.stars === star)?.length /
+                    shopReviews?.length
+                  }
+                  color="green"
+                />
+                <Text>
+                  {shopReviews?.filter(itm => itm.stars === star)?.length}{' '}
+                  Reviews
+                </Text>
+              </View>
+            ))
+          : // <View style={{paddingVertical: 40}}>
+            //   <ActivityIndicator />
+            // </View>
+            ''}
       </View>
 
       <Divider style={{marginVertical: 20}} />
@@ -115,7 +130,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
                   fontWeight: '400',
                   fontSize: 14,
                 }}>
-                {review?.user_type}
+                {getReviewedTimeString(review?.updatedAt)}
               </Text>
             </View>
           </View>
