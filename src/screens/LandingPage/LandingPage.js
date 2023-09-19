@@ -321,12 +321,14 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingVertical: 10,
     alignSelf: 'center',
+    textAlign: 'center',
   },
   chooseDesText: {
     color: 'rgba(24, 23, 37, 0.56)',
     fontWeight: '400',
     fontSize: 14,
     alignSelf: 'center',
+    textAlign: 'center',
   },
   tabBottomVendorInnerMainDiv: {
     flexDirection: 'row',

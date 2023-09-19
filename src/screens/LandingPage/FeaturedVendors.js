@@ -131,7 +131,7 @@ const FeaturedVendors = ({shop}) => {
                 <View style={styles.ratingMain}>
                   <Icon name="user" size={18} color="black" />
                   <Text style={styles.ratingParentText}>
-                    {`${shop?.shopFollowerCount} K`}
+                    {`${shop?.shopFollowerCount}`}
                   </Text>
                 </View>
               </View>
@@ -238,6 +238,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     paddingBottom: 10,
     textDecorationLine: 'underline',
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
   },
 });

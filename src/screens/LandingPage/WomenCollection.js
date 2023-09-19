@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -20,6 +21,7 @@ const WomenCollection = () => {
   const [woMenCategoryLabel, setWoMenCategoryLabel] = useState([]);
   const [selectedWomenCat, setSelectedWomenCat] = useState([]);
   const [woMenSelectedData, setWoMenProductData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const carouselRef = useRef(null);
   const autoplayConfig = {
@@ -38,7 +40,8 @@ const WomenCollection = () => {
   }, [categories]);
 
   const getWoMenProduct = async () => {
-    const response = await getProducts({
+    setLoading(true);
+    await getProducts({
       pageData: {
         skip: 0,
         limit: 5,
@@ -50,8 +53,12 @@ const WomenCollection = () => {
       shopId: [],
       sort: 'new',
       search: '',
-    });
-    setWoMenProductData(response?.data?.productList?.data);
+    })
+      .then(response => {
+        setLoading(false);
+        setWoMenProductData(response?.data?.productList?.data);
+      })
+      .catch(err => setLoading(false));
   };
 
   useEffect(() => {
@@ -93,7 +100,9 @@ const WomenCollection = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.rightSliderMain}>
-          {woMenSelectedData?.length > 0 ? (
+          {loading ? (
+            <ActivityIndicator />
+          ) : woMenSelectedData?.length > 0 ? (
             <Carousel
               ref={carouselRef}
               data={woMenSelectedData}

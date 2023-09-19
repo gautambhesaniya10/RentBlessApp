@@ -78,7 +78,7 @@ const ShopCard = ({shop}) => {
           <View style={styles.ratingMain}>
             <Icon name="user" size={18} color="black" />
             <Text style={styles.ratingParentText}>
-              {`${shop?.shopFollowerCount} K`}
+              {`${shop?.shopFollowerCount}`}
             </Text>
           </View>
         </View>

@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -26,6 +27,7 @@ const MenCollection = () => {
   const [menCategoryLabel, setMenCategoryLabel] = useState([]);
   const [selectedMenCat, setSelectedMenCat] = useState([]);
   const [menSelectedData, setMenProductData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const filterMenData = categories.filter(
@@ -37,7 +39,8 @@ const MenCollection = () => {
   }, [categories]);
 
   const getMenProduct = async () => {
-    const response = await getProducts({
+    setLoading(true);
+    await getProducts({
       pageData: {
         skip: 0,
         limit: 5,
@@ -49,8 +52,12 @@ const MenCollection = () => {
       shopId: [],
       sort: 'new',
       search: '',
-    });
-    setMenProductData(response?.data?.productList?.data);
+    })
+      .then(response => {
+        setLoading(false);
+        setMenProductData(response?.data?.productList?.data);
+      })
+      .catch(err => setLoading(false));
   };
 
   useEffect(() => {
@@ -91,7 +98,9 @@ const MenCollection = () => {
           </TouchableOpacity>
         </View>
         <View style={styles.rightSliderMain}>
-          {menSelectedData?.length > 0 ? (
+          {loading ? (
+            <ActivityIndicator />
+          ) : menSelectedData?.length > 0 ? (
             <Carousel
               ref={carouselRef}
               data={menSelectedData}
@@ -106,7 +115,9 @@ const MenCollection = () => {
               {...autoplayConfig}
             />
           ) : (
-            <Text style={styles.noDataText}>No Data</Text>
+            <>
+              <Text style={styles.noDataText}>No Data</Text>
+            </>
           )}
         </View>
       </View>
