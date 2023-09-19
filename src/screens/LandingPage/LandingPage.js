@@ -250,7 +250,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   worksMain: {
-    marginTop: 25,
     marginBottom: 15,
     width: '90%',
     alignSelf: 'center',
