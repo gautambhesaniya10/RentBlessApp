@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomerHeader from '../../components/CustomerHeader';
 import {Image} from 'react-native';
@@ -20,6 +20,8 @@ const LandingPage = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [activeTab, setActiveTab] = useState('customer');
+
+  const scrollViewRef = useRef(null);
 
   // const getAllProducts = () => {
   //   dispatch(
@@ -51,11 +53,12 @@ const LandingPage = () => {
           <View style={{width: '100%'}}>
             <ScrollView
               horizontal
-              showsHorizontalScrollIndicator={true}
+              showsHorizontalScrollIndicator={false}
               contentContainerStyle={{
                 flexDirection: 'row',
                 gap: 15,
-              }}>
+              }}
+              ref={scrollViewRef}>
               {[0, 1, 2, 3]?.map((item, index) => (
                 <View key={index} style={styles.sliderMainView}>
                   <View style={{width: 210}}>
@@ -111,24 +114,28 @@ const LandingPage = () => {
                 <View style={styles.tabBottomInnerLeftMainDiv}>
                   <Image
                     source={require('../../images/storeCloth.png')}
-                    style={{width: 40, height: 40}}
+                    style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
-                  <Text style={styles.chooseText}>Choose Cloth For Rent</Text>
-                  <Text style={styles.chooseDesText}>
-                    Choose your rental outfit from different collection
-                  </Text>
+                  <View style={{alignSelf: 'center'}}>
+                    <Text style={styles.chooseText}>Choose Cloth For Rent</Text>
+                    <Text style={styles.chooseDesText}>
+                      Choose your rental outfit from different collection
+                    </Text>
+                  </View>
                 </View>
                 <View style={styles.tabBottomInnerRightMainDiv}>
                   <Image
                     source={require('../../images/storeCloth.png')}
-                    style={{width: 40, height: 40}}
+                    style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
-                  <Text style={styles.chooseText}>Connect With Vendors</Text>
-                  <Text style={styles.chooseDesText}>
-                    After choosing your desired clothing reach out to the vendor
-                    directly through whatsapp or a direct phone call to inquire
-                    about pricing, availibity and other T&C.
-                  </Text>
+                  <View style={{alignSelf: 'center'}}>
+                    <Text style={styles.chooseText}>Connect With Vendors</Text>
+                    <Text style={styles.chooseDesText}>
+                      After choosing your desired clothing reach out to the
+                      vendor directly through whatsapp or a direct phone call to
+                      inquire about pricing, availibity and other T&C.
+                    </Text>
+                  </View>
                 </View>
               </View>
             ) : (
@@ -137,35 +144,43 @@ const LandingPage = () => {
                   <View style={styles.tabBottomInnerLeftMainDiv}>
                     <Image
                       source={require('../../images/ownShopImg.png')}
-                      style={{width: 40, height: 40}}
+                      style={{width: 40, height: 40, alignSelf: 'center'}}
                     />
-                    <Text style={styles.chooseText}>Create Your Own Shop</Text>
-                    <Text style={styles.chooseDesText}>
-                      Create your personalized experience by setting up your own
-                      shop
-                    </Text>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={styles.chooseText}>
+                        Create Your Own Shop
+                      </Text>
+                      <Text style={styles.chooseDesText}>
+                        Create your personalized experience by setting up your
+                        own shop
+                      </Text>
+                    </View>
                   </View>
                   <View style={styles.tabBottomInnerRightMainDiv}>
                     <Image
                       source={require('../../images/uploadImg.png')}
-                      style={{width: 40, height: 40}}
+                      style={{width: 40, height: 40, alignSelf: 'center'}}
                     />
-                    <Text style={styles.chooseText}>Upload Products</Text>
-                    <Text style={styles.chooseDesText}>
-                      Upload list of rental products
-                    </Text>
+                    <View style={{alignSelf: 'center'}}>
+                      <Text style={styles.chooseText}>Upload Products</Text>
+                      <Text style={styles.chooseDesText}>
+                        Upload list of rental products
+                      </Text>
+                    </View>
                   </View>
                 </View>
                 <View style={styles.tabBottomVendorInnerBottom}>
                   <Image
                     source={require('../../images/queryImg.png')}
-                    style={{width: 40, height: 40}}
+                    style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
-                  <Text style={styles.chooseText}>Get Inquiries</Text>
-                  <Text style={styles.chooseDesText}>
-                    Wait patiently for inquires to arrive via whatsapp or phone
-                    calls
-                  </Text>
+                  <View style={{alignSelf: 'center'}}>
+                    <Text style={styles.chooseText}>Get Inquiries</Text>
+                    <Text style={styles.chooseDesText}>
+                      Wait patiently for inquires to arrive via whatsapp or
+                      phone calls
+                    </Text>
+                  </View>
                 </View>
               </View>
             )}
@@ -213,7 +228,10 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   worksMain: {
-    marginVertical: 35,
+    marginTop: 25,
+    marginBottom: 15,
+    width: '90%',
+    alignSelf: 'center',
   },
   worksH1Text: {
     alignSelf: 'center',
@@ -259,6 +277,7 @@ const styles = StyleSheet.create({
   },
   tabBottomMainDiv: {
     backgroundColor: '#FFF',
+    width: '100%',
     elevation: 5,
     borderRadius: 8,
     // height: 150,
@@ -270,26 +289,27 @@ const styles = StyleSheet.create({
   },
   tabBottomInnerLeftMainDiv: {
     width: '50%',
-    alignItems: 'center',
   },
   tabBottomInnerRightMainDiv: {
     width: '50%',
-    alignItems: 'center',
   },
   chooseText: {
     color: '#181725',
     fontWeight: '700',
     fontSize: 20,
     paddingVertical: 10,
+    alignSelf: 'center',
   },
   chooseDesText: {
     color: 'rgba(24, 23, 37, 0.56)',
     fontWeight: '400',
     fontSize: 14,
+    alignSelf: 'center',
   },
   tabBottomVendorInnerMainDiv: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    width: '100%',
   },
   tabBottomVendorMain: {
     backgroundColor: '#FFF',
@@ -298,9 +318,9 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     paddingVertical: 25,
     paddingHorizontal: 18,
+    width: '100%',
   },
   tabBottomVendorInnerBottom: {
-    alignItems: 'center',
     marginTop: 25,
   },
 });

@@ -12,11 +12,19 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {getShops} from '../../graphql/queries/shopQueries';
 import {ScrollView} from 'react-native';
+import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
+import {useDispatch} from 'react-redux';
 
 const FeaturedVendors = ({shop}) => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const [ShopImagesModelShow, setShopImagesModelShow] = useState(false);
   const [shopData, setShopData] = useState([]);
+
+  const GoToShopList = () => {
+    dispatch(shopProductButtonChange(true));
+    navigation.navigate('CustomerHomePage');
+  };
 
   const getAllShops = async () => {
     const response = await getShops({
@@ -33,6 +41,7 @@ const FeaturedVendors = ({shop}) => {
 
   useEffect(() => {
     getAllShops();
+    dispatch(shopProductButtonChange(false));
   }, []);
 
   return (
@@ -131,6 +140,12 @@ const FeaturedVendors = ({shop}) => {
           </View>
         ))}
       </View>
+
+      <View>
+        <TouchableOpacity onPress={() => GoToShopList()}>
+          <Text style={styles.viewAllBtn}>ViewAll</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -152,6 +167,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     fontFamily: FontStyle,
+    width: '80%',
   },
 
   featuredMain: {
@@ -214,5 +230,13 @@ const styles = StyleSheet.create({
   ratingChildText: {
     color: 'black',
     fontWeight: '300',
+  },
+  viewAllBtn: {
+    color: '#29977E',
+    fontWeight: '600',
+    fontSize: 18,
+    paddingBottom: 10,
+    textDecorationLine: 'underline',
+    alignSelf: 'flex-end',
   },
 });

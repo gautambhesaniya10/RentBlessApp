@@ -79,10 +79,7 @@ const WomenCollection = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('CustomerHomePage')}>
             <Text
-              style={[
-                styles.inActiveColText,
-                {textDecorationLine: 'underline'},
-              ]}>
+              style={[styles.viewAllBtn, {textDecorationLine: 'underline'}]}>
               View All
             </Text>
           </TouchableOpacity>
@@ -123,6 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '700',
     fontFamily: FontStyle,
+    paddingBottom: 5,
   },
   descriptionText: {
     alignSelf: 'center',
@@ -131,6 +129,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontFamily: FontStyle,
     paddingBottom: 30,
+    width: '80%',
   },
   menSlideColMain: {
     width: '100%',
@@ -152,6 +151,12 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     fontFamily: FontStyle,
+    paddingBottom: 10,
+  },
+  viewAllBtn: {
+    color: '#29977E',
+    fontWeight: '600',
+    fontSize: 18,
     paddingBottom: 10,
   },
   rightSliderMain: {
