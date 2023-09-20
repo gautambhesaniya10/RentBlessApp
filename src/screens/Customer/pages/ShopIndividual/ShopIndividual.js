@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../../CommonStyle';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
 import {useToast} from 'native-base';
@@ -59,6 +59,19 @@ const ShopIndividual = () => {
   const [showBottomLoader, setShowBottomLoader] = useState(false);
 
   const [filterModelOpen, setFilterModelOpen] = useState(false);
+  const scrollViewRef = useRef(null);
+  const reviewSectionRef = useRef(null);
+
+  const handleScrollToReviewClick = () => {
+    if (scrollViewRef.current && reviewSectionRef.current) {
+      reviewSectionRef.current.measureLayout(
+        scrollViewRef.current.getInnerViewNode(),
+        (x, y, width, height) => {
+          scrollViewRef.current.scrollTo({y, animated: true});
+        },
+      );
+    }
+  };
 
   const getAllFollowers = () => {
     getShopFollowers({id: shopId}).then(res =>
@@ -223,7 +236,7 @@ const ShopIndividual = () => {
           <Text style={styles.filterBtnText}>Filters</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <View style={styles.mainContainer}>
           <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
             <Icon name="angle-left" size={30} color="black" />
@@ -299,13 +312,15 @@ const ShopIndividual = () => {
                 </Text>
                 <Text style={styles.numText}>{totalFollowers}</Text>
               </View>
-              <View style={styles.bottomItemDiv}>
+              <TouchableOpacity
+                onPress={() => handleScrollToReviewClick()}
+                style={styles.bottomItemDiv}>
                 <Text style={styles.bottomTitleText}>
                   <Icon name="pencil-square-o" size={16} color="white" />{' '}
                   Reviews
                 </Text>
                 <Text style={styles.numText}>{shopReviews?.length}</Text>
-              </View>
+              </TouchableOpacity>
               <View style={styles.bottomItemDiv}>
                 <TouchableOpacity onPress={() => shareContent()}>
                   <Text style={styles.bottomTitleText}>
@@ -346,11 +361,13 @@ const ShopIndividual = () => {
             </View>
           )}
 
-          <ShopAllReviewSection
-            shopReviews={shopReviews}
-            viewAllBtn={false}
-            shopDetails={shopDetails}
-          />
+          <View ref={reviewSectionRef}>
+            <ShopAllReviewSection
+              shopReviews={shopReviews}
+              viewAllBtn={false}
+              shopDetails={shopDetails}
+            />
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -419,7 +436,7 @@ const styles = StyleSheet.create({
   },
   numText: {
     color: '#FFF',
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: '600',
   },
   bottomItemDiv: {
