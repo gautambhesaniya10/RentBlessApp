@@ -19,6 +19,14 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
 
   const displayReview = viewAllBtn ? 3 : shopReviews?.length;
   const [latestReview, setLatestReview] = useState(null);
+  const [avgShopRating, setAvgShopRating] = useState(0);
+
+  useEffect(() => {
+    var rating = 0;
+    shopReviews.map(itm =>
+      setAvgShopRating(Math.round((rating += itm.stars) / shopReviews.length)),
+    );
+  }, [shopReviews]);
 
   useEffect(() => {
     if (shopReviews?.length > 0) {
@@ -36,10 +44,11 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
   return (
     <View>
       <View style={styles.reviewMainHeader}>
-        <View>
+        <View style={{flexDirection: 'row', alignItems: 'center', gap: 5}}>
           <Text style={styles.reText}>Reviews</Text>
-          <Text style={styles.reBoText}>
-            Last Review Updated on {formatDate(latestReview?.updatedAt)}
+          <Text
+            style={[styles.fiveStarText, {color: 'rgba(21, 24, 39, 0.40)'}]}>
+            ({shopReviews?.length} Reviews)
           </Text>
         </View>
         <TouchableOpacity
@@ -58,20 +67,18 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.supMain}>
+        <View style={styles.avgRatingMain}>
+          <Text style={styles.avgRatingText}>{avgShopRating}</Text>
+          <Text style={styles.avgTotalRatingText}>/5</Text>
+        </View>
         <StarRating
           starSize={22}
           starStyle={{marginHorizontal: 0}}
-          rating={1}
-          maxStars={1}
+          rating={avgShopRating}
+          maxStars={5}
           emptyColor="#CCCFD2"
           onChange={() => {}}
         />
-        <Text style={styles.fiveStarText}>
-          5 Superb{' '}
-          <Text style={{color: 'rgba(21, 24, 39, 0.40)'}}>
-            ({shopReviews?.length} Reviews)
-          </Text>
-        </Text>
       </View>
 
       <View style={{marginTop: 20}}>
@@ -100,6 +107,9 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
             //   <ActivityIndicator />
             // </View>
             ''}
+        <Text style={styles.reBoText}>
+          Last Review Updated on {formatDate(latestReview?.updatedAt)}
+        </Text>
       </View>
 
       <Divider style={{marginVertical: 20}} />
@@ -132,9 +142,9 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
                 }}>
                 {getReviewedTimeString(review?.updatedAt)}
               </Text>
+              <Text style={styles.revDesText}>{review?.message}</Text>
             </View>
           </View>
-          <Text style={styles.revDesText}>{review?.message}</Text>
           <Divider style={{marginVertical: 20}} />
         </View>
       ))}
@@ -184,9 +194,25 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
   },
   supMain: {
+    // flexDirection: 'row',
+    // alignItems: 'center',
+    marginTop: 8,
+  },
+  avgRatingMain: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    gap: 1,
+    paddingLeft: 35,
+  },
+  avgRatingText: {
+    color: 'black',
+    fontSize: 32,
+    fontWeight: '600',
+  },
+  avgTotalRatingText: {
+    color: 'black',
+    fontSize: 22,
+    fontWeight: '400',
   },
   fiveStarText: {
     color: '#151827',
@@ -195,7 +221,6 @@ const styles = StyleSheet.create({
   },
   cardTopDiv: {
     flexDirection: 'row',
-    alignItems: 'center',
     gap: 20,
   },
   countStarMain: {

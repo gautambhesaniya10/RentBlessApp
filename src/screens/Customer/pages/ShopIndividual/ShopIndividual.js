@@ -379,7 +379,7 @@ const styles = StyleSheet.create({
   },
   firstText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: '700',
     fontFamily: FontStyle,
     paddingBottom: 3,
@@ -402,7 +402,7 @@ const styles = StyleSheet.create({
   followBtnMain: {
     flexDirection: 'row',
     gap: 10,
-    marginVertical: 18,
+    marginTop: 10,
   },
   cardBottomMain: {
     flexDirection: 'row',
@@ -475,7 +475,7 @@ const styles = StyleSheet.create({
   seeBranchLink: {
     color: '#3ac1a8',
     textDecorationLine: 'underline',
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '500',
     paddingTop: 5,
   },
