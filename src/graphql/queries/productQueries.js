@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
+import {gql} from '@apollo/client';
+import client from '../apollo-client';
 
-export const getProducts = async (payload) => {
+export const getProducts = async payload => {
   const result = await client.query({
     query: gql`
       query ProductList(
@@ -102,13 +102,13 @@ export const getProducts = async (payload) => {
       sort: payload.sort,
       search: payload.search,
     },
-    fetchPolicy: "no-cache",
+    fetchPolicy: 'no-cache',
   });
 
   return result;
 };
 
-export const getProductDetails = async (payload) => {
+export const getProductDetails = async payload => {
   const result = await client.query({
     query: gql`
       query Product($productId: String) {
@@ -258,6 +258,7 @@ export const getProductDetails = async (payload) => {
     variables: {
       productId: payload.id,
     },
+    fetchPolicy: 'no-cache',
   });
   return result;
 };

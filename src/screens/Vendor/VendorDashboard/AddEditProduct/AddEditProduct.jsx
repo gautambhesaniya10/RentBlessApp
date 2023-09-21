@@ -12,15 +12,22 @@ import {BackGroundStyle, FontStyle} from '../../../../../CommonStyle';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
 import {MultipleImageUploadFile} from '../../../../services/MultipleImageUploadFile';
-import {createProduct} from '../../../../graphql/mutations/products';
+import {
+  createProduct,
+  updateProduct,
+} from '../../../../graphql/mutations/products';
 import {useSelector} from 'react-redux';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {VideoUploadFile} from '../../../../services/VideoUploadFile';
+import {getProductDetails} from '../../../../graphql/queries/productQueries';
+import {deleteMedia} from '../../../../graphql/mutations/deleteMedia';
+import RNFetchBlob from 'rn-fetch-blob';
 
 const AddEditProduct = () => {
   const toast = useToast();
   const navigation = useNavigation();
+  const router = useRoute();
 
   const {
     handleSubmit,
@@ -80,6 +87,12 @@ const AddEditProduct = () => {
   };
 
   useEffect(() => {
+    if (router?.params?.state?.productEditId) {
+      setEditProductId(router?.params?.state?.productEditId);
+    }
+  }, [router?.params?.state?.productEditId]);
+
+  useEffect(() => {
     if (ProductImgError?.length === 3) {
       setError({...error, productImages: ''});
     }
@@ -116,10 +129,12 @@ const AddEditProduct = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     // Set the initial content when the component mounts
-  //     richtext.current?.setContentHTML('<p>Hello, Rich Editor!</p>');
-  //   }, []);
+  useEffect(() => {
+    // Set the initial content when the component mounts
+    if (editProductId !== undefined) {
+      richtext.current?.setContentHTML(editorDescriptionContent);
+    }
+  }, [editProductId, editorDescriptionContent]);
 
   const ChooseProductImages = index => {
     let options = {
@@ -180,6 +195,112 @@ const AddEditProduct = () => {
       }
     });
   };
+
+  const srcToFile = async (src, fileName, mimeType) => {
+    const response = await RNFetchBlob.fetch('GET', src);
+    const buf = await response.blob();
+    const file = new File([buf], fileName, {type: mimeType});
+
+    let ext = '';
+    if (mimeType === 'image/png') {
+      ext = 'jpg';
+    } else if (mimeType === 'video') {
+      ext = 'mp4';
+    }
+    const storeLocalUrl = await RNFetchBlob.config({
+      fileCache: true,
+      appendExt: ext,
+    }).fetch('GET', src);
+    const imagePath = storeLocalUrl.path();
+    const imagePathModify = `file://${imagePath}`;
+
+    const reFactorFile = {
+      ...file?._data,
+      fileName: file?._data?.name,
+      fileSize: file?._data?.size,
+      uri: imagePathModify,
+    };
+    return reFactorFile;
+  };
+
+  useEffect(() => {
+    if (editProductId !== undefined) {
+      getProductDetails({id: editProductId}).then(res => {
+        console.log(
+          'res:::111111111111',
+          res?.data?.product?.data?.product_name,
+        );
+
+        setValue('product_name', res?.data?.product?.data?.product_name);
+        setEditorDescriptionContent(
+          res?.data?.product?.data?.product_description,
+        );
+        setValue('product_color', res?.data?.product.data?.product_color);
+        setValue('product_type', res?.data?.product?.data?.product_type);
+        setProductType(res?.data?.product?.data.product_type);
+        setValue(
+          'product_category',
+          res?.data?.product?.data?.categoryInfo?.id,
+        );
+        setValue('product_branch', res?.data?.product?.data?.branchInfo?.id);
+
+        res?.data?.product?.data?.product_image?.front &&
+          srcToFile(
+            res?.data?.product?.data?.product_image?.front,
+            'front.png',
+            'image/png',
+          ).then(file => {
+            setUploadProductImages(old => [...old, file]);
+          });
+
+        res?.data?.product?.data?.product_image?.back &&
+          srcToFile(
+            res?.data?.product?.data?.product_image?.back,
+            'back.png',
+            'image/png',
+          ).then(file => {
+            setUploadProductImages(old => [...old, file]);
+          });
+
+        res?.data?.product?.data?.product_image?.side &&
+          srcToFile(
+            res?.data?.product?.data?.product_image?.side,
+            'side.png',
+            'image/png',
+          ).then(file => {
+            setUploadProductImages(old => [...old, file]);
+          });
+
+        res?.data?.product?.data?.product_image?.front &&
+          setProductImages(old => [
+            ...old,
+            res?.data?.product?.data?.product_image?.front,
+          ]);
+        res?.data?.product?.data?.product_image?.back &&
+          setProductImages(old => [
+            ...old,
+            res?.data?.product?.data?.product_image?.back,
+          ]);
+        res?.data?.product?.data?.product_image?.side &&
+          setProductImages(old => [
+            ...old,
+            res?.data?.product?.data?.product_image?.side,
+          ]);
+
+        res?.data?.product?.data?.product_video &&
+          srcToFile(
+            res?.data?.product?.data?.product_video,
+            'profile.mp4',
+            'video',
+          ).then(file => {
+            setUploadProductVideo(file);
+          });
+
+        res?.data?.product?.data?.product_video &&
+          setProductVideo(res?.data?.product?.data?.product_video);
+      });
+    }
+  }, [router?.params?.state?.productEditId, editProductId, setValue]);
 
   const onSubmitProduct = data => {
     if (editorDescriptionContent === '') {
@@ -265,20 +386,115 @@ const AddEditProduct = () => {
                 },
               );
         });
+      } else {
+        productImages?.map(img =>
+          deleteMedia({
+            file: img,
+            fileType: 'image',
+          }).then(res => setProductImages([])),
+        );
+
+        productVideo !== undefined &&
+          deleteMedia({
+            file: productVideo,
+            fileType: 'video',
+          }).then(res => setProductVideo());
+
+        MultipleImageUploadFile(uploadProductImages).then(res => {
+          uploadProductVideo !== undefined
+            ? VideoUploadFile(uploadProductVideo).then(videoResponse => {
+                updateProduct({
+                  id: editProductId,
+                  productInfo: {
+                    branch_id: data.product_branch,
+                    category_id: data.product_category,
+                    product_color: data.product_color,
+                    product_description: editorDescriptionContent,
+                    product_name: data.product_name,
+                    product_type: data.product_type,
+                    product_image: {
+                      front: res.data.data.multipleUpload[0],
+                      back: res.data.data.multipleUpload[1],
+                      side: res.data.data.multipleUpload[2],
+                    },
+                    product_video: videoResponse.data.data.singleUpload,
+                  },
+                }).then(
+                  res => {
+                    console.log('res:::', res);
+                    toast.show({
+                      title: res.data.updateProduct.message,
+                      placement: 'top',
+                      backgroundColor: 'green.600',
+                      variant: 'solid',
+                    });
+                    setLoading(false);
+                    handleProductListingModalClose();
+                  },
+                  error => {
+                    setLoading(false);
+                    toast.show({
+                      title: error.message,
+                      placement: 'top',
+                      backgroundColor: 'red.600',
+                      variant: 'solid',
+                    });
+                  },
+                );
+              })
+            : updateProduct({
+                id: editProductId,
+                productInfo: {
+                  branch_id: data.product_branch,
+                  category_id: data.product_category,
+                  product_color: data.product_color,
+                  product_description: editorDescriptionContent,
+                  product_name: data.product_name,
+                  product_type: data.product_type,
+                  product_image: {
+                    front: res.data.data.multipleUpload[0],
+                    back: res.data.data.multipleUpload[1],
+                    side: res.data.data.multipleUpload[2],
+                  },
+                },
+              }).then(
+                res => {
+                  console.log('res:::', res);
+                  setLoading(false);
+                  toast.show({
+                    title: res.data.updateProduct.message,
+                    placement: 'top',
+                    backgroundColor: 'green.600',
+                    variant: 'solid',
+                  });
+                  handleProductListingModalClose();
+                },
+                error => {
+                  setLoading(false);
+                  toast.show({
+                    title: error.message,
+                    placement: 'top',
+                    backgroundColor: 'red.600',
+                    variant: 'solid',
+                  });
+                },
+              );
+        });
       }
     }
   };
 
   const handleProductListingModalClose = () => {
     reset();
-    setProductType();
-    setProductImages([]);
-    setUploadProductImages([]);
-    setProductVideo();
-    setUploadProductVideo();
     setEditProductId();
-    // setOpenAddEditProduct(false);
+    setProductType();
+
     navigation.goBack();
+    // setOpenAddEditProduct(false);
+    setProductVideo();
+    setUploadProductImages([]);
+    setUploadProductVideo();
+    setProductImages([]);
   };
 
   return (
@@ -294,7 +510,9 @@ const AddEditProduct = () => {
               size={26}
               color="black"
             />
-            <Text style={styles.addBranchText}>Add Product</Text>
+            <Text style={styles.addBranchText}>
+              {editProductId !== undefined ? 'Edit' : 'Add'} Product
+            </Text>
           </View>
           <View>
             <View style={{marginBottom: 15}}>
@@ -474,6 +692,7 @@ const AddEditProduct = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
+                gap: 10,
               }}>
               {['One', 'Two', 'Three']?.map((item, index) => {
                 return (
@@ -548,7 +767,9 @@ const AddEditProduct = () => {
 
             <View style={{width: '100%', marginTop: 20}}>
               <CustomButton
-                name="Add Product"
+                name={
+                  editProductId !== undefined ? 'Edit Product' : 'Add Product'
+                }
                 color="#FFFFFF"
                 backgroundColor="#29977E"
                 borderColor="#29977E"
@@ -587,15 +808,15 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderWidth: 1,
     borderColor: 'gray',
-    height: 190,
+    // height: 190,
   },
   richEditor: {
-    minHeight: 100, // Set the desired height here
+    // minHeight: 100, // Set the desired height here
     // You can also use maxHeight or height with percentages or flex values
     // height: '50%',
     // height: 300,
-    borderWidth: 1,
-    borderColor: 'gray',
+    // borderWidth: 1,
+    // borderColor: 'gray',
   },
   richToolbar: {
     borderTopWidth: 1,
