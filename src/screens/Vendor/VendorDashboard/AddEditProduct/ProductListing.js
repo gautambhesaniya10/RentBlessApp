@@ -42,12 +42,14 @@ const ProductListing = () => {
   // const useProfileData = useSelector(state => state?.user.userProfile);
   const [productPageSkip, setProductPageSkip] = useState(0);
 
+  const ProductLimit = 5;
+
   const getAllProducts = () => {
     dispatch(
       loadProductsStart({
         pageData: {
           skip: productPageSkip,
-          limit: 5,
+          limit: ProductLimit,
         },
         filter: {
           category_id: appliedProductsFilters?.categoryId?.selectedValue,
@@ -89,7 +91,7 @@ const ProductListing = () => {
   const [deleteProductId, setDeleteProductId] = useState();
 
   const handlePageChange = pageNumber => {
-    const newSkip = (pageNumber - 1) * 2;
+    const newSkip = (pageNumber - 1) * ProductLimit;
     setProductPageSkip(newSkip);
   };
 
@@ -192,7 +194,7 @@ const ProductListing = () => {
           </ScrollView>
         </View>
 
-        {productsCount > 5 && (
+        {productsCount > ProductLimit && (
           <View
             style={{
               flexDirection: 'row',
