@@ -22,9 +22,12 @@ import {
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
 import FilterDrawerModel from '../../common/FilterDrawerModel';
+import {emptyProductFilter} from '../../redux/ProductFilter/ProductFilterSlice';
+import {useIsFocused} from '@react-navigation/native';
 
 const HomePage = () => {
   const dispatch = useDispatch();
+  const IsFocused = useIsFocused();
 
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
@@ -103,10 +106,16 @@ const HomePage = () => {
       }),
     );
   };
+
+  useEffect(() => {
+    dispatch(emptyProductFilter());
+  }, [IsFocused]);
+
   // useFocusEffect(
   //   React.useCallback(() => {
   //   }, []),
   // );
+
   const handleProductScroll = event => {
     setShowBottomLoader(true);
     const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
