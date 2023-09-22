@@ -19,6 +19,7 @@ import {Modal} from 'react-native';
 import CustomButton from '../../../../common/CustomButton';
 import {deleteProduct} from '../../../../graphql/mutations/products';
 import {useToast} from 'native-base';
+import TablePagination from '../../../../components/TablePagination';
 
 const ProductListing = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,7 @@ const ProductListing = () => {
       loadProductsStart({
         pageData: {
           skip: productPageSkip,
-          limit: 6,
+          limit: 5,
         },
         filter: {
           category_id: appliedProductsFilters?.categoryId?.selectedValue,
@@ -76,50 +77,21 @@ const ProductListing = () => {
     if (appliedProductsFilters.shopId.selectedValue.length > 0) {
       getAllProducts();
     }
-  }, [dispatch, appliedProductsFilters, sortFilters, isFocused]);
+  }, [
+    dispatch,
+    appliedProductsFilters,
+    sortFilters,
+    isFocused,
+    productPageSkip,
+  ]);
 
   const [productDeleteModalOpen, setProductDeleteModalOpen] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState();
 
-  // const [page, setPage] = useState(0);
-  // const [numberOfItemsPerPageList] = useState([2, 3, 4]);
-  // const [itemsPerPage, onItemsPerPageChange] = useState(
-  //   numberOfItemsPerPageList[0],
-  // );
-
-  // const [items] = useState([
-  //   {
-  //     key: 1,
-  //     name: 'Cupcake',
-  //     calories: 356,
-  //     fat: 16,
-  //   },
-  //   {
-  //     key: 2,
-  //     name: 'Eclair',
-  //     calories: 262,
-  //     fat: 16,
-  //   },
-  //   {
-  //     key: 3,
-  //     name: 'Frozen yogurt',
-  //     calories: 159,
-  //     fat: 6,
-  //   },
-  //   {
-  //     key: 4,
-  //     name: 'Gingerbread',
-  //     calories: 305,
-  //     fat: 3.7,
-  //   },
-  // ]);
-
-  // const from = page * itemsPerPage;
-  // const to = Math.min((page + 1) * itemsPerPage, items.length);
-
-  // useEffect(() => {
-  //   setPage(0);
-  // }, [itemsPerPage]);
+  const handlePageChange = pageNumber => {
+    const newSkip = (pageNumber - 1) * 2;
+    setProductPageSkip(newSkip);
+  };
 
   return (
     <View style={{flex: 1}}>
@@ -132,7 +104,7 @@ const ProductListing = () => {
           />
         </View>
 
-        <View style={{marginVertical: 15}}>
+        <View style={{marginTop: 15}}>
           <ScrollView horizontal={true}>
             <View style={styles.productTable}>
               {/* Render table headers */}
@@ -219,6 +191,22 @@ const ProductListing = () => {
             </View>
           </ScrollView>
         </View>
+
+        {productsCount > 5 && (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              marginBottom: 15,
+            }}>
+            <TablePagination
+              totalItems={productsCount}
+              numOfPages={numOfPages}
+              itemsPerPage={2}
+              onPageChange={handlePageChange}
+            />
+          </View>
+        )}
       </View>
       <ProductDeleteModel
         productDeleteModalOpen={productDeleteModalOpen}
@@ -355,15 +343,15 @@ const styles = StyleSheet.create({
   },
 
   productTable: {
-    borderWidth: 1,
-    borderColor: 'black',
     marginBottom: 20,
+    marginHorizontal: 2,
+    backgroundColor: 'white',
+    elevation: 5,
   },
   tableRow: {
     flexDirection: 'row',
   },
   tableHeader: {
-    // flex: 1,
     padding: 10,
     fontWeight: 'bold',
     textAlign: 'center',
@@ -371,10 +359,9 @@ const styles = StyleSheet.create({
     color: '#FFFF',
   },
   tableCell: {
-    // flex: 1,
     padding: 10,
     textAlign: 'center',
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: '#151827',
   },
 });
