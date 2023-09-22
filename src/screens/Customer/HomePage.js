@@ -107,9 +107,9 @@ const HomePage = () => {
     );
   };
 
-  useEffect(() => {
-    dispatch(emptyProductFilter());
-  }, [IsFocused]);
+  // useEffect(() => {
+  //   dispatch(emptyProductFilter());
+  // }, [IsFocused]);
 
   // useFocusEffect(
   //   React.useCallback(() => {
