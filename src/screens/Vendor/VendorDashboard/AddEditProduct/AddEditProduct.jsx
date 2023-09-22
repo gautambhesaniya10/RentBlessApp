@@ -129,13 +129,6 @@ const AddEditProduct = () => {
     }
   };
 
-  // useEffect(() => {
-  //   // Set the initial content when the component mounts
-  //   if (editProductId !== undefined) {
-  //     richtext.current?.setContentHTML(editorDescriptionContent);
-  //   }
-  // }, [router?.params?.state?.productEditId, editProductId]);
-
   const ChooseProductImages = index => {
     let options = {
       title: 'Select Product Image',
