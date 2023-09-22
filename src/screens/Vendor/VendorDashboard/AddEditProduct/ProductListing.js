@@ -202,9 +202,9 @@ const ProductListing = () => {
               marginBottom: 15,
             }}>
             <TablePagination
-              totalItems={productsCount}
+              // totalItems={productsCount}
+              // itemsPerPage={2}
               numOfPages={numOfPages}
-              itemsPerPage={2}
               onPageChange={handlePageChange}
             />
           </View>

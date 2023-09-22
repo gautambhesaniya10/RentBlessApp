@@ -28,6 +28,7 @@ import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlic
 import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
 import UpperFilter from '../../../../common/Customer/UpperFilter';
 import FilterDrawerModel from '../../../../common/FilterDrawerModel';
+import TablePagination from '../../../../components/TablePagination';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -55,12 +56,14 @@ const ShopIndividual = () => {
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [shopReviews, setShopReviews] = useState([]);
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
-
   const [showBottomLoader, setShowBottomLoader] = useState(false);
-
   const [filterModelOpen, setFilterModelOpen] = useState(false);
   const scrollViewRef = useRef(null);
   const reviewSectionRef = useRef(null);
+
+  const [productPageSkip, setProductPageSkip] = useState(0);
+
+  const ProductLimit = 5;
 
   const handleScrollToReviewClick = () => {
     if (scrollViewRef.current && reviewSectionRef.current) {
@@ -94,8 +97,8 @@ const ShopIndividual = () => {
     dispatch(
       loadProductsStart({
         pageData: {
-          skip: 0,
-          limit: productsCount,
+          skip: productPageSkip,
+          limit: ProductLimit,
         },
         filter: {
           category_id:
@@ -111,6 +114,11 @@ const ShopIndividual = () => {
         search: productsFiltersReducer.searchBarData,
       }),
     );
+  };
+
+  const handlePageChange = pageNumber => {
+    const newSkip = (pageNumber - 1) * ProductLimit;
+    setProductPageSkip(newSkip);
   };
 
   const shareContent = async () => {
@@ -217,7 +225,7 @@ const ShopIndividual = () => {
     productsFiltersReducer.appliedProductsFilters,
     productsFiltersReducer.sortFilters,
     productsFiltersReducer.searchBarData,
-    // productPageSkip,
+    productPageSkip,
   ]);
 
   return (
@@ -283,19 +291,6 @@ const ShopIndividual = () => {
                       iconName="plus"
                     />
                   </View>
-                  {/* <View style={{width: '40%'}}>
-                    <CustomButton
-                      name="Branches"
-                      color="white"
-                      borderColor="white"
-                      backgroundColor="#151827"
-                      onPress={() =>
-                        navigation.navigate('Branches', {
-                          state: {shopDetails: shopDetails},
-                        })
-                      }
-                    />
-                  </View> */}
                 </View>
               </View>
             </View>
@@ -360,6 +355,24 @@ const ShopIndividual = () => {
               )}
             </View>
           )}
+
+          <View>
+            {productsCount > ProductLimit && (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  marginBottom: 15,
+                }}>
+                <TablePagination
+                  // totalItems={productsCount}
+                  // itemsPerPage={2}
+                  numOfPages={numOfPages}
+                  onPageChange={handlePageChange}
+                />
+              </View>
+            )}
+          </View>
 
           <View ref={reviewSectionRef}>
             <ShopAllReviewSection
