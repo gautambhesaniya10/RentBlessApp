@@ -82,7 +82,14 @@ const CustomerHeader = ({homeScreen}) => {
             <Icon name="bars" size={22} color="white" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LandingPage')}>
-            <Text style={styles.leftText}>RENTBLESS</Text>
+            {/* <Text style={styles.leftText}>RENTBLESS</Text> */}
+            <Image
+              source={{
+                uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/rentblessLogo.png',
+              }}
+              width={100}
+              height={37}
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.container}>

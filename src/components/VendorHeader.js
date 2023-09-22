@@ -65,7 +65,14 @@ const VendorHeader = () => {
                 <Icon name="bars" size={22} color="white" />
               </TouchableOpacity>
             )}
-          <Text style={styles.leftText}>RENTBLESS</Text>
+          <Image
+            source={{
+              uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/rentblessLogo.png',
+            }}
+            width={100}
+            height={37}
+          />
+          {/* <Text style={styles.leftText}>RENTBLESS</Text> */}
         </View>
         <View>
           <TouchableOpacity
@@ -116,7 +123,8 @@ const styles = StyleSheet.create({
   mainDiv: {
     backgroundColor: '#151827',
     width: '100%',
-    height: 60,
+    // height: 70,
+    paddingVertical: 10,
     justifyContent: 'center',
   },
   leftMainDiv: {
@@ -129,6 +137,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginHorizontal: 26,
   },
   leftText: {

@@ -34,12 +34,21 @@ const Splash = () => {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: BackGroundStyle,
+        backgroundColor: '#151827',
       }}>
-      <Image
+      {/* <Image
         source={require('../images/logo.png')}
         style={{width: 191, height: 138}}
-      />
+      /> */}
+      <View style={{padding: 20}}>
+        <Image
+          source={{
+            uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/rentblessLogo.png',
+          }}
+          width={231}
+          height={86}
+        />
+      </View>
     </View>
   );
 };
