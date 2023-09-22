@@ -697,7 +697,8 @@ const AddEditProduct = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: 10,
+                // gap: 10,
+                width: '100%',
               }}>
               {['One', 'Two', 'Three']?.map((item, index) => {
                 return (
@@ -849,6 +850,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,
+    width: '30%',
   },
   editIconMain: {
     backgroundColor: 'black',
