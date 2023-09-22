@@ -129,12 +129,12 @@ const AddEditProduct = () => {
     }
   };
 
-  useEffect(() => {
-    // Set the initial content when the component mounts
-    if (editProductId !== undefined) {
-      richtext.current?.setContentHTML(editorDescriptionContent);
-    }
-  }, [editProductId, editorDescriptionContent]);
+  // useEffect(() => {
+  //   // Set the initial content when the component mounts
+  //   if (editProductId !== undefined) {
+  //     richtext.current?.setContentHTML(editorDescriptionContent);
+  //   }
+  // }, [router?.params?.state?.productEditId, editProductId]);
 
   const ChooseProductImages = index => {
     let options = {
@@ -233,6 +233,9 @@ const AddEditProduct = () => {
 
         setValue('product_name', res?.data?.product?.data?.product_name);
         setEditorDescriptionContent(
+          res?.data?.product?.data?.product_description,
+        );
+        richtext.current?.setContentHTML(
           res?.data?.product?.data?.product_description,
         );
         setValue('product_color', res?.data?.product.data?.product_color);
