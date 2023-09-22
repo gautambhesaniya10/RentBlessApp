@@ -65,17 +65,20 @@ const SubBranchTab = ({
   return (
     <View style={{flex: 1}}>
       <View style={styles.mainContainer}>
-        <View style={{width: '100%', marginBottom: 20}}>
-          <CustomButton
-            name="Add Sub Branch"
-            color="#29977E"
-            backgroundColor="#FAFCFC"
-            borderColor="#29977E"
-            onPress={() => setSubBranchModalOpen(true)}
-            icon={true}
-            iconName="plus"
-          />
-        </View>
+        {!subBranchModalOpen && (
+          <View style={{width: '100%', marginBottom: 20}}>
+            <CustomButton
+              name="Add Sub Branch"
+              color="#29977E"
+              backgroundColor="#FAFCFC"
+              borderColor="#29977E"
+              onPress={() => setSubBranchModalOpen(true)}
+              icon={true}
+              iconName="plus"
+            />
+          </View>
+        )}
+
         {subBranchModalOpen ? (
           <View>
             <SubBranchModal

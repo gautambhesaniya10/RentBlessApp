@@ -282,7 +282,7 @@ const ShopDetail = () => {
           <View style={styles.sliderMain}>
             <ScrollView
               horizontal
-              showsHorizontalScrollIndicator={false}
+              showsHorizontalScrollIndicator={true}
               contentContainerStyle={{
                 flexDirection: 'row',
                 gap: 15,
