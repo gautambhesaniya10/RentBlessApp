@@ -18,6 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useToast} from 'native-base';
 import {Divider} from 'react-native-paper';
+import {Avatar} from 'react-native-paper';
 
 const VendorHeader = () => {
   const toast = useToast();
@@ -25,6 +26,10 @@ const VendorHeader = () => {
   const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
+
+  const logoName = `${useProfileData?.first_name?.charAt(
+    0,
+  )}${useProfileData?.last_name?.charAt(0)}`;
 
   const LogOut = async () => {
     AsyncStorage.clear();
@@ -65,13 +70,7 @@ const VendorHeader = () => {
         <View>
           <TouchableOpacity
             onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
-            <Image
-              source={require('../images/profileImg.png')}
-              style={{
-                width: 30,
-                height: 30,
-              }}
-            />
+            <Avatar.Text size={35} label={logoName} backgroundColor="#29977E" />
           </TouchableOpacity>
 
           <Modal
@@ -83,15 +82,16 @@ const VendorHeader = () => {
               onPress={() => setLogoutTooltipVisible(false)}>
               <View style={{flex: 1, position: 'relative'}}>
                 <View style={styles.modelLogoutMain}>
-                  <Image
-                    source={require('../images/profileImg.png')}
+                  <View
                     style={{
-                      width: 40,
-                      height: 40,
-                      // marginLeft: 20,
                       marginTop: 15,
-                    }}
-                  />
+                    }}>
+                    <Avatar.Text
+                      size={35}
+                      label={logoName}
+                      backgroundColor="#29977E"
+                    />
+                  </View>
                   <Text style={[styles.logoutText]}>
                     {useProfileData?.first_name} {useProfileData?.last_name}
                   </Text>

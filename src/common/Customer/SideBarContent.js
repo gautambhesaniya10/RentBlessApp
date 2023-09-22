@@ -8,6 +8,7 @@ import {Divider} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import {Avatar} from 'react-native-paper';
 
 const SideBarContent = ({AccessToken}) => {
   const navigation = useNavigation();
@@ -16,15 +17,15 @@ const SideBarContent = ({AccessToken}) => {
     state => state?.productsFiltersReducer,
   );
   const {userProfile} = useSelector(state => state?.user);
+  const logoName = `${userProfile?.first_name?.charAt(
+    0,
+  )}${userProfile?.last_name?.charAt(0)}`;
 
   return (
     <View style={styles.sideMainContainer}>
       {AccessToken ? (
         <View style={styles.authUserMain}>
-          <Image
-            source={require('../../images/profileImg.png')}
-            style={{width: 55, height: 55}}
-          />
+          <Avatar.Text size={55} label={logoName} backgroundColor="#29977E" />
           <Text style={styles.userNameText} numberOfLines={1}>
             {userProfile?.first_name} {userProfile?.last_name}
           </Text>

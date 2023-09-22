@@ -226,11 +226,6 @@ const AddEditProduct = () => {
   useEffect(() => {
     if (editProductId !== undefined) {
       getProductDetails({id: editProductId}).then(res => {
-        console.log(
-          'res:::111111111111',
-          res?.data?.product?.data?.product_name,
-        );
-
         setValue('product_name', res?.data?.product?.data?.product_name);
         setEditorDescriptionContent(
           res?.data?.product?.data?.product_description,
@@ -507,12 +502,11 @@ const AddEditProduct = () => {
         style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={styles.mainContainer}>
           <View style={styles.addBranchHeader}>
-            <Icon
-              onPress={() => navigation.goBack()}
-              name="angle-left"
-              size={26}
-              color="black"
-            />
+            <TouchableOpacity
+              style={{width: 25, height: 25}}
+              onPress={() => navigation.goBack()}>
+              <Icon name="angle-left" size={26} color="black" />
+            </TouchableOpacity>
             <Text style={styles.addBranchText}>
               {editProductId !== undefined ? 'Edit' : 'Add'} Product
             </Text>
@@ -697,7 +691,6 @@ const AddEditProduct = () => {
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                // gap: 10,
                 width: '100%',
               }}>
               {['One', 'Two', 'Three']?.map((item, index) => {
@@ -850,7 +843,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,
-    width: '30%',
+    width: '26%',
   },
   editIconMain: {
     backgroundColor: 'black',

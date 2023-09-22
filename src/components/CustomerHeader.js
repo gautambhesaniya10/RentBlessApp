@@ -13,6 +13,7 @@ import {useToast} from 'native-base';
 import {Dropdown} from 'react-native-element-dropdown';
 import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
+import {Avatar} from 'react-native-paper';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
@@ -24,6 +25,10 @@ const CustomerHeader = ({homeScreen}) => {
 
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
   const [AccessToken, setAccessToken] = useState('');
+
+  const logoName = `${userProfile?.first_name?.charAt(
+    0,
+  )}${userProfile?.last_name?.charAt(0)}`;
 
   const LogOut = async () => {
     AsyncStorage.clear();
@@ -105,12 +110,17 @@ const CustomerHeader = ({homeScreen}) => {
           <View>
             <TouchableOpacity
               onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
-              <Image
+              {/* <Image
                 source={require('../images/profileImg.png')}
                 style={{
                   width: 30,
                   height: 30,
                 }}
+              /> */}
+              <Avatar.Text
+                size={35}
+                label={logoName}
+                backgroundColor="#29977E"
               />
             </TouchableOpacity>
 
@@ -123,15 +133,16 @@ const CustomerHeader = ({homeScreen}) => {
                 onPress={() => setLogoutTooltipVisible(false)}>
                 <View style={{flex: 1, position: 'relative'}}>
                   <View style={styles.modelLogoutMain}>
-                    <Image
-                      source={require('../images/profileImg.png')}
+                    <View
                       style={{
-                        width: 40,
-                        height: 40,
-                        // marginLeft: 20,
                         marginTop: 15,
-                      }}
-                    />
+                      }}>
+                      <Avatar.Text
+                        size={35}
+                        label={logoName}
+                        backgroundColor="#29977E"
+                      />
+                    </View>
                     <Text style={[styles.logoutText]}>
                       {userProfile?.first_name} {userProfile?.last_name}
                     </Text>
