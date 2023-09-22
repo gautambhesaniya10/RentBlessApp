@@ -56,6 +56,7 @@ const AddEditProduct = () => {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [editProductId, setEditProductId] = useState();
+  const [richEditorShow, setRichEditorShow] = useState(false);
 
   const richtext = useRef(null);
 
@@ -72,6 +73,12 @@ const AddEditProduct = () => {
     'black',
   ];
   const productTypeData = ['Men', 'Women'];
+
+  useEffect(() => {
+    setTimeout(() => {
+      setRichEditorShow(true);
+    }, 1000);
+  }, []);
 
   const Validate = () => {
     let isValid = true;
@@ -655,30 +662,32 @@ const AddEditProduct = () => {
                 </Text>
               )}
             </View>
-            <View style={{marginBottom: 15}}>
-              <View style={styles.container}>
-                <Text style={styles.desText}>Description</Text>
-                <RichToolbar
-                  style={styles.richToolbar}
-                  editor={richtext}
-                  actions={[
-                    actions.setBold,
-                    actions.setItalic,
-                    actions.setUnderline,
-                    actions.undo,
-                    actions.redo,
-                  ]}
-                />
-                <RichEditor
-                  ref={richtext}
-                  onChange={des => handleEditorChange(des)}
-                  style={styles.richEditor}
-                />
+            {richEditorShow && (
+              <View style={{marginBottom: 15}}>
+                <View style={styles.container}>
+                  <Text style={styles.desText}>Description</Text>
+                  <RichToolbar
+                    style={styles.richToolbar}
+                    editor={richtext}
+                    actions={[
+                      actions.setBold,
+                      actions.setItalic,
+                      actions.setUnderline,
+                      actions.undo,
+                      actions.redo,
+                    ]}
+                  />
+                  <RichEditor
+                    ref={richtext}
+                    onChange={des => handleEditorChange(des)}
+                    style={styles.richEditor}
+                  />
+                </View>
+                {errorDescription && (
+                  <Text style={{color: 'red'}}>{errorDescription}</Text>
+                )}
               </View>
-              {errorDescription && (
-                <Text style={{color: 'red'}}>{errorDescription}</Text>
-              )}
-            </View>
+            )}
 
             <Text style={styles.shopImgText}>Product Images</Text>
 
