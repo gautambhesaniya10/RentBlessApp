@@ -31,8 +31,8 @@ const LoginMainScreen = () => {
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.main}>
         <Image
-          source={require('../../images/logo.png')}
-          style={{width: 191, height: 138, alignSelf: 'center'}}
+          source={require('../../images/BlackLogoFull.png')}
+          style={{width: 231, height: 86, alignSelf: 'center'}}
         />
         <View style={{alignSelf: 'center', width: '90%'}}>
           <Text style={styles.joinText}>How you would like to join us ?</Text>

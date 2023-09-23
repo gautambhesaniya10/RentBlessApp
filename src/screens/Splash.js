@@ -3,6 +3,7 @@ import React, {useEffect} from 'react';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {BackGroundStyle} from '../../CommonStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {logoImage} from '../common/AllLiveImageLink';
 
 const Splash = () => {
   const navigation = useNavigation();
@@ -43,7 +44,7 @@ const Splash = () => {
       <View style={{padding: 20}}>
         <Image
           source={{
-            uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/rentblessLogo.png',
+            uri: logoImage,
           }}
           width={231}
           height={86}

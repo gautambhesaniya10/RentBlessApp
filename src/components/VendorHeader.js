@@ -19,6 +19,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useToast} from 'native-base';
 import {Divider} from 'react-native-paper';
 import {Avatar} from 'react-native-paper';
+import {logoImage} from '../common/AllLiveImageLink';
 
 const VendorHeader = () => {
   const toast = useToast();
@@ -67,7 +68,7 @@ const VendorHeader = () => {
             )}
           <Image
             source={{
-              uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/rentblessLogo.png',
+              uri: logoImage,
             }}
             width={100}
             height={37}

@@ -14,6 +14,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
+import {logoImage} from '../common/AllLiveImageLink';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
@@ -85,7 +86,7 @@ const CustomerHeader = ({homeScreen}) => {
             {/* <Text style={styles.leftText}>RENTBLESS</Text> */}
             <Image
               source={{
-                uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/rentblessLogo.png',
+                uri: logoImage,
               }}
               width={100}
               height={37}
