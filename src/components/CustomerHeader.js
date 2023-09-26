@@ -27,9 +27,9 @@ const CustomerHeader = ({homeScreen}) => {
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
   const [AccessToken, setAccessToken] = useState('');
 
-  const logoName = `${userProfile?.first_name?.charAt(
-    0,
-  )}${userProfile?.last_name?.charAt(0)}`;
+  const logoName = `${userProfile?.first_name
+    ?.charAt(0)
+    .toUpperCase()}${userProfile?.last_name?.charAt(0).toUpperCase()}`;
 
   const LogOut = async () => {
     AsyncStorage.clear();

@@ -27,6 +27,7 @@ import {useToast} from 'native-base';
 import {shopFollow} from '../../../graphql/mutations/shops';
 import {Modal} from 'react-native';
 import {Share} from 'react-native';
+import {Avatar} from 'react-native-paper';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -43,6 +44,13 @@ const ProductDetail = () => {
     const productDetails = await getProductDetails({id: productId});
     setProductDetails(productDetails);
   };
+  console.log(
+    'productDetails?.data?.product?.data',
+    productDetails?.data?.product?.data?.branchInfo?.manager_name,
+  );
+  const logoName =
+    productDetails?.data?.product?.data?.branchInfo?.manager_name?.split(' ');
+  console.log('logoName', logoName);
 
   const clickedByFollow = () => {
     if (isAuthenticate) {
@@ -457,9 +465,19 @@ const ProductDetail = () => {
                 </View>
               </View>
               <View style={{flexDirection: 'row', gap: 15}}>
-                <Image
-                  source={require('../../../images/profileImg.png')}
-                  style={{width: 50, height: 50, borderRadius: 25}}
+                <Avatar.Text
+                  size={50}
+                  label={
+                    productDetails?.data?.product?.data?.branchInfo?.manager_name
+                      ?.split(' ')[0]
+                      .charAt(0)
+                      .toUpperCase() +
+                    productDetails?.data?.product?.data?.branchInfo?.manager_name
+                      ?.split(' ')[1]
+                      .charAt(0)
+                      .toUpperCase()
+                  }
+                  backgroundColor="#29977E"
                 />
                 <View>
                   <Text style={styles.modelTitleName}>

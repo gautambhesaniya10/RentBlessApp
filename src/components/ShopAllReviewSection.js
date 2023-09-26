@@ -13,6 +13,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import StarRating from 'react-native-star-rating-widget';
 import {useNavigation} from '@react-navigation/native';
 import {formatDate, getReviewedTimeString} from '../utils';
+import {Avatar} from 'react-native-paper';
 
 const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
   const navigation = useNavigation();
@@ -116,9 +117,13 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
       {shopReviews?.slice(0, displayReview)?.map((review, index) => (
         <View key={index} style={styles.reviewCardContainer}>
           <View style={styles.cardTopDiv}>
-            <Image
-              source={require('../images/profileImg.png')}
-              style={{width: 50, height: 50}}
+            <Avatar.Text
+              size={50}
+              label={
+                review?.user_name?.split(' ')[0].charAt(0).toUpperCase() +
+                review?.user_name?.split(' ')[1].charAt(0).toUpperCase()
+              }
+              backgroundColor="#29977E"
             />
             <View>
               <View style={{flexDirection: 'row', gap: 15}}>

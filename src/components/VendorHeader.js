@@ -28,9 +28,9 @@ const VendorHeader = () => {
   const useProfileData = useSelector(state => state?.user.userProfile);
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
 
-  const logoName = `${useProfileData?.first_name?.charAt(
-    0,
-  )}${useProfileData?.last_name?.charAt(0)}`;
+  const logoName = `${useProfileData?.first_name
+    ?.charAt(0)
+    .toUpperCase()}${useProfileData?.last_name?.charAt(0).toUpperCase()}`;
 
   const LogOut = async () => {
     AsyncStorage.clear();

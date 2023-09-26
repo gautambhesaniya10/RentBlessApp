@@ -17,9 +17,9 @@ const SideBarContent = ({AccessToken}) => {
     state => state?.productsFiltersReducer,
   );
   const {userProfile} = useSelector(state => state?.user);
-  const logoName = `${userProfile?.first_name?.charAt(
-    0,
-  )}${userProfile?.last_name?.charAt(0)}`;
+  const logoName = `${userProfile?.first_name
+    ?.charAt(0)
+    .toUpperCase()}${userProfile?.last_name?.charAt(0).toUpperCase()}`;
 
   return (
     <View style={styles.sideMainContainer}>
