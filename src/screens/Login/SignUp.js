@@ -21,6 +21,12 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
 
+GoogleSignin.configure({
+  webClientId:
+    '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
+  showPlayServicesUpdateDialog: true, // Add this line to always show the dialog
+});
+
 const SignUp = () => {
   const toast = useToast();
   const {
@@ -123,12 +129,12 @@ const SignUp = () => {
     retrieveData();
   }, []);
 
-  useEffect(() => {
-    GoogleSignin.configure({
-      webClientId:
-        '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
-    });
-  }, []);
+  // useEffect(() => {
+  //   GoogleSignin.configure({
+  //     webClientId:
+  //       '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
+  //   });
+  // }, []);
 
   const GoogleSignUPPress = async () => {
     await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});

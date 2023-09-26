@@ -20,7 +20,7 @@ import {useToast} from 'native-base';
 import {Divider} from 'react-native-paper';
 import {Avatar} from 'react-native-paper';
 import {logoImage} from '../common/AllLiveImageLink';
-import auth from '@react-native-firebase/auth';
+// import auth from '@react-native-firebase/auth';
 
 const VendorHeader = () => {
   const toast = useToast();
@@ -35,11 +35,11 @@ const VendorHeader = () => {
 
   const LogOut = async () => {
     AsyncStorage.clear();
-    auth()
-      .signOut()
-      .then(response => {
-        console.log('SignOut');
-      });
+    // auth()
+    //   .signOut()
+    //   .then(response => {
+    //     console.log('SignOut');
+    //   });
     setLogoutTooltipVisible(false);
     dispatch(userLogout());
 
