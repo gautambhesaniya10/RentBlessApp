@@ -13,11 +13,13 @@ import CustomTextInput from '../../common/CustomTextInput';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
-import {signUp} from '../../graphql/mutations/authMutations';
+import {googleSignUp, signUp} from '../../graphql/mutations/authMutations';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 import {useSelector, useDispatch} from 'react-redux';
 import {useToast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
 const SignUp = () => {
   const toast = useToast();
@@ -51,6 +53,38 @@ const SignUp = () => {
     }
   };
 
+  const handleAfterSignUpResponse = async (userId, token, message) => {
+    setLoading(false);
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('userId', userId);
+    dispatch(loadUserProfileStart());
+    toast.show({
+      title: message,
+      placement: 'top',
+      backgroundColor: 'green.600',
+      variant: 'solid',
+    });
+    if (loginType === 'vendor') {
+      setTimeout(() => {
+        navigation.navigate('VendorMain');
+      }, 1000);
+    } else if (loginType === 'customer') {
+      setTimeout(() => {
+        navigation.navigate('CustomerMain');
+      }, 1000);
+    }
+  };
+
+  const handleAfterSignUpError = message => {
+    setLoading(false);
+    toast.show({
+      title: message,
+      placement: 'top',
+      backgroundColor: 'red.600',
+      variant: 'solid',
+    });
+  };
+
   const onSubmit = data => {
     setLoading(true);
     signUp(
@@ -72,33 +106,15 @@ const SignUp = () => {
           },
     ).then(
       async res => {
-        setLoading(false);
-        await AsyncStorage.setItem('token', res.data.signUp.token);
-        await AsyncStorage.setItem('userId', res.data.signUp.user);
-
-        //   dispatch(loginUserId(res.data.signUp.user));
-        dispatch(loadUserProfileStart());
-        //   localStorage.setItem("userId", res.data.signUp.user);
-        // alert(res.data.signUp.message);
-        toast.show({
-          title: res.data.signUp.message,
-          placement: 'top',
-          backgroundColor: 'green.600',
-          variant: 'solid',
-        });
-        if (loginType === 'vendor') {
-          setTimeout(() => {
-            navigation.navigate('VendorMain');
-          }, 1000);
-        } else if (loginType === 'customer') {
-          setTimeout(() => {
-            navigation.navigate('CustomerMain');
-          }, 1000);
-        }
+        handleAfterSignUpResponse(
+          res.data.signUp.user,
+          res.data.signUp.token,
+          res.data.signUp.message,
+        );
       },
       error => {
         console.log('eeeee', error);
-        setLoading(false);
+        handleAfterSignUpError(error);
       },
     );
   };
@@ -106,6 +122,37 @@ const SignUp = () => {
   useEffect(() => {
     retrieveData();
   }, []);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
+    });
+  }, []);
+
+  const GoogleSignUPPress = async () => {
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+
+    const userInfo = await GoogleSignin.signIn();
+
+    googleSignUp({
+      first_name: userInfo?.user?.name.split(' ')[0] || '',
+      last_name: userInfo?.user?.name.split(' ')[1] || '',
+      user_type: loginType === 'vendor' ? 'vendor' : 'customer',
+      user_email: userInfo?.user?.email,
+    }).then(
+      res =>
+        handleAfterSignUpResponse(
+          res.data.googleSignUp.user,
+          res.data.googleSignUp.token,
+          res.data.googleSignUp.message,
+        ),
+      error => {
+        console.log('eeeeeee', error);
+        handleAfterSignUpError(error.message);
+      },
+    );
+  };
 
   return (
     <View
@@ -131,7 +178,9 @@ const SignUp = () => {
           industry.
         </Text>
         <View style={{marginBottom: 16, width: '100%'}}>
-          <TouchableOpacity style={styles.socialBtnMain}>
+          <TouchableOpacity
+            onPress={() => GoogleSignUPPress()}
+            style={styles.socialBtnMain}>
             <Image
               source={require('../../images/google.png')}
               style={{width: 20, height: 20}}

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "750471046151",
+    "project_id": "rn-rentbless",
+    "storage_bucket": "rn-rentbless.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750471046151:android:b26585ff28144bfb0776a2",
+        "android_client_info": {
+          "package_name": "com.rentblessapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750471046151-6fh8rc98jrmn715ce7voq96p27nv23nu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rentblessapp",
+            "certificate_hash": "2e4e83114fb39a7727181dd78ac43fb9822762a0"
+          }
+        },
+        {
+          "client_id": "750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD46Q6_HKZpnvnb6A0ZMAm25aLO2JfknRU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

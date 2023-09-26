@@ -15,6 +15,7 @@ import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {logoImage} from '../common/AllLiveImageLink';
+import auth from '@react-native-firebase/auth';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
@@ -33,6 +34,11 @@ const CustomerHeader = ({homeScreen}) => {
 
   const LogOut = async () => {
     AsyncStorage.clear();
+    auth()
+      .signOut()
+      .then(response => {
+        console.log('SignOut');
+      });
     setLogoutTooltipVisible(false);
     dispatch(userLogout());
     setAccessToken('');

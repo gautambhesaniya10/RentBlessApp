@@ -13,11 +13,13 @@ import CustomTextInput from '../../common/CustomTextInput';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
-import {signIn} from '../../graphql/mutations/authMutations';
+import {googleSignIn, signIn} from '../../graphql/mutations/authMutations';
 import {useSelector, useDispatch} from 'react-redux';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 import {useToast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import auth from '@react-native-firebase/auth';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -47,6 +49,39 @@ const Login = () => {
       console.error('Error retrieving data:', error);
     }
   };
+
+  const handleAfterSignInResponse = async (userId, token, message) => {
+    setLoading(false);
+    await AsyncStorage.setItem('token', token);
+    await AsyncStorage.setItem('userId', userId);
+    dispatch(loadUserProfileStart());
+    toast.show({
+      title: message,
+      placement: 'top',
+      backgroundColor: 'green.600',
+      variant: 'solid',
+    });
+    if (loginType === 'vendor') {
+      setTimeout(() => {
+        navigation.navigate('VendorMain');
+      }, 1000);
+    } else if (loginType === 'customer') {
+      setTimeout(() => {
+        navigation.navigate('CustomerMain');
+      }, 1000);
+    }
+  };
+
+  const handleAfterSignInError = message => {
+    setLoading(false);
+    toast.show({
+      title: message,
+      placement: 'top',
+      backgroundColor: 'red.600',
+      variant: 'solid',
+    });
+  };
+
   const onSubmit = data => {
     setLoading(true);
     signIn({
@@ -56,40 +91,50 @@ const Login = () => {
     })
       .then(
         async res => {
-          setLoading(false);
-          await AsyncStorage.setItem('token', res.data.signIn.token);
-          await AsyncStorage.setItem('userId', res.data.signIn.user);
-          dispatch(loadUserProfileStart());
-          toast.show({
-            title: res.data.signIn.message,
-            placement: 'top',
-            backgroundColor: 'green.600',
-            variant: 'solid',
-          });
-          if (loginType === 'vendor') {
-            setTimeout(() => {
-              navigation.navigate('VendorMain');
-            }, 1000);
-          } else if (loginType === 'customer') {
-            setTimeout(() => {
-              navigation.navigate('CustomerMain');
-            }, 1000);
-          }
+          handleAfterSignInResponse(
+            res.data.signIn.user,
+            res.data.signIn.token,
+            res.data.signIn.message,
+          );
         },
         error => {
-          setLoading(false);
-          console.log('login____Error', error.message);
+          handleAfterSignInError(error.message);
         },
       )
       .catch(error => {
-        setLoading(false);
-        console.log('login____Error', error.message);
+        handleAfterSignInError(error.message);
       });
   };
 
   useEffect(() => {
     retrieveData();
   }, []);
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
+    });
+  }, []);
+
+  const GoogleSignInPress = async () => {
+    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+
+    const userInfo = await GoogleSignin.signIn();
+
+    googleSignIn({
+      username: userInfo?.user?.email,
+      type: loginType === 'vendor' ? 'vendor' : 'customer',
+    }).then(
+      res =>
+        handleAfterSignInResponse(
+          res.data.googleSignIn.user,
+          res.data.googleSignIn.token,
+          res.data.googleSignIn.message,
+        ),
+      error => handleAfterSignInError(error.message),
+    );
+  };
 
   return (
     <View
@@ -118,7 +163,9 @@ const Login = () => {
         </Text>
 
         <View style={{marginBottom: 16, width: '100%'}}>
-          <TouchableOpacity style={styles.socialBtnMain}>
+          <TouchableOpacity
+            onPress={() => GoogleSignInPress()}
+            style={styles.socialBtnMain}>
             <Image
               source={require('../../images/google.png')}
               style={{width: 20, height: 20}}
