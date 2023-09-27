@@ -13,10 +13,17 @@ import {useNavigation} from '@react-navigation/native';
 import MenCollection from './MenCollection';
 import WomenCollection from './WomenCollection';
 import FeaturedVendors from './FeaturedVendors';
-import {loadProductsStart} from '../../redux/ProductSlice/ProductSlice';
 import {useDispatch} from 'react-redux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {Dimensions} from 'react-native';
+import {
+  landingBanner1,
+  landingBanner2,
+  landingBanner3,
+  landingBanner4,
+  landingBanner5,
+  landingBanner6,
+} from '../../common/AllLiveImageLink';
 
 const LandingPage = () => {
   const navigation = useNavigation();
@@ -28,9 +35,12 @@ const LandingPage = () => {
   const {width: screenWidth} = Dimensions.get('window');
 
   const TopCarouselData = [
-    {title: 'Item 1', image: require('../../images/ProductIMg.png')},
-    {title: 'Item 2', image: require('../../images/banner.jpg')},
-    {title: 'Item 3', image: require('../../images/menTshirt.png')},
+    {image: landingBanner1},
+    {image: landingBanner3},
+    {image: landingBanner2},
+    {image: landingBanner4},
+    {image: landingBanner5},
+    {image: landingBanner6},
   ];
 
   const autoplayConfig = {
@@ -41,9 +51,9 @@ const LandingPage = () => {
 
   const CarouselRenderItem = ({item}) => (
     <View style={styles.sliderMainView}>
-      <View style={{width: '60%'}}>
+      <View style={{width: '100%'}}>
         <Image
-          source={item?.image}
+          source={{uri: item?.image}}
           style={{
             height: '100%',
             width: '100%',
@@ -52,38 +62,16 @@ const LandingPage = () => {
           }}
         />
       </View>
-      <View style={styles.sliderRightMain}>
+      {/* <View style={styles.sliderRightMain}>
         <Text style={styles.sliderH1Text}>Men’s Blazer</Text>
         <Text style={styles.sliderH2Text}>Under ₹699</Text>
         <TouchableOpacity
           onPress={() => navigation.navigate('CustomerHomePage')}>
           <Text style={styles.sliderH2Text}>+ Explore</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
     </View>
   );
-
-  // const getAllProducts = () => {
-  //   dispatch(
-  //     loadProductsStart({
-  //       pageData: {
-  //         skip: 0,
-  //         limit: 10,
-  //       },
-  //       filter: {
-  //         category_id: [],
-  //         product_color: [],
-  //       },
-  //       shopId: [],
-  //       sort: 'new',
-  //       search: '',
-  //     }),
-  //   );
-  // };
-
-  // useEffect(() => {
-  //   getAllProducts();
-  // }, []);
 
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
