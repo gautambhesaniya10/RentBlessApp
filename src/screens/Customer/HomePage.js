@@ -24,6 +24,7 @@ import ShopCard from '../../components/ShopCard/ShopCard';
 import FilterDrawerModel from '../../common/FilterDrawerModel';
 import {emptyProductFilter} from '../../redux/ProductFilter/ProductFilterSlice';
 import {useIsFocused} from '@react-navigation/native';
+import {homeCoverImage} from '../../common/AllLiveImageLink';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -225,7 +226,7 @@ const HomePage = () => {
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>
           <Image
-            source={require('../../images/banner.jpg')}
+            source={{uri: homeCoverImage}}
             style={{width: '100%', height: 150, objectFit: 'cover'}}
           />
           <View style={styles.mainContainer}>

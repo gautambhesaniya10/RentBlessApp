@@ -20,6 +20,7 @@ import {useToast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import auth from '@react-native-firebase/auth';
+import {facebookIcon, googleIcon} from '../../common/AllLiveImageLink';
 
 GoogleSignin.configure({
   webClientId:
@@ -169,13 +170,6 @@ const SignUp = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
-        {/* <View style={{alignSelf: 'center'}}>
-          <Image
-            source={require('../../images/logo.png')}
-            style={{width: 191, height: 138}}
-          />
-        </View> */}
-
         <Text style={styles.joinText}>Create an account</Text>
         <Text style={styles.childText}>
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -185,17 +179,14 @@ const SignUp = () => {
           <TouchableOpacity
             onPress={() => GoogleSignUPPress()}
             style={styles.socialBtnMain}>
-            <Image
-              source={require('../../images/google.png')}
-              style={{width: 20, height: 20}}
-            />
+            <Image source={{uri: googleIcon}} style={{width: 20, height: 20}} />
             <Text style={styles.socialText}>Continue to Google</Text>
           </TouchableOpacity>
         </View>
         <View style={{width: '100%'}}>
           <TouchableOpacity style={styles.socialBtnMain}>
             <Image
-              source={require('../../images/facebook.png')}
+              source={{uri: facebookIcon}}
               style={{width: 22, height: 22}}
             />
             <Text style={styles.socialText}>Continue to Facebook</Text>

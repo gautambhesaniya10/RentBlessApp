@@ -10,6 +10,7 @@ import {
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
+import {locationIcon} from '../../common/AllLiveImageLink';
 
 const ShopCard = ({shop}) => {
   const navigation = useNavigation();
@@ -52,7 +53,7 @@ const ShopCard = ({shop}) => {
                 gap: 2,
               }}>
               <Image
-                source={require('../../images/locationIcon.png')}
+                source={{uri: locationIcon}}
                 style={{width: 12, height: 12}}
               />
               <Text style={styles.addressNameText} numberOfLines={1}>

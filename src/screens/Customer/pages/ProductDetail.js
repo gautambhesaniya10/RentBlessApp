@@ -28,6 +28,7 @@ import {shopFollow} from '../../../graphql/mutations/shops';
 import {Modal} from 'react-native';
 import {Share} from 'react-native';
 import {Avatar} from 'react-native-paper';
+import {locationIcon} from '../../../common/AllLiveImageLink';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -274,7 +275,7 @@ const ProductDetail = () => {
               gap: 2,
             }}>
             <Image
-              source={require('../../../images/locationIcon.png')}
+              source={{uri: locationIcon}}
               style={{width: 12, height: 12, tintColor: 'white'}}
             />
             <Text numberOfLines={1} style={styles.locationText}>

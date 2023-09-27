@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../common/CustomButton';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {rentBlessBlackLogo, vendorIcon} from '../../common/AllLiveImageLink';
 
 const LoginMainScreen = () => {
   const [loginType, setLoginType] = useState('customer');
@@ -31,7 +32,7 @@ const LoginMainScreen = () => {
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.main}>
         <Image
-          source={require('../../images/BlackLogoFull.png')}
+          source={{uri: rentBlessBlackLogo}}
           style={{width: 231, height: 86, alignSelf: 'center'}}
         />
         <View style={{alignSelf: 'center', width: '90%'}}>
@@ -91,7 +92,7 @@ const LoginMainScreen = () => {
             <TouchableOpacity onPress={() => setLoginType('vendor')}>
               <View style={styles.icons}>
                 <Image
-                  source={require('../../images/shopBusinessIcon.png')}
+                  source={{uri: vendorIcon}}
                   style={{
                     width: 20,
                     height: 20,

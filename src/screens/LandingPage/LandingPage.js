@@ -23,6 +23,11 @@ import {
   landingBanner4,
   landingBanner5,
   landingBanner6,
+  store1,
+  store2,
+  store3,
+  store4,
+  store5,
 } from '../../common/AllLiveImageLink';
 
 const LandingPage = () => {
@@ -123,7 +128,7 @@ const LandingPage = () => {
               <View style={styles.tabBottomMainDiv}>
                 <View style={styles.tabBottomInnerLeftMainDiv}>
                   <Image
-                    source={require('../../images/storeCloth.png')}
+                    source={{uri: store1}}
                     style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
                   <View style={{alignSelf: 'center'}}>
@@ -135,7 +140,7 @@ const LandingPage = () => {
                 </View>
                 <View style={styles.tabBottomInnerRightMainDiv}>
                   <Image
-                    source={require('../../images/storeCloth.png')}
+                    source={{uri: store2}}
                     style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
                   <View style={{alignSelf: 'center'}}>
@@ -153,7 +158,7 @@ const LandingPage = () => {
                 <View style={styles.tabBottomVendorInnerMainDiv}>
                   <View style={styles.tabBottomInnerLeftMainDiv}>
                     <Image
-                      source={require('../../images/ownShopImg.png')}
+                      source={{uri: store3}}
                       style={{width: 40, height: 40, alignSelf: 'center'}}
                     />
                     <View style={{alignSelf: 'center'}}>
@@ -168,7 +173,7 @@ const LandingPage = () => {
                   </View>
                   <View style={styles.tabBottomInnerRightMainDiv}>
                     <Image
-                      source={require('../../images/uploadImg.png')}
+                      source={{uri: store4}}
                       style={{width: 40, height: 40, alignSelf: 'center'}}
                     />
                     <View style={{alignSelf: 'center'}}>
@@ -181,7 +186,7 @@ const LandingPage = () => {
                 </View>
                 <View style={styles.tabBottomVendorInnerBottom}>
                   <Image
-                    source={require('../../images/queryImg.png')}
+                    source={{uri: store5}}
                     style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
                   <View style={{alignSelf: 'center'}}>

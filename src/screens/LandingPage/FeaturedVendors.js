@@ -14,6 +14,7 @@ import {getShops} from '../../graphql/queries/shopQueries';
 import {ScrollView} from 'react-native';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import {useDispatch} from 'react-redux';
+import {locationIcon} from '../../common/AllLiveImageLink';
 
 const FeaturedVendors = ({shop}) => {
   const navigation = useNavigation();
@@ -104,7 +105,7 @@ const FeaturedVendors = ({shop}) => {
                     alignSelf: 'center',
                   }}>
                   <Image
-                    source={require('../../images/locationIcon.png')}
+                    source={{uri: locationIcon}}
                     style={{width: 12, height: 12}}
                   />
                   <Text style={styles.addressNameText} numberOfLines={1}>

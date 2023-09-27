@@ -37,10 +37,6 @@ const Splash = () => {
         justifyContent: 'center',
         backgroundColor: '#151827',
       }}>
-      {/* <Image
-        source={require('../images/logo.png')}
-        style={{width: 191, height: 138}}
-      /> */}
       <View style={{padding: 20}}>
         <Image
           source={{

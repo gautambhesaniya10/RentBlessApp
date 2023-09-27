@@ -29,6 +29,7 @@ import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
 import UpperFilter from '../../../../common/Customer/UpperFilter';
 import FilterDrawerModel from '../../../../common/FilterDrawerModel';
 import TablePagination from '../../../../components/TablePagination';
+import {locationIcon} from '../../../../common/AllLiveImageLink';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -264,7 +265,7 @@ const ShopIndividual = () => {
                 </Text>
                 <Text style={styles.thirdText}>
                   <Image
-                    source={require('../../../../images/locationIcon.png')}
+                    source={{uri: locationIcon}}
                     style={{width: 10, height: 10, tintColor: 'red'}}
                   />{' '}
                   {shopDetails?.branch_info?.map(

@@ -17,10 +17,6 @@ const LikeScreen = () => {
       <CustomerHeader />
       {userProfile?.product_like_list?.length === 0 || !isAuthenticate ? (
         <View style={styles.emptyMain}>
-          {/* <Image
-            source={require('../../../images/emptyList.jpg')}
-            style={{width: 180, height: 180, borderRadius: 90}}
-          /> */}
           <Image
             source={{
               uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/empty_cart.png',

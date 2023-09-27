@@ -25,6 +25,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {setShopRegisterId} from '../../../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'native-base';
+import {homeCoverImage} from '../../../common/AllLiveImageLink';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -374,7 +375,7 @@ const ShopSetUp = () => {
         <View style={{position: 'relative'}}>
           <View style={styles.imageContainer}>
             <Image
-              source={require('../../../images/banner.jpg')}
+              source={{uri: homeCoverImage}}
               style={[styles.imageDark, {width: '100%', height: 250}]}
             />
             <View style={styles.overlay}></View>

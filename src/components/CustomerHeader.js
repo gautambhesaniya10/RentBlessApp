@@ -14,7 +14,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
-import {logoImage} from '../common/AllLiveImageLink';
+import {locationIcon, logoImage} from '../common/AllLiveImageLink';
 import WebView from 'react-native-webview';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 // import auth from '@react-native-firebase/auth';
@@ -75,7 +75,7 @@ const CustomerHeader = ({homeScreen}) => {
     return (
       <Text style={[styles.label]}>
         <Image
-          source={require('../images/locationIcon.png')}
+          source={{uri: locationIcon}}
           style={{width: 12, height: 12, tintColor: 'white'}}
         />{' '}
         Location
@@ -126,13 +126,6 @@ const CustomerHeader = ({homeScreen}) => {
           <View>
             <TouchableOpacity
               onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
-              {/* <Image
-                source={require('../images/profileImg.png')}
-                style={{
-                  width: 30,
-                  height: 30,
-                }}
-              /> */}
               <Avatar.Text
                 size={35}
                 label={logoName}
