@@ -117,6 +117,8 @@ const Login = () => {
   }, []);
 
   const GoogleSignInPress = async () => {
+    GoogleSignin.signOut();
+
     try {
       await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
       const userInfo = await GoogleSignin.signIn();

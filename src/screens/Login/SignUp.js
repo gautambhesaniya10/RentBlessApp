@@ -129,35 +129,33 @@ const SignUp = () => {
     retrieveData();
   }, []);
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
-  //   });
-  // }, []);
-
   const GoogleSignUPPress = async () => {
-    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+    GoogleSignin.signOut();
 
-    const userInfo = await GoogleSignin.signIn();
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const userInfo = await GoogleSignin.signIn();
 
-    googleSignUp({
-      first_name: userInfo?.user?.name.split(' ')[0] || '',
-      last_name: userInfo?.user?.name.split(' ')[1] || '',
-      user_type: loginType === 'vendor' ? 'vendor' : 'customer',
-      user_email: userInfo?.user?.email,
-    }).then(
-      res =>
-        handleAfterSignUpResponse(
-          res.data.googleSignUp.user,
-          res.data.googleSignUp.token,
-          res.data.googleSignUp.message,
-        ),
-      error => {
-        console.log('eeeeeee', error);
-        handleAfterSignUpError(error.message);
-      },
-    );
+      googleSignUp({
+        first_name: userInfo?.user?.name.split(' ')[0] || '',
+        last_name: userInfo?.user?.name.split(' ')[1] || '',
+        user_type: loginType === 'vendor' ? 'vendor' : 'customer',
+        user_email: userInfo?.user?.email,
+      }).then(
+        res =>
+          handleAfterSignUpResponse(
+            res.data.googleSignUp.user,
+            res.data.googleSignUp.token,
+            res.data.googleSignUp.message,
+          ),
+        error => {
+          console.log('eeeeeee', error);
+          handleAfterSignUpError(error.message);
+        },
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
