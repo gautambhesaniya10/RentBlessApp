@@ -7,18 +7,26 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:750471046151:android:b26585ff28144bfb0776a2",
+        "mobilesdk_app_id": "1:750471046151:android:2f002c31e8b8b7a10776a2",
         "android_client_info": {
           "package_name": "com.rentblessapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "750471046151-6fh8rc98jrmn715ce7voq96p27nv23nu.apps.googleusercontent.com",
+          "client_id": "750471046151-lv7eqkhjoe1aguam0h0mrrhp42tk7b31.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.rentblessapp",
-            "certificate_hash": "2e4e83114fb39a7727181dd78ac43fb9822762a0"
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "750471046151-s9j7rt77bhetbmolpofped6ifgnb962p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rentblessapp",
+            "certificate_hash": "11c72dea44e5d2bb8d544a294bafc08a74c8c7df"
           }
         },
         {
