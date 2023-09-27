@@ -45,13 +45,6 @@ const ProductDetail = () => {
     const productDetails = await getProductDetails({id: productId});
     setProductDetails(productDetails);
   };
-  console.log(
-    'productDetails?.data?.product?.data',
-    productDetails?.data?.product?.data?.branchInfo?.manager_name,
-  );
-  const logoName =
-    productDetails?.data?.product?.data?.branchInfo?.manager_name?.split(' ');
-  console.log('logoName', logoName);
 
   const clickedByFollow = () => {
     if (isAuthenticate) {
@@ -538,7 +531,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     fontFamily: FontStyle,
-    width: 100,
+    width: 85,
   },
   dayText: {
     color: 'white',
