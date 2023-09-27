@@ -15,6 +15,8 @@ import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {logoImage} from '../common/AllLiveImageLink';
+import WebView from 'react-native-webview';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 // import auth from '@react-native-firebase/auth';
 
 const CustomerHeader = ({homeScreen}) => {
@@ -32,13 +34,13 @@ const CustomerHeader = ({homeScreen}) => {
     ?.charAt(0)
     .toUpperCase()}${userProfile?.last_name?.charAt(0).toUpperCase()}`;
 
+  const clearGoogleSignInCaches = async () => {
+    await GoogleSignin.signOut();
+  };
+
   const LogOut = async () => {
+    clearGoogleSignInCaches();
     AsyncStorage.clear();
-    // auth()
-    //   .signOut()
-    //   .then(response => {
-    //     console.log('SignOut');
-    //   });
     setLogoutTooltipVisible(false);
     dispatch(userLogout());
     setAccessToken('');

@@ -24,7 +24,7 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 GoogleSignin.configure({
   webClientId:
     '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
-  showPlayServicesUpdateDialog: true, // Add this line to always show the dialog
+  showPlayServicesUpdateDialog: true,
 });
 
 const Login = () => {
@@ -116,30 +116,25 @@ const Login = () => {
     retrieveData();
   }, []);
 
-  // useEffect(() => {
-  //   GoogleSignin.configure({
-  //     webClientId:
-  //       '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
-  //   });
-  // }, []);
-
   const GoogleSignInPress = async () => {
-    await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
-
-    const userInfo = await GoogleSignin.signIn();
-
-    googleSignIn({
-      username: userInfo?.user?.email,
-      type: loginType === 'vendor' ? 'vendor' : 'customer',
-    }).then(
-      res =>
-        handleAfterSignInResponse(
-          res.data.googleSignIn.user,
-          res.data.googleSignIn.token,
-          res.data.googleSignIn.message,
-        ),
-      error => handleAfterSignInError(error.message),
-    );
+    try {
+      await GoogleSignin.hasPlayServices({showPlayServicesUpdateDialog: true});
+      const userInfo = await GoogleSignin.signIn();
+      googleSignIn({
+        username: userInfo?.user?.email,
+        type: loginType === 'vendor' ? 'vendor' : 'customer',
+      }).then(
+        res =>
+          handleAfterSignInResponse(
+            res.data.googleSignIn.user,
+            res.data.googleSignIn.token,
+            res.data.googleSignIn.message,
+          ),
+        error => handleAfterSignInError(error.message),
+      );
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
