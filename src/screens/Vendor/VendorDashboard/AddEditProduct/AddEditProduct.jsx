@@ -53,6 +53,10 @@ const AddEditProduct = () => {
   const ProductImgError = productImages?.filter(item => item !== undefined);
   const [productVideo, setProductVideo] = useState('');
   const [uploadProductVideo, setUploadProductVideo] = useState();
+
+  const [productAllMediaImages, setProductAllMediaImages] = useState([]);
+  const [productAllMediaVideo, setProductAllMediaVideo] = useState();
+
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [editProductId, setEditProductId] = useState();
@@ -285,6 +289,22 @@ const AddEditProduct = () => {
             res?.data?.product?.data?.product_image?.side,
           ]);
 
+        res?.data?.product?.data?.product_image?.front &&
+          setProductAllMediaImages(old => [
+            ...old,
+            res?.data?.product?.data?.product_image?.front,
+          ]);
+        res?.data?.product?.data?.product_image?.back &&
+          setProductAllMediaImages(old => [
+            ...old,
+            res?.data?.product?.data?.product_image?.back,
+          ]);
+        res?.data?.product?.data?.product_image?.side &&
+          setProductAllMediaImages(old => [
+            ...old,
+            res?.data?.product?.data?.product_image?.side,
+          ]);
+
         res?.data?.product?.data?.product_video &&
           srcToFile(
             res?.data?.product?.data?.product_video,
@@ -296,6 +316,9 @@ const AddEditProduct = () => {
 
         res?.data?.product?.data?.product_video &&
           setProductVideo(res?.data?.product?.data?.product_video);
+
+        res?.data?.product?.data?.product_video &&
+          setProductAllMediaVideo(res?.data?.product?.data?.product_video);
       });
     }
   }, [router?.params?.state?.productEditId, editProductId, setValue]);
@@ -385,18 +408,18 @@ const AddEditProduct = () => {
               );
         });
       } else {
-        productImages?.map(img =>
+        productAllMediaImages?.map(img =>
           deleteMedia({
             file: img,
             fileType: 'image',
-          }).then(res => setProductImages([])),
+          }).then(res => setProductAllMediaImages([])),
         );
 
-        productVideo !== undefined &&
+        productAllMediaVideo !== undefined &&
           deleteMedia({
-            file: productVideo,
+            file: productAllMediaVideo,
             fileType: 'video',
-          }).then(res => setProductVideo());
+          }).then(res => setProductAllMediaVideo());
 
         MultipleImageUploadFile(uploadProductImages).then(res => {
           uploadProductVideo !== undefined
