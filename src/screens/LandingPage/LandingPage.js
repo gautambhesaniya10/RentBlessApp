@@ -63,7 +63,7 @@ const LandingPage = () => {
             height: '100%',
             width: '100%',
             borderRadius: 8,
-            objectFit: 'cover',
+            objectFit: 'fill',
           }}
         />
       </View>
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
   sliderMainView: {
     width: '100%',
-    height: 200,
+    height: 150,
     backgroundColor: '#fff',
     marginTop: 20,
     borderRadius: 8,
