@@ -40,9 +40,9 @@ const LandingPage = () => {
   const {width: screenWidth} = Dimensions.get('window');
 
   const TopCarouselData = [
-    {image: landingBanner1},
-    {image: landingBanner3},
-    {image: landingBanner2},
+    // {image: landingBanner1},
+    // {image: landingBanner3},
+    // {image: landingBanner2},
     {image: landingBanner4},
     {image: landingBanner5},
     {image: landingBanner6},

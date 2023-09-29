@@ -18,6 +18,7 @@ import Branches from './src/screens/Customer/pages/ShopIndividual/Branches';
 import WriteReview from './src/screens/Customer/pages/ShopIndividual/WriteReview';
 import FilterScreen from './src/screens/FilterScreen/FilterScreen';
 import LandingPage from './src/screens/LandingPage/LandingPage';
+import ForgotPassword from './src/screens/Login/ForgotPassword';
 
 const AppNavigator = () => {
   const Stack = createStackNavigator();
@@ -99,11 +100,11 @@ const AppNavigator = () => {
           component={WriteReview}
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen
-          name="FilterScreen"
-          component={FilterScreen}
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
           options={{headerShown: false}}
-        /> */}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

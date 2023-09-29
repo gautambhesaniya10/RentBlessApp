@@ -229,7 +229,9 @@ const Login = () => {
           )}
         </View>
 
-        <Text style={styles.fpText}>Forgot Password?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={styles.fpText}>Forgot Password?</Text>
+        </TouchableOpacity>
 
         <View style={styles.buttonMainContainer}>
           <View style={{width: '100%'}}>

@@ -1,5 +1,5 @@
-import {StyleSheet, Text, View, TextInput, FlatList, Image} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import React, {useState, useEffect, useRef} from 'react';
 import CustomerHeader from '../../components/CustomerHeader';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -22,13 +22,34 @@ import {
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
 import FilterDrawerModel from '../../common/FilterDrawerModel';
-import {emptyProductFilter} from '../../redux/ProductFilter/ProductFilterSlice';
 import {useIsFocused} from '@react-navigation/native';
-import {homeCoverImage} from '../../common/AllLiveImageLink';
+import {
+  landingBanner4,
+  landingBanner5,
+  landingBanner6,
+} from '../../common/AllLiveImageLink';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 const HomePage = () => {
   const dispatch = useDispatch();
   const IsFocused = useIsFocused();
+
+  const {width: screenWidth} = Dimensions.get('window');
+  const [activeSlide, setActiveSlide] = useState(0);
+  const autoplayConfig = {
+    autoplay: true,
+    autoplayInterval: 2000,
+    loop: true,
+  };
+  const carouselRef = useRef(null);
+  const TopCarouselData = [
+    // {image: landingBanner1},
+    // {image: landingBanner3},
+    // {image: landingBanner2},
+    {image: landingBanner4},
+    {image: landingBanner5},
+    {image: landingBanner6},
+  ];
 
   const productsFiltersReducer = useSelector(
     state => state.productsFiltersReducer,
@@ -201,6 +222,21 @@ const HomePage = () => {
     }
   }, [dispatch, productDataLimit]);
 
+  const CarouselRenderItem = ({item}) => (
+    <View style={styles.sliderMainView}>
+      <View style={{width: '100%'}}>
+        <Image
+          source={{uri: item?.image}}
+          style={{
+            height: '100%',
+            width: '100%',
+            objectFit: 'cover',
+          }}
+        />
+      </View>
+    </View>
+  );
+
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <FilterDrawerModel
@@ -225,10 +261,29 @@ const HomePage = () => {
           onScroll={handleProductScroll}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>
-          <Image
+          {/* <Image
             source={{uri: homeCoverImage}}
             style={{width: '100%', height: 150, objectFit: 'cover'}}
-          />
+          /> */}
+          <View>
+            <Carousel
+              ref={carouselRef}
+              data={TopCarouselData}
+              renderItem={CarouselRenderItem}
+              sliderWidth={screenWidth}
+              itemWidth={screenWidth}
+              onSnapToItem={index => setActiveSlide(index)} // Update active slide index
+              {...autoplayConfig}
+            />
+            <Pagination
+              dotsLength={TopCarouselData?.length} // Number of dots (usually the length of your data)
+              activeDotIndex={activeSlide}
+              containerStyle={{
+                paddingTop: 10,
+                paddingBottom: 0,
+              }}
+            />
+          </View>
           <View style={styles.mainContainer}>
             <View style={{paddingHorizontal: 0, paddingTop: 5}}>
               <UpperFilter
@@ -386,5 +441,10 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  sliderMainView: {
+    width: '100%',
+    height: 150,
+    flexDirection: 'row',
   },
 });
