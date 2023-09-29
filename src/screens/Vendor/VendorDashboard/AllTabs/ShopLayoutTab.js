@@ -250,6 +250,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
     });
   };
 
+  console.log('uploadShopImages', uploadShopImages);
   const shopLayoutOnSubmit = () => {
     setShopLayoutLoading(true);
     shopLayoutAllMediaImages?.map(img =>
@@ -264,6 +265,8 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
         file: shopLayoutAllMediaVideos,
         fileType: 'video',
       }).then(res => setShopLayoutAllMediaVideos());
+
+    console.log('uploadShopImages-=-=-=-', uploadShopImages);
 
     SingleImageUploadFile(uploadShopLogo).then(logoResponse => {
       SingleImageUploadFile(uploadShopBackground).then(backgroundResponse => {
