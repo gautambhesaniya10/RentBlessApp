@@ -1,57 +1,104 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
 import CustomButton from '../../../common/CustomButton';
-import CustomTextInput from '../../../common/CustomTextInput';
 import {useNavigation} from '@react-navigation/native';
-import {useForm} from 'react-hook-form';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 const OtpScreen = ({setActiveScreen}) => {
   const navigation = useNavigation();
-  const {
-    control: otpControl,
-    handleSubmit,
-    formState: {errors},
-    getValues,
-  } = useForm();
 
-  const onSubmit = data => {
-    console.log('pppppppp', data);
-    if (data) {
+  const inputRefs = Array(4)
+    .fill(null)
+    .map(() => useRef(null));
+
+  const [otp, setOTP] = useState(Array(4).fill(''));
+  const mergedString = otp.join('');
+
+  const [error, setError] = useState('');
+
+  const onSubmit = () => {
+    if (mergedString?.length === 4) {
       setActiveScreen(3);
+      setError('');
+    } else {
+      setError('Please Enter Valid OTP *');
     }
   };
+
+  const handleChangeText = (text, index) => {
+    setError('');
+
+    if (/^[0-9]*$/.test(text)) {
+      const newOTP = [...otp];
+      newOTP[index] = text;
+      setOTP(newOTP);
+      if (text === '' && index > 0) {
+        inputRefs[index - 1].current.focus();
+      } else if (text.length === 1 && index < 4 - 1) {
+        inputRefs[index + 1].current.focus();
+      }
+    }
+  };
+
+  const handleBackspace = index => {
+    if (index > 0) {
+      const newOTP = [...otp];
+      newOTP[index] = '';
+      setOTP(newOTP);
+      inputRefs[index - 1].current.focus();
+    }
+  };
+
   return (
     <View style={styles.mainContainer}>
       <View style={styles.cardContainer}>
-        <Text style={styles.appName}>Rentbless</Text>
-        <Text style={styles.forgotText}>Enter Otp</Text>
+        {/* <Text style={styles.appName}>Rentbless</Text> */}
+        <Text style={styles.forgotText}>Verification</Text>
+        <Text style={styles.desOneText}>Enter Your OTP Code Number</Text>
+        <Text style={styles.desOneText}>
+          We will send you a One Time PassWord on your email
+        </Text>
         <View style={{width: '100%', marginBottom: 16, position: 'relative'}}>
-          <CustomTextInput
-            control={otpControl}
-            label={'OTP'}
-            mode="outlined"
-            name="otp"
-            rules={{
-              required: 'OTP is required *',
-            }}
-            activeOutlineColor="#151827"
-            outlineStyle={{borderRadius: 12}}
-            keyboardType="numeric"
-          />
-          {errors?.otp && (
-            <Text style={{color: 'red', marginTop: 4}}>
-              {errors.otp.message}
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+            }}>
+            {otp?.map((value, index) => (
+              <TextInput
+                key={index}
+                ref={inputRefs[index]}
+                style={styles.input}
+                onChangeText={text => handleChangeText(text, index)}
+                onKeyPress={({nativeEvent}) => {
+                  if (nativeEvent.key === 'Backspace') {
+                    handleBackspace(index);
+                  }
+                }}
+                value={value}
+                maxLength={1}
+                keyboardType="numeric"
+              />
+            ))}
+          </View>
+          {error !== '' && (
+            <Text style={{color: 'red', marginTop: 4, alignSelf: 'center'}}>
+              {error}
             </Text>
           )}
         </View>
 
-        <View style={{width: '100%', marginBottom: 15}}>
+        <View style={{width: '80%', marginBottom: 15}}>
           <CustomButton
-            name="Send Otp"
+            name="Verify"
             color="#FFFFFF"
             backgroundColor="#151827"
-            onPress={handleSubmit(onSubmit)}
+            onPress={onSubmit}
             //   loading={loading}
           />
         </View>
@@ -66,7 +113,8 @@ const styles = StyleSheet.create({
   mainContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
+    // flex: 1,
+    marginTop: 50,
   },
   cardContainer: {
     backgroundColor: 'white',
@@ -88,5 +136,21 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '600',
     paddingBottom: 10,
+  },
+  desOneText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '400',
+    paddingBottom: 10,
+    textAlign: 'center',
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: 'black',
+    width: 40,
+    height: 40,
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 5,
   },
 });
