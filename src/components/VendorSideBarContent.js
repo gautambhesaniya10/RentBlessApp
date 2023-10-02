@@ -80,10 +80,12 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     // paddingTop: 5,
+    width: '75%',
   },
   userEmailText: {
     fontSize: 16,
     color: '#151827',
     fontWeight: '400',
+    width: '75%',
   },
 });

@@ -31,7 +31,7 @@ const SideBarContent = ({AccessToken}) => {
               {userProfile?.first_name} {userProfile?.last_name}
             </Text>
             <Text style={styles.userEmailText} numberOfLines={1}>
-              {userProfile?.user_email || 'Undefined..'}
+              {userProfile?.user_email || 'Undefined..'} hgth fhfgh
             </Text>
           </View>
         </View>
@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     // paddingTop: 5,
+    width: '75%',
   },
   searchTextMain: {
     backgroundColor: '#FFF',
@@ -144,5 +145,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#151827',
     fontWeight: '400',
+    width: '75%',
   },
 });
