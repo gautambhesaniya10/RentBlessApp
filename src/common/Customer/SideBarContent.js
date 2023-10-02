@@ -26,9 +26,14 @@ const SideBarContent = ({AccessToken}) => {
       {AccessToken ? (
         <View style={styles.authUserMain}>
           <Avatar.Text size={55} label={logoName} backgroundColor="#29977E" />
-          <Text style={styles.userNameText} numberOfLines={1}>
-            {userProfile?.first_name} {userProfile?.last_name}
-          </Text>
+          <View>
+            <Text style={styles.userNameText} numberOfLines={1}>
+              {userProfile?.first_name} {userProfile?.last_name}
+            </Text>
+            <Text style={styles.userEmailText} numberOfLines={1}>
+              {userProfile?.user_email || 'Undefined..'}
+            </Text>
+          </View>
         </View>
       ) : (
         <TouchableOpacity
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#151827',
     fontWeight: '600',
-    paddingTop: 5,
+    // paddingTop: 5,
   },
   searchTextMain: {
     backgroundColor: '#FFF',
@@ -134,5 +139,10 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '400',
     fontSize: 18,
+  },
+  userEmailText: {
+    fontSize: 16,
+    color: '#151827',
+    fontWeight: '400',
   },
 });
