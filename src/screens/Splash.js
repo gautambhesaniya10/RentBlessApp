@@ -21,13 +21,8 @@ const Splash = () => {
 
   const currVersion = DeviceInfo.getVersion();
 
-  console.log('c=-=-=-=-46325473', currVersion);
-
   const retrieveLocalData = async () => {
-    // const data = await fetchDataFromFirestore();
-
     const dataQuery = await getAppVersionLists();
-    console.log('dataQuery-=-=-=-=', dataQuery?.data?.appVersionList[0]);
     const data = dataQuery?.data?.appVersionList[0];
 
     const loginType = await AsyncStorage.getItem('loginType');
@@ -37,7 +32,6 @@ const Splash = () => {
       setTimeout(() => {
         if (currVersion !== data?.version) {
           dispatch(appVersionAction({...data, versionModelVisible: true}));
-          // navigation.navigate('VersionApp', {state: {versionData: data}});
         } else {
           dispatch(appVersionAction({...data, versionModelVisible: false}));
           navigation.navigate('VendorMain');
@@ -47,7 +41,6 @@ const Splash = () => {
       setTimeout(() => {
         if (currVersion !== data?.version) {
           dispatch(appVersionAction({...data, versionModelVisible: true}));
-          // navigation.navigate('VersionApp', {state: {versionData: data}});
           navigation.navigate('CustomerMain');
         } else {
           dispatch(appVersionAction({...data, versionModelVisible: false}));
