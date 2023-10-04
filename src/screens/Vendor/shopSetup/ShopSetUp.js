@@ -26,6 +26,7 @@ import {setShopRegisterId} from '../../../redux/LoginUserProfileSlice/userSlice'
 import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'native-base';
 import {homeCoverImage} from '../../../common/AllLiveImageLink';
+import VersionAppModel from '../../AppVersionModel/VersionApp';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -58,6 +59,7 @@ const ShopSetUp = () => {
   const navigation = useNavigation();
   const userProfile = useSelector(state => state?.user.userProfile);
   const dispatch = useDispatch();
+  const {versionData} = useSelector(state => state?.appVersion);
 
   const {
     control,
@@ -543,6 +545,10 @@ const ShopSetUp = () => {
           </View>
         </View>
       </ScrollView>
+      <VersionAppModel
+        modalVisible={versionData?.versionModelVisible}
+        versionData={versionData}
+      />
     </View>
   );
 };

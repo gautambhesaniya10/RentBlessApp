@@ -30,11 +30,6 @@ const AppNavigator = () => {
           component={Splash}
           options={{headerShown: false}}
         />
-        {/* <Stack.Screen
-          name="LandingPage"
-          component={LandingPage}
-          options={{headerShown: false}}
-        /> */}
         <Stack.Screen
           name="CustomerMain"
           component={CustomerMain}

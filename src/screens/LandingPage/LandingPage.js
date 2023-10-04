@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import MenCollection from './MenCollection';
 import WomenCollection from './WomenCollection';
 import FeaturedVendors from './FeaturedVendors';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {Dimensions} from 'react-native';
 import {
@@ -29,10 +29,11 @@ import {
   store4,
   store5,
 } from '../../common/AllLiveImageLink';
+import VersionAppModel from '../AppVersionModel/VersionApp';
 
 const LandingPage = () => {
-  const navigation = useNavigation();
-  const dispatch = useDispatch();
+  const {versionData} = useSelector(state => state?.appVersion);
+
   const [activeTab, setActiveTab] = useState('customer');
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -205,6 +206,10 @@ const LandingPage = () => {
           <FeaturedVendors />
         </View>
       </ScrollView>
+      <VersionAppModel
+        modalVisible={versionData?.versionModelVisible}
+        versionData={versionData}
+      />
     </View>
   );
 };

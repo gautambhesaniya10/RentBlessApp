@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#151827',
     fontWeight: '400',
-    width: '75%',
+    width: '60%',
   },
 });

@@ -5,11 +5,15 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import VendorHeader from '../../../components/VendorHeader';
+import VersionAppModel from '../../AppVersionModel/VersionApp';
 
 const Home = ({}) => {
   const navigation = useNavigation();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const [totalProducts, setTotalProducts] = useState(0);
+  const {versionData} = useSelector(state => state?.appVersion);
+
+  console.log('versionData', versionData);
 
   useEffect(() => {
     var count = 0;
@@ -61,6 +65,10 @@ const Home = ({}) => {
             </View>
           </View>
         </View>
+        <VersionAppModel
+          modalVisible={versionData?.versionModelVisible}
+          versionData={versionData}
+        />
       </ScrollView>
     </View>
   );

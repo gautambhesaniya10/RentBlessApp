@@ -1,25 +1,58 @@
-import {StyleSheet, Image, View, Text} from 'react-native';
-import React, {useEffect} from 'react';
+import {StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import {BackGroundStyle} from '../../CommonStyle';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {logoImage} from '../common/AllLiveImageLink';
+import firestore from '@react-native-firebase/firestore';
+import DeviceInfo from 'react-native-device-info';
+import {
+  fetchDataFromFirestore,
+  updateDataInFirestore,
+} from '../common/Appversion/Appversion';
+import {getAppVersionLists} from '../graphql/queries/appVersionQueries';
+import {useDispatch} from 'react-redux';
+import {appVersionAction} from '../redux/AppVersionSlice/AppVersionSlice';
 
 const Splash = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const isFocused = useIsFocused();
 
+  const currVersion = DeviceInfo.getVersion();
+
+  console.log('c=-=-=-=-46325473', currVersion);
+
   const retrieveLocalData = async () => {
+    // const data = await fetchDataFromFirestore();
+
+    const dataQuery = await getAppVersionLists();
+    console.log('dataQuery-=-=-=-=', dataQuery?.data?.appVersionList[0]);
+    const data = dataQuery?.data?.appVersionList[0];
+
     const loginType = await AsyncStorage.getItem('loginType');
     const Token = await AsyncStorage.getItem('token');
 
     if (loginType === 'vendor' && Token) {
       setTimeout(() => {
-        navigation.navigate('VendorMain');
+        if (currVersion !== data?.version) {
+          dispatch(appVersionAction({...data, versionModelVisible: true}));
+          // navigation.navigate('VersionApp', {state: {versionData: data}});
+        } else {
+          dispatch(appVersionAction({...data, versionModelVisible: false}));
+          navigation.navigate('VendorMain');
+        }
       }, 2000);
     } else {
       setTimeout(() => {
-        navigation.navigate('CustomerMain');
+        if (currVersion !== data?.version) {
+          dispatch(appVersionAction({...data, versionModelVisible: true}));
+          // navigation.navigate('VersionApp', {state: {versionData: data}});
+          navigation.navigate('CustomerMain');
+        } else {
+          dispatch(appVersionAction({...data, versionModelVisible: false}));
+          navigation.navigate('CustomerMain');
+        }
         // navigation.navigate('LandingPage');
       }, 2000);
     }
@@ -28,6 +61,10 @@ const Splash = () => {
   useEffect(() => {
     retrieveLocalData();
   }, [isFocused]);
+
+  useEffect(() => {
+    // updateDataInFirestore(currVersion);
+  }, []);
 
   return (
     <View
@@ -38,6 +75,7 @@ const Splash = () => {
         backgroundColor: '#151827',
       }}>
       <View style={{padding: 20}}>
+        {/* <TouchableOpacity onPress={() => updateDataInFirestore()}> */}
         <Image
           source={{
             uri: logoImage,
@@ -45,6 +83,7 @@ const Splash = () => {
           width={231}
           height={86}
         />
+        {/* </TouchableOpacity> */}
       </View>
     </View>
   );
