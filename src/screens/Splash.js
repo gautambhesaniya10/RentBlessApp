@@ -8,7 +8,7 @@ import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
 import {
   fetchDataFromFirestore,
-  updateDataInFirestore,
+  updateVersionData,
 } from '../common/Appversion/Appversion';
 import {getAppVersionLists} from '../graphql/queries/appVersionQueries';
 import {useDispatch} from 'react-redux';
@@ -56,7 +56,7 @@ const Splash = () => {
   }, [isFocused]);
 
   useEffect(() => {
-    // updateDataInFirestore(currVersion);
+    // updateVersionData(currVersion);
   }, []);
 
   return (
@@ -68,7 +68,6 @@ const Splash = () => {
         backgroundColor: '#151827',
       }}>
       <View style={{padding: 20}}>
-        {/* <TouchableOpacity onPress={() => updateDataInFirestore()}> */}
         <Image
           source={{
             uri: logoImage,
@@ -76,7 +75,6 @@ const Splash = () => {
           width={231}
           height={86}
         />
-        {/* </TouchableOpacity> */}
       </View>
     </View>
   );

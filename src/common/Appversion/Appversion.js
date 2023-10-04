@@ -17,7 +17,7 @@ import {appVersionUpdate} from '../../graphql/mutations/appVersionMutation';
 //   }
 // };
 
-export const updateDataInFirestore = async (currVersion, docId) => {
+export const updateVersionData = async (currVersion, docId) => {
   const updatedData = {
     version: currVersion,
     message: 'New Features Added',
