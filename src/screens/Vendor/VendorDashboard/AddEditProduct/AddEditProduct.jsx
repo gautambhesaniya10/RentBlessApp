@@ -739,7 +739,7 @@ const AddEditProduct = () => {
                       <TouchableOpacity
                         onPress={() => ChooseProductImages(index)}
                         key={index}
-                        style={styles.shopImagesMain}>
+                        style={[styles.shopImagesMain, {width: '30%'}]}>
                         <Icon name="image" size={23} color="black" />
                         <Text style={[styles.uploadText, {fontSize: 12}]}>
                           Click to Upload
