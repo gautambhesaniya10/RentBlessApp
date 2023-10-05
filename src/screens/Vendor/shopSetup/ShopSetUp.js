@@ -124,9 +124,12 @@ const ShopSetUp = () => {
 
   useEffect(() => {
     const handleBackButton = () => {
-      BackHandler.exitApp();
+      // BackHandler.exitApp();
+      navigation.navigate('Splash');
+      return true;
     };
     BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+
     return () => {
       BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
     };
