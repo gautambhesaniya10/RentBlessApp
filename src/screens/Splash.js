@@ -32,6 +32,7 @@ const Splash = () => {
       setTimeout(() => {
         if (currVersion !== data?.version) {
           dispatch(appVersionAction({...data, versionModelVisible: true}));
+          navigation.navigate('VendorMain');
         } else {
           dispatch(appVersionAction({...data, versionModelVisible: false}));
           navigation.navigate('VendorMain');
