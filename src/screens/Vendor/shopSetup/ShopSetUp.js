@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  BackHandler,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -120,6 +121,16 @@ const ShopSetUp = () => {
     {key: 'Friday', value: ['09:00 AM - 08:00 PM']},
     {key: 'Saturday', value: ['09:00 AM - 08:00 PM']},
   ]);
+
+  useEffect(() => {
+    const handleBackButton = () => {
+      BackHandler.exitApp();
+    };
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, []);
 
   const handleClickIndividual = (option, active) => {
     setSelectedOption(option);

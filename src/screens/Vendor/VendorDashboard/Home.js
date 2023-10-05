@@ -1,4 +1,11 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  BackHandler,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,7 +20,15 @@ const Home = ({}) => {
   const [totalProducts, setTotalProducts] = useState(0);
   const {versionData} = useSelector(state => state?.appVersion);
 
-  console.log('versionData', versionData);
+  useEffect(() => {
+    const handleBackButton = () => {
+      BackHandler.exitApp();
+    };
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', handleBackButton);
+    };
+  }, []);
 
   useEffect(() => {
     var count = 0;
