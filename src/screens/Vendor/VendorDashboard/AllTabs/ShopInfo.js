@@ -178,7 +178,7 @@ const ShopInfo = ({
             onPress={handleOpenBottomSheet}
             style={styles.editLabelMain}>
             <Icon name="pencil" size={12} color="black" />
-            <Text>Edit</Text>
+            <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>Edit</Text>
           </TouchableOpacity>
         </View>
 
@@ -625,6 +625,7 @@ const daysStyles = StyleSheet.create({
     paddingBottom: 10,
     fontSize: 16,
     fontWeight: '700',
+    color: '#151827',
   },
   bottomButtonMain: {
     display: 'flex',
@@ -906,6 +907,11 @@ const DaysTimeModal = ({
                       setClosed(!e);
                     }
                   }}
+                  tintColors={{
+                    true: '#29977E',
+                    false: '#151827',
+                    disabled: 'gray',
+                  }}
                   // style={styles.checkbox}
                 />
                 <Text style={{color: 'black'}}>Open 24 Hours</Text>
@@ -924,6 +930,11 @@ const DaysTimeModal = ({
                       setOpen24Hours(!e);
                     }
                   }}
+                  tintColors={{
+                    true: '#29977E',
+                    false: '#151827',
+                    disabled: 'gray',
+                  }}
                   // style={styles.checkbox}
                 />
                 <Text style={{color: 'black'}}>Closed</Text>
@@ -940,6 +951,7 @@ const DaysTimeModal = ({
                     date={selectedStartTime}
                     onDateChange={handleStartTimeChange}
                     is24hourSource="locale"
+                    textColor="black"
                   />
                 </View>
                 <View>
@@ -950,6 +962,7 @@ const DaysTimeModal = ({
                     date={selectedEndTime}
                     onDateChange={handleEndTimeChange}
                     is24hourSource="locale"
+                    textColor="black"
                   />
                 </View>
               </View>
