@@ -411,6 +411,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
               flexDirection: 'row',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
+              width: '100%',
             }}>
             {shopImages?.map((item, index) => {
               return (
@@ -435,7 +436,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                     <TouchableOpacity
                       onPress={() => ChooseShopImages(index)}
                       key={index}
-                      style={styles.shopImagesMain}>
+                      style={[styles.shopImagesMain, {width: '30%'}]}>
                       <Icon name="image" size={23} color="black" />
                       <Text style={[styles.uploadText, {fontSize: 12}]}>
                         Click to Upload
@@ -554,6 +555,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,
+    width: '26%',
   },
   editIconMain: {
     backgroundColor: 'black',

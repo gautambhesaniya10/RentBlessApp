@@ -365,5 +365,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderBottomWidth: 0.5,
     borderBottomColor: '#151827',
+    color: '#31333E',
   },
 });

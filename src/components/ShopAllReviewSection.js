@@ -87,7 +87,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
         {shopReviews?.length > 0
           ? [5, 4, 3, 2, 1]?.map?.((star, index) => (
               <View style={styles.progressBarMain}>
-                <Text>
+                <Text style={{color: '#31333E', fontWeight: '400'}}>
                   {star} {''} <Icon name="star" size={12} color="black" />
                 </Text>
                 <ProgressBar
@@ -98,7 +98,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
                   }
                   color="green"
                 />
-                <Text>
+                <Text style={{color: '#31333E', fontWeight: '400'}}>
                   {shopReviews?.filter(itm => itm.stars === star)?.length}{' '}
                   Reviews
                 </Text>
@@ -243,6 +243,9 @@ const styles = StyleSheet.create({
   },
   revDesText: {
     paddingTop: 18,
+    color: 'rgba(21, 24, 39, 0.56)',
+    fontWeight: '400',
+    fontSize: 14,
   },
   DistributionText: {
     color: '#31333E',
