@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 import CustomButton from '../../../common/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import ProductCard from '../../../components/ProductCard/ProductCard';
+import {emptyCartImage} from '../../../common/AllLiveImageLink';
 
 const LikeScreen = () => {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ const LikeScreen = () => {
         <View style={styles.emptyMain}>
           <Image
             source={{
-              uri: 'https://s3.us-east-1.wasabisys.com/flyontech-rental-productt/images/empty_cart.png',
+              uri: emptyCartImage,
             }}
             style={{width: 150, height: 170, marginBottom: 20}}
           />
