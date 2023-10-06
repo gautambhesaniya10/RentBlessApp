@@ -104,6 +104,7 @@ const CustomerHeader = ({homeScreen}) => {
         <View style={styles.container}>
           {renderLocationLabel()}
           <Dropdown
+            itemTextStyle={{color: '#151827'}}
             style={[styles.dropdown]}
             placeholderStyle={styles.placeholderStyle}
             selectedTextStyle={styles.selectedTextStyle}

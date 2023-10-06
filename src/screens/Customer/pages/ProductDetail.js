@@ -450,7 +450,7 @@ const ProductDetail = () => {
                         ?.shop_name
                     }
                   </Text>
-                  <Text>
+                  <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>
                     {
                       productDetails?.data?.product?.data?.branchInfo
                         ?.branch_address
@@ -483,7 +483,7 @@ const ProductDetail = () => {
                   <Text style={[styles.modelTitleName, {paddingLeft: 60}]}>
                     - Manager
                   </Text>
-                  <Text>
+                  <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>
                     {
                       productDetails?.data?.product?.data?.branchInfo
                         ?.manager_contact

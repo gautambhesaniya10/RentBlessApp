@@ -234,7 +234,6 @@ const ShopSetUpScreenTwo = ({
           justifyContent: 'space-between',
           flexWrap: 'wrap',
           width: '100%',
-          paddingHorizontal: 10,
         }}>
         {['One', 'Two', 'Three']?.map((item, index) => {
           return (
@@ -348,7 +347,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,
-    width: '26%',
+    width: '30%',
   },
   errorText: {
     color: 'red',
