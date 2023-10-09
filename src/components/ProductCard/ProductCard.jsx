@@ -7,6 +7,7 @@ import {productLike} from '../../graphql/mutations/products';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
+import {Avatar} from 'react-native-paper';
 
 const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
@@ -145,10 +146,19 @@ const ProductCard = ({product, landingPageCardWith}) => {
           {product?.product_name}
         </Text>
         <View style={styles.shopMain}>
-          <Image
-            source={{uri: product?.branchInfo?.shop_info?.shop_logo}}
-            style={{width: 25, height: 25, borderRadius: 12}}
-          />
+          {product?.branchInfo?.shop_info?.shop_logo ? (
+            <Image
+              source={{uri: product?.branchInfo?.shop_info?.shop_logo}}
+              style={{width: 25, height: 25, borderRadius: 12}}
+            />
+          ) : (
+            <Avatar.Text
+              size={25}
+              label={product?.branchInfo?.shop_info?.shop_name?.charAt(0)}
+              backgroundColor="#29977E"
+            />
+          )}
+
           <Text style={styles.shopNameText} numberOfLines={1}>
             {product?.branchInfo?.shop_info?.shop_name}
           </Text>

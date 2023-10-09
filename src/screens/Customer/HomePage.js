@@ -300,7 +300,7 @@ const HomePage = () => {
                   <View style={styles.loaderDiv}>
                     <ActivityIndicator color="green" />
                   </View>
-                ) : (
+                ) : productsData?.length > 0 ? (
                   <View
                     style={[
                       styles.productCardMain,
@@ -332,12 +332,14 @@ const HomePage = () => {
                         </View>
                       )}
                   </View>
+                ) : (
+                  <Text style={styles.noDataText}>No Product Available</Text>
                 )
               ) : shopLoading && shopsData?.length === 0 ? (
                 <View style={styles.loaderDiv}>
                   <ActivityIndicator color="green" />
                 </View>
-              ) : (
+              ) : shopsData?.length > 0 ? (
                 <View
                   style={[
                     styles.productCardMain,
@@ -369,6 +371,8 @@ const HomePage = () => {
                       </View>
                     )}
                 </View>
+              ) : (
+                <Text style={styles.noDataText}>No Shop Available</Text>
               )}
             </View>
           </View>
@@ -446,5 +450,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     flexDirection: 'row',
+  },
+  noDataText: {
+    fontSize: 20,
+    color: 'black',
+    fontWeight: '400',
+    alignSelf: 'center',
+    marginTop: 100,
   },
 });

@@ -11,6 +11,7 @@ import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {locationIcon} from '../../common/AllLiveImageLink';
+import {Avatar} from 'react-native-paper';
 
 const ShopCard = ({shop}) => {
   const navigation = useNavigation();
@@ -20,15 +21,26 @@ const ShopCard = ({shop}) => {
       <View style={{position: 'relative'}}>
         <TouchableOpacity
           onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
-          <Image
-            source={{uri: shop?.shop_images[0]?.links}}
-            style={{
-              height: 128,
-              width: '100%',
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-            }}
-          />
+          {shop?.shop_images[0]?.links ? (
+            <Image
+              source={{uri: shop?.shop_images[0]?.links}}
+              style={{
+                height: 128,
+                width: '100%',
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+              }}
+            />
+          ) : (
+            <View
+              style={{
+                backgroundColor: '#00000031',
+                width: '100%',
+                height: 120,
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+              }}></View>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -37,10 +49,19 @@ const ShopCard = ({shop}) => {
           navigation.navigate('ShopIndividual', {state: {shopId: shop?.id}})
         }>
         <View style={styles.shopMain}>
-          <Image
-            source={{uri: shop?.shop_logo}}
-            style={{width: 35, height: 35, borderRadius: 17}}
-          />
+          {shop?.shop_logo ? (
+            <Image
+              source={{uri: shop?.shop_logo}}
+              style={{width: 35, height: 35, borderRadius: 17}}
+            />
+          ) : (
+            <Avatar.Text
+              size={35}
+              label={shop?.shop_name?.charAt(0)}
+              backgroundColor="#29977E"
+            />
+          )}
+
           <View>
             <Text style={styles.shopNameText} numberOfLines={1}>
               {shop.shop_name}

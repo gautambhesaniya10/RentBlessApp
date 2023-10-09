@@ -30,6 +30,7 @@ import UpperFilter from '../../../../common/Customer/UpperFilter';
 import FilterDrawerModel from '../../../../common/FilterDrawerModel';
 import TablePagination from '../../../../components/TablePagination';
 import {locationIcon} from '../../../../common/AllLiveImageLink';
+import {Avatar} from 'react-native-paper';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -252,10 +253,19 @@ const ShopIndividual = () => {
           </TouchableOpacity>
           <View style={styles.mainHeaderContainer}>
             <View style={styles.topInnerMain}>
-              <Image
-                source={{uri: shopDetails?.shop_logo}}
-                style={{width: 64, height: 64, borderRadius: 32}}
-              />
+              {shopDetails?.shop_logo ? (
+                <Image
+                  source={{uri: shopDetails?.shop_logo}}
+                  style={{width: 64, height: 64, borderRadius: 32}}
+                />
+              ) : (
+                <Avatar.Text
+                  size={64}
+                  label={shopDetails?.shop_name?.charAt(0)}
+                  backgroundColor="#29977E"
+                />
+              )}
+
               <View>
                 <Text style={styles.firstText}>{shopDetails?.shop_name}</Text>
                 <Text numberOfLines={2} style={styles.secText}>
