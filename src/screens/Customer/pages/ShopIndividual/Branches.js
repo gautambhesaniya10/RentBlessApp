@@ -16,6 +16,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {shopFollow} from '../../../../graphql/mutations/shops';
 import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
 import {useToast} from 'native-base';
+import {Avatar} from 'react-native-paper';
 
 const Branches = () => {
   const toast = useToast();
@@ -94,10 +95,19 @@ const Branches = () => {
             onPress={() => navigation.goBack()}>
             <Icon name="angle-left" size={24} color="white" />
           </TouchableOpacity>
-          <Image
-            source={{uri: shopDetails?.shop_logo}}
-            style={{width: 45, height: 45, borderRadius: 24}}
-          />
+          {shopDetails?.shop_logo ? (
+            <Image
+              source={{uri: shopDetails?.shop_logo}}
+              style={{width: 45, height: 45, borderRadius: 24}}
+            />
+          ) : (
+            <Avatar.Text
+              size={45}
+              label={shopDetails?.shop_name?.charAt(0)}
+              backgroundColor="#29977E"
+            />
+          )}
+
           <View>
             <Text style={styles.shopNameText}>{shopDetails?.shop_name}</Text>
             <Text style={{color: 'white'}}>

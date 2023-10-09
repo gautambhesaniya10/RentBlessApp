@@ -221,13 +221,23 @@ const ProductDetail = () => {
                 },
               })
             }>
-            <Image
-              source={{
-                uri: productDetails?.data?.product?.data?.branchInfo?.shop_info
-                  .shop_logo,
-              }}
-              style={{width: 42, height: 42, borderRadius: 22}}
-            />
+            {productDetails?.data?.product?.data?.branchInfo?.shop_info ? (
+              <Image
+                source={{
+                  uri: productDetails?.data?.product?.data?.branchInfo
+                    ?.shop_info.shop_logo,
+                }}
+                style={{width: 42, height: 42, borderRadius: 22}}
+              />
+            ) : (
+              <Avatar.Text
+                size={42}
+                label={productDetails?.data?.product?.data?.branchInfo?.shop_info?.shop_name?.charAt(
+                  0,
+                )}
+                backgroundColor="#29977E"
+              />
+            )}
           </TouchableOpacity>
           <TouchableOpacity
             style={{marginLeft: 10}}
