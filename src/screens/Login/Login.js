@@ -21,10 +21,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {facebookIcon, googleIcon} from '../../common/AllLiveImageLink';
+import {NEXT_PUBLIC_GOOGLE_CLIENT_ID} from '@env';
 
 GoogleSignin.configure({
-  webClientId:
-    '750471046151-vjra5ie3mc3qk80bvkgr3qtlt88fmll9.apps.googleusercontent.com',
+  webClientId: NEXT_PUBLIC_GOOGLE_CLIENT_ID,
   showPlayServicesUpdateDialog: true,
 });
 
