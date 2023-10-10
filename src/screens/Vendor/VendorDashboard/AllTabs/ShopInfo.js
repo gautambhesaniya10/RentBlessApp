@@ -42,8 +42,6 @@ const ShopInfo = ({
   const windowHeight = Dimensions.get('window').height;
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
-  console.log('vendorShopDetails', vendorShopDetails?.shop_type);
-
   const handleOpenBottomSheet = () => {
     setIsBottomSheetOpen(true);
   };
