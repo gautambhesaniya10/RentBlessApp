@@ -12,6 +12,7 @@ export const SingleImageUploadFile = async data => {
   };
 
   const uploadFile = newData;
+  console.log('uploadFile', uploadFile);
   formData.append(
     'operations',
     '{"query" : "mutation singleUpload($file: Upload!, $fileType: String) {singleUpload(file: $file, fileType: $fileType)}", "variables" : {"file": null, "fileType": "image"}}',

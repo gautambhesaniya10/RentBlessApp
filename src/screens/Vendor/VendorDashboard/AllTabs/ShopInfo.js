@@ -42,6 +42,8 @@ const ShopInfo = ({
   const windowHeight = Dimensions.get('window').height;
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
+  console.log('vendorShopDetails', vendorShopDetails?.shop_type);
+
   const handleOpenBottomSheet = () => {
     setIsBottomSheetOpen(true);
   };
@@ -89,114 +91,118 @@ const ShopInfo = ({
             </Text>
           )}
         </View>
-        <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="Shop Email"
-            mode="outlined"
-            control={shopInfoControl}
-            name="shop_email"
-            rules={{
-              required: 'Shop Email is required *',
-              pattern: {
-                value:
-                  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                message: 'Please enter a valid email',
-              },
-            }}
-            activeOutlineColor="#29977E"
-          />
-          {shopInfoErrors?.shop_email && (
-            <Text style={{color: 'red'}}>
-              {shopInfoErrors?.shop_email?.message}
-            </Text>
-          )}
-        </View>
-        <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="Personal Website Link"
-            mode="outlined"
-            control={shopInfoControl}
-            name="personal_website"
-            rules={{
-              required: 'Personal Website Link is required *',
-            }}
-            activeOutlineColor="#29977E"
-          />
-          {shopInfoErrors?.personal_website && (
-            <Text style={{color: 'red'}}>
-              {shopInfoErrors?.personal_website?.message}
-            </Text>
-          )}
-        </View>
-        <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="Facebook Link"
-            mode="outlined"
-            control={shopInfoControl}
-            name="facebook_link"
-            rules={{
-              required: 'Facebook Link is required *',
-            }}
-            activeOutlineColor="#29977E"
-          />
-          {shopInfoErrors?.facebook_link && (
-            <Text style={{color: 'red'}}>
-              {shopInfoErrors?.facebook_link?.message}
-            </Text>
-          )}
-        </View>
-        <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="Instagram Link"
-            mode="outlined"
-            control={shopInfoControl}
-            name="instagram_link"
-            rules={{
-              required: 'Instagram Link is required *',
-            }}
-            activeOutlineColor="#29977E"
-          />
-          {shopInfoErrors?.instagram_link && (
-            <Text style={{color: 'red'}}>
-              {shopInfoErrors?.instagram_link?.message}
-            </Text>
-          )}
-        </View>
+        {vendorShopDetails?.shop_type === 'shop' && (
+          <>
+            <View style={{marginBottom: 15}}>
+              <CustomTextInput
+                label="Shop Email"
+                mode="outlined"
+                control={shopInfoControl}
+                name="shop_email"
+                rules={{
+                  required: 'Shop Email is required *',
+                  pattern: {
+                    value:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    message: 'Please enter a valid email',
+                  },
+                }}
+                activeOutlineColor="#29977E"
+              />
+              {shopInfoErrors?.shop_email && (
+                <Text style={{color: 'red'}}>
+                  {shopInfoErrors?.shop_email?.message}
+                </Text>
+              )}
+            </View>
+            <View style={{marginBottom: 15}}>
+              <CustomTextInput
+                label="Personal Website Link"
+                mode="outlined"
+                control={shopInfoControl}
+                name="personal_website"
+                rules={{
+                  required: 'Personal Website Link is required *',
+                }}
+                activeOutlineColor="#29977E"
+              />
+              {shopInfoErrors?.personal_website && (
+                <Text style={{color: 'red'}}>
+                  {shopInfoErrors?.personal_website?.message}
+                </Text>
+              )}
+            </View>
+            <View style={{marginBottom: 15}}>
+              <CustomTextInput
+                label="Facebook Link"
+                mode="outlined"
+                control={shopInfoControl}
+                name="facebook_link"
+                rules={{
+                  required: 'Facebook Link is required *',
+                }}
+                activeOutlineColor="#29977E"
+              />
+              {shopInfoErrors?.facebook_link && (
+                <Text style={{color: 'red'}}>
+                  {shopInfoErrors?.facebook_link?.message}
+                </Text>
+              )}
+            </View>
+            <View style={{marginBottom: 15}}>
+              <CustomTextInput
+                label="Instagram Link"
+                mode="outlined"
+                control={shopInfoControl}
+                name="instagram_link"
+                rules={{
+                  required: 'Instagram Link is required *',
+                }}
+                activeOutlineColor="#29977E"
+              />
+              {shopInfoErrors?.instagram_link && (
+                <Text style={{color: 'red'}}>
+                  {shopInfoErrors?.instagram_link?.message}
+                </Text>
+              )}
+            </View>
 
-        <View style={styles.editBtnMain}>
-          <TouchableOpacity
-            onPress={() => setShopTimeDetails(!shopTimeDetails)}
-            style={styles.labelMain}>
-            <Icon
-              name={shopTimeDetails ? 'angle-up' : 'angle-down'}
-              size={32}
-              color="black"
-            />
-            <Text style={styles.labelStyle}>Shop Open/Close Time</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleOpenBottomSheet}
-            style={styles.editLabelMain}>
-            <Icon name="pencil" size={12} color="black" />
-            <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>Edit</Text>
-          </TouchableOpacity>
-        </View>
+            <View style={styles.editBtnMain}>
+              <TouchableOpacity
+                onPress={() => setShopTimeDetails(!shopTimeDetails)}
+                style={styles.labelMain}>
+                <Icon
+                  name={shopTimeDetails ? 'angle-up' : 'angle-down'}
+                  size={32}
+                  color="black"
+                />
+                <Text style={styles.labelStyle}>Shop Open/Close Time</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleOpenBottomSheet}
+                style={styles.editLabelMain}>
+                <Icon name="pencil" size={12} color="black" />
+                <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>Edit</Text>
+              </TouchableOpacity>
+            </View>
 
-        {shopTimeDetails && (
-          <View style={styles.shopDetailMain}>
-            {hours?.map((day, index) => (
-              <View style={{marginBottom: 15, width: '47%'}} key={index}>
-                {day['value']?.map((time, index1) => (
-                  <TimeCustomTextField
-                    key={index1}
-                    value={time}
-                    label={day['key']}
-                    editable={false}
-                  />
+            {shopTimeDetails && (
+              <View style={styles.shopDetailMain}>
+                {hours?.map((day, index) => (
+                  <View style={{marginBottom: 15, width: '47%'}} key={index}>
+                    {day['value']?.map((time, index1) => (
+                      <TimeCustomTextField
+                        key={index1}
+                        value={time}
+                        label={day['key']}
+                        editable={false}
+                      />
+                    ))}
+                  </View>
                 ))}
               </View>
-            ))}
-          </View>
+            )}
+          </>
         )}
 
         <View style={{width: '100%'}}>

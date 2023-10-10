@@ -188,6 +188,15 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
       }
     });
   };
+
+  function fillArrayWithEmptyValues(arr, targetLength) {
+    while (arr.length < targetLength) {
+      arr.push({links: 'none'});
+    }
+
+    return arr;
+  }
+
   const ChooseShopImages = index => {
     let options = {
       title: 'Select Shop Cover Image',
@@ -251,14 +260,19 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
   };
 
   console.log('uploadShopImages', uploadShopImages);
-  const shopLayoutOnSubmit = () => {
+  const shopLayoutOnSubmit = async () => {
     setShopLayoutLoading(true);
-    shopLayoutAllMediaImages?.map(img =>
-      deleteMedia({
-        file: img,
-        fileType: 'image',
-      }).then(res => setShopLayoutAllMediaImages([])),
-    );
+
+    shopLayoutAllMediaImages
+      .filter(itm => itm !== '' && itm !== null)
+      .map(img =>
+        deleteMedia({
+          file: img,
+          fileType: 'image',
+        }).then(res => {
+          setShopLayoutAllMediaImages([]);
+        }),
+      );
 
     shopLayoutAllMediaVideos !== undefined &&
       deleteMedia({
@@ -268,81 +282,58 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
 
     console.log('uploadShopImages-=-=-=-', uploadShopImages);
 
-    SingleImageUploadFile(uploadShopLogo).then(logoResponse => {
-      SingleImageUploadFile(uploadShopBackground).then(backgroundResponse => {
-        MultipleImageUploadFile(uploadShopImages).then(imagesResponse => {
-          uploadShopVideo !== ''
-            ? VideoUploadFile(uploadShopVideo).then(videoResponse => {
-                shopUpdate({
-                  shopLayout: {
-                    id: useProfileData?.userCreatedShopId,
-                    shop_logo: logoResponse.data.data.singleUpload,
-                    shop_cover_image: backgroundResponse.data.data.singleUpload,
-                    shop_images: imagesResponse.data.data.multipleUpload?.map(
-                      itm => {
-                        return {links: itm};
-                      },
-                    ),
-                    shop_video: videoResponse.data.data.singleUpload,
-                  },
-                }).then(
-                  res => {
-                    console.log('owner res:::', res);
-                    toast.show({
-                      title: res.data.updateShop.message,
-                      placement: 'top',
-                      backgroundColor: 'green.600',
-                      variant: 'solid',
-                    });
-                    setShopLayoutLoading(false);
-                  },
-                  error => {
-                    setShopLayoutLoading(false);
-                    toast.show({
-                      title: error.message,
-                      placement: 'top',
-                      backgroundColor: 'red.600',
-                      variant: 'solid',
-                    });
-                  },
-                );
-              })
-            : shopUpdate({
-                shopLayout: {
-                  id: useProfileData?.userCreatedShopId,
-                  shop_logo: logoResponse.data.data.singleUpload,
-                  shop_cover_image: backgroundResponse.data.data.singleUpload,
-                  shop_images: imagesResponse.data.data.multipleUpload?.map(
-                    itm => {
-                      return {links: itm};
-                    },
-                  ),
-                  shop_video: null,
-                },
-              }).then(
-                res => {
-                  console.log('owner res:::', res);
-                  toast.show({
-                    title: res.data.updateShop.message,
-                    placement: 'top',
-                    backgroundColor: 'green.600',
-                    variant: 'solid',
-                  });
-                  setShopLayoutLoading(false);
-                },
-                error => {
-                  setShopLayoutLoading(false);
-                  toast.show({
-                    title: error.message,
-                    placement: 'top',
-                    backgroundColor: 'red.600',
-                    variant: 'solid',
-                  });
-                },
-              );
+    let logoResponse = '';
+    let backgroundResponse = '';
+    let imagesResponse = '';
+    let videoResponse = null;
+
+    if (uploadShopLogo) {
+      logoResponse = await SingleImageUploadFile(uploadShopLogo);
+    }
+    if (uploadShopBackground) {
+      backgroundResponse = await SingleImageUploadFile(uploadShopBackground);
+    }
+    if (uploadShopImages?.filter(item => item !== undefined).length > 0) {
+      imagesResponse = await MultipleImageUploadFile(
+        uploadShopImages.filter(item => item !== undefined),
+      );
+    }
+    if (uploadShopVideo) {
+      videoResponse = await VideoUploadFile(uploadShopVideo);
+    }
+
+    await shopUpdate({
+      shopLayout: {
+        id: useProfileData?.userCreatedShopId,
+        shop_logo: logoResponse?.data?.data?.singleUpload || '',
+        shop_cover_image: backgroundResponse?.data?.data?.singleUpload || '',
+        shop_images:
+          imagesResponse?.data?.data?.multipleUpload?.map(itm => {
+            return {links: itm};
+          }) || [],
+        shop_video: videoResponse?.data?.data?.singleUpload || '',
+      },
+    }).then(
+      res => {
+        console.log('owner res:::', res);
+        toast.show({
+          title: res.data.updateShop.message,
+          placement: 'top',
+          backgroundColor: 'green.600',
+          variant: 'solid',
         });
-      });
-    });
+        setShopLayoutLoading(false);
+      },
+      error => {
+        setShopLayoutLoading(false);
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          backgroundColor: 'red.600',
+          variant: 'solid',
+        });
+      },
+    );
   };
 
   return (
@@ -359,16 +350,18 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                 <Text style={styles.uploadTextInner}>Logo </Text>
               </>
             ) : (
-              <Image
-                source={{uri: shopLogo}}
-                style={{width: 150, height: 150, borderRadius: 100}}
-              />
+              <>
+                <Image
+                  source={{uri: shopLogo}}
+                  style={{width: 150, height: 150, borderRadius: 100}}
+                />
+                <TouchableOpacity
+                  onPress={() => ChooseShopLogoImage()}
+                  style={styles.editIconMain}>
+                  <Icon name="pencil" size={16} color="white" />
+                </TouchableOpacity>
+              </>
             )}
-            <TouchableOpacity
-              onPress={() => ChooseShopLogoImage()}
-              style={styles.editIconMain}>
-              <Icon name="pencil" size={16} color="white" />
-            </TouchableOpacity>
           </TouchableOpacity>
           {error?.shopLogo && (
             <Text style={[styles.errorText, {alignSelf: 'center'}]}>
@@ -386,17 +379,19 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                 <Text style={styles.uploadTextInner}>Cover Image </Text>
               </>
             ) : (
-              <Image
-                resizeMode="cover"
-                source={{uri: shopBackground}}
-                style={{width: '100%', height: 148, borderRadius: 10}}
-              />
+              <>
+                <Image
+                  resizeMode="cover"
+                  source={{uri: shopBackground}}
+                  style={{width: '100%', height: 148, borderRadius: 10}}
+                />
+                <TouchableOpacity
+                  onPress={() => ChooseShopCoverImage()}
+                  style={[styles.editIconMain, {top: 10, right: 10}]}>
+                  <Icon name="pencil" size={16} color="white" />
+                </TouchableOpacity>
+              </>
             )}
-            <TouchableOpacity
-              onPress={() => ChooseShopCoverImage()}
-              style={[styles.editIconMain, {top: 10, right: 10}]}>
-              <Icon name="pencil" size={16} color="white" />
-            </TouchableOpacity>
           </TouchableOpacity>
 
           {error?.shopBackground && (
@@ -413,40 +408,45 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
               flexWrap: 'wrap',
               width: '100%',
             }}>
-            {shopImages?.map((item, index) => {
-              return (
-                <>
-                  {shopImages[index] ? (
-                    <TouchableOpacity
-                      onPress={() => ChooseShopImages(index)}
-                      key={index}
-                      style={styles.shopImagesMain}>
-                      <Image
-                        resizeMode="cover"
-                        source={{uri: shopImages[index]}}
-                        style={{width: 112, height: 112, borderRadius: 10}}
-                      />
-                      <TouchableOpacity
-                        onPress={() => ChooseShopImages(index)}
-                        style={[styles.editIconMain, {top: 5, right: 5}]}>
-                        <Icon name="pencil" size={16} color="white" />
-                      </TouchableOpacity>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => ChooseShopImages(index)}
-                      key={index}
-                      style={[styles.shopImagesMain, {width: '30%'}]}>
-                      <Icon name="image" size={23} color="black" />
-                      <Text style={[styles.uploadText, {fontSize: 12}]}>
-                        Click to Upload
-                      </Text>
-                      <Text style={styles.uploadTextInner}>Shop Image </Text>
-                    </TouchableOpacity>
-                  )}
-                </>
-              );
-            })}
+            {fillArrayWithEmptyValues([...shopImages], 3)?.length > 0 &&
+              fillArrayWithEmptyValues([...shopImages], 3)?.map(
+                (item, index) => {
+                  return (
+                    <>
+                      {shopImages[index] ? (
+                        <TouchableOpacity
+                          onPress={() => ChooseShopImages(index)}
+                          key={index}
+                          style={styles.shopImagesMain}>
+                          <Image
+                            resizeMode="cover"
+                            source={{uri: shopImages[index]}}
+                            style={{width: 112, height: 112, borderRadius: 10}}
+                          />
+                          <TouchableOpacity
+                            onPress={() => ChooseShopImages(index)}
+                            style={[styles.editIconMain, {top: 5, right: 5}]}>
+                            <Icon name="pencil" size={16} color="white" />
+                          </TouchableOpacity>
+                        </TouchableOpacity>
+                      ) : (
+                        <TouchableOpacity
+                          onPress={() => ChooseShopImages(index)}
+                          key={index}
+                          style={[styles.shopImagesMain, {width: '30%'}]}>
+                          <Icon name="image" size={23} color="black" />
+                          <Text style={[styles.uploadText, {fontSize: 12}]}>
+                            Click to Upload
+                          </Text>
+                          <Text style={styles.uploadTextInner}>
+                            Shop Image{' '}
+                          </Text>
+                        </TouchableOpacity>
+                      )}
+                    </>
+                  );
+                },
+              )}
           </View>
 
           {error?.shopImages && (
@@ -464,20 +464,22 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                 <Text style={styles.uploadTextInner}>Shop Video </Text>
               </>
             ) : (
-              <Video
-                source={{
-                  uri: shopVideo,
-                }}
-                style={{width: '100%', height: 150, borderRadius: 10}}
-                // controls={true}
-                resizeMode="cover"
-              />
+              <>
+                <Video
+                  source={{
+                    uri: shopVideo,
+                  }}
+                  style={{width: '100%', height: 150, borderRadius: 10}}
+                  // controls={true}
+                  resizeMode="cover"
+                />
+                <TouchableOpacity
+                  onPress={() => ChooseShopVideo()}
+                  style={[styles.editIconMain, {top: 10, right: 10}]}>
+                  <Icon name="pencil" size={16} color="white" />
+                </TouchableOpacity>
+              </>
             )}
-            <TouchableOpacity
-              onPress={() => ChooseShopVideo()}
-              style={[styles.editIconMain, {top: 10, right: 10}]}>
-              <Icon name="pencil" size={16} color="white" />
-            </TouchableOpacity>
           </TouchableOpacity>
         </View>
 

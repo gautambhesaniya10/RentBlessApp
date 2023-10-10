@@ -242,86 +242,102 @@ const ShopSetUpScreenThree = ({
           </View>
         )}
 
-        <TouchableOpacity
-          onPress={() => setManagerSubBranchShow(!managerSubBranchShow)}
-          style={styles.labelMain}>
-          <Icon
-            name={managerSubBranchShow ? 'angle-up' : 'angle-down'}
-            size={33}
-            color="black"
-          />
-          <Text style={styles.labelStyle}>Sub Branch</Text>
-        </TouchableOpacity>
-
-        {managerSubBranchShow && (
+        {!individual && (
           <>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              contentContainerStyle={{flexDirection: 'row', gap: 15}}
-              style={{marginBottom: 15}}>
-              {subBranch?.map((sub, index) => (
-                <>
-                  <View style={styles.subListMain}>
-                    <View style={styles?.delEditMain}>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setSubBranch(
-                            subBranch?.filter(itm => itm.id !== sub.id),
-                          );
-                        }}>
-                        <Text style={styles.delText}>Delete</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => {
-                          setSubBranchEdit(sub);
-                        }}>
-                        <Text style={styles.editText}>Edit</Text>
-                      </TouchableOpacity>
-                    </View>
-                    <View style={styles.textInnerMain}>
-                      <Text style={styles.textLabelSub}>Address : </Text>
-                      <Text style={styles.textSub}>
-                        {sub?.subManagerAddress}
-                      </Text>
-                    </View>
-                    <View style={styles.textInnerMain}>
-                      <Text style={styles.textLabelSub}>City : </Text>
-                      <Text style={styles.textSub}>{sub.subManagerCity}</Text>
-                    </View>
-                    <View style={styles.textInnerMain}>
-                      <Text style={styles.textLabelSub}>Pin Code : </Text>
-                      <Text style={styles.textSub}>
-                        {sub.subManagerPinCode}
-                      </Text>
-                    </View>
-                    <View style={styles.textInnerMain}>
-                      <Text style={styles.textLabelSub}>Manager Name : </Text>
-                      <Text style={styles.textSub}>
-                        {sub.subManagerFirstName + ' ' + sub.subManagerLastName}
-                      </Text>
-                    </View>
-                    <View style={styles.textInnerMain}>
-                      <Text style={styles.textLabelSub}>Manager Email : </Text>
-                      <Text style={styles.textSub}>{sub.subManagerEmail}</Text>
-                    </View>
-                    <View style={styles.textInnerMain}>
-                      <Text style={styles.textLabelSub}>
-                        Manager Phone Number :{' '}
-                      </Text>
-                      <Text style={styles.textSub}>{sub.subManagerPhone}</Text>
-                    </View>
-                  </View>
-                </>
-              ))}
-            </ScrollView>
-            <SubBranchModel
-              getValues={getValues}
-              subBranch={subBranch}
-              setSubBranch={setSubBranch}
-              subBranchEdit={subBranchEdit}
-              setSubBranchEdit={setSubBranchEdit}
-            />
+            <TouchableOpacity
+              onPress={() => setManagerSubBranchShow(!managerSubBranchShow)}
+              style={styles.labelMain}>
+              <Icon
+                name={managerSubBranchShow ? 'angle-up' : 'angle-down'}
+                size={33}
+                color="black"
+              />
+              <Text style={styles.labelStyle}>Sub Branch</Text>
+            </TouchableOpacity>
+
+            {managerSubBranchShow && (
+              <>
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{flexDirection: 'row', gap: 15}}
+                  style={{marginBottom: 15}}>
+                  {subBranch?.map((sub, index) => (
+                    <>
+                      <View style={styles.subListMain}>
+                        <View style={styles?.delEditMain}>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setSubBranch(
+                                subBranch?.filter(itm => itm.id !== sub.id),
+                              );
+                            }}>
+                            <Text style={styles.delText}>Delete</Text>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setSubBranchEdit(sub);
+                            }}>
+                            <Text style={styles.editText}>Edit</Text>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>Address : </Text>
+                          <Text style={styles.textSub}>
+                            {sub?.subManagerAddress}
+                          </Text>
+                        </View>
+                        <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>City : </Text>
+                          <Text style={styles.textSub}>
+                            {sub.subManagerCity}
+                          </Text>
+                        </View>
+                        <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>Pin Code : </Text>
+                          <Text style={styles.textSub}>
+                            {sub.subManagerPinCode}
+                          </Text>
+                        </View>
+                        <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>
+                            Manager Name :{' '}
+                          </Text>
+                          <Text style={styles.textSub}>
+                            {sub.subManagerFirstName +
+                              ' ' +
+                              sub.subManagerLastName}
+                          </Text>
+                        </View>
+                        <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>
+                            Manager Email :{' '}
+                          </Text>
+                          <Text style={styles.textSub}>
+                            {sub.subManagerEmail}
+                          </Text>
+                        </View>
+                        <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>
+                            Manager Phone Number :{' '}
+                          </Text>
+                          <Text style={styles.textSub}>
+                            {sub.subManagerPhone}
+                          </Text>
+                        </View>
+                      </View>
+                    </>
+                  ))}
+                </ScrollView>
+                <SubBranchModel
+                  getValues={getValues}
+                  subBranch={subBranch}
+                  setSubBranch={setSubBranch}
+                  subBranchEdit={subBranchEdit}
+                  setSubBranchEdit={setSubBranchEdit}
+                />
+              </>
+            )}
           </>
         )}
       </View>

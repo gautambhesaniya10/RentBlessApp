@@ -44,7 +44,7 @@ const ShopDetail = () => {
 
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const useProfileData = useSelector(state => state?.user.userProfile);
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState('Owner Details');
   const [individual, setIndividual] = useState(false);
   const [shopOwnerId, setShopOwnerId] = useState('');
   const [ownerLoading, setOwnerLoading] = useState(false);
@@ -52,6 +52,17 @@ const ShopDetail = () => {
   const [mainBranchLoading, setMainBranchLoading] = useState(false);
   const [mainBranch, setMainBranch] = useState();
   const [sameAsOwner, setSameAsOwner] = useState('False');
+
+  const sliderTabArrayShow =
+    vendorShopDetails?.shop_type === 'individual'
+      ? ['Owner Details', 'Shop Info', 'Main Branch', 'Shop Layout']
+      : [
+          'Owner Details',
+          'Shop Info',
+          'Main Branch',
+          'Sub Branch',
+          'Shop Layout',
+        ];
 
   const [hours, setHours] = useState([
     {key: 'Sunday', value: ['09:00 AM - 08:00 PM']},
@@ -288,27 +299,21 @@ const ShopDetail = () => {
                 gap: 15,
                 alignItems: 'center',
               }}>
-              {[
-                'Owner Details',
-                'Shop Info',
-                'Main Branch',
-                'Sub Branch',
-                'Shop Layout',
-              ]?.map((item, index) => (
+              {sliderTabArrayShow?.map((item, index) => (
                 <TouchableOpacity
-                  onPress={() => setActiveTab(index)}
+                  onPress={() => setActiveTab(item)}
                   style={[
                     styles.sliderTabsMain,
                     {
                       backgroundColor:
-                        activeTab === index ? '#151827' : '#FAFCFC',
+                        activeTab === item ? '#151827' : '#FAFCFC',
                     },
                   ]}
                   key={index}>
                   <Text
                     style={[
                       styles.sliderText,
-                      {color: activeTab === index ? 'white' : '#151827'},
+                      {color: activeTab === item ? 'white' : '#151827'},
                     ]}>
                     {item}
                   </Text>
@@ -316,7 +321,7 @@ const ShopDetail = () => {
               ))}
             </ScrollView>
           </View>
-          {activeTab === 0 && (
+          {activeTab === 'Owner Details' && (
             <OwnerDetail
               vendorShopDetails={vendorShopDetails}
               useProfileData={useProfileData}
@@ -329,7 +334,7 @@ const ShopDetail = () => {
               ownerLoading={ownerLoading}
             />
           )}
-          {activeTab === 1 && (
+          {activeTab === 'Shop Info' && (
             <ShopInfo
               shopInfoHandleSubmit={shopInfoHandleSubmit}
               shopInfoErrors={shopInfoErrors}
@@ -343,7 +348,7 @@ const ShopDetail = () => {
               setHours={setHours}
             />
           )}
-          {activeTab === 2 && (
+          {activeTab === 'Main Branch' && (
             <MainBranchTab
               mainBranchLoading={mainBranchLoading}
               mainBranchInfoOnSubmit={mainBranchInfoOnSubmit}
@@ -354,7 +359,7 @@ const ShopDetail = () => {
               sameAsOwner={sameAsOwner}
             />
           )}
-          {activeTab === 3 && (
+          {activeTab === 'Sub Branch' && (
             <SubBranchTab
               useProfileData={useProfileData}
               vendorShopDetails={vendorShopDetails}
@@ -362,7 +367,7 @@ const ShopDetail = () => {
               ownerInfoGetValue={ownerInfoGetValue}
             />
           )}
-          {activeTab === 4 && (
+          {activeTab === 'Shop Layout' && (
             <ShopLayoutTab
               useProfileData={useProfileData}
               vendorShopDetails={vendorShopDetails}
