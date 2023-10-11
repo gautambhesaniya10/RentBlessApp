@@ -13,6 +13,7 @@ import MainBranchTab from './AllTabs/MainBranchTab';
 import SubBranchTab from './AllTabs/SubBranchTab';
 import ShopLayoutTab from './AllTabs/ShopLayoutTab';
 import VendorHeader from '../../../components/VendorHeader';
+import {RefreshControl} from 'react-native';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -52,6 +53,7 @@ const ShopDetail = () => {
   const [mainBranchLoading, setMainBranchLoading] = useState(false);
   const [mainBranch, setMainBranch] = useState();
   const [sameAsOwner, setSameAsOwner] = useState('False');
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const sliderTabArrayShow =
     vendorShopDetails?.shop_type === 'individual'
@@ -283,10 +285,20 @@ const ShopDetail = () => {
     }
   }, [hours, vendorShopDetails, useProfileData]);
 
+  const handleRefresh = () => {
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 2000);
+    setActiveTab('Owner Details');
+  };
+
   return (
     <View style={{flex: 1}}>
       <VendorHeader />
       <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={handleRefresh} />
+        }
         showsVerticalScrollIndicator={false}
         style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={{marginTop: 20}}>
