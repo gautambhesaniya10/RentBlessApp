@@ -61,10 +61,10 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
               },
             })
           }>
-          <Text style={styles.writeReText}>
-            {' '}
-            <Icon name="edit" size={20} color="#3346BD" /> Write a Review
-          </Text>
+          <View style={{flexDirection: 'row', alignItems: 'center', gap: 2}}>
+            <Icon name="edit" size={20} color="#29977E" />
+            <Text style={styles.writeReText}>Write a Review</Text>
+          </View>
         </TouchableOpacity>
       </View>
       <View style={styles.supMain}>
@@ -108,51 +108,62 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
             //   <ActivityIndicator />
             // </View>
             ''}
-        <Text style={styles.reBoText}>
-          Last Review Updated on {formatDate(latestReview?.updatedAt)}
-        </Text>
+        {shopReviews?.length > 0 && (
+          <Text style={styles.reBoText}>
+            Last Review Updated on {formatDate(latestReview?.updatedAt)}
+          </Text>
+        )}
       </View>
+      <Divider bold={true} style={{marginBottom: 20}} />
 
-      <Divider style={{marginVertical: 20}} />
-      {shopReviews?.slice(0, displayReview)?.map((review, index) => (
-        <View key={index} style={styles.reviewCardContainer}>
-          <View style={styles.cardTopDiv}>
-            <Avatar.Text
-              size={50}
-              label={
-                review?.user_name?.split(' ')[0].charAt(0).toUpperCase() +
-                review?.user_name?.split(' ')[1].charAt(0).toUpperCase()
-              }
-              backgroundColor="#29977E"
-            />
-            <View>
-              <View style={{flexDirection: 'row', gap: 15}}>
-                <Text style={styles.reviewNameText}>{review?.user_name}</Text>
-                <View style={styles.countStarMain}>
+      {shopReviews?.length > 0 ? (
+        <>
+          {shopReviews?.slice(0, displayReview)?.map((review, index) => (
+            <View key={index} style={styles.reviewCardContainer}>
+              <View style={styles.cardTopDiv}>
+                <Avatar.Text
+                  size={50}
+                  label={
+                    review?.user_name?.split(' ')[0].charAt(0).toUpperCase() +
+                    review?.user_name?.split(' ')[1].charAt(0).toUpperCase()
+                  }
+                  backgroundColor="#29977E"
+                />
+                <View>
+                  <View style={{flexDirection: 'row', gap: 15}}>
+                    <Text style={styles.reviewNameText}>
+                      {review?.user_name}
+                    </Text>
+                    <View style={styles.countStarMain}>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontSize: 16,
+                          fontWeight: '600',
+                        }}>
+                        <Icon name="star" size={16} color="white" />{' '}
+                        {review?.stars}
+                      </Text>
+                    </View>
+                  </View>
                   <Text
                     style={{
-                      color: 'white',
-                      fontSize: 16,
-                      fontWeight: '600',
+                      color: 'rgba(21, 24, 39, 0.56)',
+                      fontWeight: '400',
+                      fontSize: 14,
                     }}>
-                    <Icon name="star" size={16} color="white" /> {review?.stars}
+                    {getReviewedTimeString(review?.updatedAt)}
                   </Text>
+                  <Text style={styles.revDesText}>{review?.message}</Text>
                 </View>
               </View>
-              <Text
-                style={{
-                  color: 'rgba(21, 24, 39, 0.56)',
-                  fontWeight: '400',
-                  fontSize: 14,
-                }}>
-                {getReviewedTimeString(review?.updatedAt)}
-              </Text>
-              <Text style={styles.revDesText}>{review?.message}</Text>
+              <Divider style={{marginVertical: 20}} />
             </View>
-          </View>
-          <Divider style={{marginVertical: 20}} />
-        </View>
-      ))}
+          ))}
+        </>
+      ) : (
+        <Text style={styles.noReviewText}>No Reviews Available</Text>
+      )}
 
       {viewAllBtn && shopReviews?.length > 0 && (
         <View style={{width: '100%', paddingBottom: 30}}>
@@ -191,12 +202,14 @@ const styles = StyleSheet.create({
     color: 'rgba(21, 24, 39, 0.40)',
     fontWeight: '400',
     fontSize: 13,
+    paddingBottom: 16,
   },
   writeReText: {
-    color: '#3346BD',
+    color: '#29977E',
     fontWeight: '600',
     fontSize: 14,
     textDecorationLine: 'underline',
+    paddingBottom: 2,
   },
   supMain: {
     // flexDirection: 'row',
@@ -251,12 +264,19 @@ const styles = StyleSheet.create({
     color: '#31333E',
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 18,
+    marginBottom: 14,
   },
   progressBarMain: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 10,
+  },
+  noReviewText: {
+    color: '#151827',
+    fontSize: 16,
+    fontWeight: '400',
+    alignSelf: 'center',
+    paddingBottom: 50,
   },
 });

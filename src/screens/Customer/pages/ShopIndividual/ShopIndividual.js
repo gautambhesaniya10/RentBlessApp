@@ -23,14 +23,13 @@ import {
   getShopFollowers,
   getShopReviews,
 } from '../../../../graphql/queries/shopQueries';
-import {shopFollow} from '../../../../graphql/mutations/shops';
-import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
 import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
 import UpperFilter from '../../../../common/Customer/UpperFilter';
 import FilterDrawerModel from '../../../../common/FilterDrawerModel';
 import TablePagination from '../../../../components/TablePagination';
 import {locationIcon} from '../../../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
+import FollowConfirmationModel from '../../../../common/Customer/FollowConfirmationModel';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -58,6 +57,7 @@ const ShopIndividual = () => {
   const [totalFollowers, setTotalFollowers] = useState(0);
   const [shopReviews, setShopReviews] = useState([]);
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
+  const [followModalVisible, setFollowModalVisible] = useState(false);
   const [showBottomLoader, setShowBottomLoader] = useState(false);
   const [filterModelOpen, setFilterModelOpen] = useState(false);
   const scrollViewRef = useRef(null);
@@ -131,51 +131,6 @@ const ShopIndividual = () => {
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);
-    }
-  };
-
-  const clickedByFollow = () => {
-    if (isAuthenticate) {
-      shopFollow({
-        shopInfo: {
-          shop_id: shopId,
-          user_id: userProfile?.id,
-        },
-      }).then(
-        res => {
-          dispatch(
-            !shopFollowByUser
-              ? shopFollowToggle({
-                  shopInfo: {
-                    key: 'follow',
-                    value: res?.data?.shopFollower?.data,
-                  },
-                })
-              : shopFollowToggle({
-                  shopInfo: {
-                    key: 'unFollow',
-                    value: shopId,
-                  },
-                }),
-          );
-          toast.show({
-            title: res?.data?.shopFollower?.message,
-            placement: 'top',
-            backgroundColor: 'green.600',
-            variant: 'solid',
-          });
-        },
-        error => {
-          toast.show({
-            title: error.message,
-            placement: 'top',
-            backgroundColor: 'red.600',
-            variant: 'solid',
-          });
-        },
-      );
-    } else {
-      navigation.navigate('LoginMainScreen');
     }
   };
 
@@ -273,15 +228,26 @@ const ShopIndividual = () => {
                     "Let's be Effortlessly Cool: Embrace Your Signature Style with Us"
                   }
                 </Text>
-                <Text style={styles.thirdText}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: '85%',
+                  }}>
                   <Image
                     source={{uri: locationIcon}}
-                    style={{width: 10, height: 10, tintColor: 'red'}}
-                  />{' '}
-                  {shopDetails?.branch_info?.map(
-                    itm => itm?.branch_type === 'main' && itm?.branch_address,
-                  )}
-                </Text>
+                    style={{
+                      width: 10,
+                      height: 10,
+                      tintColor: 'red',
+                      marginTop: 4,
+                    }}
+                  />
+                  <Text numberOfLines={2} style={styles.thirdText}>
+                    {shopDetails?.branch_info?.map(
+                      itm => itm?.branch_type === 'main' && itm?.branch_address,
+                    )}
+                  </Text>
+                </View>
                 <TouchableOpacity
                   onPress={() =>
                     navigation.navigate('Branches', {
@@ -292,16 +258,24 @@ const ShopIndividual = () => {
                 </TouchableOpacity>
 
                 <View style={styles.followBtnMain}>
-                  <View style={{width: '50%'}}>
+                  <View style={{width: '40%'}}>
                     <CustomButton
-                      name={shopFollowByUser ? 'UnFollow' : 'Follow'}
+                      name={shopFollowByUser ? 'Following' : 'Follow'}
                       color="black"
                       backgroundColor="#FFF"
-                      onPress={() => clickedByFollow()}
+                      onPress={() => setFollowModalVisible(true)}
                       icon={!shopFollowByUser && true}
                       iconName="plus"
                     />
                   </View>
+                  {followModalVisible && (
+                    <FollowConfirmationModel
+                      followModalVisible={followModalVisible}
+                      setFollowModalVisible={setFollowModalVisible}
+                      shopFollowByUser={shopFollowByUser}
+                      shopDetails={shopDetails}
+                    />
+                  )}
                 </View>
               </View>
             </View>
@@ -348,7 +322,7 @@ const ShopIndividual = () => {
             <View style={{marginVertical: 35}}>
               <ActivityIndicator />
             </View>
-          ) : (
+          ) : productsData?.length > 0 ? (
             <View
               style={[
                 styles.productCardMain,
@@ -365,6 +339,8 @@ const ShopIndividual = () => {
                 </View>
               )}
             </View>
+          ) : (
+            <Text style={styles.noProductText}>No Product Available</Text>
           )}
 
           <View>
@@ -519,5 +495,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '500',
     paddingTop: 5,
+  },
+  noProductText: {
+    color: '#151827',
+    fontSize: 16,
+    fontWeight: '400',
+    alignSelf: 'center',
+    paddingVertical: 35,
   },
 });

@@ -155,22 +155,23 @@ const styles = StyleSheet.create({
   },
 
   listMain: {
-    display: 'flex',
-    alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    gap: 4,
     paddingHorizontal: 16,
     paddingVertical: 16,
+    width: '100%',
   },
   titleLeftText: {
     color: 'rgba(21, 24, 39, 0.56)',
     fontSize: 14,
     fontWeight: '600',
+    width: '35%',
   },
   titleRightText: {
     color: '#151827',
     fontSize: 14,
     fontWeight: '600',
+    width: '65%',
   },
   addBranchHeader: {
     display: 'flex',
