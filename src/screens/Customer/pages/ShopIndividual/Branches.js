@@ -15,14 +15,64 @@ import CustomButton from '../../../../common/CustomButton';
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
 import FollowConfirmationModel from '../../../../common/Customer/FollowConfirmationModel';
+import {shopFollow} from '../../../../graphql/mutations/shops';
+import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
+import {useToast} from 'native-base';
 
 const Branches = () => {
+  const toast = useToast();
   const route = useRoute();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const {shopDetails} = route?.params?.state;
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
   const [followModalVisible, setFollowModalVisible] = useState(false);
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
+
+  const clickedByFollow = () => {
+    if (isAuthenticate) {
+      shopFollow({
+        shopInfo: {
+          shop_id: shopDetails?.id,
+          user_id: userProfile?.id,
+        },
+      }).then(
+        res => {
+          dispatch(
+            !shopFollowByUser
+              ? shopFollowToggle({
+                  shopInfo: {
+                    key: 'follow',
+                    value: res?.data?.shopFollower?.data,
+                  },
+                })
+              : shopFollowToggle({
+                  shopInfo: {
+                    key: 'unFollow',
+                    value: shopDetails?.id,
+                  },
+                }),
+          );
+          toast.show({
+            title: res?.data?.shopFollower?.message,
+            placement: 'top',
+            backgroundColor: 'green.600',
+            variant: 'solid',
+          });
+        },
+        error => {
+          toast.show({
+            title: error.message,
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        },
+      );
+    } else {
+      navigation.navigate('LoginMainScreen');
+    }
+  };
 
   useEffect(() => {
     if (!isAuthenticate) {
@@ -76,7 +126,11 @@ const Branches = () => {
               color="white"
               backgroundColor="#151827"
               borderColor="white"
-              onPress={() => setFollowModalVisible(true)}
+              onPress={() => {
+                shopFollowByUser
+                  ? setFollowModalVisible(true)
+                  : clickedByFollow();
+              }}
               icon={!shopFollowByUser && true}
               iconName="plus"
             />
