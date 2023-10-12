@@ -119,11 +119,11 @@ export default ShopCard;
 const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
-    width: '47%',
+    width: '48%',
     height: 220,
     borderRadius: 8,
     elevation: 2,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   shopNameText: {
     color: '#151827',

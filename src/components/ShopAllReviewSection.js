@@ -14,6 +14,7 @@ import StarRating from 'react-native-star-rating-widget';
 import {useNavigation} from '@react-navigation/native';
 import {formatDate, getReviewedTimeString} from '../utils';
 import {Avatar} from 'react-native-paper';
+import {capitalizeString} from '../common/CapitalizeString';
 
 const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
   const navigation = useNavigation();
@@ -132,7 +133,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
                 <View>
                   <View style={{flexDirection: 'row', gap: 15}}>
                     <Text style={styles.reviewNameText}>
-                      {review?.user_name}
+                      {capitalizeString(review?.user_name)}
                     </Text>
                     <View style={styles.countStarMain}>
                       <Text

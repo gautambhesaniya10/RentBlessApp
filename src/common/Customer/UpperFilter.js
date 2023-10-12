@@ -198,6 +198,6 @@ const styles = StyleSheet.create({
   productText: {
     color: '#151827',
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: 18,
   },
 });

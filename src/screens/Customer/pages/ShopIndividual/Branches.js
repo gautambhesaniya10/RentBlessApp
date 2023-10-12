@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 17,
-    width: 175,
+    width: 150,
   },
   listMain: {
     flexDirection: 'row',

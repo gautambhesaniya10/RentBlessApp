@@ -278,7 +278,6 @@ const ShopIndividual = () => {
                 <View
                   style={{
                     flexDirection: 'row',
-                    width: '85%',
                   }}>
                   <Image
                     source={{uri: locationIcon}}
@@ -451,6 +450,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: FontStyle,
     paddingBottom: 3,
+    marginRight: 70,
   },
   secText: {
     color: '#FFF',
@@ -465,6 +465,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '400',
     fontFamily: FontStyle,
+    width: 190,
   },
 
   followBtnMain: {

@@ -39,7 +39,9 @@ const LikeScreen = () => {
         </View>
       ) : (
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={styles.likeText}>Liked Product</Text>
+          <Text style={styles.likeText}>
+            Liked Product ({userProfile?.product_like_list?.length})
+          </Text>
           <View style={styles.cardMainContainer}>
             {userProfile?.product_like_list &&
               userProfile?.product_like_list?.map(product => (
@@ -65,6 +67,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '300',
     width: '70%',
+    textAlign: 'center',
   },
   emptyMain: {
     display: 'flex',
@@ -84,9 +87,9 @@ const styles = StyleSheet.create({
   },
   likeText: {
     paddingHorizontal: 20,
-    marginTop: 20,
-    fontSize: 18,
-    color: 'black',
+    marginTop: 10,
+    color: '#151827',
     fontWeight: '600',
+    fontSize: 18,
   },
 });

@@ -85,7 +85,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
     <View
       style={[
         styles.mainContainer,
-        {width: landingPageCardWith ? 200 : '47%'},
+        {width: landingPageCardWith ? 200 : '48%'},
       ]}>
       <View style={{position: 'relative'}}>
         {/* <ScrollView
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     elevation: 2,
     // marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 15,
   },
   productNameText: {
     color: '#151827',
