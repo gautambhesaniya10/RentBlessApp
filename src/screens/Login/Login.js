@@ -152,7 +152,11 @@ const Login = () => {
       {/* <View style={{height: '70%'}}> */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
         <Text style={styles.joinText}>
-          Login as a {loginType === 'customer' ? 'customer' : 'vendor'} !
+          Login As{' '}
+          <Text style={{color: '#29977E'}}>
+            {loginType === 'vendor' ? 'Vendor' : 'Customer'}
+          </Text>{' '}
+          !
         </Text>
         <Text style={styles.childText}>
           Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -236,7 +240,7 @@ const Login = () => {
         <View style={styles.buttonMainContainer}>
           <View style={{width: '100%'}}>
             <CustomButton
-              name="Login"
+              name="Sign In"
               color="#FFFFFF"
               backgroundColor="#151827"
               onPress={handleSubmit(onSubmit, onError)}

@@ -6,6 +6,7 @@ import CustomButton from '../../common/CustomButton';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {rentBlessBlackLogo, vendorIcon} from '../../common/AllLiveImageLink';
+import {capitalizeString} from '../../common/CapitalizeString';
 
 const LoginMainScreen = () => {
   const [loginType, setLoginType] = useState('customer');
@@ -15,14 +16,6 @@ const LoginMainScreen = () => {
     try {
       await AsyncStorage.setItem('loginType', loginType);
       navigation.navigate('Login');
-    } catch (error) {
-      console.error('Error storing data:', error);
-    }
-  };
-  const SignUpPageNavigate = async () => {
-    try {
-      await AsyncStorage.setItem('loginType', loginType);
-      navigation.navigate('SignUp');
     } catch (error) {
       console.error('Error storing data:', error);
     }
@@ -92,7 +85,7 @@ const LoginMainScreen = () => {
             <TouchableOpacity onPress={() => setLoginType('vendor')}>
               <View style={styles.icons}>
                 <Image
-                  source={{uri: vendorIcon}}
+                  source={require('../../images/shop_vendorIcon.png')}
                   style={{
                     width: 20,
                     height: 20,
@@ -104,7 +97,7 @@ const LoginMainScreen = () => {
                 )}
               </View>
               <View style={styles.bottomMain}>
-                <Text style={styles.customerText}>Business</Text>
+                <Text style={styles.customerText}>Vendor</Text>
                 <Text style={styles.customerTextChild}>
                   Sign up as a business
                 </Text>
@@ -116,23 +109,12 @@ const LoginMainScreen = () => {
         <View style={{marginTop: 65, alignSelf: 'center', width: '90%'}}>
           <View style={{marginBottom: 16, width: '100%'}}>
             <CustomButton
-              name="Create Account"
+              name={capitalizeString(`Continue as ${loginType}`)}
               color="#FFFFFF"
               backgroundColor="#151827"
               borderColor="#151827"
-              onPress={() => SignUpPageNavigate()}
+              onPress={() => LoginPageNavigate()}
             />
-          </View>
-          <View style={{width: '100%'}}>
-            <Text style={styles.loginTextMain}>
-              Already have an account?{' '}
-              <Text
-                onPress={() => LoginPageNavigate()}
-                style={styles.loginTextInner}>
-                {' '}
-                Login
-              </Text>
-            </Text>
           </View>
         </View>
       </View>
@@ -206,16 +188,5 @@ const styles = StyleSheet.create({
   bottomMain: {
     marginLeft: 20,
     marginVertical: 15,
-  },
-
-  loginTextMain: {
-    color: 'rgba(21, 24, 39, 0.56)',
-    fontSize: 16,
-    fontWeight: '400',
-    alignSelf: 'center',
-  },
-  loginTextInner: {
-    color: '#151827',
-    fontWeight: '600',
   },
 });

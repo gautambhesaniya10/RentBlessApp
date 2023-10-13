@@ -170,7 +170,12 @@ const SignUp = () => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
-        <Text style={styles.joinText}>Create an account</Text>
+        <Text style={styles.joinText}>
+          Create an account As{' '}
+          <Text style={{color: '#29977E'}}>
+            {loginType === 'vendor' ? 'Vendor' : 'Customer'}
+          </Text>
+        </Text>
         <Text style={styles.childText}>
           Lorem Ipsum is simply dummy text of the printing and typesetting
           industry.
