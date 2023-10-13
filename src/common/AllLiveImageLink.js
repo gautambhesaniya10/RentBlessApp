@@ -5,12 +5,14 @@ export const rentBlessBlackLogo = `${NEXT_PUBLIC_WASABI_URL}/imgs/rentblessBlack
 export const appBlackLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/BlackLogo.png`;
 export const whiteLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/whiteLogo.png`;
 
-export const landingBanner1 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg1.png`;
-export const landingBanner2 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg2.png`;
-export const landingBanner3 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg3.png`;
-export const landingBanner4 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg4.png`;
-export const landingBanner5 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg5.png`;
-export const landingBanner6 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg6.png`;
+// export const landingBanner1 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg1.png`;
+
+export const landingBanner1 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner1Mobile.png`;
+export const landingBanner2 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner2Mobile.png`;
+export const landingBanner3 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner3Mobile.png`;
+export const landingBanner4 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner4Mobile.png`;
+export const landingBanner5 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner5Mobile.png`;
+export const landingBanner6 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner6Mobile.png`;
 
 export const store1 = `${NEXT_PUBLIC_WASABI_URL}/imgs/store1.png`;
 export const store2 = `${NEXT_PUBLIC_WASABI_URL}/imgs/store2.png`;
