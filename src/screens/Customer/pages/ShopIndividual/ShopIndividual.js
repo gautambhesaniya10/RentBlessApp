@@ -249,16 +249,32 @@ const ShopIndividual = () => {
         </TouchableOpacity>
       </View>
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
-        <View style={styles.mainContainer}>
-          <TouchableOpacity style={{}} onPress={() => navigation.goBack()}>
+        <View style={{position: 'relative'}}>
+          {shopDetails?.shop_cover_image ? (
+            <Image
+              source={{uri: shopDetails?.shop_cover_image}}
+              style={{width: '100%', height: 160, objectFit: 'fill'}}
+            />
+          ) : (
+            <View
+              style={{
+                backgroundColor: '#00000031',
+                width: '100%',
+                height: 160,
+              }}></View>
+          )}
+
+          <TouchableOpacity
+            style={{position: 'absolute', top: 10, left: 14}}
+            onPress={() => navigation.goBack()}>
             <Icon name="angle-left" size={30} color="black" />
           </TouchableOpacity>
           <View style={styles.mainHeaderContainer}>
-            <View style={styles.topInnerMain}>
+            <View style={styles.shopLogoMainDiv}>
               {shopDetails?.shop_logo ? (
                 <Image
                   source={{uri: shopDetails?.shop_logo}}
-                  style={{width: 64, height: 64, borderRadius: 32}}
+                  style={{width: 80, height: 80, borderRadius: 40}}
                 />
               ) : (
                 <Avatar.Text
@@ -267,9 +283,12 @@ const ShopIndividual = () => {
                   backgroundColor="#29977E"
                 />
               )}
-
-              <View>
-                <Text style={styles.firstText}>{shopDetails?.shop_name}</Text>
+            </View>
+            <View style={styles.topInnerMain}>
+              <View style={{width: '70%'}}>
+                <Text numberOfLines={1} style={styles.firstText}>
+                  {shopDetails?.shop_name}
+                </Text>
                 <Text numberOfLines={2} style={styles.secText}>
                   {
                     "Let's be Effortlessly Cool: Embrace Your Signature Style with Us"
@@ -302,31 +321,31 @@ const ShopIndividual = () => {
                   }>
                   <Text style={styles.seeBranchLink}>See Branches</Text>
                 </TouchableOpacity>
-
-                <View style={styles.followBtnMain}>
-                  <View style={{width: '40%'}}>
-                    <CustomButton
-                      name={shopFollowByUser ? 'Following' : 'Follow'}
-                      color="black"
-                      backgroundColor="#FFF"
-                      onPress={() => {
-                        shopFollowByUser
-                          ? setFollowModalVisible(true)
-                          : clickedByFollow();
-                      }}
-                      icon={!shopFollowByUser && true}
-                      iconName="plus"
-                    />
-                  </View>
-                  {followModalVisible && (
-                    <FollowConfirmationModel
-                      followModalVisible={followModalVisible}
-                      setFollowModalVisible={setFollowModalVisible}
-                      shopFollowByUser={shopFollowByUser}
-                      shopDetails={shopDetails}
-                    />
-                  )}
+              </View>
+              <View style={styles.followBtnMain}>
+                <View style={{width: '100%'}}>
+                  <CustomButton
+                    name={shopFollowByUser ? 'Following' : 'Follow'}
+                    color="white"
+                    backgroundColor="#29977E"
+                    borderColor="#29977E"
+                    onPress={() => {
+                      shopFollowByUser
+                        ? setFollowModalVisible(true)
+                        : clickedByFollow();
+                    }}
+                    icon={!shopFollowByUser && true}
+                    iconName="plus"
+                  />
                 </View>
+                {followModalVisible && (
+                  <FollowConfirmationModel
+                    followModalVisible={followModalVisible}
+                    setFollowModalVisible={setFollowModalVisible}
+                    shopFollowByUser={shopFollowByUser}
+                    shopDetails={shopDetails}
+                  />
+                )}
               </View>
             </View>
             <View style={styles.cardBottomMain}>
@@ -360,6 +379,8 @@ const ShopIndividual = () => {
               </View>
             </View>
           </View>
+        </View>
+        <View style={styles.mainContainer}>
           <View style={{}}>
             <UpperFilter
               byShop={false}
@@ -430,19 +451,32 @@ const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 20,
     marginVertical: 25,
+    marginTop: '62%',
   },
   mainHeaderContainer: {
-    width: '100%',
+    width: '94%',
     backgroundColor: '#151827',
     borderRadius: 20,
     marginTop: 20,
     marginBottom: 10,
+    position: 'absolute',
+    top: '70%',
+    alignSelf: 'center',
+  },
+  shopLogoMainDiv: {
+    position: 'absolute',
+    top: '-14%',
+    zIndex: 1,
+    alignSelf: 'center',
   },
   topInnerMain: {
     marginHorizontal: 15,
     marginVertical: 15,
     flexDirection: 'row',
-    gap: 20,
+    paddingTop: 35,
+    gap: 6,
+    // width: '90%',
+    // justifyContent: 'space-between',
   },
   firstText: {
     color: '#FFF',
@@ -450,7 +484,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontFamily: FontStyle,
     paddingBottom: 3,
-    marginRight: 70,
   },
   secText: {
     color: '#FFF',
@@ -472,6 +505,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginTop: 10,
+    width: '27%',
   },
   cardBottomMain: {
     flexDirection: 'row',

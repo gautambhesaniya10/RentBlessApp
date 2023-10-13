@@ -109,18 +109,29 @@ const ProductCard = ({product, landingPageCardWith}) => {
             />
           ))}
         </ScrollView> */}
-        <View style={{height: 210, width: '100%'}}>
-          <Image
-            source={{uri: ProductImages[0]}}
-            style={{
-              height: '100%',
-              width: '100%',
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              objectFit: 'cover',
-            }}
-          />
-        </View>
+        <TouchableOpacity
+          disabled={landingPageCardWith ? true : false}
+          onPress={() =>
+            !landingPageCardWith &&
+            navigation.navigate('ProductDetail', {
+              state: {
+                productId: product?.id,
+              },
+            })
+          }>
+          <View style={{height: 210, width: '100%'}}>
+            <Image
+              source={{uri: ProductImages[0]}}
+              style={{
+                height: '100%',
+                width: '100%',
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                objectFit: 'cover',
+              }}
+            />
+          </View>
+        </TouchableOpacity>
         <View style={styles.heartIcon}>
           <TouchableOpacity onPress={() => clickedByLike()}>
             <Icon
@@ -145,6 +156,15 @@ const ProductCard = ({product, landingPageCardWith}) => {
         <Text style={styles.productNameText} numberOfLines={2}>
           {product?.product_name}
         </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        disabled={landingPageCardWith ? true : false}
+        onPress={() =>
+          !landingPageCardWith &&
+          navigation.navigate('ShopIndividual', {
+            state: {shopId: product?.branchInfo?.shop_info?.id},
+          })
+        }>
         <View style={styles.shopMain}>
           {product?.branchInfo?.shop_info?.shop_logo ? (
             <Image
@@ -185,6 +205,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     padding: 8,
+    marginTop: 4,
   },
   shopNameText: {
     color: 'rgba(21, 24, 39, 0.40)',
@@ -198,7 +219,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     marginLeft: 8,
-    marginTop: 5,
+    marginTop: 6,
+    paddingVertical: 4,
   },
   heartIcon: {
     position: 'absolute',

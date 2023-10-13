@@ -96,8 +96,7 @@ const WriteReview = () => {
         <Text style={styles.reviewShopNameText}>
           Review {shopDetails?.shop_name} Shop
         </Text>
-        <Text style={styles.rateVenderText}>Rate Vendor</Text>
-        <Text style={styles.rateOurText}>Rate Our Of</Text>
+        <Text style={styles.rateOurText}>Rate Our Of 5*</Text>
         <View style={{marginLeft: -10, paddingBottom: 30}}>
           <StarRating
             enableHalfStar={false}
@@ -121,9 +120,10 @@ const WriteReview = () => {
         </View>
         <View
           style={{
-            width: '100%',
-            marginTop: 70,
+            width: '40%',
+            marginTop: 20,
             opacity: submitButtonDisable ? 0.5 : 1,
+            alignSelf: 'flex-end',
           }}>
           <CustomButton
             name="Submit Review"
@@ -163,12 +163,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 18,
     fontFamily: FontStyle,
-    paddingBottom: 30,
-  },
-  rateVenderText: {
-    color: '#31333E',
-    fontWeight: '600',
-    fontSize: 16,
     paddingBottom: 30,
   },
   rateOurText: {

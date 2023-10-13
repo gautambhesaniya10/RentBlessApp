@@ -27,7 +27,7 @@ import {useToast} from 'native-base';
 import {shopFollow} from '../../../graphql/mutations/shops';
 import {Modal} from 'react-native';
 import {Share} from 'react-native';
-import {Avatar} from 'react-native-paper';
+import {Avatar, Divider} from 'react-native-paper';
 import {locationIcon} from '../../../common/AllLiveImageLink';
 
 const ProductDetail = () => {
@@ -221,7 +221,8 @@ const ProductDetail = () => {
                 },
               })
             }>
-            {productDetails?.data?.product?.data?.branchInfo?.shop_info ? (
+            {productDetails?.data?.product?.data?.branchInfo?.shop_info
+              .shop_logo ? (
               <Image
                 source={{
                   uri: productDetails?.data?.product?.data?.branchInfo
@@ -258,7 +259,8 @@ const ProductDetail = () => {
             <Text style={styles.dayText}>25 days ago</Text>
           </TouchableOpacity>
         </View>
-        <View style={{width: '30%'}}>
+
+        <View>
           <StarRating
             starSize={17}
             starStyle={{marginHorizontal: 0}}
@@ -342,9 +344,19 @@ const ProductDetail = () => {
           </View>
 
           <View style={styles.mainContainer}>
-            <Text style={styles.proNameText}>
-              {productDetails?.data?.product?.data?.product_name}
-            </Text>
+            <View style={styles.proNameMain}>
+              <Text style={styles.proNameText}>
+                {productDetails?.data?.product?.data?.product_name}
+              </Text>
+              <TouchableOpacity onPress={() => clickedByLike()}>
+                <Icon
+                  name={productLikeByUser ? 'heart' : 'heart-o'}
+                  size={22}
+                  color={productLikeByUser ? 'red' : 'black'}
+                />
+              </TouchableOpacity>
+            </View>
+            <Divider bold={true} style={{marginBottom: 16}} />
             <Text style={[styles.aboutNameText, {paddingBottom: 0}]}>
               About
             </Text>
@@ -517,15 +529,17 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 10,
+    gap: 15,
   },
   leftMainDiv: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
-    width: '40%',
+    paddingVertical: 12,
+    // width: '50%',
   },
   rightMainDiv: {
     display: 'flex',
@@ -534,7 +548,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 20,
     marginRight: 10,
-    width: '20%',
+    // width: '50%',
   },
   productHeadNameText: {
     color: 'white',
@@ -609,11 +623,16 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
   },
   proNameText: {
-    color: '#151827',
-    fontSize: 19,
+    color: '#29977E',
+    fontSize: 22,
     fontWeight: '700',
     fontFamily: FontStyle,
-    paddingBottom: 22,
+  },
+  proNameMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingBottom: 16,
   },
   aboutNameText: {
     color: '#151827',
