@@ -407,7 +407,7 @@ const ShopIndividual = () => {
                 <View
                   style={{
                     position: 'absolute',
-                    backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                    backgroundColor: '#fffdfd82',
                     top: 0,
                     width: '100%',
                     height: '100%',

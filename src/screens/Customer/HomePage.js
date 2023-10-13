@@ -24,11 +24,14 @@ import ShopCard from '../../components/ShopCard/ShopCard';
 import FilterDrawerModel from '../../common/FilterDrawerModel';
 import {useIsFocused} from '@react-navigation/native';
 import {
+  clothIMG,
   landingBanner4,
   landingBanner5,
   landingBanner6,
+  store_Icon,
 } from '../../common/AllLiveImageLink';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -247,6 +250,7 @@ const HomePage = () => {
       <View style={{position: 'relative'}}>
         <CustomerHeader homeScreen={true} />
       </View>
+
       <View style={styles.FilterBtnMain}>
         <TouchableOpacity
           onPress={() => setFilterModelOpen(true)}
@@ -254,6 +258,38 @@ const HomePage = () => {
           <Icon name="filter" size={18} color="white" />
           <Text style={styles.filterBtnText}>Filters</Text>
         </TouchableOpacity>
+        <View style={styles.shopProMain}>
+          <TouchableOpacity
+            onPress={() => dispatch(shopProductButtonChange(false))}
+            style={[
+              styles.filterButtonShop,
+              {backgroundColor: byShop ? 'lightgrey' : '#29977E'},
+            ]}>
+            <Image
+              source={{uri: clothIMG}}
+              style={{
+                width: 18,
+                height: 18,
+                tintColor: byShop ? 'black' : 'white',
+              }}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => dispatch(shopProductButtonChange(true))}
+            style={[
+              styles.filterButtonPro,
+              {backgroundColor: byShop ? '#29977E' : 'lightgrey'},
+            ]}>
+            <Image
+              source={{uri: store_Icon}}
+              style={{
+                width: 18,
+                height: 18,
+                tintColor: byShop ? 'white' : 'black',
+              }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={{flex: 1}}>
@@ -327,7 +363,7 @@ const HomePage = () => {
                         <View
                           style={{
                             position: 'absolute',
-                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            backgroundColor: '#fffdfd82',
                             top: 0,
                             width: '100%',
                             height: '100%',
@@ -368,7 +404,7 @@ const HomePage = () => {
                       <View
                         style={{
                           position: 'absolute',
-                          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                          backgroundColor: '#fffdfd82',
                           top: 0,
                           width: '100%',
                           height: '100%',
@@ -434,17 +470,37 @@ const styles = StyleSheet.create({
     bottom: 10,
     zIndex: 1,
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 10,
   },
   filterButton: {
     backgroundColor: '#29977E',
-    width: '30%',
     alignItems: 'center',
-    alignSelf: 'center',
     paddingVertical: 10,
+    paddingHorizontal: 10,
     borderRadius: 8,
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 5,
+  },
+  shopProMain: {
+    flexDirection: 'row',
+  },
+  filterButtonShop: {
+    backgroundColor: 'lightgrey',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
+  },
+  filterButtonPro: {
+    backgroundColor: '#151827',
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    borderTopRightRadius: 8,
+    borderBottomRightRadius: 8,
   },
   filterBtnText: {
     color: 'white',

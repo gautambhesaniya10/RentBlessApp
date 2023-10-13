@@ -5,7 +5,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../common/CustomButton';
 import {useNavigation, useIsFocused} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {rentBlessBlackLogo, vendorIcon} from '../../common/AllLiveImageLink';
+import {
+  rentBlessBlackLogo,
+  shop_vendorIcon,
+  vendorIcon,
+} from '../../common/AllLiveImageLink';
 import {capitalizeString} from '../../common/CapitalizeString';
 
 const LoginMainScreen = () => {
@@ -85,7 +89,7 @@ const LoginMainScreen = () => {
             <TouchableOpacity onPress={() => setLoginType('vendor')}>
               <View style={styles.icons}>
                 <Image
-                  source={require('../../images/shop_vendorIcon.png')}
+                  source={{uri: shop_vendorIcon}}
                   style={{
                     width: 20,
                     height: 20,

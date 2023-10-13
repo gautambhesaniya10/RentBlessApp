@@ -27,3 +27,7 @@ export const locationIcon = `${NEXT_PUBLIC_WASABI_URL}/imgs/locationIcon.png`;
 
 export const homeCoverImage = `${NEXT_PUBLIC_WASABI_URL}/imgs/homeCoverImage.png`;
 export const emptyCartImage = `${NEXT_PUBLIC_WASABI_URL}/imgs/empty_cart.png`;
+
+export const clothIMG = `${NEXT_PUBLIC_WASABI_URL}/imgs/cloth.png`;
+export const shop_vendorIcon = `${NEXT_PUBLIC_WASABI_URL}/imgs/shop_vendorIcon.png`;
+export const store_Icon = `${NEXT_PUBLIC_WASABI_URL}/imgs/store_Icon.png`;

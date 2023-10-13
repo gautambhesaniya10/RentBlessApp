@@ -28,16 +28,8 @@ const FilterScreen = ({
       <View style={[styles.headerMain, {height: '10%'}]}>
         <View style={styles.innerHeaderLeft}>
           <Text style={styles.filterHeaderText}>Filters</Text>
-          {!showOnlyShopDetailPage && (
+          {/* {!showOnlyShopDetailPage && (
             <View style={styles.toggleSwitchMain}>
-              {/* <Text style={styles.switchText}>Product</Text>
-          <Switch
-            value={byShop}
-            onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
-            color="#29977E"
-          />
-          <Text style={styles.switchText}>Shop</Text> */}
-
               <Switch
                 value={byShop}
                 onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
@@ -60,7 +52,7 @@ const FilterScreen = ({
                 switchWidthMultiplier={3} // multiplied by the `circleSize` prop to calculate total width
               />
             </View>
-          )}
+          )} */}
         </View>
         <TouchableOpacity onPress={() => handleFilterModelClose()}>
           <Icon name="close" size={20} color="black" />
@@ -111,10 +103,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-  },
-  switchText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: '600',
   },
 });
