@@ -301,18 +301,7 @@ const HomePage = () => {
                     <ActivityIndicator color="green" />
                   </View>
                 ) : productsData?.length > 0 ? (
-                  <View
-                    style={[
-                      styles.productCardMain,
-                      {
-                        opacity:
-                          productLoading &&
-                          productsData?.length > 0 &&
-                          !showBottomLoader
-                            ? 0.5
-                            : 1,
-                      },
-                    ]}>
+                  <View style={[styles.productCardMain]}>
                     {productsData?.map((product, index) => (
                       <ProductCard key={index} product={product} />
                     ))}
@@ -331,6 +320,19 @@ const HomePage = () => {
                           <ActivityIndicator color="green" />
                         </View>
                       )}
+
+                    {productLoading &&
+                      productsData?.length > 0 &&
+                      !showBottomLoader && (
+                        <View
+                          style={{
+                            position: 'absolute',
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                            top: 0,
+                            width: '100%',
+                            height: '100%',
+                          }}></View>
+                      )}
                   </View>
                 ) : (
                   <Text style={styles.noDataText}>No Product Available</Text>
@@ -340,18 +342,7 @@ const HomePage = () => {
                   <ActivityIndicator color="green" />
                 </View>
               ) : shopsData?.length > 0 ? (
-                <View
-                  style={[
-                    styles.productCardMain,
-                    {
-                      opacity:
-                        shopLoading &&
-                        shopsData?.length > 0 &&
-                        !showBottomLoader
-                          ? 0.5
-                          : 1,
-                    },
-                  ]}>
+                <View style={[styles.productCardMain]}>
                   {shopsData?.map((shop, index) => (
                     <ShopCard key={index} shop={shop} />
                   ))}
@@ -369,6 +360,19 @@ const HomePage = () => {
                       <View style={styles.loaderFilterDiv}>
                         <ActivityIndicator color="green" />
                       </View>
+                    )}
+
+                  {shopLoading &&
+                    shopsData?.length > 0 &&
+                    !showBottomLoader && (
+                      <View
+                        style={{
+                          position: 'absolute',
+                          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                          top: 0,
+                          width: '100%',
+                          height: '100%',
+                        }}></View>
                     )}
                 </View>
               ) : (
@@ -403,6 +407,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignSelf: 'center',
     width: '100%',
+    position: 'relative',
   },
   loaderDiv: {
     marginVertical: 100,
