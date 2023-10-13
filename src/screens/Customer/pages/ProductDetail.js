@@ -308,10 +308,10 @@ const ProductDetail = () => {
               images={productImages}
               sliderBoxHeight={460}
               resizeMethod={'resize'}
-              resizeMode={'cover'}
+              resizeMode={'fill'}
               ImageComponentStyle={{
                 borderRadius: 0,
-                objectFit: 'cover',
+                objectFit: 'fill',
               }}
               // dotStyle={{
               //   marginBottom: 30,

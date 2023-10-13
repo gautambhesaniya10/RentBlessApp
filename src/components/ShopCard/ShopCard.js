@@ -29,6 +29,7 @@ const ShopCard = ({shop}) => {
                 width: '100%',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
+                objectFit: 'fill',
               }}
             />
           ) : (

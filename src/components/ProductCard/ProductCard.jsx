@@ -127,7 +127,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
                 width: '100%',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
-                objectFit: 'cover',
+                objectFit: 'fill',
               }}
             />
           </View>
@@ -153,7 +153,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
             },
           })
         }>
-        <Text style={styles.productNameText} numberOfLines={2}>
+        <Text style={styles.productNameText} numberOfLines={1}>
           {product?.product_name}
         </Text>
       </TouchableOpacity>
