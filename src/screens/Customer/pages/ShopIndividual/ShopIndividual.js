@@ -269,179 +269,183 @@ const ShopIndividual = () => {
             onPress={() => navigation.goBack()}>
             <Icon name="angle-left" size={30} color="black" />
           </TouchableOpacity>
-          <View style={styles.mainHeaderContainer}>
-            <View style={styles.shopLogoMainDiv}>
-              {shopDetails?.shop_logo ? (
-                <Image
-                  source={{uri: shopDetails?.shop_logo}}
-                  style={{width: 80, height: 80, borderRadius: 40}}
-                />
-              ) : (
-                <Avatar.Text
-                  size={64}
-                  label={shopDetails?.shop_name?.charAt(0)}
-                  backgroundColor="#29977E"
-                />
-              )}
-            </View>
-            <View style={styles.topInnerMain}>
-              <View style={{width: '70%'}}>
-                <Text numberOfLines={1} style={styles.firstText}>
-                  {shopDetails?.shop_name}
-                </Text>
-                <Text numberOfLines={2} style={styles.secText}>
-                  {
-                    "Let's be Effortlessly Cool: Embrace Your Signature Style with Us"
-                  }
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
+          <View style={{marginTop: -30}}>
+            <View style={styles.mainHeaderContainer}>
+              <View style={styles.shopLogoMainDiv}>
+                {shopDetails?.shop_logo ? (
                   <Image
-                    source={{uri: locationIcon}}
-                    style={{
-                      width: 10,
-                      height: 10,
-                      tintColor: 'red',
-                      marginTop: 4,
-                    }}
+                    source={{uri: shopDetails?.shop_logo}}
+                    style={{width: 100, height: 100, borderRadius: 50}}
                   />
-                  <Text numberOfLines={2} style={styles.thirdText}>
-                    {shopDetails?.branch_info?.map(
-                      itm => itm?.branch_type === 'main' && itm?.branch_address,
-                    )}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Branches', {
-                      state: {shopDetails: shopDetails},
-                    })
-                  }>
-                  <Text style={styles.seeBranchLink}>See Branches</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.followBtnMain}>
-                <View style={{width: '100%'}}>
-                  <CustomButton
-                    name={shopFollowByUser ? 'Following' : 'Follow'}
-                    color="white"
+                ) : (
+                  <Avatar.Text
+                    size={64}
+                    label={shopDetails?.shop_name?.charAt(0)}
                     backgroundColor="#29977E"
-                    borderColor="#29977E"
-                    onPress={() => {
-                      shopFollowByUser
-                        ? setFollowModalVisible(true)
-                        : clickedByFollow();
-                    }}
-                    icon={!shopFollowByUser && true}
-                    iconName="plus"
-                  />
-                </View>
-                {followModalVisible && (
-                  <FollowConfirmationModel
-                    followModalVisible={followModalVisible}
-                    setFollowModalVisible={setFollowModalVisible}
-                    shopFollowByUser={shopFollowByUser}
-                    shopDetails={shopDetails}
                   />
                 )}
               </View>
-            </View>
-            <View style={styles.cardBottomMain}>
-              <View style={styles.bottomItemDiv}>
-                <Text style={styles.bottomTitleText}>
-                  <Icon name="shopping-cart" size={16} color="white" /> Product
-                </Text>
-                <Text style={styles.numText}>{productsCount}</Text>
-              </View>
-              <View style={styles.bottomItemDiv}>
-                <Text style={styles.bottomTitleText}>
-                  <Icon name="user-o" size={16} color="white" /> Followers
-                </Text>
-                <Text style={styles.numText}>{totalFollowers}</Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => handleScrollToReviewClick()}
-                style={styles.bottomItemDiv}>
-                <Text style={styles.bottomTitleText}>
-                  <Icon name="pencil-square-o" size={16} color="white" />{' '}
-                  Reviews
-                </Text>
-                <Text style={styles.numText}>{shopReviews?.length}</Text>
-              </TouchableOpacity>
-              <View style={styles.bottomItemDiv}>
-                <TouchableOpacity onPress={() => shareContent()}>
-                  <Text style={styles.bottomTitleText}>
-                    <Icon name="share" size={16} color="white" /> Share
+              <View style={styles.topInnerMain}>
+                <View style={{width: '70%'}}>
+                  <Text numberOfLines={2} style={styles.firstText}>
+                    {shopDetails?.shop_name}
                   </Text>
+                  <Text numberOfLines={2} style={styles.secText}>
+                    {
+                      "Let's be Effortlessly Cool: Embrace Your Signature Style with Us"
+                    }
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                    }}>
+                    <Image
+                      source={{uri: locationIcon}}
+                      style={{
+                        width: 10,
+                        height: 10,
+                        tintColor: 'red',
+                        marginTop: 4,
+                      }}
+                    />
+                    <Text numberOfLines={2} style={styles.thirdText}>
+                      {shopDetails?.branch_info?.map(
+                        itm =>
+                          itm?.branch_type === 'main' && itm?.branch_address,
+                      )}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('Branches', {
+                        state: {shopDetails: shopDetails},
+                      })
+                    }>
+                    <Text style={styles.seeBranchLink}>See Branches</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={styles.followBtnMain}>
+                  <View style={{width: '100%'}}>
+                    <CustomButton
+                      name={shopFollowByUser ? 'Following' : 'Follow'}
+                      color="white"
+                      backgroundColor="#29977E"
+                      borderColor="#29977E"
+                      onPress={() => {
+                        shopFollowByUser
+                          ? setFollowModalVisible(true)
+                          : clickedByFollow();
+                      }}
+                      icon={!shopFollowByUser && true}
+                      iconName="plus"
+                    />
+                  </View>
+                  {followModalVisible && (
+                    <FollowConfirmationModel
+                      followModalVisible={followModalVisible}
+                      setFollowModalVisible={setFollowModalVisible}
+                      shopFollowByUser={shopFollowByUser}
+                      shopDetails={shopDetails}
+                    />
+                  )}
+                </View>
+              </View>
+              <View style={styles.cardBottomMain}>
+                <View style={styles.bottomItemDiv}>
+                  <Text style={styles.bottomTitleText}>
+                    <Icon name="shopping-cart" size={16} color="white" />{' '}
+                    Product
+                  </Text>
+                  <Text style={styles.numText}>{productsCount}</Text>
+                </View>
+                <View style={styles.bottomItemDiv}>
+                  <Text style={styles.bottomTitleText}>
+                    <Icon name="user-o" size={16} color="white" /> Followers
+                  </Text>
+                  <Text style={styles.numText}>{totalFollowers}</Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => handleScrollToReviewClick()}
+                  style={styles.bottomItemDiv}>
+                  <Text style={styles.bottomTitleText}>
+                    <Icon name="pencil-square-o" size={16} color="white" />{' '}
+                    Reviews
+                  </Text>
+                  <Text style={styles.numText}>{shopReviews?.length}</Text>
                 </TouchableOpacity>
+                <View style={styles.bottomItemDiv}>
+                  <TouchableOpacity onPress={() => shareContent()}>
+                    <Text style={styles.bottomTitleText}>
+                      <Icon name="share" size={16} color="white" /> Share
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
-        <View style={styles.mainContainer}>
-          <View style={{}}>
-            <UpperFilter
-              byShop={false}
-              showOnlyShopDetailPage={true}
-              productsCount={productsCount}
-            />
-          </View>
-
-          {productLoading && productsData?.length === 0 ? (
-            <View style={{marginVertical: 35}}>
-              <ActivityIndicator />
-            </View>
-          ) : productsData?.length > 0 ? (
-            <View style={[styles.productCardMain]}>
-              {productsData?.map((product, index) => (
-                <ProductCard product={product} key={index} />
-              ))}
-              {productLoading && productsData?.length > 0 && (
-                <View style={styles.loaderFilterDiv}>
-                  <ActivityIndicator color="green" />
-                </View>
-              )}
-              {productLoading && productsData?.length > 0 && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    backgroundColor: '#fffdfd82',
-                    top: 0,
-                    width: '100%',
-                    height: '100%',
-                  }}></View>
-              )}
-            </View>
-          ) : (
-            <Text style={styles.noProductText}>No Product Available</Text>
-          )}
-
-          <View>
-            {productsCount > ProductLimit && (
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'center',
-                  marginBottom: 15,
-                }}>
-                <TablePagination
-                  // totalItems={productsCount}
-                  // itemsPerPage={2}
-                  numOfPages={numOfPages}
-                  onPageChange={handlePageChange}
+            <View style={styles.mainContainer}>
+              <View style={{}}>
+                <UpperFilter
+                  byShop={false}
+                  showOnlyShopDetailPage={true}
+                  productsCount={productsCount}
                 />
               </View>
-            )}
-          </View>
 
-          <View ref={reviewSectionRef}>
-            <ShopAllReviewSection
-              shopReviews={shopReviews}
-              viewAllBtn={false}
-              shopDetails={shopDetails}
-            />
+              {productLoading && productsData?.length === 0 ? (
+                <View style={{marginVertical: 35}}>
+                  <ActivityIndicator />
+                </View>
+              ) : productsData?.length > 0 ? (
+                <View style={[styles.productCardMain]}>
+                  {productsData?.map((product, index) => (
+                    <ProductCard product={product} key={index} />
+                  ))}
+                  {productLoading && productsData?.length > 0 && (
+                    <View style={styles.loaderFilterDiv}>
+                      <ActivityIndicator color="green" />
+                    </View>
+                  )}
+                  {productLoading && productsData?.length > 0 && (
+                    <View
+                      style={{
+                        position: 'absolute',
+                        backgroundColor: '#fffdfd82',
+                        top: 0,
+                        width: '100%',
+                        height: '100%',
+                      }}></View>
+                  )}
+                </View>
+              ) : (
+                <Text style={styles.noProductText}>No Product Available</Text>
+              )}
+
+              <View>
+                {productsCount > ProductLimit && (
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      marginBottom: 15,
+                    }}>
+                    <TablePagination
+                      // totalItems={productsCount}
+                      // itemsPerPage={2}
+                      numOfPages={numOfPages}
+                      onPageChange={handlePageChange}
+                    />
+                  </View>
+                )}
+              </View>
+
+              <View ref={reviewSectionRef}>
+                <ShopAllReviewSection
+                  shopReviews={shopReviews}
+                  viewAllBtn={false}
+                  shopDetails={shopDetails}
+                />
+              </View>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -454,22 +458,18 @@ export default ShopIndividual;
 const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 20,
-    marginVertical: 25,
-    marginTop: '62%',
+    marginBottom: 25,
+    marginTop: 13,
   },
   mainHeaderContainer: {
     width: '94%',
     backgroundColor: '#151827',
     borderRadius: 20,
-    marginTop: 20,
-    marginBottom: 10,
-    position: 'absolute',
-    top: '70%',
     alignSelf: 'center',
   },
   shopLogoMainDiv: {
     position: 'absolute',
-    top: '-14%',
+    top: '-18%',
     zIndex: 1,
     alignSelf: 'center',
   },
@@ -477,10 +477,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginVertical: 15,
     flexDirection: 'row',
-    paddingTop: 35,
+    paddingTop: 45,
     gap: 6,
-    // width: '90%',
-    // justifyContent: 'space-between',
   },
   firstText: {
     color: '#FFF',
