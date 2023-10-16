@@ -28,6 +28,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useToast} from 'native-base';
 import {homeCoverImage} from '../../../common/AllLiveImageLink';
 import VersionAppModel from '../../AppVersionModel/VersionApp';
+import {fileUpload} from '../../../wasabi';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -119,6 +120,22 @@ const ShopSetUp = () => {
       branch_type: 'sub',
     };
   };
+
+  const multipleImageUploadFile = async uploadShopImages => {
+    const uploadPromises = uploadShopImages?.map(uploadShopImg => {
+      return fileUpload(uploadShopImg);
+    });
+
+    try {
+      const uploadShopImgs = await Promise.all(uploadPromises);
+      console.log('uploadShopImgs :>> ', uploadShopImgs);
+      return uploadShopImgs;
+    } catch (error) {
+      console.error('Error during file upload:', error);
+      return [];
+    }
+  };
+
   const onSubmit = async data => {
     if (currentPosition !== 2) {
       setCurrentPosition(currentPosition + 1);
@@ -127,22 +144,37 @@ const ShopSetUp = () => {
 
       let logoResponse = '';
       let backgroundResponse = '';
-      let imagesResponse = '';
+      let imagesResponse = [];
       let videoResponse = null;
 
       if (uploadShopLogo) {
-        logoResponse = await SingleImageUploadFile(uploadShopLogo);
+        await fileUpload(uploadShopLogo)
+          .then(res => (logoResponse = res))
+          .catch(error => {
+            console.error('Error during file upload:', error);
+          });
       }
+
       if (uploadShopBackground) {
-        backgroundResponse = await SingleImageUploadFile(uploadShopBackground);
+        await fileUpload(uploadShopBackground)
+          .then(res => (backgroundResponse = res))
+          .catch(error => {
+            console.error('Error during file upload:', error);
+          });
       }
+
       if (uploadShopImages.filter(item => item !== undefined).length > 0) {
-        imagesResponse = await MultipleImageUploadFile(
+        await multipleImageUploadFile(
           uploadShopImages.filter(item => item !== undefined),
-        );
+        ).then(res => (imagesResponse = res));
       }
+
       if (uploadShopVideo) {
-        videoResponse = await VideoUploadFile(uploadShopVideo);
+        await fileUpload(uploadShopVideo)
+          .then(res => (videoResponse = res))
+          .catch(error => {
+            console.error('Error during file upload:', error);
+          });
       }
 
       await shopRegistration({
@@ -154,13 +186,13 @@ const ShopSetUp = () => {
           owner_contact: data.user_contact,
         },
         shopInfo: {
-          shop_logo: logoResponse?.data?.data?.singleUpload || '',
-          shop_cover_image: backgroundResponse?.data?.data?.singleUpload || '',
+          shop_logo: logoResponse || '',
+          shop_cover_image: backgroundResponse || '',
           shop_images:
-            imagesResponse?.data?.data?.multipleUpload?.map(itm => {
+            imagesResponse?.map(itm => {
               return {links: itm};
             }) || [],
-          shop_video: videoResponse?.data?.data?.singleUpload || '',
+          shop_video: videoResponse || '',
 
           form_steps: '3',
           shop_social_link: {
@@ -350,8 +382,10 @@ const ShopSetUp = () => {
             )}
             {currentPosition === 1 && (
               <ShopSetUpScreenTwo
+                uploadShopLogo={uploadShopLogo}
                 setUploadShopLogo={setUploadShopLogo}
                 setUploadShopBackground={setUploadShopBackground}
+                uploadShopBackground={uploadShopBackground}
                 uploadShopImages={uploadShopImages}
                 setUploadShopImages={setUploadShopImages}
                 setUploadShopVideo={setUploadShopVideo}

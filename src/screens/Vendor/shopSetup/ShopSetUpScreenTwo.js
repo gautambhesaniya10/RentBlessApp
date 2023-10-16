@@ -1,22 +1,16 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  PermissionsAndroid,
-} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {FontStyle} from '../../../../CommonStyle';
-import CustomButton from '../../../common/CustomButton';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
 
 const ShopSetUpScreenTwo = ({
   setCurrentPosition,
   currentPosition,
+  uploadShopLogo,
   setUploadShopLogo,
+  uploadShopBackground,
   setUploadShopBackground,
   uploadShopImages,
   setUploadShopImages,
@@ -202,6 +196,16 @@ const ShopSetUpScreenTwo = ({
           {error?.shopLogo}
         </Text>
       )}
+
+      {/* <View style={{width: '45%'}}>
+        <CustomButton
+          name="upload"
+          color="#FFFFFF"
+          backgroundColor="#29977E"
+          borderColor="#29977E"
+          onPress={() => fileDelete()}
+        />
+      </View> */}
 
       <TouchableOpacity
         onPress={() => ChooseShopCoverImage()}
