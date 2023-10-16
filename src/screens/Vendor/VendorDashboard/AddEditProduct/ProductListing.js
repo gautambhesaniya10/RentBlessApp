@@ -171,7 +171,10 @@ const ProductListing = () => {
                         <TouchableOpacity
                           onPress={() =>
                             navigation.navigate('VendorAddEditProduct', {
-                              state: {productEditId: item?.id},
+                              state: {
+                                productEditId: item?.id,
+                                editableProductData: item,
+                              },
                             })
                           }
                           style={styles.pencilIcon}>
