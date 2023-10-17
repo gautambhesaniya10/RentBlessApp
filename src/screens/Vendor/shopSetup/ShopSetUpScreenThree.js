@@ -24,11 +24,14 @@ const ShopSetUpScreenThree = ({
   currentPosition,
   subBranch,
   setSubBranch,
+  sameAsOwner,
+  setSameAsOwner,
+  managerValue,
+  setManagerValue,
 }) => {
   const [mainBranchShow, setMainBranchShow] = useState(true);
   const [managerShow, setManagerShow] = useState(true);
   const [managerSubBranchShow, setManagerSubBranchShow] = useState(true);
-  const [sameAsOwner, setSameAsOwner] = useState('False');
 
   const [subBranchEdit, setSubBranchEdit] = useState();
 
@@ -335,6 +338,8 @@ const ShopSetUpScreenThree = ({
                   setSubBranch={setSubBranch}
                   subBranchEdit={subBranchEdit}
                   setSubBranchEdit={setSubBranchEdit}
+                  managerValue={managerValue}
+                  setManagerValue={setManagerValue}
                 />
               </>
             )}
@@ -463,8 +468,9 @@ const SubBranchModel = ({
   setSubBranch,
   setSubBranchEdit,
   subBranchEdit,
+  managerValue,
+  setManagerValue,
 }) => {
-  const [managerValue, setManagerValue] = useState('');
   const [subManagerAddress, setSubManagerAddress] = useState('');
   const [subManagerCity, setSubManagerCity] = useState('');
   const [subManagerPinCode, setSubManagerPinCode] = useState('');

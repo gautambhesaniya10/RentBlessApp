@@ -10,6 +10,7 @@ import {FontStyle} from '../../CommonStyle';
 
 const VendorSideBarContent = ({vendorShopDetails}) => {
   const navigation = useNavigation();
+  const cacheBuster = Math.random();
   const dispatch = useDispatch();
   const {userProfile} = useSelector(state => state?.user);
   const logoName = `${userProfile?.first_name
@@ -34,7 +35,7 @@ const VendorSideBarContent = ({vendorShopDetails}) => {
         onPress={() => navigation.navigate('Home')}
         style={styles.drawerHeader}>
         <Image
-          source={{uri: vendorShopDetails?.shop_logo}}
+          source={{uri: `${vendorShopDetails?.shop_logo}?cache=${cacheBuster}`}}
           style={styles.logo}
         />
         <Text style={styles.heading}>{vendorShopDetails?.shop_name}</Text>

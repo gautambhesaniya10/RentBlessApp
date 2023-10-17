@@ -2,7 +2,7 @@ import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {TouchableOpacity} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import OwnerDetail from './AllTabs/OwnerDetail';
 import {useForm} from 'react-hook-form';
 import {shopUpdate} from '../../../graphql/mutations/shops';
@@ -14,9 +14,11 @@ import SubBranchTab from './AllTabs/SubBranchTab';
 import ShopLayoutTab from './AllTabs/ShopLayoutTab';
 import VendorHeader from '../../../components/VendorHeader';
 import {RefreshControl} from 'react-native';
+import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 
 const ShopDetail = () => {
   const toast = useToast();
+  const dispatch = useDispatch();
   const {
     handleSubmit: ownerInfoHandleSubmit,
     formState: {errors: ownerInfoErrors},
@@ -65,6 +67,10 @@ const ShopDetail = () => {
           'Sub Branch',
           'Shop Layout',
         ];
+
+  const updateVendorShopDetailStore = () => {
+    dispatch(loadVendorShopDetailsStart(useProfileData?.userCreatedShopId));
+  };
 
   const [hours, setHours] = useState([
     {key: 'Sunday', value: ['09:00 AM - 08:00 PM']},
@@ -344,6 +350,7 @@ const ShopDetail = () => {
               ownerInfoOnSubmit={ownerInfoOnSubmit}
               setShopOwnerId={setShopOwnerId}
               ownerLoading={ownerLoading}
+              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Shop Info' && (
@@ -358,6 +365,7 @@ const ShopDetail = () => {
               vendorShopDetails={vendorShopDetails}
               hours={hours}
               setHours={setHours}
+              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Main Branch' && (
@@ -369,6 +377,7 @@ const ShopDetail = () => {
               mainBranchControl={mainBranchControl}
               setSameAsOwner={setSameAsOwner}
               sameAsOwner={sameAsOwner}
+              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Sub Branch' && (
@@ -377,12 +386,14 @@ const ShopDetail = () => {
               vendorShopDetails={vendorShopDetails}
               mainBranchInfoGetValue={mainBranchInfoGetValue}
               ownerInfoGetValue={ownerInfoGetValue}
+              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Shop Layout' && (
             <ShopLayoutTab
               useProfileData={useProfileData}
               vendorShopDetails={vendorShopDetails}
+              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
         </View>

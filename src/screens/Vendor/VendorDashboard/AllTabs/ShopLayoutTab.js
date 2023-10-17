@@ -14,118 +14,81 @@ import {shopUpdate} from '../../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
+import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 
-const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
+const ShopLayoutTab = ({
+  vendorShopDetails,
+  useProfileData,
+  updateVendorShopDetailStore,
+}) => {
   const toast = useToast();
+  const cacheBuster = Math.random();
 
   const [shopLogo, setShopLogo] = useState('');
+  const [uploadShopLogo, setUploadShopLogo] = useState('');
+  const [deleteShopLogo, setDeleteShopLogo] = useState('');
+
   const [shopBackground, setShopBackground] = useState('');
+  const [uploadShopBackground, setUploadShopBackground] = useState('');
+  const [deleteShopBackground, setDeleteShopBackground] = useState('');
+
   const [shopImages, setShopImages] = useState([]);
+  const [editableShopImages, setEditableShopImages] = useState([]);
+
+  const [shopImagesWasabiUrl, setShopImageWasabiUrl] = useState([]);
+  const [deleteShopImages, setDeleteShopImages] = useState([]);
+
   // const ShopImgsError = shopImages?.filter(item => item !== undefined);
   const [shopVideo, setShopVideo] = useState('');
-
-  const [uploadShopLogo, setUploadShopLogo] = useState('');
-  const [uploadShopBackground, setUploadShopBackground] = useState('');
-  const [uploadShopImages, setUploadShopImages] = useState([]);
   const [uploadShopVideo, setUploadShopVideo] = useState('');
-  const [shopLayoutAllMediaImages, setShopLayoutAllMediaImages] = useState([]);
-  const [shopLayoutAllMediaVideos, setShopLayoutAllMediaVideos] = useState();
+  const [deleteShopVideo, setDeleteShopVideo] = useState('');
 
-  const [error, setError] = useState({});
   const [shopLayoutLoading, setShopLayoutLoading] = useState(false);
 
-  const srcToFile = async (src, fileName, mimeType) => {
-    const response = await RNFetchBlob.fetch('GET', src);
-    const buf = await response.blob();
-    const file = new File([buf], fileName, {type: mimeType});
+  // const srcToFile = async (src, fileName, mimeType) => {
+  //   const response = await RNFetchBlob.fetch('GET', src);
+  //   const buf = await response.blob();
+  //   const file = new File([buf], fileName, {type: mimeType});
 
-    let ext = '';
-    if (mimeType === 'image/png') {
-      ext = 'jpg';
-    } else if (mimeType === 'video') {
-      ext = 'mp4';
-    }
-    const storeLocalUrl = await RNFetchBlob.config({
-      fileCache: true,
-      appendExt: ext,
-    }).fetch('GET', src);
-    const imagePath = storeLocalUrl.path();
-    const imagePathModify = `file://${imagePath}`;
+  //   let ext = '';
+  //   if (mimeType === 'image/png') {
+  //     ext = 'jpg';
+  //   } else if (mimeType === 'video') {
+  //     ext = 'mp4';
+  //   }
+  //   const storeLocalUrl = await RNFetchBlob.config({
+  //     fileCache: true,
+  //     appendExt: ext,
+  //   }).fetch('GET', src);
+  //   const imagePath = storeLocalUrl.path();
+  //   const imagePathModify = `file://${imagePath}`;
 
-    const reFactorFile = {
-      ...file?._data,
-      fileName: file?._data?.name,
-      fileSize: file?._data?.size,
-      uri: imagePathModify,
-    };
+  //   const reFactorFile = {
+  //     ...file?._data,
+  //     fileName: file?._data?.name,
+  //     fileSize: file?._data?.size,
+  //     uri: imagePathModify,
+  //   };
 
-    return reFactorFile;
-  };
+  //   return reFactorFile;
+  // };
 
   useEffect(() => {
     setShopImages([]);
-    setUploadShopImages([]);
-    if (useProfileData?.userCreatedShopId) {
-      {
-        vendorShopDetails?.shop_logo &&
-          srcToFile(
-            vendorShopDetails?.shop_logo,
-            'profileLogo.png',
-            'image/png',
-          ).then(function (file) {
-            setUploadShopLogo(file);
-          });
-      }
+    setEditableShopImages([]);
+
+    if (vendorShopDetails) {
       setShopLogo(vendorShopDetails?.shop_logo);
 
-      {
-        vendorShopDetails?.shop_cover_image &&
-          srcToFile(
-            vendorShopDetails?.shop_cover_image,
-            'profileBackGround.png',
-            'image/png',
-          ).then(function (file) {
-            setUploadShopBackground(file);
-          });
-      }
       setShopBackground(vendorShopDetails?.shop_cover_image);
 
-      vendorShopDetails?.shop_images?.map(img => {
-        img?.links &&
-          srcToFile(img?.links, 'profile.png', 'image/png').then(function (
-            file,
-          ) {
-            setUploadShopImages(old => [...old, file]);
-          });
-        setShopImages(old => [...old, img?.links]);
-      });
-
-      {
-        vendorShopDetails?.shop_video &&
-          srcToFile(
-            vendorShopDetails?.shop_video,
-            'shopVideo.mp4',
-            'video',
-          ).then(function (file) {
-            setUploadShopVideo(file);
-          });
-      }
+      setShopImageWasabiUrl([...vendorShopDetails?.shop_images]);
+      setShopImages([...vendorShopDetails?.shop_images]);
 
       vendorShopDetails?.shop_video &&
         setShopVideo(vendorShopDetails?.shop_video);
-
-      setShopLayoutAllMediaImages([
-        vendorShopDetails?.shop_logo,
-        vendorShopDetails?.shop_cover_image,
-        ...(vendorShopDetails?.shop_images?.length > 0
-          ? vendorShopDetails?.shop_images?.map(itm => itm.links)
-          : []),
-      ]);
-
-      vendorShopDetails?.shop_video &&
-        setShopLayoutAllMediaVideos(vendorShopDetails?.shop_video);
     }
-  }, [useProfileData, vendorShopDetails]);
+  }, [vendorShopDetails]);
 
   const ChooseShopLogoImage = () => {
     let options = {
@@ -156,7 +119,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
       } else {
         setShopLogo(response.assets[0].uri);
         setUploadShopLogo(response.assets[0]);
-        setError({...error, shopLogo: ''});
+        setDeleteShopLogo('');
       }
     });
   };
@@ -184,7 +147,7 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
       } else {
         setShopBackground(response.assets[0].uri);
         setUploadShopBackground(response.assets[0]);
-        setError({...error, shopBackground: ''});
+        setDeleteShopBackground('');
       }
     });
   };
@@ -193,7 +156,6 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
     while (arr.length < targetLength) {
       arr.push({links: 'none'});
     }
-
     return arr;
   }
 
@@ -219,13 +181,20 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const newImage = [...shopImages]; // Create a copy of the array
-        newImage[index] = response.assets[0].uri; // Update value at the specified index
-        setShopImages(newImage);
+        let deleteShopImagesData = deleteShopImages;
 
-        const newImageFile = [...uploadShopImages]; // Create a copy of the array
-        newImageFile[index] = response.assets[0]; // Update value at the specified index
-        setUploadShopImages(newImageFile);
+        deleteShopImagesData[index] = undefined;
+        setDeleteShopImages(() => [...deleteShopImagesData]);
+
+        let editableShopImagesData = editableShopImages;
+        editableShopImagesData[index] = {
+          oldLink: shopImagesWasabiUrl[index]?.links,
+          newData: response.assets[0],
+        };
+
+        const newImage = [...shopImages];
+        newImage[index] = {links: response.assets[0].uri};
+        setShopImages(newImage);
       }
     });
   };
@@ -255,74 +224,202 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
       } else {
         setShopVideo(response.assets[0].uri);
         setUploadShopVideo(response.assets[0]);
+        setDeleteShopVideo('');
       }
     });
   };
 
-  console.log('uploadShopImages', uploadShopImages);
+  const deleteImageFiles = async (deletableProducts, type) => {
+    try {
+      const deletionPromises = deletableProducts.map(deleteProduct =>
+        fileDelete(deleteProduct, type),
+      );
+      await Promise.all(deletionPromises);
+    } catch (error) {
+      console.error('Error deleting files:', error);
+    }
+  };
+
+  const emptyImageStates = () => {
+    setShopLogo('');
+    setUploadShopLogo('');
+    setShopBackground('');
+    setUploadShopBackground('');
+    setShopImages([]);
+    setShopImageWasabiUrl([]);
+    setEditableShopImages([]);
+    setDeleteShopImages([]);
+    setDeleteShopLogo('');
+    setDeleteShopBackground('');
+    setDeleteShopVideo('');
+    setShopVideo('');
+    setUploadShopVideo('');
+  };
+
   const shopLayoutOnSubmit = async () => {
     setShopLayoutLoading(true);
 
-    shopLayoutAllMediaImages
-      .filter(itm => itm !== '' && itm !== null)
-      .map(img =>
-        deleteMedia({
-          file: img,
-          fileType: 'image',
-        }).then(res => {
-          setShopLayoutAllMediaImages([]);
-        }),
-      );
-
-    shopLayoutAllMediaVideos !== undefined &&
-      deleteMedia({
-        file: shopLayoutAllMediaVideos,
-        fileType: 'video',
-      }).then(res => setShopLayoutAllMediaVideos());
-
-    console.log('uploadShopImages-=-=-=-', uploadShopImages);
-
     let logoResponse = '';
     let backgroundResponse = '';
-    let imagesResponse = '';
+    let imagesResponse = [];
     let videoResponse = null;
 
-    if (uploadShopLogo) {
-      logoResponse = await SingleImageUploadFile(uploadShopLogo);
+    if (deleteShopLogo) {
+      await deleteImageFiles([deleteShopLogo], 'image');
     }
-    if (uploadShopBackground) {
-      backgroundResponse = await SingleImageUploadFile(uploadShopBackground);
+
+    if (deleteShopBackground) {
+      await deleteImageFiles([deleteShopBackground], 'image');
     }
-    if (uploadShopImages?.filter(item => item !== undefined).length > 0) {
-      imagesResponse = await MultipleImageUploadFile(
-        uploadShopImages.filter(item => item !== undefined),
+
+    if (deleteShopImages?.filter(itm => itm !== undefined).length > 0) {
+      await deleteImageFiles(
+        deleteShopImages?.filter(itm => itm !== undefined),
+        'image',
       );
     }
+
+    if (deleteShopVideo) {
+      await deleteImageFiles([deleteShopVideo], 'video');
+    }
+
+    if (uploadShopLogo) {
+      if (vendorShopDetails?.shop_logo) {
+        try {
+          const shopLogoRes = await fileUpdate(
+            vendorShopDetails?.shop_logo,
+            'image',
+            uploadShopLogo,
+          );
+          logoResponse = shopLogoRes;
+        } catch (error) {
+          console.error('Error during file upload:', error);
+          return;
+        }
+      } else {
+        try {
+          const shopLogoRes = await fileUpload(uploadShopLogo);
+          logoResponse = shopLogoRes;
+        } catch (error) {
+          console.error('Error during file upload:', error);
+          return;
+        }
+      }
+    }
+
+    if (uploadShopBackground) {
+      if (vendorShopDetails?.shop_cover_image) {
+        try {
+          const shopCoverRes = await fileUpdate(
+            vendorShopDetails?.shop_cover_image,
+            'image',
+            uploadShopBackground,
+          );
+          backgroundResponse = shopCoverRes;
+        } catch (error) {
+          console.error('Error during file upload:', error);
+          return;
+        }
+      } else {
+        try {
+          const shopCoverRes = await fileUpload(uploadShopBackground);
+          backgroundResponse = shopCoverRes;
+        } catch (error) {
+          console.error('Error during file upload:', error);
+          return;
+        }
+      }
+    }
+
+    if (editableShopImages?.length > 0) {
+      const uploadPromises = editableShopImages
+        ?.filter(itm => itm !== undefined)
+        ?.map(shopImage => {
+          if (shopImage?.oldLink) {
+            return fileUpdate(shopImage?.oldLink, 'image', shopImage?.newData);
+          } else {
+            return fileUpload(shopImage?.newData);
+          }
+        });
+
+      try {
+        const updateShopImgs = await Promise.all(uploadPromises);
+        imagesResponse = updateShopImgs;
+      } catch (error) {
+        console.error('Error during file upload:', error);
+        return;
+      }
+    }
+
     if (uploadShopVideo) {
-      videoResponse = await VideoUploadFile(uploadShopVideo);
+      if (vendorShopDetails?.shop_video) {
+        try {
+          const shopVideoRes = await fileUpdate(
+            vendorShopDetails?.shop_video,
+            'video',
+            uploadShopVideo,
+          );
+          videoResponse = shopVideoRes;
+        } catch (error) {
+          console.error('Error during file upload:', error);
+          return;
+        }
+      } else {
+        try {
+          const shopVideoRes = await fileUpload(uploadShopVideo);
+          videoResponse = shopVideoRes;
+        } catch (error) {
+          console.error('Error during file upload:', error);
+          return;
+        }
+      }
+    }
+
+    const existingLinks = shopImagesWasabiUrl.map(item => item.links);
+
+    const filteredImageResponse = imagesResponse?.filter(
+      item => !existingLinks.includes(item),
+    );
+
+    let combinedLinks = [
+      ...shopImagesWasabiUrl,
+      ...filteredImageResponse.map(links => ({links})),
+    ];
+
+    if (deleteShopImages?.filter(itm => itm !== undefined).length > 0) {
+      combinedLinks = combinedLinks.filter(linkObj => {
+        return !deleteShopImages
+          ?.filter(itm => itm !== undefined)
+          .includes(linkObj.links);
+      });
     }
 
     await shopUpdate({
       shopLayout: {
         id: useProfileData?.userCreatedShopId,
-        shop_logo: logoResponse?.data?.data?.singleUpload || '',
-        shop_cover_image: backgroundResponse?.data?.data?.singleUpload || '',
-        shop_images:
-          imagesResponse?.data?.data?.multipleUpload?.map(itm => {
-            return {links: itm};
-          }) || [],
-        shop_video: videoResponse?.data?.data?.singleUpload || '',
+        shop_logo:
+          logoResponse || (deleteShopLogo ? '' : vendorShopDetails?.shop_logo),
+        shop_cover_image:
+          backgroundResponse ||
+          (deleteShopBackground ? '' : vendorShopDetails?.shop_cover_image),
+        shop_images: combinedLinks?.map(item => ({
+          links: item.links,
+        })),
+        shop_video:
+          videoResponse ||
+          (deleteShopVideo ? '' : vendorShopDetails?.shop_video),
       },
     }).then(
       res => {
-        console.log('owner res:::', res);
         toast.show({
           title: res.data.updateShop.message,
           placement: 'top',
           backgroundColor: 'green.600',
           variant: 'solid',
         });
+        emptyImageStates();
         setShopLayoutLoading(false);
+        updateVendorShopDetailStore();
       },
       error => {
         setShopLayoutLoading(false);
@@ -352,22 +449,35 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
             ) : (
               <>
                 <Image
-                  source={{uri: shopLogo}}
+                  source={{uri: `${shopLogo}?cache=${cacheBuster}`}}
                   style={{width: 150, height: 150, borderRadius: 100}}
                 />
-                <TouchableOpacity
-                  onPress={() => ChooseShopLogoImage()}
-                  style={styles.editIconMain}>
-                  <Icon name="pencil" size={16} color="white" />
-                </TouchableOpacity>
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: 6,
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'space-around',
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => ChooseShopLogoImage()}
+                    style={styles.editIconMain}>
+                    <Icon name="pencil" size={16} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShopLogo('');
+                      setUploadShopLogo('');
+                      setDeleteShopLogo(vendorShopDetails?.shop_logo);
+                    }}
+                    style={styles.trashIconMain}>
+                    <Icon name="trash" size={16} color="white" />
+                  </TouchableOpacity>
+                </View>
               </>
             )}
           </TouchableOpacity>
-          {error?.shopLogo && (
-            <Text style={[styles.errorText, {alignSelf: 'center'}]}>
-              {error?.shopLogo}
-            </Text>
-          )}
 
           <TouchableOpacity
             onPress={() => ChooseShopCoverImage()}
@@ -382,21 +492,36 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
               <>
                 <Image
                   resizeMode="cover"
-                  source={{uri: shopBackground}}
+                  source={{uri: `${shopBackground}?cache=${cacheBuster}`}}
                   style={{width: '100%', height: 148, borderRadius: 10}}
                 />
-                <TouchableOpacity
-                  onPress={() => ChooseShopCoverImage()}
-                  style={[styles.editIconMain, {top: 10, right: 10}]}>
-                  <Icon name="pencil" size={16} color="white" />
-                </TouchableOpacity>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 10,
+                    right: 10,
+                    gap: 5,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => ChooseShopCoverImage()}
+                    style={[styles.editIconMain]}>
+                    <Icon name="pencil" size={16} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShopBackground('');
+                      setUploadShopBackground('');
+                      setDeleteShopBackground(
+                        vendorShopDetails?.shop_cover_image,
+                      );
+                    }}
+                    style={[styles.trashIconMain]}>
+                    <Icon name="trash" size={16} color="white" />
+                  </TouchableOpacity>
+                </View>
               </>
             )}
           </TouchableOpacity>
-
-          {error?.shopBackground && (
-            <Text style={styles.errorText}>{error?.shopBackground}</Text>
-          )}
 
           <Text style={styles.shopImgText}>Shop Images</Text>
 
@@ -415,19 +540,57 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                     <>
                       {shopImages[index] ? (
                         <TouchableOpacity
-                          onPress={() => ChooseShopImages(index)}
                           key={index}
                           style={styles.shopImagesMain}>
                           <Image
                             resizeMode="cover"
-                            source={{uri: shopImages[index]}}
+                            source={{
+                              uri: `${shopImages[index]?.links}?cache=${cacheBuster}`,
+                            }}
                             style={{width: 112, height: 112, borderRadius: 10}}
                           />
-                          <TouchableOpacity
-                            onPress={() => ChooseShopImages(index)}
-                            style={[styles.editIconMain, {top: 5, right: 5}]}>
-                            <Icon name="pencil" size={16} color="white" />
-                          </TouchableOpacity>
+                          <View
+                            style={{
+                              position: 'absolute',
+                              top: 6,
+                              right: 0,
+                              gap: 5,
+                            }}>
+                            <TouchableOpacity
+                              onPress={() => ChooseShopImages(index)}
+                              style={[styles.editIconMain]}>
+                              <Icon name="pencil" size={16} color="white" />
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => {
+                                setShopImages(
+                                  shopImages?.filter(
+                                    (itm, idx) => idx !== index,
+                                  ),
+                                );
+
+                                setEditableShopImages(
+                                  editableShopImages.filter(
+                                    (itm, idx) => idx !== index,
+                                  ),
+                                );
+
+                                let deleteShopImagesData = deleteShopImages;
+
+                                deleteShopImagesData[index] =
+                                  shopImagesWasabiUrl[index]?.links;
+                                setDeleteShopImages(() => [
+                                  ...deleteShopImagesData,
+                                ]);
+
+                                let shopImagesData = shopImages;
+                                shopImagesData[index] = undefined;
+                                setShopImages(() => [...shopImagesData]);
+                              }}
+                              style={[styles.trashIconMain]}>
+                              <Icon name="trash" size={16} color="white" />
+                            </TouchableOpacity>
+                          </View>
                         </TouchableOpacity>
                       ) : (
                         <TouchableOpacity
@@ -449,10 +612,6 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
               )}
           </View>
 
-          {error?.shopImages && (
-            <Text style={styles.errorText}>{error?.shopImages}</Text>
-          )}
-
           <Text style={styles.shopImgText}>Shop Video</Text>
           <TouchableOpacity
             onPress={() => ChooseShopVideo()}
@@ -473,11 +632,28 @@ const ShopLayoutTab = ({vendorShopDetails, useProfileData}) => {
                   // controls={true}
                   resizeMode="cover"
                 />
-                <TouchableOpacity
-                  onPress={() => ChooseShopVideo()}
-                  style={[styles.editIconMain, {top: 10, right: 10}]}>
-                  <Icon name="pencil" size={16} color="white" />
-                </TouchableOpacity>
+                <View
+                  style={{
+                    position: 'absolute',
+                    top: 5,
+                    right: 0,
+                    gap: 5,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => ChooseShopVideo()}
+                    style={[styles.editIconMain, {top: 10, right: 10}]}>
+                    <Icon name="pencil" size={16} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShopVideo('');
+                      setUploadShopVideo('');
+                      setDeleteShopVideo(vendorShopDetails?.shop_video);
+                    }}
+                    style={[styles.trashIconMain, {top: 10, right: 10}]}>
+                    <Icon name="trash" size={16} color="white" />
+                  </TouchableOpacity>
+                </View>
               </>
             )}
           </TouchableOpacity>
@@ -559,6 +735,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     width: '26%',
   },
+
   editIconMain: {
     backgroundColor: 'black',
     width: 30,
@@ -566,9 +743,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
+  },
+
+  trashIconMain: {
+    backgroundColor: 'red',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 15,
   },
   errorText: {
     color: 'red',

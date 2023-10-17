@@ -81,6 +81,8 @@ const ShopSetUp = () => {
   const [uploadShopVideo, setUploadShopVideo] = useState('');
   const [loading, setLoading] = useState(false);
   const [subBranch, setSubBranch] = useState([]);
+  const [sameAsOwner, setSameAsOwner] = useState('False');
+  const [managerValue, setManagerValue] = useState('');
 
   const [hours, setHours] = useState([
     {key: 'Sunday', value: ['09:00 AM - 10:00 PM']},
@@ -114,6 +116,11 @@ const ShopSetUp = () => {
       branch_address: val.subManagerAddress,
       branch_pinCode: val.subManagerPinCode,
       branch_city: val.city,
+      same_as:
+        (managerValue === 'Same as owner' && 'owner') ||
+        (managerValue === 'same as main branch manager' &&
+          'main_branch_manager') ||
+        'none',
       manager_name: val.subManagerFirstName + ' ' + val.subManagerLastName,
       manager_contact: val.subManagerPhone,
       manager_email: val.manager_user_email,
@@ -226,6 +233,7 @@ const ShopSetUp = () => {
           {
             branch_address: data.address,
             branch_city: data.city,
+            same_as: sameAsOwner === 'True' ? 'owner' : 'none',
             branch_pinCode: data.pin_code,
             manager_name:
               data.manager_first_name + ' ' + data.manager_last_name,
@@ -406,6 +414,10 @@ const ShopSetUp = () => {
                 individual={individual}
                 subBranch={subBranch}
                 setSubBranch={setSubBranch}
+                sameAsOwner={sameAsOwner}
+                setSameAsOwner={setSameAsOwner}
+                managerValue={managerValue}
+                setManagerValue={setManagerValue}
               />
             )}
             <View
