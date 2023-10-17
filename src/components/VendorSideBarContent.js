@@ -1,17 +1,15 @@
-import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {Divider} from 'react-native-paper';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
 import {FontStyle} from '../../CommonStyle';
+import FastImage from 'react-native-fast-image';
 
 const VendorSideBarContent = ({vendorShopDetails}) => {
   const navigation = useNavigation();
-  const cacheBuster = Math.random();
-  const dispatch = useDispatch();
   const {userProfile} = useSelector(state => state?.user);
   const logoName = `${userProfile?.first_name
     ?.charAt(0)
@@ -34,9 +32,13 @@ const VendorSideBarContent = ({vendorShopDetails}) => {
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
         style={styles.drawerHeader}>
-        <Image
-          source={{uri: `${vendorShopDetails?.shop_logo}?cache=${cacheBuster}`}}
+        <FastImage
           style={styles.logo}
+          source={{
+            uri: vendorShopDetails?.shop_logo,
+            cache: FastImage.cacheControl.web,
+          }}
+          resizeMode="cover"
         />
         <Text style={styles.heading}>{vendorShopDetails?.shop_name}</Text>
       </TouchableOpacity>

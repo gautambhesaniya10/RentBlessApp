@@ -20,6 +20,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
+import FastImage from 'react-native-fast-image';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -652,12 +653,13 @@ const AddEditProduct = () => {
                         onPress={() => ChooseProductImages(index)}
                         key={index}
                         style={styles.shopImagesMain}>
-                        <Image
-                          resizeMode="cover"
-                          source={{
-                            uri: `${productImages[index]}?cache=${cacheBuster}`,
-                          }}
+                        <FastImage
                           style={{width: 112, height: 112, borderRadius: 10}}
+                          source={{
+                            uri: productImages[index],
+                            cache: FastImage.cacheControl.web,
+                          }}
+                          resizeMode="cover"
                         />
                         <TouchableOpacity
                           onPress={() => ChooseProductImages(index)}

@@ -22,6 +22,7 @@ import {useToast} from 'native-base';
 import TablePagination from '../../../../components/TablePagination';
 import {fileDelete} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
+import FastImage from 'react-native-fast-image';
 
 const ProductListing = () => {
   const dispatch = useDispatch();
@@ -150,10 +151,13 @@ const ProductListing = () => {
                       {index + 1}
                     </Text>
                     <View style={[styles.tableCell, {width: 100}]}>
-                      <Image
-                        source={{uri: item?.product_image?.front}}
+                      <FastImage
                         style={{width: 50, height: 70, alignSelf: 'center'}}
-                        // resizeMode="contain"
+                        source={{
+                          uri: item?.product_image?.front,
+                          cache: FastImage.cacheControl.web,
+                        }}
+                        resizeMode="cover"
                       />
                     </View>
                     <Text

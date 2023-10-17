@@ -1,20 +1,14 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import CustomTextInput from '../../../../common/CustomTextInput';
 import CustomButton from '../../../../common/CustomButton';
-import {getShopOwnerDetail} from '../../../../graphql/queries/shopQueries';
 import {FontStyle} from '../../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import RNFetchBlob from 'rn-fetch-blob';
-import {deleteMedia} from '../../../../graphql/mutations/deleteMedia';
-import {SingleImageUploadFile} from '../../../../services/SingleImageUploadFile';
-import {MultipleImageUploadFile} from '../../../../services/MultipleImageUploadFile';
-import {VideoUploadFile} from '../../../../services/VideoUploadFile';
 import {shopUpdate} from '../../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
 import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
+import FastImage from 'react-native-fast-image';
 
 const ShopLayoutTab = ({
   vendorShopDetails,
@@ -22,8 +16,6 @@ const ShopLayoutTab = ({
   updateVendorShopDetailStore,
 }) => {
   const toast = useToast();
-  const cacheBuster = Math.random();
-
   const [shopLogo, setShopLogo] = useState('');
   const [uploadShopLogo, setUploadShopLogo] = useState('');
   const [deleteShopLogo, setDeleteShopLogo] = useState('');
@@ -448,9 +440,13 @@ const ShopLayoutTab = ({
               </>
             ) : (
               <>
-                <Image
-                  source={{uri: `${shopLogo}?cache=${cacheBuster}`}}
+                <FastImage
                   style={{width: 150, height: 150, borderRadius: 100}}
+                  source={{
+                    uri: shopLogo,
+                    cache: FastImage.cacheControl.web,
+                  }}
+                  resizeMode="cover"
                 />
                 <View
                   style={{
@@ -490,10 +486,13 @@ const ShopLayoutTab = ({
               </>
             ) : (
               <>
-                <Image
-                  resizeMode="cover"
-                  source={{uri: `${shopBackground}?cache=${cacheBuster}`}}
+                <FastImage
                   style={{width: '100%', height: 148, borderRadius: 10}}
+                  source={{
+                    uri: shopBackground,
+                    cache: FastImage.cacheControl.web,
+                  }}
+                  resizeMode="cover"
                 />
                 <View
                   style={{
@@ -542,12 +541,13 @@ const ShopLayoutTab = ({
                         <TouchableOpacity
                           key={index}
                           style={styles.shopImagesMain}>
-                          <Image
-                            resizeMode="cover"
-                            source={{
-                              uri: `${shopImages[index]?.links}?cache=${cacheBuster}`,
-                            }}
+                          <FastImage
                             style={{width: 112, height: 112, borderRadius: 10}}
+                            source={{
+                              uri: shopImages[index]?.links,
+                              cache: FastImage.cacheControl.web,
+                            }}
+                            resizeMode="cover"
                           />
                           <View
                             style={{
