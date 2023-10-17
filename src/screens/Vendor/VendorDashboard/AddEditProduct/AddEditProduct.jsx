@@ -23,13 +23,14 @@ import {VideoUploadFile} from '../../../../services/VideoUploadFile';
 import {getProductDetails} from '../../../../graphql/queries/productQueries';
 import {deleteMedia} from '../../../../graphql/mutations/deleteMedia';
 import RNFetchBlob from 'rn-fetch-blob';
-import {fileUpdate, fileUpload} from '../../../../wasabi';
+import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 
 const AddEditProduct = () => {
   const toast = useToast();
   const navigation = useNavigation();
   const router = useRoute();
   const editableProductData = router?.params?.state?.editableProductData;
+  const cacheBuster = Math.random();
 
   const {
     handleSubmit,
@@ -51,17 +52,11 @@ const AddEditProduct = () => {
   const [errorDescription, setErrorDescription] = useState('');
 
   const [productImages, setProductImages] = useState([]);
-
   const [uploadProductImages, setUploadProductImages] = useState([]);
   const ProductImgError = productImages?.filter(item => item !== undefined);
 
   const [productVideo, setProductVideo] = useState('');
-
   const [uploadProductVideo, setUploadProductVideo] = useState();
-
-  const [productAllMediaImages, setProductAllMediaImages] = useState([]);
-  const [productAllMediaVideo, setProductAllMediaVideo] = useState();
-
   const [deleteProductVideo, setDeleteProductVideo] = useState();
 
   const [error, setError] = useState({});
@@ -200,37 +195,24 @@ const AddEditProduct = () => {
     });
   };
 
-  const srcToFile = async (src, fileName, mimeType) => {
-    const response = await RNFetchBlob.fetch('GET', src);
-    const buf = await response.blob();
-    const file = new File([buf], fileName, {type: mimeType});
-
-    let ext = '';
-    if (mimeType === 'image/png') {
-      ext = 'jpg';
-    } else if (mimeType === 'video') {
-      ext = 'mp4';
+  useEffect(() => {
+    if (editableProductData) {
+      if (richEditorShow) {
+        setTimeout(() => {
+          richtext.current?.setContentHTML(
+            editableProductData?.product_description,
+          );
+        }, 1000);
+      }
     }
-    const storeLocalUrl = await RNFetchBlob.config({
-      fileCache: true,
-      appendExt: ext,
-    }).fetch('GET', src);
-    const imagePath = storeLocalUrl.path();
-    const imagePathModify = `file://${imagePath}`;
-
-    const reFactorFile = {
-      ...file?._data,
-      fileName: file?._data?.name,
-      fileSize: file?._data?.size,
-      uri: imagePathModify,
-    };
-    return reFactorFile;
-  };
+  }, [richtext, editableProductData, richEditorShow]);
 
   useEffect(() => {
     if (editableProductData) {
       setValue('product_name', editableProductData?.product_name);
+
       setEditorDescriptionContent(editableProductData?.product_description);
+
       setValue('product_color', editableProductData?.product_color);
       setValue('product_type', editableProductData.categoryInfo?.category_type);
       setProductType(editableProductData.categoryInfo?.category_type);
@@ -673,12 +655,17 @@ const AddEditProduct = () => {
                         style={styles.shopImagesMain}>
                         <Image
                           resizeMode="cover"
-                          source={{uri: productImages[index]}}
+                          source={{
+                            uri: `${productImages[index]}?cache=${cacheBuster}`,
+                          }}
                           style={{width: 112, height: 112, borderRadius: 10}}
                         />
                         <TouchableOpacity
                           onPress={() => ChooseProductImages(index)}
-                          style={[styles.editIconMain, {top: 5, right: 5}]}>
+                          style={[
+                            styles.editIconMain,
+                            {position: 'absolute', top: 6, right: 4},
+                          ]}>
                           <Icon name="pencil" size={16} color="white" />
                         </TouchableOpacity>
                       </TouchableOpacity>
@@ -726,11 +713,22 @@ const AddEditProduct = () => {
                 />
               )}
               {productVideo && (
-                <TouchableOpacity
-                  onPress={() => ChooseProductVideo()}
-                  style={[styles.editIconMain, {top: 10, right: 10}]}>
-                  <Icon name="pencil" size={16} color="white" />
-                </TouchableOpacity>
+                <View style={styles.videoMainIcon}>
+                  <TouchableOpacity
+                    onPress={() => ChooseProductVideo()}
+                    style={[styles.editIconMain]}>
+                    <Icon name="pencil" size={16} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setProductVideo('');
+                      setUploadProductVideo('');
+                      setDeleteProductVideo(editableProductData?.product_video);
+                    }}
+                    style={[styles.trashIcon, {backgroundColor: 'red'}]}>
+                    <Icon name="trash" color={'white'} size={16} />
+                  </TouchableOpacity>
+                </View>
               )}
             </TouchableOpacity>
 
@@ -813,6 +811,12 @@ const styles = StyleSheet.create({
     elevation: 2,
     width: '26%',
   },
+  videoMainIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    gap: 10,
+  },
   editIconMain: {
     backgroundColor: 'black',
     width: 30,
@@ -820,9 +824,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
+  },
+  trashIcon: {
+    backgroundColor: '#151827',
+    width: 30,
+    height: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 14,
   },
   errorText: {
     color: 'red',
