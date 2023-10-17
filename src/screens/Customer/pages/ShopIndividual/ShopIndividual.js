@@ -32,6 +32,7 @@ import {Avatar} from 'react-native-paper';
 import FollowConfirmationModel from '../../../../common/Customer/FollowConfirmationModel';
 import {shopFollow} from '../../../../graphql/mutations/shops';
 import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
+import FastImage from 'react-native-fast-image';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -251,9 +252,13 @@ const ShopIndividual = () => {
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <View style={{position: 'relative'}}>
           {shopDetails?.shop_cover_image ? (
-            <Image
-              source={{uri: shopDetails?.shop_cover_image}}
-              style={{width: '100%', height: 160, objectFit: 'fill'}}
+            <FastImage
+              style={{width: '100%', height: 160}}
+              source={{
+                uri: shopDetails?.shop_cover_image,
+                cache: FastImage.cacheControl.web,
+              }}
+              resizeMode="stretch"
             />
           ) : (
             <View
@@ -273,9 +278,13 @@ const ShopIndividual = () => {
             <View style={styles.mainHeaderContainer}>
               <View style={styles.shopLogoMainDiv}>
                 {shopDetails?.shop_logo ? (
-                  <Image
-                    source={{uri: shopDetails?.shop_logo}}
+                  <FastImage
                     style={{width: 100, height: 100, borderRadius: 50}}
+                    source={{
+                      uri: shopDetails?.shop_logo,
+                      cache: FastImage.cacheControl.web,
+                    }}
+                    resizeMode="cover"
                   />
                 ) : (
                   <Avatar.Text

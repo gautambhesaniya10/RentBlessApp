@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, Image} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,6 +8,7 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 import {Avatar} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
 
 const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
@@ -120,15 +121,18 @@ const ProductCard = ({product, landingPageCardWith}) => {
             })
           }>
           <View style={{height: 210, width: '100%'}}>
-            <Image
-              source={{uri: ProductImages[0]}}
+            <FastImage
+              source={{
+                uri: ProductImages[0],
+                cache: FastImage.cacheControl.web,
+              }}
               style={{
                 height: '100%',
                 width: '100%',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
-                objectFit: 'fill',
               }}
+              resizeMode="stretch"
             />
           </View>
         </TouchableOpacity>
@@ -167,9 +171,13 @@ const ProductCard = ({product, landingPageCardWith}) => {
         }>
         <View style={styles.shopMain}>
           {product?.branchInfo?.shop_info?.shop_logo ? (
-            <Image
-              source={{uri: product?.branchInfo?.shop_info?.shop_logo}}
+            <FastImage
+              source={{
+                uri: product?.branchInfo?.shop_info?.shop_logo,
+                cache: FastImage.cacheControl.web,
+              }}
               style={{width: 25, height: 25, borderRadius: 12}}
+              resizeMode="cover"
             />
           ) : (
             <Avatar.Text

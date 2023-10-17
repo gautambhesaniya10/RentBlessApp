@@ -5,24 +5,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomerHeader from '../../components/CustomerHeader';
 import {Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import MenCollection from './MenCollection';
 import WomenCollection from './WomenCollection';
 import FeaturedVendors from './FeaturedVendors';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {Dimensions} from 'react-native';
 import {
   landingBanner1,
   landingBanner2,
   landingBanner3,
-  landingBanner4,
-  landingBanner5,
-  landingBanner6,
   store1,
   store2,
   store3,
@@ -30,6 +26,7 @@ import {
   store5,
 } from '../../common/AllLiveImageLink';
 import VersionAppModel from '../AppVersionModel/VersionApp';
+import FastImage from 'react-native-fast-image';
 
 const LandingPage = () => {
   const {versionData} = useSelector(state => state?.appVersion);
@@ -44,9 +41,6 @@ const LandingPage = () => {
     {image: landingBanner1},
     {image: landingBanner2},
     {image: landingBanner3},
-    // {image: landingBanner4},
-    // {image: landingBanner5},
-    // {image: landingBanner6},
   ];
 
   const autoplayConfig = {
@@ -58,24 +52,19 @@ const LandingPage = () => {
   const CarouselRenderItem = ({item}) => (
     <View style={styles.sliderMainView}>
       <View style={{width: '100%'}}>
-        <Image
-          source={{uri: item?.image}}
+        <FastImage
           style={{
             height: '100%',
             width: '100%',
             borderRadius: 8,
-            objectFit: 'fill',
           }}
+          source={{
+            uri: item?.image,
+            cache: FastImage.cacheControl.web,
+          }}
+          resizeMode="stretch"
         />
       </View>
-      {/* <View style={styles.sliderRightMain}>
-        <Text style={styles.sliderH1Text}>Men’s Blazer</Text>
-        <Text style={styles.sliderH2Text}>Under ₹699</Text>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('CustomerHomePage')}>
-          <Text style={styles.sliderH2Text}>+ Explore</Text>
-        </TouchableOpacity>
-      </View> */}
     </View>
   );
 

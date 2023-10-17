@@ -1,5 +1,4 @@
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -18,6 +17,7 @@ import FollowConfirmationModel from '../../../../common/Customer/FollowConfirmat
 import {shopFollow} from '../../../../graphql/mutations/shops';
 import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
 import {useToast} from 'native-base';
+import FastImage from 'react-native-fast-image';
 
 const Branches = () => {
   const toast = useToast();
@@ -99,9 +99,13 @@ const Branches = () => {
               <Icon name="angle-left" size={24} color="white" />
             </TouchableOpacity>
             {shopDetails?.shop_logo ? (
-              <Image
-                source={{uri: shopDetails?.shop_logo}}
+              <FastImage
                 style={{width: 45, height: 45, borderRadius: 24}}
+                source={{
+                  uri: shopDetails?.shop_logo,
+                  cache: FastImage.cacheControl.web,
+                }}
+                resizeMode="cover"
               />
             ) : (
               <Avatar.Text

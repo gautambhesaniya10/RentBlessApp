@@ -15,6 +15,7 @@ import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import {useDispatch} from 'react-redux';
 import {locationIcon} from '../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
 
 const FeaturedVendors = ({shop}) => {
   const navigation = useNavigation();
@@ -60,14 +61,17 @@ const FeaturedVendors = ({shop}) => {
                 disabled
                 onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
                 {shop?.shop_images[0]?.links ? (
-                  <Image
-                    source={{uri: shop?.shop_images[0]?.links}}
+                  <FastImage
                     style={{
                       height: 120,
                       width: '100%',
                       borderTopLeftRadius: 8,
                       borderTopRightRadius: 8,
                       objectFit: 'fill',
+                    }}
+                    source={{
+                      uri: shop?.shop_images[0]?.links,
+                      cache: FastImage.cacheControl.web,
                     }}
                   />
                 ) : (
@@ -97,8 +101,11 @@ const FeaturedVendors = ({shop}) => {
                 {/* <View style={styles.shopMain}> */}
 
                 {shop?.shop_logo ? (
-                  <Image
-                    source={{uri: shop?.shop_logo}}
+                  <FastImage
+                    source={{
+                      uri: shop?.shop_logo,
+                      cache: FastImage.cacheControl.web,
+                    }}
                     style={{
                       width: 50,
                       height: 50,

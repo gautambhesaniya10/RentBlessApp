@@ -32,6 +32,7 @@ import {
 } from '../../common/AllLiveImageLink';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
+import FastImage from 'react-native-fast-image';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -46,9 +47,6 @@ const HomePage = () => {
   };
   const carouselRef = useRef(null);
   const TopCarouselData = [
-    // {image: landingBanner1},
-    // {image: landingBanner3},
-    // {image: landingBanner2},
     {image: landingBanner4},
     {image: landingBanner5},
     {image: landingBanner6},
@@ -228,13 +226,16 @@ const HomePage = () => {
   const CarouselRenderItem = ({item}) => (
     <View style={styles.sliderMainView}>
       <View style={{width: '100%'}}>
-        <Image
-          source={{uri: item?.image}}
+        <FastImage
           style={{
             height: '100%',
             width: '100%',
-            objectFit: 'fill',
           }}
+          source={{
+            uri: item?.image,
+            cache: FastImage.cacheControl.web,
+          }}
+          resizeMode="stretch"
         />
       </View>
     </View>

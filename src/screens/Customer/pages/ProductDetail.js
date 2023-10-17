@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   Image,
   Linking,
   StyleSheet,
@@ -6,14 +7,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomButton from '../../../common/CustomButton';
 import StarRating from 'react-native-star-rating-widget';
-import {SliderBox} from 'react-native-image-slider-box';
 import ProductCard from '../../../components/ProductCard/ProductCard';
 import {getProductDetails} from '../../../graphql/queries/productQueries';
 import RenderHTML from 'react-native-render-html';
@@ -29,6 +28,8 @@ import {Modal} from 'react-native';
 import {Share} from 'react-native';
 import {Avatar, Divider} from 'react-native-paper';
 import {locationIcon} from '../../../common/AllLiveImageLink';
+import FastImage from 'react-native-fast-image';
+import Carousel, {Pagination} from 'react-native-snap-carousel';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -41,6 +42,11 @@ const ProductDetail = () => {
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
   const [showContactModalOpen, setShowContactModalOpen] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  const carouselRef = useRef(null);
+  const {width: screenWidth} = Dimensions.get('window');
+
   const getProductDetail = async () => {
     const productDetails = await getProductDetails({id: productId});
     setProductDetails(productDetails);
@@ -176,11 +182,36 @@ const ProductDetail = () => {
     getProductDetail();
   }, [route, productId]);
 
-  const productImages = [
-    productDetails?.data?.product?.data?.product_image?.front,
-    productDetails?.data?.product?.data?.product_image?.back,
-    productDetails?.data?.product?.data?.product_image?.side,
+  const TopCarouselData = [
+    {image: productDetails?.data?.product?.data?.product_image?.front},
+    {image: productDetails?.data?.product?.data?.product_image?.back},
+    {image: productDetails?.data?.product?.data?.product_image?.side},
   ];
+
+  const autoplayConfig = {
+    autoplay: false,
+    // autoplayInterval: 3000,
+    loop: false,
+  };
+
+  const CarouselRenderItem = ({item}) => (
+    <View style={styles.sliderMainView}>
+      <View style={{width: '100%'}}>
+        <FastImage
+          style={{
+            height: '100%',
+            width: '100%',
+            borderRadius: 8,
+          }}
+          source={{
+            uri: item?.image,
+            cache: FastImage.cacheControl.web,
+          }}
+          resizeMode="stretch"
+        />
+      </View>
+    </View>
+  );
 
   const shareContent = async () => {
     try {
@@ -223,10 +254,11 @@ const ProductDetail = () => {
             }>
             {productDetails?.data?.product?.data?.branchInfo?.shop_info
               .shop_logo ? (
-              <Image
+              <FastImage
                 source={{
                   uri: productDetails?.data?.product?.data?.branchInfo
                     ?.shop_info.shop_logo,
+                  cache: FastImage.cacheControl.web,
                 }}
                 style={{width: 42, height: 42, borderRadius: 22}}
               />
@@ -302,26 +334,23 @@ const ProductDetail = () => {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{position: 'relative'}}>
           <View style={styles.carouselMain}>
-            <SliderBox
-              imageLoadingColor="green"
-              dotColor="green"
-              images={productImages}
-              sliderBoxHeight={460}
-              resizeMethod={'resize'}
-              resizeMode={'fill'}
-              ImageComponentStyle={{
-                borderRadius: 0,
-                objectFit: 'fill',
-              }}
-              // dotStyle={{
-              //   marginBottom: 30,
-              // }}
-              paginationBoxStyle={{
-                position: 'absolute',
-                bottom: 15,
-              }}
-              autoplay={false}
-            />
+            <View style={{position: 'relative'}}>
+              <Carousel
+                data={TopCarouselData}
+                renderItem={CarouselRenderItem}
+                sliderWidth={screenWidth}
+                itemWidth={screenWidth}
+                onSnapToItem={index => setActiveSlide(index)}
+                {...autoplayConfig}
+              />
+              <View style={styles.sliderPagination}>
+                <Pagination
+                  dotsLength={TopCarouselData?.length}
+                  activeDotIndex={activeSlide}
+                  // containerStyle={{paddingTop: 10}}
+                />
+              </View>
+            </View>
             <View style={styles.threeIconMain}>
               <TouchableOpacity
                 onPress={() => clickedByLike()}
@@ -458,10 +487,11 @@ const ProductDetail = () => {
             </TouchableOpacity>
             <View style={{padding: 20}}>
               <View style={{flexDirection: 'row', gap: 15, marginBottom: 18}}>
-                <Image
+                <FastImage
                   source={{
                     uri: productDetails?.data?.product?.data?.branchInfo
                       ?.shop_info?.shop_logo,
+                    cache: FastImage.cacheControl.web,
                   }}
                   style={{width: 50, height: 50, borderRadius: 25}}
                 />
@@ -586,6 +616,17 @@ const styles = StyleSheet.create({
   },
   carouselMain: {
     position: 'relative',
+  },
+  sliderMainView: {
+    width: '100%',
+    height: 460,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+  },
+  sliderPagination: {
+    position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
   },
   threeIconMain: {
     position: 'absolute',

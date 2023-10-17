@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 import {locationIcon} from '../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
+import FastImage from 'react-native-fast-image';
 
 const ShopCard = ({shop}) => {
   const navigation = useNavigation();
@@ -22,15 +23,18 @@ const ShopCard = ({shop}) => {
         <TouchableOpacity
           onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
           {shop?.shop_images[0]?.links ? (
-            <Image
-              source={{uri: shop?.shop_images[0]?.links}}
+            <FastImage
+              source={{
+                uri: shop?.shop_images[0]?.links,
+                cache: FastImage.cacheControl.web,
+              }}
               style={{
                 height: 128,
                 width: '100%',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
-                objectFit: 'fill',
               }}
+              resizeMode="stretch"
             />
           ) : (
             <View
@@ -51,9 +55,13 @@ const ShopCard = ({shop}) => {
         }>
         <View style={styles.shopMain}>
           {shop?.shop_logo ? (
-            <Image
-              source={{uri: shop?.shop_logo}}
+            <FastImage
+              source={{
+                uri: shop?.shop_logo,
+                cache: FastImage.cacheControl.web,
+              }}
               style={{width: 35, height: 35, borderRadius: 17}}
+              resizeMode="cover"
             />
           ) : (
             <Avatar.Text
@@ -244,14 +252,16 @@ const ShopImageModel = ({
               gap: 20,
             }}>
             {AllImages?.map((img, index) => (
-              <Image
-                key={index}
-                source={{uri: img?.links}}
+              <FastImage
+                source={{
+                  uri: img?.links,
+                  cache: FastImage.cacheControl.web,
+                }}
                 style={{
                   height: '90%',
                   width: 270,
-                  objectFit: 'cover',
                 }}
+                resizeMode="cover"
               />
             ))}
           </ScrollView>
