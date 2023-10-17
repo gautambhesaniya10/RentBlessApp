@@ -86,7 +86,7 @@ const ShopDetail = () => {
     setOwnerLoading(true);
     shopUpdate({
       ownerInfo: {
-        id: shopOwnerId,
+        id: vendorShopDetails?.ownerInfo?.id,
         owner_firstName: data.first_name,
         owner_lastName: data.last_name,
         owner_email: data.user_email,
@@ -100,6 +100,7 @@ const ShopDetail = () => {
           backgroundColor: 'green.600',
           variant: 'solid',
         });
+        updateVendorShopDetailStore();
         setOwnerLoading(false);
       },
       error => {
@@ -158,6 +159,7 @@ const ShopDetail = () => {
       },
     }).then(
       res => {
+        updateVendorShopDetailStore();
         toast.show({
           title: res.data.updateShop.message,
           placement: 'top',
@@ -189,6 +191,7 @@ const ShopDetail = () => {
           branch_address: data.address,
           branch_pinCode: data.pin_code,
           branch_city: data.city,
+          same_as: sameAsOwner === 'True' ? 'owner' : 'none',
           manager_name: data.manager_first_name + ' ' + data.manager_last_name,
           manager_contact: data.manager_user_contact,
           manager_email: data.manager_user_email,
@@ -197,6 +200,7 @@ const ShopDetail = () => {
       ],
     }).then(
       res => {
+        updateVendorShopDetailStore();
         toast.show({
           title: res?.data.updateShop.message,
           placement: 'top',
@@ -218,48 +222,64 @@ const ShopDetail = () => {
   };
 
   useEffect(() => {
-    if (sameAsOwner === 'True') {
-      mainBranchInfoSetValue(
-        'manager_first_name',
-        ownerInfoGetValue('first_name'),
-      );
-      mainBranchInfoSetValue(
-        'manager_last_name',
-        ownerInfoGetValue('last_name'),
-      );
-      mainBranchInfoSetValue(
-        'manager_user_email',
-        ownerInfoGetValue('user_email'),
-      );
-      mainBranchInfoSetValue(
-        'manager_user_contact',
-        ownerInfoGetValue('user_contact'),
-      );
-    } else {
+    if (vendorShopDetails && mainBranch) {
+      if (sameAsOwner === 'True') {
+        mainBranchInfoSetValue(
+          'manager_first_name',
+          vendorShopDetails?.ownerInfo?.owner_firstName,
+        );
+        mainBranchInfoSetValue(
+          'manager_last_name',
+          vendorShopDetails?.ownerInfo?.owner_lastName,
+        );
+        mainBranchInfoSetValue(
+          'manager_user_email',
+          vendorShopDetails?.ownerInfo?.owner_email,
+        );
+        mainBranchInfoSetValue(
+          'manager_user_contact',
+          vendorShopDetails?.ownerInfo?.owner_contact,
+        );
+      } else {
+        mainBranchInfoSetValue('address', mainBranch?.branch_address);
+        mainBranchInfoSetValue('pin_code', mainBranch?.branch_pinCode);
+
+        mainBranchInfoSetValue(
+          'manager_first_name',
+          mainBranch?.manager_name.split(' ')[0],
+        );
+        mainBranchInfoSetValue(
+          'manager_last_name',
+          mainBranch?.manager_name.split(' ')[1],
+        );
+        mainBranchInfoSetValue(
+          'manager_user_contact',
+          mainBranch?.manager_contact,
+        );
+        mainBranchInfoSetValue('city', mainBranch?.branch_city);
+        mainBranchInfoSetValue('manager_user_email', mainBranch?.manager_email);
+      }
+    }
+  }, [mainBranch, mainBranchInfoSetValue, sameAsOwner, vendorShopDetails]);
+
+  useEffect(() => {
+    if (vendorShopDetails) {
       const mainBranches = vendorShopDetails?.branch_info?.find(
         itm => itm.branch_type === 'main',
       );
       setMainBranch(mainBranches);
 
+      if (mainBranches?.same_as === 'owner') {
+        setSameAsOwner('True');
+      } else {
+        setSameAsOwner('False');
+      }
+
       mainBranchInfoSetValue('address', mainBranches?.branch_address);
       mainBranchInfoSetValue('pin_code', mainBranches?.branch_pinCode);
-
-      mainBranchInfoSetValue(
-        'manager_first_name',
-        mainBranches?.manager_name.split(' ')[0],
-      );
-      mainBranchInfoSetValue(
-        'manager_last_name',
-        mainBranches?.manager_name.split(' ')[1],
-      );
-      mainBranchInfoSetValue(
-        'manager_user_contact',
-        mainBranches?.manager_contact,
-      );
       mainBranchInfoSetValue('city', mainBranches?.branch_city);
-      mainBranchInfoSetValue('manager_user_email', mainBranches?.manager_email);
     }
-  }, [sameAsOwner, mainBranchInfoSetValue, ownerInfoGetValue]);
+  }, [vendorShopDetails, mainBranchInfoSetValue]);
 
   useEffect(() => {
     if (useProfileData?.userCreatedShopId) {
@@ -350,7 +370,6 @@ const ShopDetail = () => {
               ownerInfoOnSubmit={ownerInfoOnSubmit}
               setShopOwnerId={setShopOwnerId}
               ownerLoading={ownerLoading}
-              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Shop Info' && (
@@ -365,7 +384,6 @@ const ShopDetail = () => {
               vendorShopDetails={vendorShopDetails}
               hours={hours}
               setHours={setHours}
-              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Main Branch' && (
@@ -377,7 +395,6 @@ const ShopDetail = () => {
               mainBranchControl={mainBranchControl}
               setSameAsOwner={setSameAsOwner}
               sameAsOwner={sameAsOwner}
-              updateVendorShopDetailStore={updateVendorShopDetailStore}
             />
           )}
           {activeTab === 'Sub Branch' && (

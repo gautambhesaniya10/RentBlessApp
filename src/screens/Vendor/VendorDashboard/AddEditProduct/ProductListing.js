@@ -20,6 +20,8 @@ import CustomButton from '../../../../common/CustomButton';
 import {deleteProduct} from '../../../../graphql/mutations/products';
 import {useToast} from 'native-base';
 import TablePagination from '../../../../components/TablePagination';
+import {fileDelete} from '../../../../wasabi';
+import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 
 const ProductListing = () => {
   const dispatch = useDispatch();
@@ -41,6 +43,9 @@ const ProductListing = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   // const useProfileData = useSelector(state => state?.user.userProfile);
   const [productPageSkip, setProductPageSkip] = useState(0);
+
+  const [deletableProductsImages, setDeletableProductsImages] = useState([]);
+  const [deletableProductVideo, setDeletableProductVideo] = useState();
 
   const ProductLimit = 5;
 
@@ -184,6 +189,16 @@ const ProductListing = () => {
                           onPress={() => {
                             setProductDeleteModalOpen(true);
                             setDeleteProductId(item?.id);
+
+                            setDeletableProductsImages(
+                              ['front', 'back', 'side'].map(
+                                key => item?.product_image[key],
+                              ),
+                            );
+
+                            if (item?.product_video) {
+                              setDeletableProductVideo(item?.product_video);
+                            }
                           }}
                           style={[styles.pencilIcon, {backgroundColor: 'red'}]}>
                           <Icon name="trash" color={'white'} size={18} />
@@ -218,6 +233,8 @@ const ProductListing = () => {
         setProductDeleteModalOpen={setProductDeleteModalOpen}
         deleteProductId={deleteProductId}
         getAllProducts={getAllProducts}
+        deletableProductsImages={deletableProductsImages}
+        deletableProductVideo={deletableProductVideo}
       />
     </View>
   );
@@ -230,10 +247,30 @@ const ProductDeleteModel = ({
   setProductDeleteModalOpen,
   deleteProductId,
   getAllProducts,
+  deletableProductsImages,
+  deletableProductVideo,
 }) => {
   const toast = useToast();
+  const dispatch = useDispatch();
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
 
-  const deleteProductHandler = () => {
+  const deleteImageFiles = async (deletableProducts, type) => {
+    try {
+      const deletionPromises = deletableProducts.map(deleteProduct =>
+        fileDelete(deleteProduct, type),
+      );
+      await Promise.all(deletionPromises);
+    } catch (error) {
+      console.error('Error deleting files:', error);
+    }
+  };
+
+  const deleteProductHandler = async () => {
+    await deleteImageFiles(deletableProductsImages, 'image');
+    if (deletableProductVideo) {
+      await deleteImageFiles([deletableProductVideo], 'video');
+    }
+
     deleteProduct({id: deleteProductId}).then(
       res => {
         toast.show({
@@ -242,8 +279,8 @@ const ProductDeleteModel = ({
           backgroundColor: 'green.600',
           variant: 'solid',
         });
-        // dispatch(changeProductPage(0));
         getAllProducts();
+        dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
       },
       error => {
         toast.show({

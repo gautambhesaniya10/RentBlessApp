@@ -30,37 +30,31 @@ const SubBranchTab = ({
   useProfileData,
   ownerInfoGetValue,
   mainBranchInfoGetValue,
+  updateVendorShopDetailStore,
 }) => {
   const [subBranchList, setSubBranchList] = useState([]);
   const [branchDeleteModalOpen, setBranchDeleteModalOpen] = useState(false);
   const [deleteBranchId, setDeleteBranchId] = useState();
   const [subBranchModalOpen, setSubBranchModalOpen] = useState(false);
+  const [editableBranchData, setEditableBranchData] = useState();
 
-  const [editSubBranchId, setEditSubBranchId] = useState();
-
-  const getAllSubBranchList = () => {
-    getBranchLists().then(res => {
-      const subBranches = res.data.branchList
-        .filter(branch => branch.shop_id === useProfileData?.userCreatedShopId)
-        .filter(itm => itm.branch_type === 'sub');
+  useEffect(() => {
+    if (vendorShopDetails) {
+      const subBranches = vendorShopDetails?.branch_info?.filter(
+        itm => itm.branch_type === 'sub',
+      );
       setSubBranchList(subBranches);
-    });
-  };
+    }
+  }, [vendorShopDetails]);
 
   const onDeleteBranch = deleteItem => {
     setDeleteBranchId(deleteItem?.id);
     setBranchDeleteModalOpen(true);
   };
   const onEditBranch = editItem => {
-    setEditSubBranchId(editItem?.id);
+    setEditableBranchData(editItem);
     setSubBranchModalOpen(true);
   };
-
-  useEffect(() => {
-    if (useProfileData?.userCreatedShopId) {
-      getAllSubBranchList();
-    }
-  }, [useProfileData?.userCreatedShopId]);
 
   return (
     <View style={{flex: 1}}>
@@ -84,12 +78,12 @@ const SubBranchTab = ({
             <SubBranchModal
               subBranchModalOpen={subBranchModalOpen}
               setSubBranchModalOpen={setSubBranchModalOpen}
-              getAllSubBranchList={getAllSubBranchList}
+              updateVendorShopDetailStore={updateVendorShopDetailStore}
               mainBranchInfoGetValue={mainBranchInfoGetValue}
               ownerInfoGetValue={ownerInfoGetValue}
               ShopId={useProfileData?.userCreatedShopId}
-              editSubBranchId={editSubBranchId}
-              setEditSubBranchId={setEditSubBranchId}
+              editableBranchData={editableBranchData}
+              setEditableBranchData={setEditableBranchData}
             />
           </View>
         ) : (
@@ -140,7 +134,7 @@ const SubBranchTab = ({
         setBranchDeleteModalOpen={setBranchDeleteModalOpen}
         branchDeleteModalOpen={branchDeleteModalOpen}
         deleteBranchId={deleteBranchId}
-        getAllSubBranchList={getAllSubBranchList}
+        updateVendorShopDetailStore={updateVendorShopDetailStore}
       />
     </View>
   );
@@ -216,7 +210,7 @@ const BranchDeleteModel = ({
   branchDeleteModalOpen,
   setBranchDeleteModalOpen,
   deleteBranchId,
-  getAllSubBranchList,
+  updateVendorShopDetailStore,
 }) => {
   const toast = useToast();
   return (
@@ -271,7 +265,7 @@ const BranchDeleteModel = ({
                           backgroundColor: 'green.600',
                           variant: 'solid',
                         });
-                        getAllSubBranchList();
+                        updateVendorShopDetailStore();
                       },
                       error => {
                         toast.show({
@@ -325,10 +319,10 @@ const AddEditModelStyles = StyleSheet.create({
 const SubBranchModal = ({
   subBranchModalOpen,
   setSubBranchModalOpen,
-  getAllSubBranchList,
+  updateVendorShopDetailStore,
   ShopId,
-  editSubBranchId,
-  setEditSubBranchId,
+  editableBranchData,
+  setEditableBranchData,
   ownerInfoGetValue,
   mainBranchInfoGetValue,
 }) => {
@@ -374,26 +368,33 @@ const SubBranchModal = ({
       error.subManagerEmailError = '';
       error.subManagerPhoneError = '';
     } else {
-      setSubManagerFirstName('');
-      setSubManagerLastName('');
-      setSubManagerEmail('');
-      setSubManagerPhone('');
+      if (editableBranchData) {
+        setSubManagerFirstName(editableBranchData?.manager_name?.split(' ')[0]);
+        setSubManagerLastName(editableBranchData?.manager_name?.split(' ')[1]);
+        setSubManagerEmail(editableBranchData?.manager_email);
+        setSubManagerPhone(editableBranchData?.manager_contact);
+      } else {
+        setSubManagerFirstName('');
+        setSubManagerLastName('');
+        setSubManagerEmail('');
+        setSubManagerPhone('');
+      }
     }
   }, [error, mainBranchInfoGetValue, managerValue, ownerInfoGetValue]);
 
   useEffect(() => {
-    if (editSubBranchId !== undefined) {
-      getSingleBranchDetails({id: editSubBranchId}).then(res => {
-        setSubManagerAddress(res.data.branch.branch_address);
-        setSubManagerCity(res.data.branch.branch_city);
-        setSubManagerPinCode(res.data.branch.branch_pinCode);
-        setSubManagerFirstName(res.data.branch.manager_name.split(' ')[0]);
-        setSubManagerLastName(res.data.branch.manager_name.split(' ')[1]);
-        setSubManagerEmail(res.data.branch.manager_email);
-        setSubManagerPhone(res.data.branch.manager_contact);
-      });
+    if (editableBranchData) {
+      setSubManagerAddress(editableBranchData.branch_address);
+      setSubManagerCity(editableBranchData.branch_city);
+      setSubManagerPinCode(editableBranchData.branch_pinCode);
+      setManagerValue(
+        (editableBranchData?.same_as === 'owner' && 'Same as owner') ||
+          (editableBranchData?.same_as === 'main_branch_manager' &&
+            'same as main branch manager') ||
+          '',
+      );
     }
-  }, [editSubBranchId]);
+  }, [editableBranchData]);
 
   const subBranchSubmit = () => {
     let allError = {};
@@ -452,49 +453,19 @@ const SubBranchModal = ({
     ) {
       setError(allError);
     } else {
-      if (editSubBranchId === undefined) {
-        setLoading(true);
-        createBranch({
-          branchInfo: {
-            branch_address: subManagerAddress,
-            branch_city: subManagerCity,
-            branch_pinCode: subManagerPinCode,
-            manager_name: subManagerFirstName + ' ' + subManagerLastName,
-            manager_contact: subManagerPhone,
-            manager_email: subManagerEmail,
-            branch_type: 'sub',
-            shop_id: ShopId,
-          },
-        }).then(
-          res => {
-            toast.show({
-              title: res.data.createBranch.message,
-              placement: 'top',
-              backgroundColor: 'green.600',
-              variant: 'solid',
-            });
-            setLoading(false);
-            getAllSubBranchList();
-            handleSubBranchModalClose();
-          },
-          error => {
-            setLoading(false);
-            toast.show({
-              title: error.message,
-              placement: 'top',
-              backgroundColor: 'red.600',
-              variant: 'solid',
-            });
-          },
-        );
-      } else {
-        setLoading(true);
+      setLoading(true);
+      if (editableBranchData) {
         updateBranch({
-          id: editSubBranchId,
+          id: editableBranchData?.id,
           branchInfo: {
             branch_address: subManagerAddress,
             branch_city: subManagerCity,
             branch_pinCode: subManagerPinCode,
+            same_as:
+              (managerValue === 'Same as owner' && 'owner') ||
+              (managerValue === 'same as main branch manager' &&
+                'main_branch_manager') ||
+              'none',
             manager_name: subManagerFirstName + ' ' + subManagerLastName,
             manager_contact: subManagerPhone,
             manager_email: subManagerEmail,
@@ -510,7 +481,7 @@ const SubBranchModal = ({
               variant: 'solid',
             });
             setLoading(false);
-            getAllSubBranchList();
+            updateVendorShopDetailStore();
             handleSubBranchModalClose();
           },
           error => {
@@ -521,6 +492,45 @@ const SubBranchModal = ({
               variant: 'solid',
             });
             setLoading(false);
+          },
+        );
+      } else {
+        createBranch({
+          branchInfo: {
+            branch_address: subManagerAddress,
+            branch_city: subManagerCity,
+            branch_pinCode: subManagerPinCode,
+            same_as:
+              (managerValue === 'Same as owner' && 'owner') ||
+              (managerValue === 'same as main branch manager' &&
+                'main_branch_manager') ||
+              'none',
+            manager_name: subManagerFirstName + ' ' + subManagerLastName,
+            manager_contact: subManagerPhone,
+            manager_email: subManagerEmail,
+            branch_type: 'sub',
+            shop_id: ShopId,
+          },
+        }).then(
+          res => {
+            toast.show({
+              title: res.data.createBranch.message,
+              placement: 'top',
+              backgroundColor: 'green.600',
+              variant: 'solid',
+            });
+            setLoading(false);
+            updateVendorShopDetailStore();
+            handleSubBranchModalClose();
+          },
+          error => {
+            setLoading(false);
+            toast.show({
+              title: error.message,
+              placement: 'top',
+              backgroundColor: 'red.600',
+              variant: 'solid',
+            });
           },
         );
       }
@@ -537,7 +547,8 @@ const SubBranchModal = ({
     setSubManagerEmail('');
     setManagerValue('');
     setSubManagerPhone('');
-    setEditSubBranchId();
+    setEditableBranchData();
+    setLoading(false);
     error.subManagerFirstNameError = '';
     error.subManagerLastNameError = '';
     error.subManagerEmailError = '';
@@ -769,7 +780,7 @@ const SubBranchModal = ({
             </View>
             <View style={{width: '30%'}}>
               <CustomButton
-                name={editSubBranchId === undefined ? 'Save' : 'Update'}
+                name={editableBranchData ? 'Update' : 'Save'}
                 color="#FFFFFF"
                 backgroundColor="#29977E"
                 borderColor="#29977E"

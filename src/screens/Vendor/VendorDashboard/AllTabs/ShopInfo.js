@@ -51,7 +51,7 @@ const ShopInfo = ({
   };
 
   useEffect(() => {
-    if (useProfileData?.userCreatedShopId) {
+    if (vendorShopDetails) {
       shopInfoSetValue('shop_name', vendorShopDetails?.shop_name);
       shopInfoSetValue('shop_email', vendorShopDetails?.shop_email);
       shopInfoSetValue(
@@ -67,7 +67,7 @@ const ShopInfo = ({
         vendorShopDetails?.shop_social_link?.website,
       );
     }
-  }, [hours, useProfileData, shopInfoSetValue, vendorShopDetails]);
+  }, [hours, shopInfoSetValue, vendorShopDetails]);
 
   return (
     <View style={{flex: 1}}>
@@ -119,16 +119,8 @@ const ShopInfo = ({
                 mode="outlined"
                 control={shopInfoControl}
                 name="personal_website"
-                rules={{
-                  required: 'Personal Website Link is required *',
-                }}
                 activeOutlineColor="#29977E"
               />
-              {shopInfoErrors?.personal_website && (
-                <Text style={{color: 'red'}}>
-                  {shopInfoErrors?.personal_website?.message}
-                </Text>
-              )}
             </View>
             <View style={{marginBottom: 15}}>
               <CustomTextInput
@@ -136,16 +128,8 @@ const ShopInfo = ({
                 mode="outlined"
                 control={shopInfoControl}
                 name="facebook_link"
-                rules={{
-                  required: 'Facebook Link is required *',
-                }}
                 activeOutlineColor="#29977E"
               />
-              {shopInfoErrors?.facebook_link && (
-                <Text style={{color: 'red'}}>
-                  {shopInfoErrors?.facebook_link?.message}
-                </Text>
-              )}
             </View>
             <View style={{marginBottom: 15}}>
               <CustomTextInput
@@ -153,16 +137,8 @@ const ShopInfo = ({
                 mode="outlined"
                 control={shopInfoControl}
                 name="instagram_link"
-                rules={{
-                  required: 'Instagram Link is required *',
-                }}
                 activeOutlineColor="#29977E"
               />
-              {shopInfoErrors?.instagram_link && (
-                <Text style={{color: 'red'}}>
-                  {shopInfoErrors?.instagram_link?.message}
-                </Text>
-              )}
             </View>
 
             <View style={styles.editBtnMain}>

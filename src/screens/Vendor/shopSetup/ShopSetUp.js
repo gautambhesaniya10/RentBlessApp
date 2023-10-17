@@ -82,7 +82,6 @@ const ShopSetUp = () => {
   const [loading, setLoading] = useState(false);
   const [subBranch, setSubBranch] = useState([]);
   const [sameAsOwner, setSameAsOwner] = useState('False');
-  const [managerValue, setManagerValue] = useState('');
 
   const [hours, setHours] = useState([
     {key: 'Sunday', value: ['09:00 AM - 10:00 PM']},
@@ -117,8 +116,8 @@ const ShopSetUp = () => {
       branch_pinCode: val.subManagerPinCode,
       branch_city: val.city,
       same_as:
-        (managerValue === 'Same as owner' && 'owner') ||
-        (managerValue === 'same as main branch manager' &&
+        (val?.managerValue === 'Same as owner' && 'owner') ||
+        (val?.managerValue === 'same as main branch manager' &&
           'main_branch_manager') ||
         'none',
       manager_name: val.subManagerFirstName + ' ' + val.subManagerLastName,
@@ -416,8 +415,6 @@ const ShopSetUp = () => {
                 setSubBranch={setSubBranch}
                 sameAsOwner={sameAsOwner}
                 setSameAsOwner={setSameAsOwner}
-                managerValue={managerValue}
-                setManagerValue={setManagerValue}
               />
             )}
             <View

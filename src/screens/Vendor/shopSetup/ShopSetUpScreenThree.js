@@ -26,8 +26,6 @@ const ShopSetUpScreenThree = ({
   setSubBranch,
   sameAsOwner,
   setSameAsOwner,
-  managerValue,
-  setManagerValue,
 }) => {
   const [mainBranchShow, setMainBranchShow] = useState(true);
   const [managerShow, setManagerShow] = useState(true);
@@ -338,8 +336,6 @@ const ShopSetUpScreenThree = ({
                   setSubBranch={setSubBranch}
                   subBranchEdit={subBranchEdit}
                   setSubBranchEdit={setSubBranchEdit}
-                  managerValue={managerValue}
-                  setManagerValue={setManagerValue}
                 />
               </>
             )}
@@ -468,8 +464,6 @@ const SubBranchModel = ({
   setSubBranch,
   setSubBranchEdit,
   subBranchEdit,
-  managerValue,
-  setManagerValue,
 }) => {
   const [subManagerAddress, setSubManagerAddress] = useState('');
   const [subManagerCity, setSubManagerCity] = useState('');
@@ -479,6 +473,7 @@ const SubBranchModel = ({
   const [subManagerLastName, setSubManagerLastName] = useState('');
   const [subManagerEmail, setSubManagerEmail] = useState('');
   const [subManagerPhone, setSubManagerPhone] = useState('');
+  const [managerValue, setManagerValue] = useState('');
 
   const [error, setError] = useState({
     subManagerAddressError: '',
@@ -599,6 +594,7 @@ const SubBranchModel = ({
             subManagerLastName,
             subManagerEmail,
             subManagerPhone,
+            managerValue,
           },
         ]);
         handleSubBranchModalClose();
@@ -616,6 +612,7 @@ const SubBranchModel = ({
           subManagerLastName,
           subManagerEmail,
           subManagerPhone,
+          managerValue,
         };
         setSubBranch(editSelectedSubBranch);
         handleSubBranchModalClose();

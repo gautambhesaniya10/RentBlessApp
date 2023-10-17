@@ -11,22 +11,19 @@ import {actions, RichEditor, RichToolbar} from 'react-native-pell-rich-editor';
 import {BackGroundStyle, FontStyle} from '../../../../../CommonStyle';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
-import {MultipleImageUploadFile} from '../../../../services/MultipleImageUploadFile';
 import {
   createProduct,
   updateProduct,
 } from '../../../../graphql/mutations/products';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {VideoUploadFile} from '../../../../services/VideoUploadFile';
-import {getProductDetails} from '../../../../graphql/queries/productQueries';
-import {deleteMedia} from '../../../../graphql/mutations/deleteMedia';
-import RNFetchBlob from 'rn-fetch-blob';
 import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
+import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 
 const AddEditProduct = () => {
   const toast = useToast();
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const router = useRoute();
   const editableProductData = router?.params?.state?.editableProductData;
@@ -40,9 +37,9 @@ const AddEditProduct = () => {
     getValues,
     control,
   } = useForm();
-
   const {userProfile} = useSelector(state => state?.user);
   const {categories} = useSelector(state => state?.categories);
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
 
   const [menCategoryLabel, setMenCategoryLabel] = useState([]);
   const [womenCategoryLabel, setWomenCategoryLabel] = useState([]);
@@ -365,6 +362,7 @@ const AddEditProduct = () => {
               variant: 'solid',
             });
             setLoading(false);
+            dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
             handleProductListingModalClose();
           },
           error => {
@@ -419,6 +417,7 @@ const AddEditProduct = () => {
               variant: 'solid',
             });
             setLoading(false);
+            dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
             handleProductListingModalClose();
           },
           error => {

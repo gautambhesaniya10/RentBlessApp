@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
-import client from "../apollo-client";
+import {gql} from '@apollo/client';
+import client from '../apollo-client';
 
-export const productLike = async (payload) => {
+export const productLike = async payload => {
   const results = await client.mutate({
     mutation: gql`
       mutation ProductLike($productInfo: productLikeViewInput) {
@@ -86,7 +86,7 @@ export const productLike = async (payload) => {
   return results;
 };
 
-export const createProduct = async (payload) => {
+export const createProduct = async payload => {
   const results = await client.mutate({
     mutation: gql`
       mutation CreateProduct($productInfo: createProductInput) {
@@ -102,7 +102,7 @@ export const createProduct = async (payload) => {
   return results;
 };
 
-export const updateProduct = async (payload) => {
+export const updateProduct = async payload => {
   const results = await client.mutate({
     mutation: gql`
       mutation UpdateProduct(
@@ -122,7 +122,7 @@ export const updateProduct = async (payload) => {
   return results;
 };
 
-export const deleteProduct = async (payload) => {
+export const deleteProduct = async payload => {
   const results = await client.mutate({
     mutation: gql`
       mutation DeleteProduct($deleteProductId: String) {
@@ -132,6 +132,36 @@ export const deleteProduct = async (payload) => {
     variables: {
       deleteProductId: payload.id,
     },
+  });
+  return results;
+};
+
+export const productWhatsappInquiry = async payload => {
+  const results = await client.mutate({
+    mutation: gql`
+      mutation ProductWhatsappInquiry($productWhatsappInquiryId: String) {
+        productWhatsappInquiry(id: $productWhatsappInquiryId)
+      }
+    `,
+    variables: {
+      productWhatsappInquiryId: payload.id,
+    },
+    fetchPolicy: 'no-cache',
+  });
+  return results;
+};
+
+export const productContactInquiry = async payload => {
+  const results = await client.mutate({
+    mutation: gql`
+      mutation ProductContactInquiry($productContactInquiryId: String) {
+        productContactInquiry(id: $productContactInquiryId)
+      }
+    `,
+    variables: {
+      productContactInquiryId: payload.id,
+    },
+    fetchPolicy: 'no-cache',
   });
   return results;
 };

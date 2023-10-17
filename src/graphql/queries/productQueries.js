@@ -87,6 +87,12 @@ export const getProducts = async payload => {
             flag
             productLikes
             product_color
+            whatsapp_inquiry
+            contact_inquiry
+            product_listing_type
+            product_price_visible
+            product_price
+            product_discount
           }
           count
           limit
@@ -182,6 +188,12 @@ export const getProductDetails = async payload => {
             }
             flag
             productLikes
+            whatsapp_inquiry
+            contact_inquiry
+            product_listing_type
+            product_price_visible
+            product_price
+            product_discount
           }
           related {
             id
@@ -251,6 +263,12 @@ export const getProductDetails = async payload => {
             }
             flag
             productLikes
+            whatsapp_inquiry
+            contact_inquiry
+            product_listing_type
+            product_price_visible
+            product_price
+            product_discount
           }
         }
       }

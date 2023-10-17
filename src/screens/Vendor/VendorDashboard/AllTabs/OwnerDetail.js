@@ -6,8 +6,6 @@ import {getShopOwnerDetail} from '../../../../graphql/queries/shopQueries';
 
 const OwnerDetail = ({
   vendorShopDetails,
-  useProfileData,
-  setShopOwnerId,
   control,
   ownerInfoSetValue,
   ownerInfoErrors,
@@ -16,25 +14,25 @@ const OwnerDetail = ({
   ownerLoading,
 }) => {
   useEffect(() => {
-    if (useProfileData?.userCreatedShopId) {
-      getShopOwnerDetail({id: vendorShopDetails?.owner_id}).then(ownerRes => {
-        setShopOwnerId(ownerRes?.data?.shopOwner?.id);
-        ownerInfoSetValue(
-          'first_name',
-          ownerRes?.data?.shopOwner?.owner_firstName,
-        );
-        ownerInfoSetValue(
-          'last_name',
-          ownerRes?.data?.shopOwner?.owner_lastName,
-        );
-        ownerInfoSetValue('user_email', ownerRes?.data?.shopOwner?.owner_email);
-        ownerInfoSetValue(
-          'user_contact',
-          ownerRes?.data?.shopOwner?.owner_contact,
-        );
-      });
+    if (vendorShopDetails) {
+      ownerInfoSetValue(
+        'first_name',
+        vendorShopDetails?.ownerInfo?.owner_firstName,
+      );
+      ownerInfoSetValue(
+        'last_name',
+        vendorShopDetails?.ownerInfo?.owner_lastName,
+      );
+      ownerInfoSetValue(
+        'user_email',
+        vendorShopDetails?.ownerInfo?.owner_email,
+      );
+      ownerInfoSetValue(
+        'user_contact',
+        vendorShopDetails?.ownerInfo?.owner_contact,
+      );
     }
-  }, [useProfileData, ownerInfoSetValue, vendorShopDetails]);
+  }, [ownerInfoSetValue, vendorShopDetails]);
 
   return (
     <View style={{flex: 1}}>
