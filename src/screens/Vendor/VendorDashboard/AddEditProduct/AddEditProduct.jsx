@@ -22,6 +22,7 @@ import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
+import {refactorPrice} from '../../../../common/Common';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -37,6 +38,7 @@ const AddEditProduct = () => {
     setValue,
     getValues,
     control,
+    watch,
   } = useForm();
   const {userProfile} = useSelector(state => state?.user);
   const {categories} = useSelector(state => state?.categories);
@@ -305,14 +307,6 @@ const AddEditProduct = () => {
     }
   };
 
-  const refactorPrice = data => {
-    if (Number.isInteger(Number(data))) {
-      return Number(data);
-    } else {
-      return Number(Number(data).toFixed(2));
-    }
-  };
-
   const onSubmitProduct = async data => {
     if (editorDescriptionContent === '') {
       setErrorDescription('Product description is required');
@@ -498,6 +492,7 @@ const AddEditProduct = () => {
 
   const priceHandle = e => {
     const price = parseFloat(e.nativeEvent.text);
+
     if (!isNaN(price)) {
       const discount = parseFloat(getValues('product_discount') || 0);
       const finalPrice = price - price * (discount / 100);
@@ -509,17 +504,20 @@ const AddEditProduct = () => {
 
   const discountHandle = e => {
     const discount = parseFloat(e.nativeEvent.text);
+    console.log('discount', discount);
     if (!isNaN(discount)) {
       const price = parseFloat(getValues('product_price') || 0);
       const finalPrice = price - price * (discount / 100);
       setValue('product_final_price', finalPrice.toFixed(2).toString());
+    } else {
+      setValue('product_final_price', price.toFixed(2).toString());
     }
   };
 
   const finalPriceHandle = e => {
     const finalPrice = parseFloat(e.nativeEvent.text);
+    const price = parseFloat(getValues('product_price') || 0);
     if (!isNaN(finalPrice)) {
-      const price = parseFloat(getValues('product_price') || 0);
       if (price !== 0) {
         const discount = ((price - finalPrice) / price) * 100;
         setValue('product_discount', discount.toFixed(2).toString());
@@ -528,6 +526,31 @@ const AddEditProduct = () => {
       setValue('product_discount', '0');
     }
   };
+
+  const price = parseFloat(watch('product_price') || 0);
+  const finalPrice = parseFloat(watch('product_final_price') || 0);
+
+  useEffect(() => {
+    if (Number(finalPrice) > Number(price)) {
+      setValue('product_final_price', price.toFixed(2).toString());
+      setValue('product_discount', '0');
+    }
+  }, [finalPrice]);
+
+  const discountPrice = parseFloat(watch('product_discount') || 0);
+  useEffect(() => {
+    if (Number(discountPrice) > 100) {
+      setValue('product_discount', '100');
+      setValue('product_final_price', '0');
+    }
+  }, [discountPrice]);
+
+  useEffect(() => {
+    if (Number(price) < 0) {
+      setValue('product_price', '0');
+      setValue('product_final_price', '0');
+    }
+  }, [price]);
 
   return (
     <View style={{flex: 1}}>
@@ -579,10 +602,10 @@ const AddEditProduct = () => {
                 name="product_price"
                 rules={{
                   required: 'Product Price is required *',
-                  pattern: {
-                    value: /^\d+(\.\d+)?$/,
-                    message: 'Please enter a valid price !',
-                  },
+                  // pattern: {
+                  //   value: /^\d+(\.\d+)?$/,
+                  //   message: 'Please enter a valid price !',
+                  // },
                 }}
                 activeOutlineColor="#29977E"
                 keyboardType="number-pad"
@@ -609,6 +632,14 @@ const AddEditProduct = () => {
                     value: /^\d+(\.\d+)?$/,
                     message: 'Please enter a valid discount !',
                   },
+                  // min: {
+                  //   value: 0,
+                  //   message: 'Discount must be greater than or equal to 0',
+                  // },
+                  // max: {
+                  //   value: 100,
+                  //   message: 'Discount must be less than or equal to 100',
+                  // },
                 }}
                 activeOutlineColor="#29977E"
                 keyboardType="number-pad"
