@@ -33,6 +33,7 @@ import {
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import FastImage from 'react-native-fast-image';
+import CustomSwitch from '../../components/CustomSwitch';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -241,6 +242,17 @@ const HomePage = () => {
     </View>
   );
 
+  const [switchVisibility, setSwitchVisibility] = useState(false);
+
+  const onChangeLeftSwitch = () => {
+    setSwitchVisibility(false);
+    dispatch(shopProductButtonChange(false));
+  };
+  const onChangeRightSwitch = () => {
+    setSwitchVisibility(true);
+    dispatch(shopProductButtonChange(true));
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <FilterDrawerModel
@@ -259,38 +271,14 @@ const HomePage = () => {
           <Icon name="filter" size={18} color="white" />
           <Text style={styles.filterBtnText}>Filters</Text>
         </TouchableOpacity>
-        <View style={styles.shopProMain}>
-          <TouchableOpacity
-            onPress={() => dispatch(shopProductButtonChange(false))}
-            style={[
-              styles.filterButtonShop,
-              {backgroundColor: byShop ? 'lightgrey' : '#29977E'},
-            ]}>
-            <Image
-              source={{uri: clothIMG}}
-              style={{
-                width: 18,
-                height: 18,
-                tintColor: byShop ? 'black' : 'white',
-              }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => dispatch(shopProductButtonChange(true))}
-            style={[
-              styles.filterButtonPro,
-              {backgroundColor: byShop ? '#29977E' : 'lightgrey'},
-            ]}>
-            <Image
-              source={{uri: store_Icon}}
-              style={{
-                width: 18,
-                height: 18,
-                tintColor: byShop ? 'white' : 'black',
-              }}
-            />
-          </TouchableOpacity>
-        </View>
+        <CustomSwitch
+          homePage={true}
+          onClickLeft={() => onChangeLeftSwitch()}
+          onClickRight={() => onChangeRightSwitch()}
+          imgLeftIcon={clothIMG}
+          imgRightIcon={store_Icon}
+          switchVisibility={switchVisibility}
+        />
       </View>
 
       <View style={{flex: 1}}>
@@ -485,23 +473,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 5,
-  },
-  shopProMain: {
-    flexDirection: 'row',
-  },
-  filterButtonShop: {
-    backgroundColor: 'lightgrey',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-  },
-  filterButtonPro: {
-    backgroundColor: '#151827',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    borderTopRightRadius: 8,
-    borderBottomRightRadius: 8,
   },
   filterBtnText: {
     color: 'white',

@@ -21,6 +21,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
+import CustomSwitch from '../../../../components/CustomSwitch';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -82,6 +83,25 @@ const AddEditProduct = () => {
       setRichEditorShow(true);
     }, 1000);
   }, []);
+
+  // const [switchVisibility, setSwitchVisibility] = useState(false);
+  const [productPriceVisible, setProductPriceVisible] = useState(false);
+
+  const [productListingType, setProductListingType] = useState(false);
+
+  const onChangeLeftSwitch = () => {
+    setProductPriceVisible(false);
+  };
+  const onChangeRightSwitch = () => {
+    setProductPriceVisible(true);
+  };
+
+  const onChangeRentLeftSwitch = () => {
+    setProductListingType(false);
+  };
+  const onChangeRentRightSwitch = () => {
+    setProductListingType(true);
+  };
 
   const Validate = () => {
     let isValid = true;
@@ -208,14 +228,28 @@ const AddEditProduct = () => {
   useEffect(() => {
     if (editableProductData) {
       setValue('product_name', editableProductData?.product_name);
-
+      setValue('product_price', editableProductData?.product_price.toString());
+      setValue(
+        'product_discount',
+        editableProductData?.product_discount.toString(),
+      );
       setEditorDescriptionContent(editableProductData?.product_description);
-
       setValue('product_color', editableProductData?.product_color);
       setValue('product_type', editableProductData.categoryInfo?.category_type);
       setProductType(editableProductData.categoryInfo?.category_type);
       setValue('product_category', editableProductData?.categoryInfo?.id);
       setValue('product_branch', editableProductData?.branchInfo?.id);
+
+      const finalPrice =
+        editableProductData?.product_price -
+        editableProductData?.product_price *
+          (editableProductData?.product_discount / 100);
+      setValue('product_final_price', finalPrice.toString());
+
+      setProductListingType(
+        editableProductData?.product_listing_type === 'rent' ? false : true,
+      );
+      setProductPriceVisible(!editableProductData?.product_price_visible);
 
       editableProductData?.product_image?.front &&
         setProductImages(old => [
@@ -352,6 +386,10 @@ const AddEditProduct = () => {
             product_video:
               videoResponse ||
               (deleteProductVideo ? '' : editableProductData.product_video),
+            product_price: Number(data.product_price),
+            product_discount: Number(data.product_discount),
+            product_price_visible: !productPriceVisible,
+            product_listing_type: productListingType ? 'sell' : 'rent',
           },
         }).then(
           res => {
@@ -407,6 +445,10 @@ const AddEditProduct = () => {
               side: productImagesRes[2],
             },
             product_video: productVideoRes || '',
+            product_price: Number(data.product_price),
+            product_discount: Number(data.product_discount),
+            product_price_visible: !productPriceVisible,
+            product_listing_type: productListingType ? 'sell' : 'rent',
           },
         }).then(
           res => {
@@ -447,6 +489,39 @@ const AddEditProduct = () => {
     setProductImages([]);
   };
 
+  const priceHandle = e => {
+    const price = parseInt(e.nativeEvent.text);
+    if (!isNaN(price)) {
+      const discount = parseInt(getValues('product_discount') || 0);
+      const finalPrice = price - price * (discount / 100);
+      setValue('product_final_price', finalPrice.toString());
+    } else {
+      setValue('product_final_price', null);
+    }
+  };
+
+  const discountHandle = e => {
+    const discount = parseInt(e.nativeEvent.text);
+    if (!isNaN(discount)) {
+      const price = parseInt(getValues('product_price') || 0);
+      const finalPrice = price - price * (discount / 100);
+      setValue('product_final_price', finalPrice.toString());
+    }
+  };
+
+  const finalPriceHandle = e => {
+    const finalPrice = parseInt(e.nativeEvent.text);
+    if (!isNaN(finalPrice)) {
+      const price = parseInt(getValues('product_price') || 0);
+      if (price !== 0) {
+        const discount = ((price - finalPrice) / price) * 100;
+        setValue('product_discount', discount.toString());
+      }
+    } else {
+      setValue('product_discount', '0');
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
       <ScrollView
@@ -462,6 +537,14 @@ const AddEditProduct = () => {
             <Text style={styles.addBranchText}>
               {editableProductData ? 'Edit' : 'Add'} Product
             </Text>
+            <CustomSwitch
+              onClickLeft={() => onChangeRentLeftSwitch()}
+              onClickRight={() => onChangeRentRightSwitch()}
+              switchVisibility={productListingType}
+              textLeft="Rent"
+              textRight="Sell"
+              textName={true}
+            />
           </View>
           <View>
             <View style={{marginBottom: 15}}>
@@ -480,6 +563,100 @@ const AddEditProduct = () => {
                   {errors?.product_name?.message}
                 </Text>
               )}
+            </View>
+            <View style={{marginBottom: 15, position: 'relative'}}>
+              <CustomTextInput
+                label="Price"
+                mode="outlined"
+                control={control}
+                name="product_price"
+                rules={{
+                  required: 'Product Price is required *',
+                  pattern: {
+                    value: /^\d+(\.\d+)?$/,
+                    message: 'Please enter a valid price !',
+                  },
+                }}
+                activeOutlineColor="#29977E"
+                keyboardType="number-pad"
+                onChangeTextPrice={priceHandle}
+              />
+              <View style={{position: 'absolute', top: '40%', right: 20}}>
+                <Icon name="rupee" size={18} color="black" />
+              </View>
+              {errors?.product_price && (
+                <Text style={{color: 'red'}}>
+                  {errors?.product_price?.message}
+                </Text>
+              )}
+            </View>
+            <View style={{marginBottom: 15, position: 'relative'}}>
+              <CustomTextInput
+                label="Discount"
+                mode="outlined"
+                control={control}
+                name="product_discount"
+                rules={{
+                  required: 'Product Discount  is required *',
+                  pattern: {
+                    value: /^\d+(\.\d+)?$/,
+                    message: 'Please enter a valid discount !',
+                  },
+                }}
+                activeOutlineColor="#29977E"
+                keyboardType="number-pad"
+                onChangeTextPrice={discountHandle}
+              />
+              <View style={{position: 'absolute', top: '40%', right: 20}}>
+                <Icon name="percent" size={16} color="black" />
+              </View>
+              {errors?.product_discount && (
+                <Text style={{color: 'red'}}>
+                  {errors?.product_discount?.message}
+                </Text>
+              )}
+            </View>
+            <View style={{marginBottom: 15, position: 'relative'}}>
+              <CustomTextInput
+                label="Final Price"
+                mode="outlined"
+                control={control}
+                name="product_final_price"
+                rules={{
+                  required: 'Product Final Price  is required *',
+                  pattern: {
+                    value: /^\d+(\.\d+)?$/,
+                    message: 'Please enter a valid price !',
+                  },
+                }}
+                activeOutlineColor="#29977E"
+                keyboardType="number-pad"
+                onChangeTextPrice={finalPriceHandle}
+              />
+              <View style={{position: 'absolute', top: '40%', right: 20}}>
+                <Icon name="rupee" size={18} color="black" />
+              </View>
+              {errors?.product_final_price && (
+                <Text style={{color: 'red'}}>
+                  {errors?.product_final_price?.message}
+                </Text>
+              )}
+            </View>
+
+            <View style={styles.priceSwitchMain}>
+              <Text style={styles.PriceVisibilityText}>
+                Price Visibility :{' '}
+              </Text>
+              <View>
+                <CustomSwitch
+                  onClickLeft={() => onChangeLeftSwitch()}
+                  onClickRight={() => onChangeRightSwitch()}
+                  switchVisibility={productPriceVisible}
+                  IconLeft="eye"
+                  IconRight="eye-slash"
+                  switchIcon={true}
+                />
+              </View>
             </View>
 
             <View style={{marginBottom: 15}}>
@@ -864,5 +1041,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 2,
     borderRadius: 10,
+  },
+  priceSwitchMain: {
+    marginBottom: 15,
+    flexDirection: 'row',
+    gap: 20,
+    alignItems: 'center',
+  },
+  PriceVisibilityText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });

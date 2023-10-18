@@ -14,6 +14,7 @@ const CustomTextInput = ({
   activeOutlineColor,
   disabled,
   outlineStyle,
+  onChangeTextPrice,
 }) => {
   const customTheme = {
     ...DefaultTheme,
@@ -40,6 +41,7 @@ const CustomTextInput = ({
             activeOutlineColor={activeOutlineColor}
             theme={customTheme}
             disabled={disabled}
+            onChange={onChangeTextPrice}
           />
         )}
         name={name}
