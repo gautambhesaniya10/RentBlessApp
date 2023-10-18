@@ -29,7 +29,6 @@ const AddEditProduct = () => {
   const navigation = useNavigation();
   const router = useRoute();
   const editableProductData = router?.params?.state?.editableProductData;
-  const cacheBuster = Math.random();
 
   const {
     handleSubmit,
@@ -213,17 +212,15 @@ const AddEditProduct = () => {
     });
   };
 
-  useEffect(() => {
-    if (editableProductData) {
-      if (richEditorShow) {
-        setTimeout(() => {
-          richtext.current?.setContentHTML(
-            editableProductData?.product_description,
-          );
-        }, 1000);
-      }
+  if (editableProductData) {
+    if (richEditorShow) {
+      setTimeout(() => {
+        richtext.current.setContentHTML(
+          editableProductData?.product_description,
+        );
+      }, 2000);
     }
-  }, [richtext, editableProductData, richEditorShow]);
+  }
 
   useEffect(() => {
     if (editableProductData) {
