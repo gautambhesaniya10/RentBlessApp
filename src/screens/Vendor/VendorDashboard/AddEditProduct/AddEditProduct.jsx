@@ -305,6 +305,14 @@ const AddEditProduct = () => {
     }
   };
 
+  const refactorPrice = data => {
+    if (Number.isInteger(Number(data))) {
+      return Number(data);
+    } else {
+      return Number(Number(data).toFixed(2));
+    }
+  };
+
   const onSubmitProduct = async data => {
     if (editorDescriptionContent === '') {
       setErrorDescription('Product description is required');
@@ -385,8 +393,8 @@ const AddEditProduct = () => {
             product_video:
               videoResponse ||
               (deleteProductVideo ? '' : editableProductData.product_video),
-            product_price: Number(data.product_price),
-            product_discount: Number(data.product_discount),
+            product_price: refactorPrice(data.product_price),
+            product_discount: refactorPrice(data.product_discount),
             product_price_visible: !productPriceVisible,
             product_listing_type: productListingType ? 'sell' : 'rent',
           },
@@ -444,8 +452,8 @@ const AddEditProduct = () => {
               side: productImagesRes[2],
             },
             product_video: productVideoRes || '',
-            product_price: Number(data.product_price),
-            product_discount: Number(data.product_discount),
+            product_price: refactorPrice(data.product_price),
+            product_discount: refactorPrice(data.product_discount),
             product_price_visible: !productPriceVisible,
             product_listing_type: productListingType ? 'sell' : 'rent',
           },
@@ -489,32 +497,32 @@ const AddEditProduct = () => {
   };
 
   const priceHandle = e => {
-    const price = parseInt(e.nativeEvent.text);
+    const price = parseFloat(e.nativeEvent.text);
     if (!isNaN(price)) {
-      const discount = parseInt(getValues('product_discount') || 0);
+      const discount = parseFloat(getValues('product_discount') || 0);
       const finalPrice = price - price * (discount / 100);
-      setValue('product_final_price', finalPrice.toString());
+      setValue('product_final_price', finalPrice.toFixed(2).toString());
     } else {
       setValue('product_final_price', null);
     }
   };
 
   const discountHandle = e => {
-    const discount = parseInt(e.nativeEvent.text);
+    const discount = parseFloat(e.nativeEvent.text);
     if (!isNaN(discount)) {
-      const price = parseInt(getValues('product_price') || 0);
+      const price = parseFloat(getValues('product_price') || 0);
       const finalPrice = price - price * (discount / 100);
-      setValue('product_final_price', finalPrice.toString());
+      setValue('product_final_price', finalPrice.toFixed(2).toString());
     }
   };
 
   const finalPriceHandle = e => {
-    const finalPrice = parseInt(e.nativeEvent.text);
+    const finalPrice = parseFloat(e.nativeEvent.text);
     if (!isNaN(finalPrice)) {
-      const price = parseInt(getValues('product_price') || 0);
+      const price = parseFloat(getValues('product_price') || 0);
       if (price !== 0) {
         const discount = ((price - finalPrice) / price) * 100;
-        setValue('product_discount', discount.toString());
+        setValue('product_discount', discount.toFixed(2).toString());
       }
     } else {
       setValue('product_discount', '0');
