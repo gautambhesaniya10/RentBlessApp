@@ -212,15 +212,17 @@ const AddEditProduct = () => {
     });
   };
 
-  if (editableProductData) {
-    if (richEditorShow) {
-      setTimeout(() => {
-        richtext.current.setContentHTML(
-          editableProductData?.product_description,
-        );
-      }, 2000);
+  useEffect(() => {
+    if (editableProductData) {
+      if (richEditorShow) {
+        setTimeout(() => {
+          richtext.current.setContentHTML(
+            editableProductData?.product_description,
+          );
+        }, 1000);
+      }
     }
-  }
+  }, [editableProductData, richEditorShow, richtext]);
 
   useEffect(() => {
     if (editableProductData) {
