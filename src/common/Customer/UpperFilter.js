@@ -23,25 +23,12 @@ const UpperFilter = ({
     state => state.productsFiltersReducer,
   );
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
-
-  const [oldLatestValue, setOldLatestValue] = useState('new');
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
-
-  useEffect(() => {
-    if (!byShop) {
-      setOldLatestValue(
-        productsFiltersReducer?.sortFilters?.sortType?.selectedValue,
-      );
-    } else {
-      setOldLatestValue(
-        shopsFiltersReducer?.sortFilters?.sortType?.selectedValue,
-      );
-    }
-  }, [byShop, productsFiltersReducer, shopsFiltersReducer]);
 
   const onChangeSortFilter = newValue => {
     setIsOpenPopOver(false);
     !showOnlyShopDetailPage && setShowBottomLoader(false);
+
     if (!byShop) {
       dispatch(
         changeSortProductsFilters({
@@ -60,6 +47,38 @@ const UpperFilter = ({
           },
         }),
       );
+    }
+  };
+
+  const options = byShop
+    ? [
+        {label: 'Default', value: ''},
+        {label: 'Rating: high to low', value: 'rating'},
+        {label: 'Follower: high to low', value: 'follower'},
+      ]
+    : [
+        {label: 'Default', value: ''},
+        {label: 'Price: high to low', value: 'high-low'},
+        {label: 'Price: low to high', value: 'low-high'},
+      ];
+
+  const GetSortByName = value => {
+    if (value === 'high-low') {
+      return 'Price: high to low';
+    } else if (value === 'low-high') {
+      return 'Price: low to high';
+    } else {
+      return 'Sort by';
+    }
+  };
+
+  const GetSortByNameForShop = value => {
+    if (value === 'rating') {
+      return 'Rating: high to low';
+    } else if (value === 'follower') {
+      return 'Follower: high to low';
+    } else {
+      return 'Sort by';
     }
   };
 
@@ -84,15 +103,24 @@ const UpperFilter = ({
                   {...triggerProps}
                   onPress={() => setIsOpenPopOver(true)}>
                   <View style={styles.sortFilMain}>
-                    <Text
+                    {/* <Text
                       style={[
                         styles.latestText,
                         {color: 'rgba(21, 24, 39, 0.40)'},
                       ]}>
                       Sort by:
-                    </Text>
+                    </Text> */}
                     <Text style={styles.latestText}>
-                      {oldLatestValue === 'new' ? 'Latest' : 'Oldest'}
+                      {/* {oldLatestValue === 'new' ? 'Latest' : 'Oldest'} */}
+                      {byShop
+                        ? GetSortByNameForShop(
+                            shopsFiltersReducer?.sortFilters?.sortType
+                              .selectedValue,
+                          )
+                        : GetSortByName(
+                            productsFiltersReducer?.sortFilters.sortType
+                              .selectedValue,
+                          )}
                       <Icon name="angle-down" size={16} color="black" />
                     </Text>
                   </View>
@@ -106,38 +134,34 @@ const UpperFilter = ({
               <View style={styles.radioTopMain}>
                 <RadioButton.Group
                   onValueChange={newValue => onChangeSortFilter(newValue)}
-                  value={oldLatestValue}>
+                  value={
+                    byShop
+                      ? shopsFiltersReducer?.sortFilters?.sortType.selectedValue
+                      : productsFiltersReducer?.sortFilters.sortType
+                          .selectedValue
+                  }>
                   <View style={styles.radioParent}>
-                    <View style={styles.radioMain}>
-                      <RadioButton color="#29977E" value="new" />
-                      <Text
-                        style={[
-                          styles.radioText,
-                          {
-                            color:
-                              oldLatestValue === 'new'
-                                ? '#151827'
-                                : 'rgba(21, 24, 39, 0.56)',
-                          },
-                        ]}>
-                        Latest
-                      </Text>
-                    </View>
-                    <View style={styles.radioMain}>
-                      <RadioButton color="#29977E" value="old" />
-                      <Text
-                        style={[
-                          styles.radioText,
-                          {
-                            color:
-                              oldLatestValue === 'old'
-                                ? '#151827'
-                                : 'rgba(21, 24, 39, 0.56)',
-                          },
-                        ]}>
-                        Oldest
-                      </Text>
-                    </View>
+                    {options?.map((item, index) => (
+                      <View key={index} style={styles.radioMain}>
+                        <RadioButton color="#29977E" value={item?.value} />
+                        <Text
+                          style={[
+                            styles.radioText,
+                            {
+                              color:
+                                (byShop
+                                  ? shopsFiltersReducer?.sortFilters?.sortType
+                                      .selectedValue
+                                  : productsFiltersReducer?.sortFilters.sortType
+                                      .selectedValue) === item?.value
+                                  ? '#151827'
+                                  : 'rgba(21, 24, 39, 0.56)',
+                            },
+                          ]}>
+                          {item?.label}
+                        </Text>
+                      </View>
+                    ))}
                   </View>
                 </RadioButton.Group>
               </View>

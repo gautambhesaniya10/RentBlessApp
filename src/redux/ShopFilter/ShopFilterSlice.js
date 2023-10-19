@@ -12,7 +12,7 @@ const ShopFilterSlice = createSlice({
       },
     },
     sortFilters: {
-      sortType: {selectedValue: 'new'},
+      sortType: {selectedValue: ''},
     },
     byShop: false,
   },

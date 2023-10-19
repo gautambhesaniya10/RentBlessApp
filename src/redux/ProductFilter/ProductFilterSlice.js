@@ -27,7 +27,7 @@ const productFilterSlice = createSlice({
       },
     },
     sortFilters: {
-      sortType: {selectedValue: 'new'},
+      sortType: {selectedValue: ''},
     },
     searchBarData: '',
   },
