@@ -6,9 +6,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {Divider} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {changeProductsSearchBarData} from '../../redux/ProductFilter/ProductFilterSlice';
+import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
+import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 
 const SideBarContent = ({AccessToken}) => {
   const navigation = useNavigation();
@@ -20,6 +21,44 @@ const SideBarContent = ({AccessToken}) => {
   const logoName = `${userProfile?.first_name
     ?.charAt(0)
     .toUpperCase()}${userProfile?.last_name?.charAt(0).toUpperCase()}`;
+
+  const {byShop} = useSelector(state => state.shopsFiltersReducer);
+
+  const passValueForProduct = (itm, searchBarData) => {
+    if (itm === 'searchBarData') {
+      return searchBarData;
+    } else if (itm === 'productPrice') {
+      return {min: 0, max: 0};
+    } else if (itm === 'productListingType') {
+      return '';
+    } else {
+      return [];
+    }
+  };
+
+  const handleSearch = searchData => {
+    [
+      'productColor',
+      'shopId',
+      'categoryId',
+      'searchBarData',
+      'productPrice',
+      'productListingType',
+    ].map(itm =>
+      dispatch(
+        changeAppliedProductsFilters({
+          key: itm,
+          value: {
+            selectedValue: passValueForProduct(itm, searchData),
+          },
+        }),
+      ),
+    );
+
+    byShop && dispatch(shopProductButtonChange(false));
+
+    navigation.navigate('CustomerHomePage');
+  };
 
   return (
     <View style={styles.sideMainContainer}>
@@ -47,15 +86,11 @@ const SideBarContent = ({AccessToken}) => {
       <View style={styles.searchTextMain}>
         <Icon name="search" size={18} color="black" />
         <TextInput
-          value={productsFiltersReducer?.searchBarData}
-          onChangeText={value => {
-            dispatch(
-              changeProductsSearchBarData({
-                key: 'searchBarData',
-                value: value,
-              }),
-            );
-          }}
+          value={
+            productsFiltersReducer?.appliedProductsFilters.searchBarData
+              .selectedValue
+          }
+          onChangeText={value => handleSearch(value)}
           style={{width: '100%', color: 'black'}}
           placeholder="Search  Hear.."
           placeholderTextColor="rgba(21, 24, 39, 0.40)"

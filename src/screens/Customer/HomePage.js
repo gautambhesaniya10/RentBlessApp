@@ -99,11 +99,22 @@ const HomePage = () => {
           product_color:
             productsFiltersReducer.appliedProductsFilters.productColor
               .selectedValue,
+          product_price: {
+            min: productsFiltersReducer?.appliedProductsFilters.productPrice
+              .selectedValue.min,
+            max: productsFiltersReducer?.appliedProductsFilters.productPrice
+              .selectedValue.max,
+          },
+          product_listing_type:
+            productsFiltersReducer.appliedProductsFilters.productListingType
+              .selectedValue,
         },
         shopId:
           productsFiltersReducer.appliedProductsFilters.shopId.selectedValue,
         sort: productsFiltersReducer.sortFilters.sortType.selectedValue,
-        search: productsFiltersReducer.searchBarData,
+        search:
+          productsFiltersReducer.appliedProductsFilters.searchBarData
+            .selectedValue,
       }),
     );
   };
@@ -122,11 +133,22 @@ const HomePage = () => {
           product_color:
             productsFiltersReducer.appliedProductsFilters.productColor
               .selectedValue,
+          product_price: {
+            min: productsFiltersReducer?.appliedProductsFilters.productPrice
+              .selectedValue.min,
+            max: productsFiltersReducer?.appliedProductsFilters.productPrice
+              .selectedValue.max,
+          },
+          product_listing_type:
+            productsFiltersReducer.appliedProductsFilters.productListingType
+              .selectedValue,
         },
         shopId:
           productsFiltersReducer.appliedProductsFilters.shopId.selectedValue,
         sort: productsFiltersReducer.sortFilters.sortType.selectedValue,
-        search: productsFiltersReducer.searchBarData,
+        search:
+          productsFiltersReducer.appliedProductsFilters.searchBarData
+            .selectedValue,
       }),
     );
   };
@@ -242,14 +264,10 @@ const HomePage = () => {
     </View>
   );
 
-  const [switchVisibility, setSwitchVisibility] = useState(false);
-
   const onChangeLeftSwitch = () => {
-    setSwitchVisibility(false);
     dispatch(shopProductButtonChange(false));
   };
   const onChangeRightSwitch = () => {
-    setSwitchVisibility(true);
     dispatch(shopProductButtonChange(true));
   };
 
@@ -277,7 +295,7 @@ const HomePage = () => {
           onClickRight={() => onChangeRightSwitch()}
           imgLeftIcon={clothIMG}
           imgRightIcon={store_Icon}
-          switchVisibility={switchVisibility}
+          switchVisibility={byShop}
         />
       </View>
 

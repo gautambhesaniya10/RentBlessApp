@@ -60,6 +60,14 @@ const ProductListing = () => {
         filter: {
           category_id: appliedProductsFilters?.categoryId?.selectedValue,
           product_color: appliedProductsFilters?.productColor?.selectedValue,
+          product_price: {
+            min: productsFiltersReducer?.appliedProductsFilters.productPrice
+              .selectedValue.min,
+            max: productsFiltersReducer?.appliedProductsFilters.productPrice
+              .selectedValue.max,
+          },
+          product_listing_type:
+            appliedProductsFilters?.productListingType.selectedValue,
         },
         shopId: appliedProductsFilters?.shopId?.selectedValue,
         sort: sortFilters?.sortType?.selectedValue,

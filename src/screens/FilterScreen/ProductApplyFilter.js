@@ -9,6 +9,8 @@ import ProductColorFilter from './ProductFilterSubTab/ProductColorFilter';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {Button} from 'react-native-paper';
 import {arraysHaveSameValues} from '../../utils';
+import ProductTypeTab from './ProductFilterSubTab/ProductTypeTab';
+import ProductPriceTab from './ProductFilterSubTab/ProductPriceTab';
 
 const ProductApplyFilter = ({
   handleFilterModelClose,
@@ -16,14 +18,14 @@ const ProductApplyFilter = ({
   showOnlyShopDetailPage,
 }) => {
   const dispatch = useDispatch();
-  const AllCateGory = ['Men', 'Women', 'Shops', 'Color'];
+  const AllCateGory = ['Types', 'Men', 'Women', 'Shops', 'Color', 'Price'];
 
   const {categories} = useSelector(state => state.categories);
   const productsFiltersReducer = useSelector(
     state => state?.productsFiltersReducer,
   );
 
-  const [selectedCategory, setSelectedCategory] = useState('Men');
+  const [selectedCategory, setSelectedCategory] = useState('Types');
 
   const [selectedMenCat, setSelectedMenCat] = useState([]);
   const [selectedWomenCat, setSelectedWomenCat] = useState([]);
@@ -37,6 +39,10 @@ const ProductApplyFilter = ({
 
   const [selectedColorData, setSelectedColorData] = useState([]);
 
+  const [selectedTypeData, setSelectedTypeData] = useState('');
+
+  const [selectedPriceData, setSelectedPriceData] = useState({});
+
   const [clearTextShow, setClearTextShow] = useState(false);
   const [clearAllBtnShow, setClearAllBtnShow] = useState(false);
 
@@ -45,7 +51,13 @@ const ProductApplyFilter = ({
   useEffect(() => {
     setApplyBtnDisable(
       arraysHaveSameValues(
-        [...categoryId, ...selectedShopData, ...selectedColorData],
+        [
+          ...categoryId,
+          ...selectedShopData,
+          ...selectedColorData,
+          ...[selectedTypeData],
+          ...[selectedPriceData],
+        ],
         [
           ...productsFiltersReducer?.appliedProductsFilters?.categoryId
             ?.selectedValue,
@@ -53,10 +65,24 @@ const ProductApplyFilter = ({
             .selectedValue,
           ...productsFiltersReducer?.appliedProductsFilters?.productColor
             .selectedValue,
+          ...[
+            productsFiltersReducer?.appliedProductsFilters?.productListingType
+              .selectedValue,
+          ],
+          ...[
+            productsFiltersReducer?.appliedProductsFilters?.productPrice
+              .selectedValue,
+          ],
         ],
       ),
     );
-  }, [categoryId, selectedShopData, selectedColorData]);
+  }, [
+    categoryId,
+    selectedShopData,
+    selectedColorData,
+    selectedTypeData,
+    selectedPriceData,
+  ]);
 
   useEffect(() => {
     if (selectedCategory === 'Men') {
@@ -83,6 +109,18 @@ const ProductApplyFilter = ({
       } else {
         setClearTextShow(false);
       }
+    } else if (selectedCategory === 'Types') {
+      if (selectedTypeData) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
+    } else if (selectedCategory === 'Price') {
+      if (selectedPriceData) {
+        setClearTextShow(true);
+      } else {
+        setClearTextShow(false);
+      }
     }
   }, [
     selectedMenCat,
@@ -90,6 +128,8 @@ const ProductApplyFilter = ({
     selectedShopData,
     selectedColorData,
     selectedCategory,
+    selectedTypeData,
+    selectedPriceData,
   ]);
 
   useEffect(() => {
@@ -97,7 +137,9 @@ const ProductApplyFilter = ({
       selectedMenCat?.length > 0 ||
       selectedWomenCat?.length > 0 ||
       (!showOnlyShopDetailPage && selectedShopData?.length > 0) ||
-      selectedColorData?.length > 0
+      selectedColorData?.length > 0 ||
+      selectedTypeData ||
+      Object.keys(selectedPriceData).length > 0
     ) {
       setClearAllBtnShow(true);
     } else {
@@ -109,6 +151,8 @@ const ProductApplyFilter = ({
     selectedShopData,
     selectedColorData,
     selectedCategory,
+    selectedTypeData,
+    selectedPriceData,
   ]);
 
   const ClearParticularTab = () => {
@@ -122,6 +166,10 @@ const ProductApplyFilter = ({
       setSelectedShopData([]);
     } else if (selectedCategory === 'Color') {
       setSelectedColorData([]);
+    } else if (selectedCategory === 'Types') {
+      setSelectedTypeData('');
+    } else if (selectedCategory === 'Price') {
+      setSelectedPriceData({});
     }
   };
   const clearAllFilter = () => {
@@ -131,6 +179,8 @@ const ProductApplyFilter = ({
     setWomenSelectedData([]);
     !showOnlyShopDetailPage && setSelectedShopData([]);
     setSelectedColorData([]);
+    setSelectedTypeData('');
+    setSelectedPriceData({});
   };
 
   const handleCloseProductFilter = () => {
@@ -143,6 +193,8 @@ const ProductApplyFilter = ({
       {name: 'categoryId', value: categoryId},
       {name: 'productColor', value: selectedColorData},
       {name: 'shopId', value: selectedShopData},
+      {name: 'productListingType', value: selectedTypeData},
+      {name: 'productPrice', value: selectedPriceData},
     ]?.map(item =>
       dispatch(
         changeAppliedProductsFilters({
@@ -198,6 +250,22 @@ const ProductApplyFilter = ({
 
   useEffect(() => {
     productsFiltersReducer?.appliedProductsFilters &&
+      setSelectedTypeData(
+        productsFiltersReducer?.appliedProductsFilters.productListingType
+          .selectedValue,
+      );
+  }, [productsFiltersReducer?.appliedProductsFilters]);
+
+  useEffect(() => {
+    productsFiltersReducer?.appliedProductsFilters &&
+      setSelectedPriceData(
+        productsFiltersReducer?.appliedProductsFilters.productPrice
+          .selectedValue,
+      );
+  }, [productsFiltersReducer?.appliedProductsFilters]);
+
+  useEffect(() => {
+    productsFiltersReducer?.appliedProductsFilters &&
       setSelectedColorData(
         productsFiltersReducer?.appliedProductsFilters?.productColor
           .selectedValue,
@@ -241,6 +309,13 @@ const ProductApplyFilter = ({
           </View>
           <View style={{marginTop: 10, paddingBottom: 55, height: '95%'}}>
             <ScrollView showsVerticalScrollIndicator={false}>
+              {selectedCategory === 'Types' && (
+                <ProductTypeTab
+                  selectedTypeData={selectedTypeData}
+                  setSelectedTypeData={setSelectedTypeData}
+                />
+              )}
+
               {(selectedCategory === 'Men' || selectedCategory === 'Women') && (
                 <MenWomenTabs
                   categories={categories}
@@ -265,6 +340,12 @@ const ProductApplyFilter = ({
                   productsFiltersReducer={productsFiltersReducer}
                   selectedColorData={selectedColorData}
                   setSelectedColorData={setSelectedColorData}
+                />
+              )}
+              {selectedCategory === 'Price' && (
+                <ProductPriceTab
+                  selectedPriceData={selectedPriceData}
+                  setSelectedPriceData={setSelectedPriceData}
                 />
               )}
             </ScrollView>

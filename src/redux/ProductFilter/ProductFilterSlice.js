@@ -10,8 +10,20 @@ const productFilterSlice = createSlice({
       productColor: {
         selectedValue: [],
       },
+      productPrice: {
+        selectedValue: {
+          min: 0,
+          max: 0,
+        },
+      },
+      productListingType: {
+        selectedValue: '',
+      },
       shopId: {
         selectedValue: [],
+      },
+      searchBarData: {
+        selectedValue: '',
       },
     },
     sortFilters: {
@@ -40,12 +52,6 @@ const productFilterSlice = createSlice({
         },
       };
     },
-    changeProductsSearchBarData: (state, action) => {
-      return {
-        ...state,
-        [`${action.payload.key}`]: `${action.payload.value}`,
-      };
-    },
     emptyProductFilter: (state, action) => {
       return {
         appliedProductsFilters: {
@@ -72,7 +78,6 @@ const productFilterSlice = createSlice({
 export const {
   changeAppliedProductsFilters,
   changeSortProductsFilters,
-  changeProductsSearchBarData,
   emptyProductFilter,
 } = productFilterSlice.actions;
 export default productFilterSlice.reducer;
