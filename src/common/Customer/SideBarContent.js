@@ -10,6 +10,7 @@ import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFil
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
+import useDebounce from '../../components/UseDebounceSearch';
 
 const SideBarContent = ({AccessToken}) => {
   const navigation = useNavigation();
@@ -21,8 +22,10 @@ const SideBarContent = ({AccessToken}) => {
   const logoName = `${userProfile?.first_name
     ?.charAt(0)
     .toUpperCase()}${userProfile?.last_name?.charAt(0).toUpperCase()}`;
-
   const {byShop} = useSelector(state => state.shopsFiltersReducer);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebounce(searchTerm, 700);
 
   const passValueForProduct = (itm, searchBarData) => {
     if (itm === 'searchBarData') {
@@ -60,6 +63,19 @@ const SideBarContent = ({AccessToken}) => {
     navigation.navigate('CustomerHomePage');
   };
 
+  useEffect(() => {
+    handleSearch(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    setSearchTerm(
+      productsFiltersReducer?.appliedProductsFilters.searchBarData
+        .selectedValue,
+    );
+  }, [
+    productsFiltersReducer?.appliedProductsFilters.searchBarData.selectedValue,
+  ]);
+
   return (
     <View style={styles.sideMainContainer}>
       {AccessToken ? (
@@ -86,11 +102,8 @@ const SideBarContent = ({AccessToken}) => {
       <View style={styles.searchTextMain}>
         <Icon name="search" size={18} color="black" />
         <TextInput
-          value={
-            productsFiltersReducer?.appliedProductsFilters.searchBarData
-              .selectedValue
-          }
-          onChangeText={value => handleSearch(value)}
+          value={searchTerm}
+          onChangeText={text => setSearchTerm(text)}
           style={{width: '100%', color: 'black'}}
           placeholder="Search  Hear.."
           placeholderTextColor="rgba(21, 24, 39, 0.40)"
