@@ -89,32 +89,67 @@ const ProductCard = ({product, landingPageCardWith}) => {
 
   return (
     <View
-      style={[
-        styles.mainContainer,
-        {width: landingPageCardWith ? 200 : '48%'},
-      ]}>
-      <View style={{position: 'relative'}}>
-        {/* <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={true}
-          contentContainerStyle={{
-            flexDirection: 'row',
-            width: '100%',
-          }}>
-          {ProductImages?.map((img, index) => (
-            <Image
-              key={index}
-              source={{uri: img}}
-              style={{
-                height: 180,
-                width: '100%',
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-                objectFit: 'cover',
-              }}
-            />
-          ))}
-        </ScrollView> */}
+      style={{
+        position: 'relative',
+        paddingTop: 4,
+        paddingLeft: 4,
+        width: landingPageCardWith ? 200 : '48%',
+        overflow: 'hidden',
+      }}>
+      {product?.product_listing_type && (
+        <View
+          style={[
+            styles.rentSellRebinMain,
+            {
+              backgroundColor:
+                product?.product_listing_type === 'rent'
+                  ? '#ff3b3b'
+                  : '#29977E',
+            },
+          ]}>
+          <Text style={styles.rebinText}>{product?.product_listing_type}</Text>
+        </View>
+      )}
+
+      <View style={[styles.mainContainer]}>
+        <View style={{position: 'relative'}}>
+          <TouchableOpacity
+            disabled={landingPageCardWith ? true : false}
+            onPress={() =>
+              !landingPageCardWith &&
+              navigation.navigate('ProductDetail', {
+                state: {
+                  productId: product?.id,
+                },
+              })
+            }>
+            <View style={{height: 210, width: '100%'}}>
+              <FastImage
+                source={{
+                  uri: ProductImages[0],
+                  cache: FastImage.cacheControl.web,
+                }}
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                }}
+                resizeMode="stretch"
+              />
+            </View>
+          </TouchableOpacity>
+          <View style={styles.heartIcon}>
+            <TouchableOpacity onPress={() => clickedByLike()}>
+              <Icon
+                name={productLikeByUser ? 'heart' : 'heart-o'}
+                size={18}
+                color={productLikeByUser ? 'red' : 'black'}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <TouchableOpacity
           disabled={landingPageCardWith ? true : false}
           onPress={() =>
@@ -125,95 +160,59 @@ const ProductCard = ({product, landingPageCardWith}) => {
               },
             })
           }>
-          <View style={{height: 210, width: '100%'}}>
-            <FastImage
-              source={{
-                uri: ProductImages[0],
-                cache: FastImage.cacheControl.web,
-              }}
-              style={{
-                height: '100%',
-                width: '100%',
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-              }}
-              resizeMode="stretch"
-            />
+          <Text style={styles.productNameText} numberOfLines={1}>
+            {product?.product_name}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          disabled={landingPageCardWith ? true : false}
+          onPress={() =>
+            !landingPageCardWith &&
+            navigation.navigate('ShopIndividual', {
+              state: {shopId: product?.branchInfo?.shop_info?.id},
+            })
+          }>
+          <View style={styles.shopMain}>
+            {product?.branchInfo?.shop_info?.shop_logo ? (
+              <FastImage
+                source={{
+                  uri: product?.branchInfo?.shop_info?.shop_logo,
+                  cache: FastImage.cacheControl.web,
+                }}
+                style={{width: 25, height: 25, borderRadius: 12}}
+                resizeMode="cover"
+              />
+            ) : (
+              <Avatar.Text
+                size={25}
+                label={product?.branchInfo?.shop_info?.shop_name?.charAt(0)}
+                backgroundColor="#29977E"
+              />
+            )}
+
+            <Text style={styles.shopNameText} numberOfLines={1}>
+              {product?.branchInfo?.shop_info?.shop_name}
+            </Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.heartIcon}>
-          <TouchableOpacity onPress={() => clickedByLike()}>
-            <Icon
-              name={productLikeByUser ? 'heart' : 'heart-o'}
-              size={18}
-              color={productLikeByUser ? 'red' : 'black'}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <TouchableOpacity
-        disabled={landingPageCardWith ? true : false}
-        onPress={() =>
-          !landingPageCardWith &&
-          navigation.navigate('ProductDetail', {
-            state: {
-              productId: product?.id,
-            },
-          })
-        }>
-        <Text style={styles.productNameText} numberOfLines={1}>
-          {product?.product_name}
-        </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        disabled={landingPageCardWith ? true : false}
-        onPress={() =>
-          !landingPageCardWith &&
-          navigation.navigate('ShopIndividual', {
-            state: {shopId: product?.branchInfo?.shop_info?.id},
-          })
-        }>
-        <View style={styles.shopMain}>
-          {product?.branchInfo?.shop_info?.shop_logo ? (
-            <FastImage
-              source={{
-                uri: product?.branchInfo?.shop_info?.shop_logo,
-                cache: FastImage.cacheControl.web,
-              }}
-              style={{width: 25, height: 25, borderRadius: 12}}
-              resizeMode="cover"
-            />
-          ) : (
-            <Avatar.Text
-              size={25}
-              label={product?.branchInfo?.shop_info?.shop_name?.charAt(0)}
-              backgroundColor="#29977E"
-            />
-          )}
-
-          <Text style={styles.shopNameText} numberOfLines={1}>
-            {product?.branchInfo?.shop_info?.shop_name}
-          </Text>
-        </View>
-      </TouchableOpacity>
-      {product?.product_price_visible ? (
-        <View style={styles.priceMainDiv}>
-          <Text style={styles.finalPriceText}>
-            ₹{refactorPrice(Math.round(finalPrice))}
-          </Text>
-          <View style={styles.priceInnerDiv}>
-            <Text style={styles.productPriceText}>
-              ₹{Math.round(product?.product_price)}
+        {product?.product_price_visible ? (
+          <View style={styles.priceMainDiv}>
+            <Text style={styles.finalPriceText}>
+              ₹{refactorPrice(Math.round(finalPrice))}
             </Text>
-            <Text style={styles.percentageText}>
-              ({product?.product_discount}% off)
-            </Text>
+            <View style={styles.priceInnerDiv}>
+              <Text style={styles.productPriceText}>
+                ₹{Math.round(product?.product_price)}
+              </Text>
+              <Text style={styles.percentageText}>
+                ({product?.product_discount}% off)
+              </Text>
+            </View>
           </View>
-        </View>
-      ) : (
-        <Text style={styles.noVisible}>No Price Visible !</Text>
-      )}
+        ) : (
+          <Text style={styles.noVisible}>No Price Visible !</Text>
+        )}
+      </View>
     </View>
   );
 };
@@ -294,5 +293,25 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     alignSelf: 'center',
     paddingTop: 12,
+  },
+  rentSellRebinMain: {
+    height: 35,
+    width: 100,
+    backgroundColor: '#29977E',
+    position: 'absolute',
+    top: 5,
+    right: 105,
+    transform: [{rotate: '320deg'}],
+    zIndex: 1,
+    borderWidth: 5,
+    borderColor: '#f5cd79',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rebinText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+    textTransform: 'uppercase',
   },
 });

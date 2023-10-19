@@ -17,7 +17,11 @@ import ProductCard from '../../../components/ProductCard/ProductCard';
 import {getProductDetails} from '../../../graphql/queries/productQueries';
 import RenderHTML from 'react-native-render-html';
 import {useDispatch, useSelector} from 'react-redux';
-import {productLike} from '../../../graphql/mutations/products';
+import {
+  productContactInquiry,
+  productLike,
+  productWhatsappInquiry,
+} from '../../../graphql/mutations/products';
 import {
   productLikeToggle,
   shopFollowToggle,
@@ -232,6 +236,10 @@ const ProductDetail = () => {
   };
 
   const openWhatsAppChat = async () => {
+    productWhatsappInquiry({
+      id: productDetails?.data?.product?.data.id,
+    });
+
     const phoneNumber = `+91${productDetails?.data?.product?.data?.branchInfo?.manager_contact}`; // Replace with the desired phone number
     const url = `https://api.whatsapp.com/send?phone=${phoneNumber}`;
     Linking.openURL(url);
@@ -493,7 +501,12 @@ const ProductDetail = () => {
               <View style={{width: '48%'}}>
                 <TouchableOpacity
                   style={styles.showConBtnMain}
-                  onPress={() => setShowContactModalOpen(true)}>
+                  onPress={() => {
+                    productContactInquiry({
+                      id: productDetails.data.product.data.id,
+                    });
+                    setShowContactModalOpen(true);
+                  }}>
                   <Icon name="user-circle-o" size={25} color="#151827" />
                   <Text style={styles.showConBtnText}>Show Contact</Text>
                 </TouchableOpacity>

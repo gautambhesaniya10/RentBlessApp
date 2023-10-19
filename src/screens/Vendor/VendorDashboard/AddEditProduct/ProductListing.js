@@ -61,10 +61,8 @@ const ProductListing = () => {
           category_id: appliedProductsFilters?.categoryId?.selectedValue,
           product_color: appliedProductsFilters?.productColor?.selectedValue,
           product_price: {
-            min: productsFiltersReducer?.appliedProductsFilters.productPrice
-              .selectedValue.min,
-            max: productsFiltersReducer?.appliedProductsFilters.productPrice
-              .selectedValue.max,
+            min: appliedProductsFilters.productPrice.selectedValue.min,
+            max: appliedProductsFilters.productPrice.selectedValue.max,
           },
           product_listing_type:
             appliedProductsFilters?.productListingType.selectedValue,
@@ -128,15 +126,19 @@ const ProductListing = () => {
                 {[
                   'NO',
                   'Thumbnail',
-                  'Shop Name',
                   'Name',
+                  'Price',
                   'Color',
+                  'Inquiry',
                   'Action',
                 ].map((itm, index) => (
                   <Text
                     style={[
                       styles.tableHeader,
-                      {width: index === 0 ? 60 : 100},
+                      {
+                        width:
+                          itm === 'NO' ? 60 : itm === 'Inquiry' ? 200 : 100,
+                      },
                     ]}>
                     {itm}
                   </Text>
@@ -153,72 +155,96 @@ const ProductListing = () => {
                   <ActivityIndicator />
                 </View>
               ) : (
-                productsData?.map((item, index) => (
-                  <View style={styles.tableRow}>
-                    <Text style={[styles.tableCell, {width: 60}]}>
-                      {index + 1}
-                    </Text>
-                    <View style={[styles.tableCell, {width: 100}]}>
-                      <FastImage
-                        style={{width: 50, height: 70, alignSelf: 'center'}}
-                        source={{
-                          uri: item?.product_image?.front,
-                          cache: FastImage.cacheControl.web,
-                        }}
-                        resizeMode="cover"
-                      />
-                    </View>
-                    <Text
-                      numberOfLines={2}
-                      style={[styles.tableCell, {width: 100}]}>
-                      {item?.branchInfo?.shop_info?.shop_name}
-                    </Text>
-                    <Text
-                      numberOfLines={2}
-                      style={[styles.tableCell, {width: 100}]}>
-                      {item?.product_name}
-                    </Text>
-                    <Text
-                      numberOfLines={2}
-                      style={[styles.tableCell, {width: 100}]}>
-                      {item?.product_color}
-                    </Text>
-                    <View style={[styles.tableCell, {width: 100}]}>
-                      <View style={{flexDirection: 'row', gap: 8}}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            navigation.navigate('VendorAddEditProduct', {
-                              state: {
-                                productEditId: item?.id,
-                                editableProductData: item,
-                              },
-                            })
-                          }
-                          style={styles.pencilIcon}>
-                          <Icon name="pencil" color={'white'} size={18} />
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                          onPress={() => {
-                            setProductDeleteModalOpen(true);
-                            setDeleteProductId(item?.id);
+                productsData?.map((item, index) => {
+                  const finalPrice =
+                    item?.product_price -
+                    item?.product_price * (item?.product_discount / 100);
 
-                            setDeletableProductsImages(
-                              ['front', 'back', 'side'].map(
-                                key => item?.product_image[key],
-                              ),
-                            );
-
-                            if (item?.product_video) {
-                              setDeletableProductVideo(item?.product_video);
-                            }
+                  return (
+                    <View style={styles.tableRow}>
+                      <Text style={[styles.tableCell, {width: 60}]}>
+                        {index + 1}
+                      </Text>
+                      <View style={[styles.tableCell, {width: 100}]}>
+                        <FastImage
+                          style={{width: 50, height: 70, alignSelf: 'center'}}
+                          source={{
+                            uri: item?.product_image?.front,
+                            cache: FastImage.cacheControl.web,
                           }}
-                          style={[styles.pencilIcon, {backgroundColor: 'red'}]}>
-                          <Icon name="trash" color={'white'} size={18} />
-                        </TouchableOpacity>
+                          resizeMode="cover"
+                        />
+                      </View>
+                      <Text
+                        numberOfLines={2}
+                        style={[styles.tableCell, {width: 100}]}>
+                        {item?.product_name}
+                      </Text>
+                      <Text
+                        numberOfLines={2}
+                        style={[styles.tableCell, {width: 100}]}>
+                        {Math.round(finalPrice)}
+                      </Text>
+                      <Text
+                        numberOfLines={2}
+                        style={[styles.tableCell, {width: 100}]}>
+                        {item?.product_color}
+                      </Text>
+
+                      <View style={[styles.tableCell, {width: 200}]}>
+                        <Text style={styles.inqueryText}>
+                          WhatsApp Inquiry :{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {item?.whatsapp_inquiry}
+                          </Text>
+                        </Text>
+                        <Text style={styles.inqueryText}>
+                          Contact Inquiry :{' '}
+                          <Text style={{fontWeight: '700'}}>
+                            {item.contact_inquiry}
+                          </Text>
+                        </Text>
+                      </View>
+                      <View style={[styles.tableCell, {width: 100}]}>
+                        <View style={{flexDirection: 'row', gap: 8}}>
+                          <TouchableOpacity
+                            onPress={() =>
+                              navigation.navigate('VendorAddEditProduct', {
+                                state: {
+                                  productEditId: item?.id,
+                                  editableProductData: item,
+                                },
+                              })
+                            }
+                            style={styles.pencilIcon}>
+                            <Icon name="pencil" color={'white'} size={18} />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={() => {
+                              setProductDeleteModalOpen(true);
+                              setDeleteProductId(item?.id);
+
+                              setDeletableProductsImages(
+                                ['front', 'back', 'side'].map(
+                                  key => item?.product_image[key],
+                                ),
+                              );
+
+                              if (item?.product_video) {
+                                setDeletableProductVideo(item?.product_video);
+                              }
+                            }}
+                            style={[
+                              styles.pencilIcon,
+                              {backgroundColor: 'red'},
+                            ]}>
+                            <Icon name="trash" color={'white'} size={18} />
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                ))
+                  );
+                })
               )}
             </View>
           </ScrollView>
@@ -417,6 +443,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderBottomWidth: 0.5,
     borderBottomColor: '#151827',
+    color: '#31333E',
+  },
+  tableCell: {
+    padding: 10,
+    textAlign: 'center',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#151827',
+    color: '#31333E',
+  },
+  inqueryText: {
+    textAlign: 'center',
     color: '#31333E',
   },
 });
