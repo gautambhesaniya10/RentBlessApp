@@ -9,6 +9,7 @@ import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {refactorPrice} from '../../common/Common';
 
 const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
@@ -22,6 +23,10 @@ const ProductCard = ({product, landingPageCardWith}) => {
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
 
   const [productLikeByUser, setProductLikeByUser] = useState(false);
+
+  const finalPrice =
+    product?.product_price -
+    product?.product_price * (product?.product_discount / 100);
 
   const clickedByLike = () => {
     if (isAuthenticate) {
@@ -192,6 +197,23 @@ const ProductCard = ({product, landingPageCardWith}) => {
           </Text>
         </View>
       </TouchableOpacity>
+      {product?.product_price_visible ? (
+        <View style={styles.priceMainDiv}>
+          <Text style={styles.finalPriceText}>
+            ₹{refactorPrice(Math.round(finalPrice))}
+          </Text>
+          <View style={styles.priceInnerDiv}>
+            <Text style={styles.productPriceText}>
+              ₹{Math.round(product?.product_price)}
+            </Text>
+            <Text style={styles.percentageText}>
+              ({product?.product_discount}% off)
+            </Text>
+          </View>
+        </View>
+      ) : (
+        <Text style={styles.noVisible}>No Price Visible !</Text>
+      )}
     </View>
   );
 };
@@ -202,7 +224,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
     // width: '47%',
-    height: 300,
+    height: 343,
     borderRadius: 8,
     elevation: 2,
     // marginTop: 20,
@@ -240,5 +262,37 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 15,
+  },
+  priceMainDiv: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+  },
+  finalPriceText: {
+    color: 'black',
+    fontSize: 17,
+    fontWeight: '600',
+  },
+  productPriceText: {
+    color: '#9d9d9d',
+    fontSize: 15,
+    fontWeight: '600',
+    textDecorationLine: 'line-through',
+  },
+  percentageText: {
+    color: '#29977E',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  priceInnerDiv: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  noVisible: {
+    color: 'black',
+    fontSize: 17,
+    fontWeight: '500',
+    alignSelf: 'center',
+    paddingTop: 12,
   },
 });

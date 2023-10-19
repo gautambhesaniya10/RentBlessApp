@@ -30,6 +30,7 @@ import {Avatar, Divider} from 'react-native-paper';
 import {locationIcon} from '../../../common/AllLiveImageLink';
 import FastImage from 'react-native-fast-image';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
+import {refactorPrice} from '../../../common/Common';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -43,9 +44,15 @@ const ProductDetail = () => {
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
   const [showContactModalOpen, setShowContactModalOpen] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [readMore, setReadMore] = useState(false);
 
   const carouselRef = useRef(null);
   const {width: screenWidth} = Dimensions.get('window');
+
+  const finalPrice =
+    productDetails?.data?.product?.data?.product_price -
+    productDetails?.data?.product?.data?.product_price *
+      (productDetails?.data?.product?.data?.product_discount / 100);
 
   const getProductDetail = async () => {
     const productDetails = await getProductDetails({id: productId});
@@ -386,6 +393,25 @@ const ProductDetail = () => {
               </TouchableOpacity>
             </View>
             <Divider bold={true} style={{marginBottom: 16}} />
+
+            {productDetails?.data?.product?.data?.product_price_visible && (
+              <View style={styles.priceMainDiv}>
+                <Text style={styles.finalPriceText}>
+                  ₹{refactorPrice(Math.round(finalPrice))}
+                </Text>
+
+                <Text style={styles.productPriceText}>
+                  ₹
+                  {Math.round(
+                    productDetails?.data?.product?.data?.product_price,
+                  )}
+                </Text>
+                <Text style={styles.percentageText}>
+                  ({productDetails?.data?.product?.data?.product_discount}% off)
+                </Text>
+              </View>
+            )}
+
             <Text style={[styles.aboutNameText, {paddingBottom: 0}]}>
               About
             </Text>
@@ -394,7 +420,16 @@ const ProductDetail = () => {
               <RenderHTML
                 contentWidth={300}
                 source={{
-                  html: `${productDetails?.data?.product?.data?.product_description}`,
+                  html: readMore
+                    ? productDetails?.data?.product?.data?.product_description
+                    : productDetails?.data?.product?.data?.product_description?.slice(
+                        0,
+                        350,
+                      ) +
+                      (productDetails?.data?.product?.data?.product_description
+                        ?.length > 350
+                        ? '...'
+                        : ' '),
                 }}
                 tagsStyles={{
                   p: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
@@ -408,6 +443,14 @@ const ProductDetail = () => {
                   b: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
                 }}
               />
+              {productDetails?.data?.product?.data?.product_description
+                ?.length > 350 && (
+                <TouchableOpacity onPress={() => setReadMore(!readMore)}>
+                  <Text style={styles.readMoreStyle}>
+                    {readMore ? 'read less' : 'read more'}
+                  </Text>
+                </TouchableOpacity>
+              )}
               {/* </Text> */}
             </View>
             <Text style={styles.aboutNameText}>Item Details</Text>
@@ -767,5 +810,35 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '600',
     fontFamily: FontStyle,
+  },
+  readMoreStyle: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '600',
+    paddingBottom: 10,
+    paddingLeft: 10,
+    marginTop: -20,
+  },
+  priceMainDiv: {
+    paddingBottom: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
+  finalPriceText: {
+    color: 'black',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  productPriceText: {
+    color: '#9d9d9d',
+    fontSize: 16,
+    fontWeight: '600',
+    textDecorationLine: 'line-through',
+  },
+  percentageText: {
+    color: '#29977E',
+    fontSize: 17,
+    fontWeight: '600',
   },
 });
