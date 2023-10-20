@@ -6,21 +6,9 @@ import ShopSetUp from './shopSetup/ShopSetUp';
 import MainDashboard from './VendorDashboard/MainDashboard';
 
 const VendorMain = () => {
-  const [shop, setShop] = useState(false);
-  const isFocus = useIsFocused();
+  const storedValue = AsyncStorage.getItem('userHaveAnyShop');
 
-  const getUserHaveAnyShop = async () => {
-    const storedValue = await AsyncStorage.getItem('userHaveAnyShop');
-    const parsedValue = JSON.parse(storedValue);
-    setShop(parsedValue);
-    // return parsedValue;
-  };
-
-  useEffect(() => {
-    getUserHaveAnyShop();
-  }, [isFocus]);
-
-  return <>{shop ? <MainDashboard /> : <ShopSetUp />}</>;
+  return <>{storedValue ? <MainDashboard /> : <ShopSetUp />}</>;
 };
 
 export default VendorMain;

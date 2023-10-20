@@ -59,9 +59,9 @@ const Login = () => {
 
   const handleAfterSignInResponse = async (userId, token, message) => {
     setLoading(false);
+    dispatch(loadUserProfileStart());
     await AsyncStorage.setItem('token', token);
     await AsyncStorage.setItem('userId', userId);
-    dispatch(loadUserProfileStart());
     toast.show({
       title: message,
       placement: 'top',
