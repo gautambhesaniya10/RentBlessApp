@@ -149,6 +149,14 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
     productsFiltersReducer?.appliedProductsFilters?.productColor?.selectedValue,
   ]);
 
+  const priceFilterLabel = price => {
+    if (price.min === 20001 && price.max === 0) {
+      return 'Price: Over 20001';
+    } else {
+      return `Price: ${price.min} - ${price.max}`;
+    }
+  };
+
   useEffect(() => {
     productsFiltersReducer?.appliedProductsFilters.productPrice.selectedValue
       .min === 0 &&
@@ -158,7 +166,10 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
       : setSelectedPrices([
           {
             type: 'productPrice',
-            label: `Price: ${productsFiltersReducer?.appliedProductsFilters.productPrice.selectedValue.min} - ${productsFiltersReducer?.appliedProductsFilters.productPrice.selectedValue.max}`,
+            label: priceFilterLabel(
+              productsFiltersReducer?.appliedProductsFilters.productPrice
+                .selectedValue,
+            ),
             value:
               productsFiltersReducer?.appliedProductsFilters.productPrice
                 .selectedValue,
