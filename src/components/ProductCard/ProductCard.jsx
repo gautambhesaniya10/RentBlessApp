@@ -105,6 +105,8 @@ const ProductCard = ({product, landingPageCardWith}) => {
                 product?.product_listing_type === 'rent'
                   ? '#ff3b3b'
                   : '#29977E',
+              top: landingPageCardWith ? 6 : 5,
+              right: landingPageCardWith ? 120 : 105,
             },
           ]}>
           <Text style={styles.rebinText}>{product?.product_listing_type}</Text>
@@ -299,8 +301,8 @@ const styles = StyleSheet.create({
     width: 100,
     backgroundColor: '#29977E',
     position: 'absolute',
-    top: 5,
-    right: 105,
+    // top: 6,
+    // right: 120,
     transform: [{rotate: '320deg'}],
     zIndex: 1,
     borderWidth: 5,
