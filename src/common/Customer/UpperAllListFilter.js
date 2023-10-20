@@ -150,8 +150,8 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   ]);
 
   const priceFilterLabel = price => {
-    if (price.min === 20001 && price.max === 0) {
-      return 'Price: Over 20001';
+    if (price.min > 0 && price.max === 0) {
+      return `Price: Over ${price.min}`;
     } else {
       return `Price: ${price.min} - ${price.max}`;
     }

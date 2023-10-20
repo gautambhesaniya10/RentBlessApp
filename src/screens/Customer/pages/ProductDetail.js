@@ -35,6 +35,7 @@ import {locationIcon} from '../../../common/AllLiveImageLink';
 import FastImage from 'react-native-fast-image';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {refactorPrice} from '../../../common/Common';
+import Video from 'react-native-video';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -194,10 +195,30 @@ const ProductDetail = () => {
   }, [route, productId]);
 
   const TopCarouselData = [
-    {image: productDetails?.data?.product?.data?.product_image?.front},
-    {image: productDetails?.data?.product?.data?.product_image?.back},
-    {image: productDetails?.data?.product?.data?.product_image?.side},
+    {
+      image: productDetails?.data?.product?.data?.product_image?.front,
+      type: 'image',
+    },
+    {
+      image: productDetails?.data?.product?.data?.product_image?.back,
+      type: 'image',
+    },
+    {
+      image: productDetails?.data?.product?.data?.product_image?.side,
+      type: 'image',
+    },
   ];
+
+  if (productDetails?.data?.product?.data?.product_video) {
+    // If there's a video, add it to the initialPhotos array
+    TopCarouselData.push({
+      // video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+      video: productDetails?.data?.product?.data?.product_video,
+      type: 'video',
+    });
+  }
+
+  console.log('TopCarouselData', TopCarouselData);
 
   const autoplayConfig = {
     autoplay: false,
@@ -208,18 +229,32 @@ const ProductDetail = () => {
   const CarouselRenderItem = ({item}) => (
     <View style={styles.sliderMainView}>
       <View style={{width: '100%'}}>
-        <FastImage
-          style={{
-            height: '100%',
-            width: '100%',
-            borderRadius: 8,
-          }}
-          source={{
-            uri: item?.image,
-            cache: FastImage.cacheControl.web,
-          }}
-          resizeMode="stretch"
-        />
+        {item?.type === 'image' ? (
+          <FastImage
+            style={{
+              height: '100%',
+              width: '100%',
+              borderRadius: 8,
+            }}
+            source={{
+              uri: item?.image,
+              cache: FastImage.cacheControl.web,
+            }}
+            resizeMode="stretch"
+          />
+        ) : (
+          item?.video && (
+            <Video
+              source={{
+                uri: item?.video,
+              }}
+              style={{width: '100%', height: '100%', borderRadius: 6}}
+              controls={true}
+              autoplay={false}
+              resizeMode="cover"
+            />
+          )
+        )}
       </View>
     </View>
   );
@@ -681,8 +716,9 @@ const styles = StyleSheet.create({
   },
   sliderPagination: {
     position: 'absolute',
-    bottom: 0,
+    bottom: -50,
     alignSelf: 'center',
+    zIndex: 1,
   },
   threeIconMain: {
     position: 'absolute',
@@ -710,7 +746,7 @@ const styles = StyleSheet.create({
   },
   mainContainer: {
     paddingHorizontal: 20,
-    paddingVertical: 25,
+    paddingVertical: 30,
     backgroundColor: '#FAFCFC',
     // position: 'relative',
     // top: -25,
