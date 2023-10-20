@@ -84,6 +84,24 @@ const ProductApplyFilter = ({
     selectedPriceData,
   ]);
 
+  const priceDefaultData = {
+    min: 0,
+    max: 0,
+  };
+
+  function areObjectsEqual(objA, objB) {
+    const keysA = Object.keys(objA);
+    const keysB = Object.keys(objB);
+
+    if (keysA.length !== keysB.length) return false;
+
+    for (const key of keysA) {
+      if (objA[key] !== objB[key]) return false;
+    }
+
+    return true;
+  }
+
   useEffect(() => {
     if (selectedCategory === 'Men') {
       if (selectedMenCat?.length > 0) {
@@ -116,10 +134,10 @@ const ProductApplyFilter = ({
         setClearTextShow(false);
       }
     } else if (selectedCategory === 'Price') {
-      if (selectedPriceData) {
-        setClearTextShow(true);
-      } else {
+      if (areObjectsEqual(selectedPriceData, priceDefaultData)) {
         setClearTextShow(false);
+      } else {
+        setClearTextShow(true);
       }
     }
   }, [
@@ -138,12 +156,17 @@ const ProductApplyFilter = ({
       selectedWomenCat?.length > 0 ||
       (!showOnlyShopDetailPage && selectedShopData?.length > 0) ||
       selectedColorData?.length > 0 ||
-      selectedTypeData ||
-      Object.keys(selectedPriceData).length > 0
+      selectedTypeData
     ) {
       setClearAllBtnShow(true);
     } else {
       setClearAllBtnShow(false);
+    }
+
+    if (areObjectsEqual(selectedPriceData, priceDefaultData)) {
+      setClearAllBtnShow(false);
+    } else {
+      setClearAllBtnShow(true);
     }
   }, [
     selectedMenCat,
@@ -169,7 +192,7 @@ const ProductApplyFilter = ({
     } else if (selectedCategory === 'Types') {
       setSelectedTypeData('');
     } else if (selectedCategory === 'Price') {
-      setSelectedPriceData({});
+      setSelectedPriceData(priceDefaultData);
     }
   };
   const clearAllFilter = () => {
@@ -180,7 +203,7 @@ const ProductApplyFilter = ({
     !showOnlyShopDetailPage && setSelectedShopData([]);
     setSelectedColorData([]);
     setSelectedTypeData('');
-    setSelectedPriceData({});
+    setSelectedPriceData(priceDefaultData);
   };
 
   const handleCloseProductFilter = () => {
