@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -48,7 +49,9 @@ const Home = ({}) => {
         style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={{marginTop: 40}}>
           <View style={{paddingBottom: 15}}>
-            <View style={styles.boxMain}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Product')}
+              style={styles.boxMain}>
               <View>
                 <Text style={styles.totalText}>Total Products</Text>
                 <Text style={styles.TotalNumberText}>{totalProducts}</Text>
@@ -56,7 +59,7 @@ const Home = ({}) => {
               <View style={styles.iconParent}>
                 <Icon name="shopping-cart" color="black" size={22} />
               </View>
-            </View>
+            </TouchableOpacity>
 
             <View style={styles.boxMain}>
               <View>
