@@ -1,6 +1,6 @@
 import {StyleSheet, Image, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {logoImage} from '../common/AllLiveImageLink';
 import DeviceInfo from 'react-native-device-info';
@@ -12,6 +12,7 @@ import NoInternetScreen from './NoInternetScreen';
 
 const Splash = () => {
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const dispatch = useDispatch();
   const currVersion = DeviceInfo.getVersion();
   const [netWarningShow, setNetWarningShow] = useState(false);
@@ -34,7 +35,7 @@ const Splash = () => {
             dispatch(appVersionAction({...data, versionModelVisible: false}));
             navigation.navigate('VendorMain');
           }
-        }, 2000);
+        }, 1000);
       } else {
         setTimeout(() => {
           if (currVersion !== data?.version) {
@@ -44,7 +45,7 @@ const Splash = () => {
             dispatch(appVersionAction({...data, versionModelVisible: false}));
             navigation.navigate('CustomerMain');
           }
-        }, 2000);
+        }, 1000);
       }
     } else {
       setTimeout(() => {
@@ -55,7 +56,7 @@ const Splash = () => {
 
   useEffect(() => {
     retrieveLocalData();
-  }, [isConnected]);
+  }, [isConnected, isFocused]);
 
   useEffect(() => {
     // updateVersionData(currVersion);
