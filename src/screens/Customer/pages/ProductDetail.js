@@ -538,7 +538,7 @@ const ProductDetail = () => {
                   style={styles.showConBtnMain}
                   onPress={() => {
                     productContactInquiry({
-                      id: productDetails.data.product.data.id,
+                      id: productDetails?.data?.product?.data?.id,
                     });
                     setShowContactModalOpen(true);
                   }}>
@@ -587,13 +587,15 @@ const ProductDetail = () => {
                   style={{width: 50, height: 50, borderRadius: 25}}
                 />
                 <View>
-                  <Text style={styles.modelTitleName}>
+                  <Text numberOfLines={1} style={styles.modelTitleName}>
                     {
                       productDetails?.data?.product?.data?.branchInfo?.shop_info
                         ?.shop_name
                     }
                   </Text>
-                  <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>
+                  <Text
+                    numberOfLines={2}
+                    style={{color: 'rgba(21, 24, 39, 0.56)', width: 200}}>
                     {
                       productDetails?.data?.product?.data?.branchInfo
                         ?.branch_address
@@ -617,7 +619,7 @@ const ProductDetail = () => {
                   backgroundColor="#29977E"
                 />
                 <View>
-                  <Text style={styles.modelTitleName}>
+                  <Text numberOfLines={1} style={styles.modelTitleName}>
                     {
                       productDetails?.data?.product?.data?.branchInfo
                         ?.manager_name
@@ -808,11 +810,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     // padding: 35,
     elevation: 5,
+    width: '80%',
   },
   modelTitleName: {
     fontSize: 16,
     fontWeight: '600',
     color: 'black',
+    width: 200,
   },
   modelClose: {
     alignItems: 'flex-end',
@@ -866,7 +870,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     paddingBottom: 10,
     paddingLeft: 10,
-    marginTop: -20,
+    marginTop: -10,
   },
   priceMainDiv: {
     paddingBottom: 8,
