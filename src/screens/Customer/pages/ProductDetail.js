@@ -218,8 +218,6 @@ const ProductDetail = () => {
     });
   }
 
-  console.log('TopCarouselData', TopCarouselData);
-
   const autoplayConfig = {
     autoplay: false,
     // autoplayInterval: 3000,
