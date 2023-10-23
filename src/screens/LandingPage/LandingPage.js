@@ -30,10 +30,8 @@ import FastImage from 'react-native-fast-image';
 
 const LandingPage = () => {
   const {versionData} = useSelector(state => state?.appVersion);
-
   const [activeTab, setActiveTab] = useState('customer');
   const [activeSlide, setActiveSlide] = useState(0);
-
   const carouselRef = useRef(null);
   const {width: screenWidth} = Dimensions.get('window');
 

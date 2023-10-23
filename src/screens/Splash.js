@@ -1,66 +1,69 @@
-import {StyleSheet, Image, View, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Image, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
-import {BackGroundStyle} from '../../CommonStyle';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {logoImage} from '../common/AllLiveImageLink';
-import firestore from '@react-native-firebase/firestore';
 import DeviceInfo from 'react-native-device-info';
-import {
-  fetchDataFromFirestore,
-  updateVersionData,
-} from '../common/Appversion/Appversion';
 import {getAppVersionLists} from '../graphql/queries/appVersionQueries';
 import {useDispatch} from 'react-redux';
 import {appVersionAction} from '../redux/AppVersionSlice/AppVersionSlice';
+import {checkInternetConnectivity} from '../config/CheckInternetConnectivity';
+import NoInternetScreen from './NoInternetScreen';
 
 const Splash = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
-
   const currVersion = DeviceInfo.getVersion();
+  const [netWarningShow, setNetWarningShow] = useState(false);
+
+  const isConnected = checkInternetConnectivity();
 
   const retrieveLocalData = async () => {
-    const dataQuery = await getAppVersionLists();
-    const data = dataQuery?.data?.appVersionList[0];
-
-    const loginType = await AsyncStorage.getItem('loginType');
-    const Token = await AsyncStorage.getItem('token');
-
-    if (loginType === 'vendor' && Token) {
-      setTimeout(() => {
-        if (currVersion !== data?.version) {
-          dispatch(appVersionAction({...data, versionModelVisible: true}));
-          navigation.navigate('VendorMain');
-        } else {
-          dispatch(appVersionAction({...data, versionModelVisible: false}));
-          navigation.navigate('VendorMain');
-        }
-      }, 2000);
+    if (isConnected) {
+      const dataQuery = await getAppVersionLists();
+      const data = dataQuery?.data?.appVersionList[0];
+      const loginType = await AsyncStorage.getItem('loginType');
+      const Token = await AsyncStorage.getItem('token');
+      setNetWarningShow(false);
+      if (loginType === 'vendor' && Token) {
+        setTimeout(() => {
+          if (currVersion !== data?.version) {
+            dispatch(appVersionAction({...data, versionModelVisible: true}));
+            navigation.navigate('VendorMain');
+          } else {
+            dispatch(appVersionAction({...data, versionModelVisible: false}));
+            navigation.navigate('VendorMain');
+          }
+        }, 2000);
+      } else {
+        setTimeout(() => {
+          if (currVersion !== data?.version) {
+            dispatch(appVersionAction({...data, versionModelVisible: true}));
+            navigation.navigate('CustomerMain');
+          } else {
+            dispatch(appVersionAction({...data, versionModelVisible: false}));
+            navigation.navigate('CustomerMain');
+          }
+        }, 2000);
+      }
     } else {
       setTimeout(() => {
-        if (currVersion !== data?.version) {
-          dispatch(appVersionAction({...data, versionModelVisible: true}));
-          navigation.navigate('CustomerMain');
-        } else {
-          dispatch(appVersionAction({...data, versionModelVisible: false}));
-          navigation.navigate('CustomerMain');
-        }
-        // navigation.navigate('LandingPage');
-      }, 2000);
+        setNetWarningShow(true);
+      }, 1500);
     }
   };
 
   useEffect(() => {
     retrieveLocalData();
-  }, [isFocused]);
+  }, [isConnected]);
 
   useEffect(() => {
     // updateVersionData(currVersion);
   }, []);
 
-  return (
+  return netWarningShow ? (
+    <NoInternetScreen />
+  ) : (
     <View
       style={{
         flex: 1,

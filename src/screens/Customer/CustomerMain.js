@@ -6,6 +6,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {loadAreaListsStart} from '../../redux/AreaSlice/AreaListSlice';
 import {loadAllShopsListsStart} from '../../redux/ShopSlice/ShopSlice';
 import CustomerTab from '../../TabNavigation/CustomerTab';
+import {checkInternetConnectivity} from '../../config/CheckInternetConnectivity';
+import NoInternetScreen from '../NoInternetScreen';
 
 const CustomerMain = () => {
   const dispatch = useDispatch();
@@ -17,11 +19,15 @@ const CustomerMain = () => {
     dispatch(loadAllShopsListsStart());
   }, [dispatch]);
 
-  return (
+  const checkInternetStatus = checkInternetConnectivity();
+
+  return checkInternetStatus ? (
     <View style={{flex: 1}}>
       <DrawerCustomer />
       {/* <CustomerTab /> */}
     </View>
+  ) : (
+    <NoInternetScreen />
   );
 };
 
