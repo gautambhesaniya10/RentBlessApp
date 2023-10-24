@@ -3,7 +3,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
@@ -13,7 +12,6 @@ import UpperFilter from '../../../../common/Customer/UpperFilter';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {changeAppliedProductsFilters} from '../../../../redux/ProductFilter/ProductFilterSlice';
-import {DataTable} from 'react-native-paper';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {Modal} from 'react-native';
 import CustomButton from '../../../../common/CustomButton';
@@ -121,7 +119,6 @@ const ProductListing = () => {
         <View style={{marginTop: 15}}>
           <ScrollView horizontal={true}>
             <View style={styles.productTable}>
-              {/* Render table headers */}
               <View style={styles.tableRow}>
                 {[
                   'NO',
@@ -133,6 +130,7 @@ const ProductListing = () => {
                   'Action',
                 ].map((itm, index) => (
                   <Text
+                    key={index}
                     style={[
                       styles.tableHeader,
                       {
@@ -143,15 +141,14 @@ const ProductListing = () => {
                     {itm}
                   </Text>
                 ))}
-                {/* Add more headers as needed */}
               </View>
-
               {productLoading && productsData?.length === 0 ? (
-                <View style={{paddingVertical: 40}}>
-                  <ActivityIndicator />
-                </View>
-              ) : productLoading && productsData?.length > 0 ? (
-                <View style={{paddingVertical: 40}}>
+                <View
+                  style={{
+                    paddingVertical: 40,
+                    paddingHorizontal: '30%',
+                    alignSelf: 'flex-start',
+                  }}>
                   <ActivityIndicator />
                 </View>
               ) : (
@@ -161,19 +158,57 @@ const ProductListing = () => {
                     item?.product_price * (item?.product_discount / 100);
 
                   return (
-                    <View style={styles.tableRow}>
+                    <View
+                      style={[
+                        styles.tableRow,
+                        {
+                          opacity:
+                            productLoading && productsData?.length > 0
+                              ? 0.5
+                              : 1,
+                        },
+                      ]}>
                       <Text style={[styles.tableCell, {width: 60}]}>
                         {index + 1}
                       </Text>
-                      <View style={[styles.tableCell, {width: 100}]}>
-                        <FastImage
-                          style={{width: 50, height: 70, alignSelf: 'center'}}
-                          source={{
-                            uri: item?.product_image?.front,
-                            cache: FastImage.cacheControl.web,
-                          }}
-                          resizeMode="cover"
-                        />
+                      <View
+                        style={[
+                          styles.tableCell,
+                          {
+                            width: 100,
+                          },
+                        ]}>
+                        <View
+                          style={{
+                            position: 'relative',
+                            overflow: 'hidden',
+                            padding: 3,
+                          }}>
+                          <FastImage
+                            style={{width: 70, height: 70, alignSelf: 'center'}}
+                            source={{
+                              uri: item?.product_image?.front,
+                              cache: FastImage.cacheControl.web,
+                            }}
+                            resizeMode="cover"
+                          />
+                          {item?.product_listing_type && (
+                            <View
+                              style={[
+                                styles.rentSellRebinMain,
+                                {
+                                  backgroundColor:
+                                    item?.product_listing_type === 'rent'
+                                      ? '#ff3b3b'
+                                      : '#29977E',
+                                },
+                              ]}>
+                              <Text style={styles.rebinText}>
+                                {item?.product_listing_type}
+                              </Text>
+                            </View>
+                          )}
+                        </View>
                       </View>
                       <Text
                         numberOfLines={2}
@@ -242,6 +277,13 @@ const ProductListing = () => {
                           </TouchableOpacity>
                         </View>
                       </View>
+                      {index === 0 &&
+                        productLoading &&
+                        productsData?.length > 0 && (
+                          <View style={styles.loadingDiv}>
+                            <ActivityIndicator />
+                          </View>
+                        )}
                     </View>
                   );
                 })
@@ -430,6 +472,7 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: 'row',
+    position: 'relative',
   },
   tableHeader: {
     padding: 10,
@@ -455,5 +498,30 @@ const styles = StyleSheet.create({
   inqueryText: {
     textAlign: 'center',
     color: '#31333E',
+  },
+  rentSellRebinMain: {
+    height: 30,
+    width: 70,
+    // backgroundColor: '#29977E',
+    position: 'absolute',
+    top: 0,
+    right: 32,
+    transform: [{rotate: '320deg'}],
+    zIndex: 1,
+    borderWidth: 5,
+    borderColor: '#f5cd79',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rebinText: {
+    color: 'white',
+    fontSize: 10,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+  },
+  loadingDiv: {
+    position: 'absolute',
+    top: '60%',
+    left: '30%',
   },
 });
