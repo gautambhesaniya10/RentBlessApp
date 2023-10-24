@@ -156,17 +156,12 @@ const ProductApplyFilter = ({
       selectedWomenCat?.length > 0 ||
       (!showOnlyShopDetailPage && selectedShopData?.length > 0) ||
       selectedColorData?.length > 0 ||
-      selectedTypeData
+      selectedTypeData ||
+      !areObjectsEqual(selectedPriceData, priceDefaultData)
     ) {
       setClearAllBtnShow(true);
     } else {
       setClearAllBtnShow(false);
-    }
-
-    if (areObjectsEqual(selectedPriceData, priceDefaultData)) {
-      setClearAllBtnShow(false);
-    } else {
-      setClearAllBtnShow(true);
     }
   }, [
     selectedMenCat,
