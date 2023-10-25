@@ -1,31 +1,26 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import Home from '../screens/Vendor/VendorDashboard/Home';
 import ShopDetail from '../screens/Vendor/VendorDashboard/ShopDetail';
 import Product from '../screens/Vendor/VendorDashboard/Product';
+import CustomVendorTabBar from './CustomVendorTabBar';
 
 const VendorTab = () => {
   const Tab = createBottomTabNavigator();
 
   return (
     <Tab.Navigator
-      tabBarOptions={{
-        activeTintColor: 'green',
-        labelStyle: {
-          fontSize: 12,
-          paddingBottom: 5,
-        },
-      }}>
+      tabBar={props => <CustomVendorTabBar {...props} />}
+      initialRouteName="Home">
       <Tab.Screen
         name="Home"
         component={Home}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size}) => (
-            <Icon name="home" color={color} size={22} />
-          ),
+          tabBarIconName: 'home',
+          tabBarLabel: 'Home',
+          // unmountOnBlur: true,
         }}
       />
 
@@ -34,10 +29,8 @@ const VendorTab = () => {
         component={ShopDetail}
         options={{
           headerShown: false,
+          tabBarIconName: 'shopping-cart',
           tabBarLabel: 'Shop',
-          tabBarIcon: ({color, size}) => (
-            <Icon name="shopping-cart" color={color} size={22} />
-          ),
         }}
       />
       <Tab.Screen
@@ -45,9 +38,8 @@ const VendorTab = () => {
         component={Product}
         options={{
           headerShown: false,
-          tabBarIcon: ({color, size}) => (
-            <Icon name="list-alt" color={color} size={22} />
-          ),
+          tabBarIconName: 'list-alt',
+          tabBarLabel: 'Product',
         }}
       />
     </Tab.Navigator>

@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   likeText: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     marginTop: 10,
     color: '#151827',
     fontWeight: '600',

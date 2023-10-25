@@ -2,7 +2,7 @@ import React from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CustomCustomerTabBar = ({state, descriptors, navigation}) => {
+const CustomVendorTabBar = ({state, descriptors, navigation}) => {
   return (
     <View style={styles.tabBarContainer}>
       {state.routes.map((route, index) => {
@@ -29,20 +29,7 @@ const CustomCustomerTabBar = ({state, descriptors, navigation}) => {
               key={route.key}
               onPress={onPress}
               style={styles.tabBarItem}>
-              <View style={styles.mainLikeTabDiv}>
-                <Icon
-                  name={options.tabBarIconName}
-                  size={24}
-                  color={iconColor}
-                />
-                {options.tabBarBadgeLikeCount && (
-                  <View style={styles.likeCountMain}>
-                    <Text style={styles.likeCount}>
-                      {options.tabBarBadgeLikeCount}
-                    </Text>
-                  </View>
-                )}
-              </View>
+              <Icon name={options.tabBarIconName} size={24} color={iconColor} />
               {options.tabBarLabel && (
                 <Text style={{color: iconColor, fontSize: 14}}>
                   {options.tabBarLabel}
@@ -71,10 +58,6 @@ const styles = {
     alignItems: 'center',
     paddingVertical: 8,
   },
-
-  mainLikeTabDiv: {
-    position: 'relative',
-  },
   likeCountMain: {
     backgroundColor: 'red',
     width: 18,
@@ -93,4 +76,4 @@ const styles = {
   },
 };
 
-export default CustomCustomerTabBar;
+export default CustomVendorTabBar;

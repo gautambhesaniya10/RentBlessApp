@@ -111,7 +111,9 @@ const VendorHeader = () => {
                     {useProfileData?.first_name} {useProfileData?.last_name}
                   </Text>
                   <Divider bold={true} />
-                  <Text onPress={() => LogOut()} style={styles.logoutText}>
+                  <Text
+                    onPress={() => LogOut()}
+                    style={[styles.logoutText, {paddingHorizontal: 25}]}>
                     <Icon name="power-off" size={14} color="#151827" /> {''}
                     Logout
                   </Text>
