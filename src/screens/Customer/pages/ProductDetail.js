@@ -34,8 +34,8 @@ import {Avatar, Divider} from 'react-native-paper';
 import {locationIcon} from '../../../common/AllLiveImageLink';
 import FastImage from 'react-native-fast-image';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {refactorPrice} from '../../../common/Common';
 import Video from 'react-native-video';
+import {refactorPrice} from '../../../utils';
 
 const ProductDetail = () => {
   const route = useRoute();

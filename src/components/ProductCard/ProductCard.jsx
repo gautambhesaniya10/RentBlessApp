@@ -9,7 +9,7 @@ import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {refactorPrice} from '../../common/Common';
+import {refactorPrice} from '../../utils';
 
 const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();

@@ -22,7 +22,7 @@ import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
-import {refactorPrice} from '../../../../common/Common';
+import {refactorPrice} from '../../../../utils';
 
 const AddEditProduct = () => {
   const toast = useToast();
