@@ -113,6 +113,8 @@ export const getShopDetails = async payload => {
         shop(id: $shopId) {
           id
           user_id
+          createdAt
+          subscriptionDate
           subscriptionId
           shop_name
           shop_time {
@@ -148,6 +150,7 @@ export const getShopDetails = async payload => {
           }
           shopFollowerCount
           shopReviewCount
+          productLimit
           shop_review {
             id
             shop_id

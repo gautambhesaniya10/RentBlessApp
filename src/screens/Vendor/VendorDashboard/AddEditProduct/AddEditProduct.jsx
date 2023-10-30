@@ -372,6 +372,7 @@ const AddEditProduct = () => {
         await updateProduct({
           id: editableProductData?.id,
           productInfo: {
+            shop_id: vendorShopDetails?.id,
             branch_id: data.product_branch,
             category_id: data.product_category,
             product_color: data.product_color,
@@ -434,6 +435,7 @@ const AddEditProduct = () => {
 
         await createProduct({
           productInfo: {
+            shop_id: vendorShopDetails?.id,
             branch_id: data.product_branch,
             category_id: data.product_category,
             product_color: data.product_color,

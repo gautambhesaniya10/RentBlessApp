@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../screens/Vendor/VendorDashboard/Home';
 import ShopDetail from '../screens/Vendor/VendorDashboard/ShopDetail';
 import Product from '../screens/Vendor/VendorDashboard/Product';
+import SubscriptionTab from '../screens/Vendor/VendorDashboard/Subscription/SubscriptionTab';
 import CustomVendorTabBar from './CustomVendorTabBar';
 
 const VendorTab = () => {
@@ -40,6 +41,15 @@ const VendorTab = () => {
           headerShown: false,
           tabBarIconName: 'list-alt',
           tabBarLabel: 'Product',
+        }}
+      />
+      <Tab.Screen
+        name="SubscriptionTab"
+        component={SubscriptionTab}
+        options={{
+          headerShown: false,
+          tabBarIconName: 'archive',
+          tabBarLabel: 'Subscription',
         }}
       />
     </Tab.Navigator>
