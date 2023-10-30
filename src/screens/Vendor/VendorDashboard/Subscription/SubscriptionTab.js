@@ -16,6 +16,8 @@ import {
   SHOP_PRODUCT_VISIBLE_DAYS,
   INDIVIDUAL_SHOP_PRODUCT_VISIBLE_DAYS,
 } from '@env';
+import CustomTextInput from '../../../../common/CustomTextInput';
+import {useForm} from 'react-hook-form';
 
 const SubscriptionTab = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
@@ -207,6 +209,20 @@ const styles = StyleSheet.create({
 });
 
 const ContactSaleModel = ({contactModalVisible, setContactModalVisible}) => {
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+    setValue,
+  } = useForm();
+
+  const onSubmit = data => {
+    console.log('dataaa', data);
+    setContactModalVisible(false);
+    setValue('email', '');
+    setValue('description', '');
+  };
+
   return (
     <View style={contactModelStyles.centeredView}>
       <Modal
@@ -218,9 +234,68 @@ const ContactSaleModel = ({contactModalVisible, setContactModalVisible}) => {
         }}>
         <View style={contactModelStyles.centeredView}>
           <View style={contactModelStyles.modalView}>
-            <Text onPress={() => setContactModalVisible(false)}>
-              Hello World!
+            <TouchableOpacity
+              onPress={() => setContactModalVisible(false)}
+              style={{alignItems: 'flex-end'}}>
+              <Icon name="close" color="black" size={22} />
+            </TouchableOpacity>
+            <Text style={contactModelStyles.topTitleText}>Contact Us</Text>
+            <Text style={contactModelStyles.topSecText}>
+              Custom contract & additional features Volume-based discounting
+              available
             </Text>
+            <View style={{alignItems: 'center'}}>
+              <View style={{width: '80%', marginBottom: 20}}>
+                <CustomTextInput
+                  label={'Email'}
+                  mode="outlined"
+                  keyboardType={'email-address'}
+                  name="email"
+                  control={control}
+                  rules={{
+                    required: 'Email is required *',
+                    pattern: {
+                      value:
+                        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                      message: 'Please enter a valid email',
+                    },
+                  }}
+                  activeOutlineColor="#151827"
+                  outlineStyle={{borderRadius: 12}}
+                />
+                {errors?.email && (
+                  <Text style={{color: 'red', marginTop: 4}}>
+                    {errors.email.message}
+                  </Text>
+                )}
+              </View>
+              <View style={{width: '80%', marginBottom: 20}}>
+                <CustomTextInput
+                  label={'Anything Else'}
+                  mode="outlined"
+                  name="description"
+                  control={control}
+                  rules={{required: 'Description is required *'}}
+                  activeOutlineColor="#151827"
+                  outlineStyle={{borderRadius: 12}}
+                />
+                {errors?.description && (
+                  <Text style={{color: 'red', marginTop: 4}}>
+                    {errors.description.message}
+                  </Text>
+                )}
+              </View>
+              <View style={{width: '80%', marginBottom: 20}}>
+                <CustomButton
+                  name="Contact Us"
+                  color="#FFFFFF"
+                  backgroundColor="#151827"
+                  borderColor="#151827"
+                  onPress={handleSubmit(onSubmit)}
+                  // loading={loading}
+                />
+              </View>
+            </View>
           </View>
         </View>
       </Modal>
@@ -233,15 +308,29 @@ const contactModelStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
+    position: 'relative',
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 15,
     elevation: 5,
+    width: '90%',
+  },
+  topTitleText: {
+    color: 'black',
+    fontSize: 22,
+    fontWeight: '600',
+    textAlign: 'center',
+    paddingBottom: 15,
+  },
+  topSecText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: '400',
+    textAlign: 'center',
+    paddingBottom: 15,
   },
 });
