@@ -28,6 +28,7 @@ const VendorHeader = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const useProfileData = useSelector(state => state?.user.userProfile);
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
 
   const logoName = `${useProfileData?.first_name
@@ -80,8 +81,14 @@ const VendorHeader = () => {
             width={100}
             height={37}
           />
-          {/* <Text style={styles.leftText}>RENTBLESS</Text> */}
         </View>
+        {useProfileData?.userHaveAnyShop && vendorShopDetails && (
+          <Text style={styles.centerText}>
+            Available Product :{' '}
+            {vendorShopDetails?.productLimit -
+              vendorShopDetails?.balanceProduct || 0}
+          </Text>
+        )}
         <View>
           <TouchableOpacity
             onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
@@ -154,6 +161,11 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18,
     fontWeight: '600',
+  },
+  centerText: {
+    color: 'white',
+    fontSize: 15,
+    fontWeight: '500',
   },
   logoutText: {
     color: 'black',

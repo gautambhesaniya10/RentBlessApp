@@ -18,7 +18,6 @@ import VersionAppModel from '../../AppVersionModel/VersionApp';
 const Home = ({}) => {
   const navigation = useNavigation();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
-  const [totalProducts, setTotalProducts] = useState(0);
   const {versionData} = useSelector(state => state?.appVersion);
 
   useEffect(() => {
@@ -34,13 +33,6 @@ const Home = ({}) => {
     };
   }, []);
 
-  useEffect(() => {
-    var count = 0;
-    vendorShopDetails?.branch_info?.map(itm =>
-      setTotalProducts((count += itm.product_info?.length)),
-    );
-  }, [vendorShopDetails]);
-
   return (
     <View style={{flex: 1}}>
       <VendorHeader />
@@ -54,7 +46,9 @@ const Home = ({}) => {
               style={styles.boxMain}>
               <View>
                 <Text style={styles.totalText}>Total Products</Text>
-                <Text style={styles.TotalNumberText}>{totalProducts}</Text>
+                <Text style={styles.TotalNumberText}>
+                  {vendorShopDetails?.balanceProduct}
+                </Text>
               </View>
               <View style={styles.iconParent}>
                 <Icon name="shopping-cart" color="black" size={22} />
