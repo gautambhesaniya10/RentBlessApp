@@ -89,7 +89,7 @@ const Login = () => {
     });
   };
 
-  const onSubmit = data => {
+  const onSubmit = async data => {
     setLoading(true);
     signIn({
       username: data.username,
@@ -98,6 +98,7 @@ const Login = () => {
     })
       .then(
         async res => {
+          console.log('res-=-=-=', res);
           handleAfterSignInResponse(
             res.data.signIn.user,
             res.data.signIn.token,
@@ -105,10 +106,14 @@ const Login = () => {
           );
         },
         error => {
+          console.log('error111-=-=-=', error);
+
           handleAfterSignInError(error.message);
         },
       )
       .catch(error => {
+        console.log('error222-=-=-=', error);
+
         handleAfterSignInError(error.message);
       });
   };
