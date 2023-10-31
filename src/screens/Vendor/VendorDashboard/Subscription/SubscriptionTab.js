@@ -214,13 +214,13 @@ const ContactSaleModel = ({contactModalVisible, setContactModalVisible}) => {
     handleSubmit,
     formState: {errors},
     setValue,
+    reset,
   } = useForm();
 
   const onSubmit = data => {
     console.log('dataaa', data);
     setContactModalVisible(false);
-    setValue('email', '');
-    setValue('description', '');
+    reset();
   };
 
   return (
@@ -278,6 +278,8 @@ const ContactSaleModel = ({contactModalVisible, setContactModalVisible}) => {
                   rules={{required: 'Description is required *'}}
                   activeOutlineColor="#151827"
                   outlineStyle={{borderRadius: 12}}
+                  multiline={true}
+                  numberOfLines={5}
                 />
                 {errors?.description && (
                   <Text style={{color: 'red', marginTop: 4}}>

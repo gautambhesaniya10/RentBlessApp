@@ -15,6 +15,8 @@ const CustomTextInput = ({
   disabled,
   outlineStyle,
   onChangeTextPrice,
+  multiline,
+  numberOfLines,
 }) => {
   const customTheme = {
     ...DefaultTheme,
@@ -42,6 +44,8 @@ const CustomTextInput = ({
             theme={customTheme}
             disabled={disabled}
             onChange={onChangeTextPrice}
+            multiline={multiline}
+            numberOfLines={numberOfLines}
           />
         )}
         name={name}
