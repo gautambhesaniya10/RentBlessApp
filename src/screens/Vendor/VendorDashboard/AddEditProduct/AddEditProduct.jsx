@@ -23,6 +23,7 @@ import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSli
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
 import {refactorPrice} from '../../../../utils';
+import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -43,6 +44,10 @@ const AddEditProduct = () => {
   const {userProfile} = useSelector(state => state?.user);
   const {categories} = useSelector(state => state?.categories);
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
+  const {PaginationProductLimit} = useSelector(state => state?.productsData);
+  const {appliedProductsFilters, sortFilters} = useSelector(
+    state => state.productsFiltersReducer,
+  );
 
   const [menCategoryLabel, setMenCategoryLabel] = useState([]);
   const [womenCategoryLabel, setWomenCategoryLabel] = useState([]);
@@ -310,6 +315,30 @@ const AddEditProduct = () => {
     }
   };
 
+  const getAllProducts = () => {
+    dispatch(
+      loadProductsStart({
+        pageData: {
+          skip: 0,
+          limit: PaginationProductLimit,
+        },
+        filter: {
+          category_id: appliedProductsFilters?.categoryId?.selectedValue,
+          product_color: appliedProductsFilters?.productColor?.selectedValue,
+          product_price: {
+            min: appliedProductsFilters.productPrice.selectedValue.min,
+            max: appliedProductsFilters.productPrice.selectedValue.max,
+          },
+          product_listing_type:
+            appliedProductsFilters?.productListingType.selectedValue,
+        },
+        shopId: appliedProductsFilters?.shopId?.selectedValue,
+        sort: sortFilters?.sortType?.selectedValue,
+        search: appliedProductsFilters?.searchBarData?.selectedValue,
+      }),
+    );
+  };
+
   const onSubmitProduct = async data => {
     if (editorDescriptionContent === '') {
       setErrorDescription('Product description is required');
@@ -399,15 +428,16 @@ const AddEditProduct = () => {
         }).then(
           res => {
             console.log('res:::', res);
+            setLoading(false);
+            dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
+            getAllProducts();
+            handleProductListingModalClose();
             toast.show({
               title: res.data.updateProduct.message,
               placement: 'top',
               backgroundColor: 'green.600',
               variant: 'solid',
             });
-            setLoading(false);
-            dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
-            handleProductListingModalClose();
           },
           error => {
             setLoading(false);
@@ -459,15 +489,16 @@ const AddEditProduct = () => {
         }).then(
           res => {
             console.log('res:::', res);
+            setLoading(false);
+            dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
+            getAllProducts();
+            handleProductListingModalClose();
             toast.show({
               title: res.data.createProduct.message,
               placement: 'top',
               backgroundColor: 'green.600',
               variant: 'solid',
             });
-            setLoading(false);
-            dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
-            handleProductListingModalClose();
           },
           error => {
             setLoading(false);
@@ -512,7 +543,6 @@ const AddEditProduct = () => {
 
   const discountHandle = e => {
     const discount = parseFloat(e.nativeEvent.text);
-    console.log('discount', discount);
     if (!isNaN(discount)) {
       const price = parseFloat(getValues('product_price') || 0);
       const finalPrice = price - price * (discount / 100);

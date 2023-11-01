@@ -6,13 +6,15 @@ import {
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import UpperFilter from '../../../../common/Customer/UpperFilter';
 import {useDispatch, useSelector} from 'react-redux';
-import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
-import {changeAppliedProductsFilters} from '../../../../redux/ProductFilter/ProductFilterSlice';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {
+  changeProductPageSkip,
+  loadProductsStart,
+} from '../../../../redux/ProductSlice/ProductSlice';
+import {useNavigation} from '@react-navigation/native';
 import {Modal} from 'react-native';
 import CustomButton from '../../../../common/CustomButton';
 import {deleteProduct} from '../../../../graphql/mutations/products';
@@ -24,12 +26,13 @@ import FastImage from 'react-native-fast-image';
 
 const ProductListing = () => {
   const dispatch = useDispatch();
-  const isFocused = useIsFocused();
   const navigation = useNavigation();
 
   const {
     productsLimit,
     productsCount,
+    productPageSkip,
+    PaginationProductLimit,
     numOfPages,
     productsData,
     productLoading,
@@ -39,21 +42,15 @@ const ProductListing = () => {
   const {appliedProductsFilters, sortFilters} = useSelector(
     state => state.productsFiltersReducer,
   );
-  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
-  // const useProfileData = useSelector(state => state?.user.userProfile);
-  const [productPageSkip, setProductPageSkip] = useState(0);
-
   const [deletableProductsImages, setDeletableProductsImages] = useState([]);
   const [deletableProductVideo, setDeletableProductVideo] = useState();
-
-  const ProductLimit = 5;
 
   const getAllProducts = () => {
     dispatch(
       loadProductsStart({
         pageData: {
-          skip: productPageSkip,
-          limit: ProductLimit,
+          skip: 0,
+          limit: PaginationProductLimit,
         },
         filter: {
           category_id: appliedProductsFilters?.categoryId?.selectedValue,
@@ -72,37 +69,12 @@ const ProductListing = () => {
     );
   };
 
-  useEffect(() => {
-    if (vendorShopDetails?.id) {
-      dispatch(
-        changeAppliedProductsFilters({
-          key: 'shopId',
-          value: {
-            selectedValue: [vendorShopDetails?.id],
-          },
-        }),
-      );
-    }
-  }, [dispatch, vendorShopDetails?.id]);
-
-  useEffect(() => {
-    if (appliedProductsFilters.shopId.selectedValue.length > 0) {
-      getAllProducts();
-    }
-  }, [
-    dispatch,
-    appliedProductsFilters,
-    sortFilters,
-    isFocused,
-    productPageSkip,
-  ]);
-
   const [productDeleteModalOpen, setProductDeleteModalOpen] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState();
 
   const handlePageChange = pageNumber => {
-    const newSkip = (pageNumber - 1) * ProductLimit;
-    setProductPageSkip(newSkip);
+    const newSkip = (pageNumber - 1) * PaginationProductLimit;
+    dispatch(changeProductPageSkip(newSkip));
   };
 
   return (
@@ -142,14 +114,17 @@ const ProductListing = () => {
                   </Text>
                 ))}
               </View>
-              {productLoading && productsData?.length === 0 ? (
+              {productsData?.length === 0 ? (
                 <View
                   style={{
                     paddingVertical: 40,
-                    paddingHorizontal: '30%',
+                    paddingHorizontal: '12%',
                     alignSelf: 'flex-start',
                   }}>
-                  <ActivityIndicator />
+                  <Text
+                    style={{color: 'black', fontSize: 20, fontWeight: '600'}}>
+                    No Product Available !
+                  </Text>
                 </View>
               ) : (
                 productsData?.map((item, index) => {
@@ -292,7 +267,7 @@ const ProductListing = () => {
           </ScrollView>
         </View>
 
-        {productsCount > ProductLimit && (
+        {productsCount > PaginationProductLimit && (
           <View
             style={{
               flexDirection: 'row',

@@ -64,8 +64,10 @@ const productSlice = createSlice({
     numOfPages: 0,
     productCurrentPage: 0,
     productDataLimit: 0,
+    productPageSkip: 0,
     productsData: [],
     productLoading: false,
+    PaginationProductLimit: 5,
     error: '',
   },
   reducers: {
@@ -81,6 +83,12 @@ const productSlice = createSlice({
         productDataLimit: action.payload,
       };
     },
+    changeProductPageSkip: (state, action) => {
+      return {
+        ...state,
+        productPageSkip: action.payload,
+      };
+    },
   },
   extraReducers: builder => {
     builder
@@ -93,6 +101,9 @@ const productSlice = createSlice({
   },
 });
 
-export const {changeProductCurrentPage, changeProductDataLimit} =
-  productSlice.actions;
+export const {
+  changeProductCurrentPage,
+  changeProductDataLimit,
+  changeProductPageSkip,
+} = productSlice.actions;
 export default productSlice.reducer;
