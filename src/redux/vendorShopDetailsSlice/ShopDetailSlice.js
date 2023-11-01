@@ -1,10 +1,10 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {getShopDetails} from '../../graphql/queries/shopQueries';
+import {getVendorShopDetails} from '../../graphql/queries/shopQueries';
 
 export const loadVendorShopDetailsStart = createAsyncThunk(
   'shop/shopDetail',
   async shopId => {
-    const response = await getShopDetails({id: shopId});
+    const response = await getVendorShopDetails({id: shopId});
     return response;
   },
 );
