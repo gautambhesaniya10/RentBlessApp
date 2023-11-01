@@ -9,7 +9,6 @@ import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import {refactorPrice} from '../../utils';
 
 const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
@@ -199,15 +198,13 @@ const ProductCard = ({product, landingPageCardWith}) => {
         </TouchableOpacity>
         {product?.product_price_visible ? (
           <View style={styles.priceMainDiv}>
-            <Text style={styles.finalPriceText}>
-              ₹{refactorPrice(Math.round(finalPrice))}
-            </Text>
+            <Text style={styles.finalPriceText}>₹{Math.round(finalPrice)}</Text>
             <View style={styles.priceInnerDiv}>
               <Text style={styles.productPriceText}>
                 ₹{Math.round(product?.product_price)}
               </Text>
               <Text style={styles.percentageText}>
-                ({product?.product_discount}% off)
+                ({Math.round(product?.product_discount)}% off)
               </Text>
             </View>
           </View>

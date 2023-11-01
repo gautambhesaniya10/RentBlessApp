@@ -35,7 +35,6 @@ import {locationIcon} from '../../../common/AllLiveImageLink';
 import FastImage from 'react-native-fast-image';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Video from 'react-native-video';
-import {refactorPrice} from '../../../utils';
 
 const ProductDetail = () => {
   const route = useRoute();
@@ -438,7 +437,7 @@ const ProductDetail = () => {
             {productDetails?.data?.product?.data?.product_price_visible && (
               <View style={styles.priceMainDiv}>
                 <Text style={styles.finalPriceText}>
-                  ₹{refactorPrice(Math.round(finalPrice))}
+                  ₹{Math.round(finalPrice)}
                 </Text>
 
                 <Text style={styles.productPriceText}>
@@ -448,7 +447,11 @@ const ProductDetail = () => {
                   )}
                 </Text>
                 <Text style={styles.percentageText}>
-                  ({productDetails?.data?.product?.data?.product_discount}% off)
+                  (
+                  {Math.round(
+                    productDetails?.data?.product?.data?.product_discount,
+                  )}
+                  % off)
                 </Text>
               </View>
             )}

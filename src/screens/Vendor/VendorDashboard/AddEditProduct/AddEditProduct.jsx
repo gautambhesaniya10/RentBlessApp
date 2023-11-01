@@ -229,7 +229,10 @@ const AddEditProduct = () => {
   useEffect(() => {
     if (editableProductData) {
       setValue('product_name', editableProductData?.product_name);
-      setValue('product_price', editableProductData?.product_price.toString());
+      setValue(
+        'product_price',
+        Math.round(editableProductData?.product_price).toString(),
+      );
       setValue(
         'product_discount',
         editableProductData?.product_discount.toString(),
@@ -245,7 +248,7 @@ const AddEditProduct = () => {
         editableProductData?.product_price -
         editableProductData?.product_price *
           (editableProductData?.product_discount / 100);
-      setValue('product_final_price', finalPrice.toString());
+      setValue('product_final_price', Math.round(finalPrice).toString());
 
       setProductListingType(
         editableProductData?.product_listing_type === 'rent' ? false : true,
@@ -388,7 +391,7 @@ const AddEditProduct = () => {
             product_video:
               videoResponse ||
               (deleteProductVideo ? '' : editableProductData.product_video),
-            product_price: refactorPrice(data.product_price),
+            product_price: Math.round(data.product_price),
             product_discount: refactorPrice(data.product_discount),
             product_price_visible: !productPriceVisible,
             product_listing_type: productListingType ? 'sell' : 'rent',
@@ -448,7 +451,7 @@ const AddEditProduct = () => {
               side: productImagesRes[2],
             },
             product_video: productVideoRes || '',
-            product_price: refactorPrice(data.product_price),
+            product_price: Math.round(data.product_price),
             product_discount: refactorPrice(data.product_discount),
             product_price_visible: !productPriceVisible,
             product_listing_type: productListingType ? 'sell' : 'rent',
@@ -498,7 +501,10 @@ const AddEditProduct = () => {
     if (!isNaN(price)) {
       const discount = parseFloat(getValues('product_discount') || 0);
       const finalPrice = price - price * (discount / 100);
-      setValue('product_final_price', finalPrice.toFixed(2).toString());
+      setValue(
+        'product_final_price',
+        Math.round(finalPrice.toFixed(2)).toString(),
+      );
     } else {
       setValue('product_final_price', null);
     }
@@ -510,9 +516,12 @@ const AddEditProduct = () => {
     if (!isNaN(discount)) {
       const price = parseFloat(getValues('product_price') || 0);
       const finalPrice = price - price * (discount / 100);
-      setValue('product_final_price', finalPrice.toFixed(2).toString());
+      setValue(
+        'product_final_price',
+        Math.round(finalPrice.toFixed(2)).toString(),
+      );
     } else {
-      setValue('product_final_price', price.toFixed(2).toString());
+      setValue('product_final_price', Math.round(price.toFixed(2)).toString());
     }
   };
 
@@ -534,7 +543,7 @@ const AddEditProduct = () => {
 
   useEffect(() => {
     if (Number(finalPrice) > Number(price)) {
-      setValue('product_final_price', price.toFixed(2).toString());
+      setValue('product_final_price', Math.round(price.toFixed(2)).toString());
       setValue('product_discount', '0');
     }
   }, [finalPrice]);
