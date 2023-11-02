@@ -262,8 +262,6 @@ const ShopSetUpScreenOne = ({control, errors, individual, hours, setHours}) => {
         setDaysTimeModalOpen={setDaysTimeModalOpen}
         setSelectedDay={setSelectedDay}
         setSelectedWeek={setSelectedWeek}
-        // selectedWeek={selectedWeek}
-        // selectedAllHours={selectedAllHours}
         setSelectedAllHours={setSelectedAllHours}
       />
       <DaysTimeModal
@@ -333,13 +331,10 @@ const hourModelStyles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    // justifyContent: 'flex-start',
-    // alignItems: 'center',
     backgroundColor: 'white',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     paddingVertical: 23,
-    // paddingHorizontal: 25,
     bottom: 0,
   },
   headerText: {
@@ -631,7 +626,6 @@ const daysStyles = StyleSheet.create({
     marginBottom: 20,
   },
   charMainDiv: {
-    // backgroundColor: '#bdbbbb',
     width: 28,
     height: 28,
     borderRadius: 14,
@@ -955,7 +949,6 @@ const DaysTimeModal = ({
                     false: '#151827',
                     disabled: 'gray',
                   }}
-                  // style={styles.checkbox}
                 />
                 <Text style={{color: 'black'}}>Open 24 Hours</Text>
               </View>
@@ -978,7 +971,6 @@ const DaysTimeModal = ({
                     false: '#151827',
                     disabled: 'gray',
                   }}
-                  // style={styles.checkbox}
                 />
                 <Text style={{color: 'black'}}>Closed</Text>
               </View>

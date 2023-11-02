@@ -98,8 +98,6 @@ const FeaturedVendors = ({shop}) => {
                 //     })
                 //   }
               >
-                {/* <View style={styles.shopMain}> */}
-
                 {shop?.shop_logo ? (
                   <FastImage
                     source={{
@@ -171,7 +169,6 @@ const FeaturedVendors = ({shop}) => {
                     </Text>
                   </View>
                 </View>
-                {/* </View> */}
               </TouchableOpacity>
             </View>
           ))}
@@ -231,7 +228,6 @@ const styles = StyleSheet.create({
     color: '#151827',
     fontWeight: '600',
     fontSize: 14,
-    // width: 120,
     paddingBottom: 5,
     alignSelf: 'center',
   },
@@ -239,7 +235,6 @@ const styles = StyleSheet.create({
     color: 'rgba(21, 24, 39, 0.40)',
     fontWeight: '600',
     fontSize: 14,
-    // width: 100,
   },
   shopMain: {
     display: 'flex',

@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
   },
   mainLeftList: {
     width: '35%',
-    // backgroundColor: '#FAFCFC',
     backgroundColor: 'rgba(21, 24, 39, 0.10)',
   },
   mainRightList: {

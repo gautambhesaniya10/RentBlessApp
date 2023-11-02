@@ -19,7 +19,6 @@ const ShopReviewAll = () => {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const {shopDetails} = route?.params?.state;
-  // const {shopReviews} = route?.params?.state;
 
   const [shopReviews, setShopReviews] = useState([]);
 

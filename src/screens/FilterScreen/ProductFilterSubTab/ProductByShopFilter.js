@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {useSelector} from 'react-redux';
 import {CheckBox} from 'react-native-elements';

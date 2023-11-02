@@ -1,19 +1,6 @@
-import {
-  Alert,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Alert, Modal, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import CustomTextInput from '../../../../common/CustomTextInput';
 import CustomButton from '../../../../common/CustomButton';
-import {getShopOwnerDetail} from '../../../../graphql/queries/shopQueries';
-import {
-  getBranchLists,
-  getSingleBranchDetails,
-} from '../../../../graphql/queries/branchListsQueries';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import BranchMultiDropDown from '../../../../components/BranchMultiDropDown';
 import {FontStyle} from '../../../../../CommonStyle';

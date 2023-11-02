@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
+import {BackGroundStyle} from '../../../../CommonStyle';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomButton from '../../../common/CustomButton';
 import {loadCategoriesStart} from '../../../redux/CategorySlice/CategoryListSlice';

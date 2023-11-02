@@ -1,9 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
-import VendorHeader from '../../../components/VendorHeader';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
-import VendorTab from '../../../TabNavigation/VendorTab';
 import DrawerVendor from '../../../DrawerNavigation/DrawerVendor';
 import {loadProductsStart} from '../../../redux/ProductSlice/ProductSlice';
 import {changeAppliedProductsFilters} from '../../../redux/ProductFilter/ProductFilterSlice';

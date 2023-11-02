@@ -2,13 +2,11 @@ import {
   Image,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {BackGroundStyle} from '../../../CommonStyle';
 import {useNavigation} from '@react-navigation/native';
 import EmailScreen from './ForgotPassWordScreens/EmailScreen';
 import OtpScreen from './ForgotPassWordScreens/OtpScreen';

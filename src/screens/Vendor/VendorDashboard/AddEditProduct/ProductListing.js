@@ -477,7 +477,6 @@ const styles = StyleSheet.create({
   rentSellRebinMain: {
     height: 30,
     width: 70,
-    // backgroundColor: '#29977E',
     position: 'absolute',
     top: 0,
     right: 32,

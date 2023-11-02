@@ -93,7 +93,6 @@ const AddEditProduct = () => {
     }, 1000);
   }, []);
 
-  // const [switchVisibility, setSwitchVisibility] = useState(false);
   const [productPriceVisible, setProductPriceVisible] = useState(false);
 
   const [productListingType, setProductListingType] = useState(false);
@@ -531,7 +530,6 @@ const AddEditProduct = () => {
     setProductType();
 
     navigation.goBack();
-    // setOpenAddEditProduct(false);
     setProductVideo();
     setUploadProductImages([]);
     setUploadProductVideo();
@@ -675,10 +673,6 @@ const AddEditProduct = () => {
                 name="product_price"
                 rules={{
                   required: 'Product Price is required *',
-                  // pattern: {
-                  //   value: /^\d+(\.\d+)?$/,
-                  //   message: 'Please enter a valid price !',
-                  // },
                 }}
                 activeOutlineColor="#29977E"
                 keyboardType="number-pad"
@@ -705,14 +699,6 @@ const AddEditProduct = () => {
                     value: /^\d+(\.\d+)?$/,
                     message: 'Please enter a valid discount !',
                   },
-                  // min: {
-                  //   value: 0,
-                  //   message: 'Discount must be greater than or equal to 0',
-                  // },
-                  // max: {
-                  //   value: 100,
-                  //   message: 'Discount must be less than or equal to 100',
-                  // },
                 }}
                 activeOutlineColor="#29977E"
                 keyboardType="number-pad"
@@ -1062,16 +1048,8 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderWidth: 1,
     borderColor: 'gray',
-    // height: 190,
   },
-  richEditor: {
-    // minHeight: 100, // Set the desired height here
-    // You can also use maxHeight or height with percentages or flex values
-    // height: '50%',
-    // height: 300,
-    // borderWidth: 1,
-    // borderColor: 'gray',
-  },
+  richEditor: {},
   richToolbar: {
     borderTopWidth: 1,
     borderTopColor: 'gray',

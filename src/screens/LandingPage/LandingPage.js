@@ -78,11 +78,11 @@ const LandingPage = () => {
               renderItem={CarouselRenderItem}
               sliderWidth={screenWidth - 30}
               itemWidth={screenWidth - 30}
-              onSnapToItem={index => setActiveSlide(index)} // Update active slide index
+              onSnapToItem={index => setActiveSlide(index)}
               {...autoplayConfig}
             />
             <Pagination
-              dotsLength={TopCarouselData?.length} // Number of dots (usually the length of your data)
+              dotsLength={TopCarouselData?.length}
               activeDotIndex={activeSlide}
               containerStyle={{paddingTop: 10}}
             />
@@ -248,7 +248,6 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   worksH2Text: {
-    // alignSelf: 'center',
     textAlign: 'center',
     color: 'rgba(24, 23, 37, 0.56)',
     fontSize: 16,
@@ -264,12 +263,10 @@ const styles = StyleSheet.create({
   },
   cusTextMain: {
     width: '50%',
-    // backgroundColor: 'yellow',
     paddingVertical: 12,
   },
   venTextMain: {
     width: '50%',
-    // backgroundColor: 'yellow',
     paddingVertical: 12,
   },
   TextTab: {
@@ -287,7 +284,6 @@ const styles = StyleSheet.create({
     width: '100%',
     elevation: 5,
     borderRadius: 8,
-    // height: 150,
     marginBottom: 40,
     flexDirection: 'row',
     justifyContent: 'space-between',

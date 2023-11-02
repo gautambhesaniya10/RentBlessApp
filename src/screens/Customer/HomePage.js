@@ -1,10 +1,10 @@
-import {StyleSheet, Text, View, Image, Dimensions} from 'react-native';
+import {StyleSheet, Text, View, Dimensions} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import CustomerHeader from '../../components/CustomerHeader';
-import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
+import {BackGroundStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {ActivityIndicator, RadioButton, Switch} from 'react-native-paper';
+import {ActivityIndicator} from 'react-native-paper';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
 import {
@@ -22,7 +22,6 @@ import {
 } from '../../redux/ShopSlice/ShopSlice';
 import ShopCard from '../../components/ShopCard/ShopCard';
 import FilterDrawerModel from '../../common/FilterDrawerModel';
-import {useIsFocused} from '@react-navigation/native';
 import {
   clothIMG,
   landingBanner4,
@@ -37,7 +36,6 @@ import CustomSwitch from '../../components/CustomSwitch';
 
 const HomePage = () => {
   const dispatch = useDispatch();
-  const IsFocused = useIsFocused();
 
   const {width: screenWidth} = Dimensions.get('window');
   const [activeSlide, setActiveSlide] = useState(0);
@@ -304,10 +302,6 @@ const HomePage = () => {
           onScroll={handleProductScroll}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>
-          {/* <Image
-            source={{uri: homeCoverImage}}
-            style={{width: '100%', height: 150, objectFit: 'cover'}}
-          /> */}
           <View>
             <Carousel
               ref={carouselRef}
@@ -315,11 +309,11 @@ const HomePage = () => {
               renderItem={CarouselRenderItem}
               sliderWidth={screenWidth}
               itemWidth={screenWidth}
-              onSnapToItem={index => setActiveSlide(index)} // Update active slide index
+              onSnapToItem={index => setActiveSlide(index)}
               {...autoplayConfig}
             />
             <Pagination
-              dotsLength={TopCarouselData?.length} // Number of dots (usually the length of your data)
+              dotsLength={TopCarouselData?.length}
               activeDotIndex={activeSlide}
               containerStyle={{
                 paddingTop: 10,
@@ -470,7 +464,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     position: 'absolute',
     top: 150,
-    // left: '50%',
   },
   FilterBtnMain: {
     position: 'absolute',

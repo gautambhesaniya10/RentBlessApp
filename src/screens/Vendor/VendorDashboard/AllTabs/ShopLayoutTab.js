@@ -30,7 +30,6 @@ const ShopLayoutTab = ({
   const [shopImagesWasabiUrl, setShopImageWasabiUrl] = useState([]);
   const [deleteShopImages, setDeleteShopImages] = useState([]);
 
-  // const ShopImgsError = shopImages?.filter(item => item !== undefined);
   const [shopVideo, setShopVideo] = useState('');
   const [uploadShopVideo, setUploadShopVideo] = useState('');
   const [deleteShopVideo, setDeleteShopVideo] = useState('');
@@ -161,7 +160,6 @@ const ShopLayoutTab = ({
         skipBackup: true,
         path: 'images',
       },
-      // selectionLimit: 10
     };
 
     launchImageLibrary(options, response => {

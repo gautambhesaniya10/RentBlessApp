@@ -50,7 +50,6 @@ const ProductDetail = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [readMore, setReadMore] = useState(false);
 
-  const carouselRef = useRef(null);
   const {width: screenWidth} = Dimensions.get('window');
 
   const finalPrice =
@@ -209,7 +208,6 @@ const ProductDetail = () => {
   ];
 
   if (productDetails?.data?.product?.data?.product_video) {
-    // If there's a video, add it to the initialPhotos array
     TopCarouselData.push({
       // video: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
       video: productDetails?.data?.product?.data?.product_video,
@@ -272,7 +270,7 @@ const ProductDetail = () => {
       id: productDetails?.data?.product?.data.id,
     });
 
-    const phoneNumber = `+91${productDetails?.data?.product?.data?.branchInfo?.manager_contact}`; // Replace with the desired phone number
+    const phoneNumber = `+91${productDetails?.data?.product?.data?.branchInfo?.manager_contact}`;
     const url = `https://api.whatsapp.com/send?phone=${phoneNumber}`;
     Linking.openURL(url);
   };
@@ -394,7 +392,6 @@ const ProductDetail = () => {
                 <Pagination
                   dotsLength={TopCarouselData?.length}
                   activeDotIndex={activeSlide}
-                  // containerStyle={{paddingTop: 10}}
                 />
               </View>
             </View>
@@ -460,7 +457,6 @@ const ProductDetail = () => {
               About
             </Text>
             <View style={{width: '100%'}}>
-              {/* <Text style={styles.aboutText}> */}
               <RenderHTML
                 contentWidth={300}
                 source={{
@@ -495,7 +491,6 @@ const ProductDetail = () => {
                   </Text>
                 </TouchableOpacity>
               )}
-              {/* </Text> */}
             </View>
             <Text style={styles.aboutNameText}>Item Details</Text>
             <Text style={[styles.aboutText, {paddingBottom: 12}]}>
@@ -663,7 +658,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 12,
-    // width: '50%',
   },
   rightMainDiv: {
     display: 'flex',
@@ -672,7 +666,6 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     gap: 20,
     marginRight: 10,
-    // width: '50%',
   },
   productHeadNameText: {
     color: 'white',
@@ -751,10 +744,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 30,
     backgroundColor: '#FAFCFC',
-    // position: 'relative',
-    // top: -25,
     width: '100%',
-    // zIndex: 999999,
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
   },
@@ -809,7 +799,6 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: 'white',
     borderRadius: 20,
-    // padding: 35,
     elevation: 5,
     width: '80%',
   },

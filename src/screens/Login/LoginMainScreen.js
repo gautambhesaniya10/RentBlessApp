@@ -3,12 +3,11 @@ import React, {useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../common/CustomButton';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   rentBlessBlackLogo,
   shop_vendorIcon,
-  vendorIcon,
 } from '../../common/AllLiveImageLink';
 import {capitalizeString} from '../../common/CapitalizeString';
 
@@ -44,7 +43,6 @@ const LoginMainScreen = () => {
           style={{
             display: 'flex',
             flexDirection: 'row',
-            // gap: 15,
             justifyContent: 'space-between',
             width: '90%',
             alignSelf: 'center',
@@ -130,7 +128,6 @@ export default LoginMainScreen;
 
 const styles = StyleSheet.create({
   main: {
-    // alignItems: 'center',
     marginHorizontal: 20,
     justifyContent: 'center',
     display: 'flex',
@@ -152,20 +149,17 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     marginTop: 16,
     marginBottom: 40,
-    // paddingHorizontal: 10,
   },
   customerMain: {
     width: '47%',
     height: 104,
     borderWidth: 1,
-    // borderColor: '#29977E',
     borderRadius: 16,
   },
   businessMain: {
     width: '47%',
     height: 104,
     borderWidth: 1,
-    // borderColor: 'rgba(21, 24, 39, 0.10)',
     borderRadius: 16,
   },
   icons: {

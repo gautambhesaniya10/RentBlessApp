@@ -139,7 +139,7 @@ const ShopIndividual = () => {
 
   const shareContent = async () => {
     try {
-      const result = await Share.share({
+      await Share.share({
         message: `https://rentbless.com/shop/${shopId}/`,
         // url: `https://rentbless.com/product/${productId}/`,
       });
@@ -225,8 +225,6 @@ const ShopIndividual = () => {
   useEffect(() => {
     getAllReviews();
     getAllFollowers();
-    // dispatch(loadCategoriesStart());
-    // dispatch(loadAreaListsStart());
   }, [dispatch, userProfile, isFocused]);
 
   useEffect(() => {
@@ -595,7 +593,6 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     position: 'absolute',
     top: 150,
-    // left: '50%',
   },
   seeBranchLink: {
     color: '#3ac1a8',

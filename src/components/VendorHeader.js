@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   centerText: {
-    color: 'white',
+    color: '#f6c915',
     fontSize: 15,
     fontWeight: '500',
   },

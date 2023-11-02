@@ -10,15 +10,14 @@ import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomButton from '../../common/CustomButton';
 import CustomTextInput from '../../common/CustomTextInput';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
 import {googleSignIn, signIn} from '../../graphql/mutations/authMutations';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 import {useToast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {facebookIcon, googleIcon} from '../../common/AllLiveImageLink';
 import {NEXT_PUBLIC_GOOGLE_CLIENT_ID} from '@env';
@@ -149,7 +148,6 @@ const Login = () => {
         </TouchableOpacity>
         <Text style={styles.appNameText}>Rentbless</Text>
       </View>
-      {/* <View style={{height: '70%'}}> */}
       <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
         <Text style={styles.joinText}>
           Login As{' '}
@@ -258,7 +256,6 @@ const Login = () => {
           </Text>
         </View>
       </ScrollView>
-      {/* </View> */}
     </View>
   );
 };

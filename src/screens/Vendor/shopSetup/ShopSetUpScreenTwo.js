@@ -197,16 +197,6 @@ const ShopSetUpScreenTwo = ({
         </Text>
       )}
 
-      {/* <View style={{width: '45%'}}>
-        <CustomButton
-          name="upload"
-          color="#FFFFFF"
-          backgroundColor="#29977E"
-          borderColor="#29977E"
-          onPress={() => fileDelete()}
-        />
-      </View> */}
-
       <TouchableOpacity
         onPress={() => ChooseShopCoverImage()}
         style={styles.coverMainDiv}>

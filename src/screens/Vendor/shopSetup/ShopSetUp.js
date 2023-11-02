@@ -372,7 +372,6 @@ const ShopSetUp = () => {
                 stepCount={3}
                 customStyles={customStyles}
                 currentPosition={currentPosition}
-                // labels={labels}
               />
             </View>
             {currentPosition === 0 && (

@@ -1,25 +1,15 @@
-import {
-  Dimensions,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
-import {useDispatch, useSelector} from 'react-redux';
-// import {Switch} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import ProductApplyFilter from './ProductApplyFilter';
 import ShopApplyFilter from './ShopApplyFilter';
-import {Switch} from 'react-native-switch';
 
 const FilterScreen = ({
   handleFilterModelClose,
   setShowBottomLoader,
   showOnlyShopDetailPage,
 }) => {
-  const dispatch = useDispatch();
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
 
   return (
@@ -28,31 +18,6 @@ const FilterScreen = ({
       <View style={[styles.headerMain, {height: '10%'}]}>
         <View style={styles.innerHeaderLeft}>
           <Text style={styles.filterHeaderText}>Filters</Text>
-          {/* {!showOnlyShopDetailPage && (
-            <View style={styles.toggleSwitchMain}>
-              <Switch
-                value={byShop}
-                onValueChange={() => dispatch(shopProductButtonChange(!byShop))}
-                activeText={'Shop'}
-                activeTextStyle={{color: 'black'}}
-                inActiveText={'Product'}
-                inactiveTextStyle={{color: 'black'}}
-                circleSize={30}
-                barHeight={27}
-                backgroundActive={'#94cbbe'}
-                backgroundInactive={'rgba(21, 24, 39, 0.10)'}
-                circleActiveColor={'#29977e'}
-                circleInActiveColor={'#ffffff'}
-                innerCircleStyle={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: byShop ? 0 : 20,
-                  marginRight: byShop ? 12 : 0,
-                }}
-                switchWidthMultiplier={3} // multiplied by the `circleSize` prop to calculate total width
-              />
-            </View>
-          )} */}
         </View>
         <TouchableOpacity onPress={() => handleFilterModelClose()}>
           <Icon name="close" size={20} color="black" />

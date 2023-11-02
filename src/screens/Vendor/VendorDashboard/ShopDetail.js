@@ -1,4 +1,4 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {TouchableOpacity} from 'react-native';
@@ -8,7 +8,6 @@ import {useForm} from 'react-hook-form';
 import {shopUpdate} from '../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import ShopInfo from './AllTabs/ShopInfo';
-import VendorLogoAndName from '../../../components/VendorLogoAndName';
 import MainBranchTab from './AllTabs/MainBranchTab';
 import SubBranchTab from './AllTabs/SubBranchTab';
 import ShopLayoutTab from './AllTabs/ShopLayoutTab';

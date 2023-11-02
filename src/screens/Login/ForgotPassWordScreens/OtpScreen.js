@@ -1,17 +1,8 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import React, {useState, useRef, useEffect} from 'react';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
+import React, {useState, useRef} from 'react';
 import CustomButton from '../../../common/CustomButton';
-import {useNavigation} from '@react-navigation/native';
 
 const OtpScreen = ({setActiveScreen}) => {
-  const navigation = useNavigation();
-
   const inputRefs = Array(4)
     .fill(null)
     .map(() => useRef(null));
@@ -57,7 +48,6 @@ const OtpScreen = ({setActiveScreen}) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.cardContainer}>
-        {/* <Text style={styles.appName}>Rentbless</Text> */}
         <Text style={styles.forgotText}>Verification</Text>
         <Text style={styles.desOneText}>Enter Your OTP Code Number</Text>
         <Text style={styles.desOneText}>
@@ -113,7 +103,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    // flex: 1,
     marginTop: 50,
   },
   cardContainer: {

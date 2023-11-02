@@ -27,7 +27,6 @@ const NewPassWordScreen = ({setActiveScreen}) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.cardContainer}>
-        {/* <Text style={styles.appName}>Rentbless</Text> */}
         <Text style={styles.forgotText}>Update Password</Text>
         <Text style={styles.desOneText}>Update Your New Password</Text>
         <View style={{width: '100%', marginVertical: 0, position: 'relative'}}>
@@ -110,7 +109,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    // flex: 1,
     marginTop: 50,
   },
   cardContainer: {

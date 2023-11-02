@@ -1,6 +1,5 @@
 import {
   ActivityIndicator,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,7 +12,7 @@ import {capitalizeString} from '../../common/CapitalizeString';
 import {getProducts} from '../../graphql/queries/productQueries';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useNavigation} from '@react-navigation/native';
-import Carousel, {Pagination} from 'react-native-snap-carousel';
+import Carousel from 'react-native-snap-carousel';
 
 const WomenCollection = () => {
   const navigation = useNavigation();

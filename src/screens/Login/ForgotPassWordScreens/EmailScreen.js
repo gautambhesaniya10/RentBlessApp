@@ -1,12 +1,10 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import CustomButton from '../../../common/CustomButton';
 import CustomTextInput from '../../../common/CustomTextInput';
-import {useNavigation} from '@react-navigation/native';
 import {useForm} from 'react-hook-form';
 
 const EmailScreen = ({setActiveScreen}) => {
-  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
@@ -22,7 +20,6 @@ const EmailScreen = ({setActiveScreen}) => {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.cardContainer}>
-        {/* <Text style={styles.appName}>Rentbless</Text> */}
         <Text style={styles.forgotText}>Forgot Password</Text>
         <Text style={styles.desOneText}>
           Enter the email address you used when you joined and we’ll send you
@@ -76,7 +73,6 @@ const styles = StyleSheet.create({
   mainContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    // flex: 1,
     marginTop: 50,
   },
   cardContainer: {

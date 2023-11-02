@@ -4,13 +4,6 @@ import {capitalizeString} from '../../../common/CapitalizeString';
 import {RadioButton} from 'react-native-paper';
 
 const priceFilterData = [
-  //   {
-  //     label: 'Any Price',
-  //     value: {
-  //       min: 0,
-  //       max: 0,
-  //     },
-  //   },
   {
     label: 'Under ₹1000',
     value: {

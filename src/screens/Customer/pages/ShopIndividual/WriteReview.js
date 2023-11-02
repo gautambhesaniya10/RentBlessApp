@@ -37,7 +37,6 @@ const WriteReview = () => {
             },
           }).then(
             res => {
-              // getAllReviews();
               toast.show({
                 title: 'Review Submitted Successfully!!',
                 placement: 'top',
