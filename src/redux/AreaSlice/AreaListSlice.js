@@ -1,5 +1,4 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {getCategories} from '../../graphql/queries/categoriesQueries';
 import {getAreaLists} from '../../graphql/queries/areaListsQueries';
 
 export const loadAreaListsStart = createAsyncThunk(

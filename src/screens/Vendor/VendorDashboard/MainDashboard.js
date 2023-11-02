@@ -7,6 +7,7 @@ import VendorTab from '../../../TabNavigation/VendorTab';
 import DrawerVendor from '../../../DrawerNavigation/DrawerVendor';
 import {loadProductsStart} from '../../../redux/ProductSlice/ProductSlice';
 import {changeAppliedProductsFilters} from '../../../redux/ProductFilter/ProductFilterSlice';
+import {loadShopConfigurationsStart} from '../../../redux/ShopConfigurationsSlice/ShopConfigurationsSlice';
 
 const MainDashboard = () => {
   const dispatch = useDispatch();
@@ -67,6 +68,12 @@ const MainDashboard = () => {
   useEffect(() => {
     if (useProfileData?.userCreatedShopId) {
       dispatch(loadVendorShopDetailsStart(useProfileData?.userCreatedShopId));
+    }
+  }, [useProfileData]);
+
+  useEffect(() => {
+    if (useProfileData?.userCreatedShopId) {
+      dispatch(loadShopConfigurationsStart());
     }
   }, [useProfileData]);
 

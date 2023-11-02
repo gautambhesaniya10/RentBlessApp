@@ -12,29 +12,35 @@ import VendorHeader from '../../../../components/VendorHeader';
 import CustomButton from '../../../../common/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
-import {
-  SHOP_PRODUCT_VISIBLE_DAYS,
-  INDIVIDUAL_SHOP_PRODUCT_VISIBLE_DAYS,
-} from '@env';
 import CustomTextInput from '../../../../common/CustomTextInput';
 import {useForm} from 'react-hook-form';
+import moment from 'moment';
 
 const SubscriptionTab = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const [contactModalVisible, setContactModalVisible] = useState(false);
 
+  const {shopConfigurationsData} = useSelector(
+    state => state.shopConfigurations,
+  );
+
   const FreeTrailProduct =
     vendorShopDetails && vendorShopDetails?.shop_type === 'individual'
-      ? 10
-      : 30;
+      ? shopConfigurationsData[0]?.individual_product_limit
+      : shopConfigurationsData[0]?.shop_product_limit;
 
   const FreeTrailDay =
     vendorShopDetails && vendorShopDetails?.shop_type === 'individual'
-      ? parseInt(INDIVIDUAL_SHOP_PRODUCT_VISIBLE_DAYS)
-      : parseInt(SHOP_PRODUCT_VISIBLE_DAYS);
+      ? shopConfigurationsData[0]?.individual_days_limit
+      : shopConfigurationsData[0]?.shop_days_limit;
+
+  const shopCreatedDate = new Date(Number(vendorShopDetails?.createdAt));
+
+  const futureDate = new Date(shopCreatedDate);
+  futureDate.setDate(shopCreatedDate.getDate() + FreeTrailDay);
+  const formattedFutureDate = moment(futureDate).format('DD-MM-YYYY');
 
   const FreeTrialHandler = () => {
-    const shopCreatedDate = new Date(Number(vendorShopDetails?.createdAt));
     const currentDate = new Date();
 
     let threshold = new Date();
@@ -70,7 +76,7 @@ const SubscriptionTab = () => {
                   styles.bottomTitleText,
                   {color: '#29977E', fontWeight: '600'},
                 ]}>
-                Free Trail is active.
+                Free Trail is expire on {formattedFutureDate}.
               </Text>
             ) : (
               <Text

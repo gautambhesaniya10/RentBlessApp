@@ -6,7 +6,6 @@ export const loadUserProfileStart = createAsyncThunk(
   'user/fetchUser',
   async () => {
     const response = await getUserProfile();
-    // localStorage.setItem("loginType", response?.data?.user?.user_type);
     AsyncStorage.setItem(
       'userHaveAnyShop',
       JSON.stringify(response?.data?.user?.userHaveAnyShop),
