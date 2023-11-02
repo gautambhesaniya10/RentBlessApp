@@ -7,9 +7,13 @@ import {loadAreaListsStart} from '../../redux/AreaSlice/AreaListSlice';
 import {loadAllShopsListsStart} from '../../redux/ShopSlice/ShopSlice';
 import {checkInternetConnectivity} from '../../config/CheckInternetConnectivity';
 import NoInternetScreen from '../NoInternetScreen';
+import {useRoute} from '@react-navigation/native';
 
 const CustomerMain = () => {
   const dispatch = useDispatch();
+
+  const route = useRoute();
+  const loginToken = route?.params?.data?.key;
 
   useEffect(() => {
     dispatch(loadCategoriesStart());
@@ -21,7 +25,7 @@ const CustomerMain = () => {
 
   return checkInternetStatus ? (
     <View style={{flex: 1}}>
-      <DrawerCustomer />
+      <DrawerCustomer loginToken={loginToken ? true : false} />
       {/* <CustomerTab /> */}
     </View>
   ) : (

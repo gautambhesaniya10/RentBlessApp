@@ -14,7 +14,7 @@ import {userLogout} from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch} from 'react-redux';
 import {useToast} from 'native-base';
 
-const DrawerCustomer = () => {
+const DrawerCustomer = ({loginToken}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const toast = useToast();
@@ -79,6 +79,7 @@ const DrawerCustomer = () => {
         options={{
           headerShown: false,
         }}
+        initialParams={{loginToken: loginToken}}
       />
     </Drawer.Navigator>
   );

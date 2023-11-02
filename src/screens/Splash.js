@@ -38,12 +38,15 @@ const Splash = () => {
         }, 1000);
       } else {
         setTimeout(() => {
+          const loginAccessToken = {
+            key: Token,
+          };
           if (currVersion !== data?.version) {
             dispatch(appVersionAction({...data, versionModelVisible: true}));
-            navigation.navigate('CustomerMain');
+            navigation.navigate('CustomerMain', {data: loginAccessToken});
           } else {
             dispatch(appVersionAction({...data, versionModelVisible: false}));
-            navigation.navigate('CustomerMain');
+            navigation.navigate('CustomerMain', {data: loginAccessToken});
           }
         }, 1000);
       }

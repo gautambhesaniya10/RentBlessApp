@@ -7,15 +7,18 @@ import LikeScreen from '../screens/Customer/pages/LikeScreen';
 import {useSelector} from 'react-redux';
 import CustomCustomerTabBar from './CustomCustomerTabBar';
 import LandingPage from '../screens/LandingPage/LandingPage';
+import {useRoute} from '@react-navigation/native';
 
 const CustomerTab = () => {
+  const route = useRoute();
+  const loginToken = route?.params?.loginToken;
   const Tab = createBottomTabNavigator();
   const {userProfile} = useSelector(state => state?.user);
 
   return (
     <Tab.Navigator
       tabBar={props => <CustomCustomerTabBar {...props} />}
-      initialRouteName="LandingPage">
+      initialRouteName={loginToken ? 'CustomerHomePage' : 'LandingPage'}>
       <Tab.Screen
         name="LandingPage"
         component={LandingPage}
