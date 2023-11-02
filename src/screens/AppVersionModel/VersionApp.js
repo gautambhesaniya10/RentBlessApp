@@ -1,5 +1,5 @@
 import {Modal, StyleSheet, Text, View, Linking} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import CustomButton from '../../common/CustomButton';
 
 const VersionAppModel = ({modalVisible, versionData}) => {

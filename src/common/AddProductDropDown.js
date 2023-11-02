@@ -1,6 +1,5 @@
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React, {useState, useEffect} from 'react';
-import {DefaultTheme, TextInput} from 'react-native-paper';
 import {Controller} from 'react-hook-form';
 import {NativeBaseProvider, Select} from 'native-base';
 

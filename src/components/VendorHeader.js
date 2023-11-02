@@ -21,7 +21,6 @@ import {Divider} from 'react-native-paper';
 import {Avatar} from 'react-native-paper';
 import {logoImage} from '../common/AllLiveImageLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-// import auth from '@react-native-firebase/auth';
 
 const VendorHeader = () => {
   const toast = useToast();
@@ -53,14 +52,12 @@ const VendorHeader = () => {
     });
 
     setTimeout(() => {
-      // navigation.navigate('CustomerHomePage');
       navigation.navigate('Splash');
     }, 1000);
   };
 
   useEffect(() => {
     const getAccessToken = AsyncStorage.getItem('token');
-    // setAccessToken(getAccessToken);
     AsyncStorage.getItem('userId') && dispatch(loadUserProfileStart());
   }, []);
 
@@ -140,7 +137,6 @@ const styles = StyleSheet.create({
   mainDiv: {
     backgroundColor: '#151827',
     width: '100%',
-    // height: 70,
     paddingVertical: 10,
     justifyContent: 'center',
   },

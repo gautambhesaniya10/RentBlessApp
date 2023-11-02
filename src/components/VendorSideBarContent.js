@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {Divider} from 'react-native-paper';
@@ -53,8 +53,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     marginTop: 50,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#ccc',
   },
   logo: {
     width: 120,
@@ -69,9 +67,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 25,
   },
-  sideMainContainer: {
-    // paddingHorizontal: 30,
-  },
+  sideMainContainer: {},
   authUserMain: {
     flexDirection: 'row',
     gap: 15,
@@ -82,7 +78,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#151827',
     fontWeight: '600',
-    // paddingTop: 5,
     width: '75%',
   },
   userEmailText: {

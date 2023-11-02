@@ -1,10 +1,10 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {productLike} from '../../graphql/mutations/products';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 import {Avatar} from 'react-native-paper';
@@ -225,7 +225,6 @@ const styles = StyleSheet.create({
     height: 343,
     borderRadius: 8,
     elevation: 2,
-    // marginTop: 20,
     marginBottom: 15,
   },
   productNameText: {
@@ -298,8 +297,6 @@ const styles = StyleSheet.create({
     width: 100,
     backgroundColor: '#29977E',
     position: 'absolute',
-    // top: 6,
-    // right: 120,
     transform: [{rotate: '320deg'}],
     zIndex: 1,
     borderWidth: 5,

@@ -1,14 +1,7 @@
-import {
-  ActivityIndicator,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import CustomButton from '../common/CustomButton';
 import {Divider, ProgressBar} from 'react-native-paper';
-import {Image} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import StarRating from 'react-native-star-rating-widget';
 import {useNavigation} from '@react-navigation/native';
@@ -105,10 +98,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
                 </Text>
               </View>
             ))
-          : // <View style={{paddingVertical: 40}}>
-            //   <ActivityIndicator />
-            // </View>
-            ''}
+          : ''}
         {shopReviews?.length > 0 && (
           <Text style={styles.reBoText}>
             Last Review Updated on {formatDate(latestReview?.updatedAt)}
@@ -213,8 +203,6 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   supMain: {
-    // flexDirection: 'row',
-    // alignItems: 'center',
     marginTop: 8,
   },
   avgRatingMain: {

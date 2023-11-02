@@ -9,13 +9,10 @@ import {
 import CustomerTab from '../TabNavigation/CustomerTab';
 import SideBarContent from '../common/Customer/SideBarContent';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {Divider} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {userLogout} from '../redux/LoginUserProfileSlice/userSlice';
 import {useDispatch} from 'react-redux';
 import {useToast} from 'native-base';
-import LandingPage from '../screens/LandingPage/LandingPage';
-import LikeScreen from '../screens/Customer/pages/LikeScreen';
 
 const DrawerCustomer = () => {
   const navigation = useNavigation();
@@ -76,13 +73,6 @@ const DrawerCustomer = () => {
   };
   return (
     <Drawer.Navigator drawerContent={CustomDrawerContent}>
-      {/* <Drawer.Screen
-        name="LandingPage"
-        component={LandingPage}
-        options={{
-          headerShown: false,
-        }}
-      /> */}
       <Drawer.Screen
         name="Dashboard"
         component={CustomerTab}
@@ -90,13 +80,6 @@ const DrawerCustomer = () => {
           headerShown: false,
         }}
       />
-      {/* <Drawer.Screen
-        name="LikeScreen"
-        component={LikeScreen}
-        options={{
-          headerShown: false,
-        }}
-      /> */}
     </Drawer.Navigator>
   );
 };

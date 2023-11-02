@@ -89,7 +89,6 @@ const UpperFilter = ({
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          // paddingTop: 30,
         }}>
         <Text style={styles.productText}>
           {byShop ? `Shop (${shopsCount})` : `Product (${productsCount})`}
@@ -103,15 +102,7 @@ const UpperFilter = ({
                   {...triggerProps}
                   onPress={() => setIsOpenPopOver(true)}>
                   <View style={styles.sortFilMain}>
-                    {/* <Text
-                      style={[
-                        styles.latestText,
-                        {color: 'rgba(21, 24, 39, 0.40)'},
-                      ]}>
-                      Sort by:
-                    </Text> */}
                     <Text style={styles.latestText}>
-                      {/* {oldLatestValue === 'new' ? 'Latest' : 'Oldest'} */}
                       {byShop
                         ? GetSortByNameForShop(
                             shopsFiltersReducer?.sortFilters?.sortType
@@ -130,7 +121,6 @@ const UpperFilter = ({
             isOpen={isOpenPopOver}
             onClose={() => setIsOpenPopOver(!isOpenPopOver)}>
             <Popover.Content>
-              {/* <Popover.Arrow /> */}
               <View style={styles.radioTopMain}>
                 <RadioButton.Group
                   onValueChange={newValue => onChangeSortFilter(newValue)}
@@ -190,7 +180,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 5,
     alignItems: 'center',
-    // padding: 10,
     justifyContent: 'center',
     borderColor: 'rgba(21, 24, 39, 0.10)',
   },

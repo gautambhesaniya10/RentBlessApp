@@ -15,9 +15,7 @@ import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {locationIcon, logoImage} from '../common/AllLiveImageLink';
-import WebView from 'react-native-webview';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-// import auth from '@react-native-firebase/auth';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
@@ -56,7 +54,6 @@ const CustomerHeader = ({homeScreen}) => {
   };
 
   const retrieveLocalData = async () => {
-    // const loginType = await AsyncStorage.getItem('loginType');
     const Token = await AsyncStorage.getItem('token');
     setAccessToken(Token);
   };
@@ -91,7 +88,6 @@ const CustomerHeader = ({homeScreen}) => {
             <Icon name="bars" size={22} color="white" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LandingPage')}>
-            {/* <Text style={styles.leftText}>RENTBLESS</Text> */}
             <Image
               source={{
                 uri: logoImage,
@@ -123,7 +119,6 @@ const CustomerHeader = ({homeScreen}) => {
           />
         </View>
         {AccessToken ? (
-          // <TouchableOpacity>
           <View>
             <TouchableOpacity
               onPress={() => setLogoutTooltipVisible(!isLogoutTooltipVisible)}>
@@ -133,7 +128,6 @@ const CustomerHeader = ({homeScreen}) => {
                 backgroundColor="#29977E"
               />
             </TouchableOpacity>
-
             <Modal
               transparent={true}
               visible={isLogoutTooltipVisible}
@@ -169,7 +163,6 @@ const CustomerHeader = ({homeScreen}) => {
             </Modal>
           </View>
         ) : (
-          // </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate('LoginMainScreen')}>
             <Icon name="user-plus" size={22} color="white" />
@@ -186,8 +179,6 @@ const styles = StyleSheet.create({
   mainDiv: {
     backgroundColor: '#151827',
     width: '100%',
-    // height: 96,
-    // paddingTop: 20,
     paddingVertical: 10,
     position: 'relative',
   },

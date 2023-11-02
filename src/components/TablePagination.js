@@ -59,19 +59,6 @@ const TablePagination = ({
       );
     }
 
-    // paginationItems.unshift(
-    //   <TouchableOpacity
-    //     disabled={currentPage === 1 ? true : false}
-    //     style={[
-    //       paginationStyles.leftAngle,
-    //       {opacity: currentPage === 1 ? 0.5 : 1},
-    //     ]}
-    //     key="left-arrow"
-    //     onPress={() => handlePageClick(currentPage - 1)}>
-    //     <Icon name="angle-left" size={26} color="black" />
-    //   </TouchableOpacity>,
-    // );
-
     if (startPage > 1) {
       paginationItems.unshift(
         <Text style={paginationStyles.dotStale} key="ellipsis1">
@@ -105,19 +92,6 @@ const TablePagination = ({
         </TouchableOpacity>,
       );
     }
-
-    // paginationItems.push(
-    //   <TouchableOpacity
-    //     disabled={totalPages === currentPage ? true : false}
-    //     style={[
-    //       paginationStyles.rightAngle,
-    //       {opacity: totalPages === currentPage ? 0.5 : 1},
-    //     ]}
-    //     key="right-arrow"
-    //     onPress={() => handlePageClick(currentPage + 1)}>
-    //     <Icon name="angle-right" size={26} color="black" />
-    //   </TouchableOpacity>,
-    // );
 
     if (endPage < totalPages) {
       paginationItems.push(

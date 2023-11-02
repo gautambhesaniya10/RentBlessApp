@@ -1,11 +1,9 @@
-import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {FontStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useIsFocused, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {Divider} from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {Avatar} from 'react-native-paper';
@@ -150,7 +148,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#151827',
     fontWeight: '600',
-    // paddingTop: 5,
     width: '75%',
   },
   searchTextMain: {
@@ -182,7 +179,6 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     bottom: 0,
     position: 'absolute',
-    // height: '100%',
   },
   wishText: {
     color: '#151827',

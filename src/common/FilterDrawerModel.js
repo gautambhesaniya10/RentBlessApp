@@ -1,11 +1,4 @@
-import {
-  Dimensions,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Modal, StyleSheet, View} from 'react-native';
 import React from 'react';
 import FilterScreen from '../screens/FilterScreen/FilterScreen';
 
@@ -15,8 +8,6 @@ const FilterDrawerModel = ({
   setShowBottomLoader,
   showOnlyShopDetailPage,
 }) => {
-  const windowHeight = Dimensions.get('window').height;
-
   return (
     <Modal
       animationType="slide"
