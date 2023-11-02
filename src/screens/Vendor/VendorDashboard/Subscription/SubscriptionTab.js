@@ -23,14 +23,19 @@ const SubscriptionTab = () => {
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const [contactModalVisible, setContactModalVisible] = useState(false);
 
+  const FreeTrailProduct =
+    vendorShopDetails && vendorShopDetails?.shop_type === 'individual'
+      ? 10
+      : 30;
+
+  const FreeTrailDay =
+    vendorShopDetails && vendorShopDetails?.shop_type === 'individual'
+      ? parseInt(INDIVIDUAL_SHOP_PRODUCT_VISIBLE_DAYS)
+      : parseInt(SHOP_PRODUCT_VISIBLE_DAYS);
+
   const FreeTrialHandler = () => {
     const shopCreatedDate = new Date(Number(vendorShopDetails?.createdAt));
     const currentDate = new Date();
-
-    const FreeTrailDay =
-      vendorShopDetails?.shop_type === 'individual'
-        ? parseInt(INDIVIDUAL_SHOP_PRODUCT_VISIBLE_DAYS)
-        : parseInt(SHOP_PRODUCT_VISIBLE_DAYS);
 
     let threshold = new Date();
     threshold.setDate(threshold.getDate() - FreeTrailDay);
@@ -50,17 +55,11 @@ const SubscriptionTab = () => {
         style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={styles.mainContainer}>
           <Text style={styles.headerText}>
-            Transparent Pricing for Every Stage of Growth
-          </Text>
-          <Text style={styles.headerSecText}>
-            Choose the right plan for your business.
+            Choose the right plan for your business
           </Text>
           <View style={styles.boxMain}>
             <Text style={styles.topTitleText}>Free</Text>
-            <Text style={styles.bottomTitleText}>
-              Powerful essentials for small businesses
-            </Text>
-            <Text style={styles.topTitleText}>₹0 / Month</Text>
+            <Text style={styles.topTitleText}>₹0 / Year</Text>
             <Text style={styles.bottomTitleText}>
               Free access to upload products limits may apply
             </Text>
@@ -85,26 +84,27 @@ const SubscriptionTab = () => {
             <Text style={styles.listTitleText}>Free access to:</Text>
             <View style={styles.listMain}>
               <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>Limited Product Upload</Text>
+              <Text style={styles.listText}>
+                <Text style={{color: '#29977E', fontWeight: '600'}}>
+                  {FreeTrailProduct}
+                </Text>{' '}
+                Products Upload
+              </Text>
             </View>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>Limited Journeys</Text>
-            </View>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>Onboarding & 24/7 Support</Text>
-            </View>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>Limited User Permissions</Text>
-            </View>
+            {[
+              'Limited Product Analysis',
+              'Max 3 updates allowed per product',
+              'AI based Auto Product title, description not supported',
+              '24/7 Support',
+            ]?.map((item, index) => (
+              <View key={index} style={styles.listMain}>
+                <Icon name="check-circle" size={26} color="#29977E" />
+                <Text style={styles.listText}>{item}</Text>
+              </View>
+            ))}
           </View>
           <View style={styles.boxMain}>
             <Text style={styles.topTitleText}>Enterprise</Text>
-            <Text style={styles.bottomTitleText}>
-              Ultimate control and support for businesses
-            </Text>
             <Text style={styles.topTitleText}>Custom</Text>
             <Text style={styles.bottomTitleText}>
               Custom contract & additional features Volume-based discounting
@@ -120,22 +120,18 @@ const SubscriptionTab = () => {
               />
             </View>
             <Text style={styles.listTitleText}>Custom access to:</Text>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>More Advance Product Upload</Text>
-            </View>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>More Advanced Journeys</Text>
-            </View>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>Onboarding & 24/7 Support</Text>
-            </View>
-            <View style={styles.listMain}>
-              <Icon name="check-circle" size={26} color="#29977E" />
-              <Text style={styles.listText}>Advanced User Permissions</Text>
-            </View>
+            {[
+              'More Advanced Product Upload',
+              'More Advanced Product Analysis',
+              'Unlimited updates allowed per product',
+              'AI based Auto Product title, description supported',
+              '24/7 Support',
+            ]?.map((item, index) => (
+              <View key={index} style={styles.listMain}>
+                <Icon name="check-circle" size={26} color="#29977E" />
+                <Text style={styles.listText}>{item}</Text>
+              </View>
+            ))}
           </View>
         </View>
         <ContactSaleModel
@@ -157,15 +153,8 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 20,
     fontWeight: '600',
-    paddingBottom: 10,
+    paddingBottom: 20,
     textAlign: 'center',
-  },
-  headerSecText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: '400',
-    textAlign: 'center',
-    paddingBottom: 25,
   },
   topTitleText: {
     color: 'black',

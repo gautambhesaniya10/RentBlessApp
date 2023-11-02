@@ -67,6 +67,9 @@ const AddEditProduct = () => {
   const [error, setError] = useState({});
   const [loading, setLoading] = useState(false);
   const [richEditorShow, setRichEditorShow] = useState(false);
+  const [alertMsg, setAlertMsg] = useState('');
+  const scrollViewRef = useRef(null);
+  const alertViewRef = useRef(null);
 
   const richtext = useRef(null);
 
@@ -502,12 +505,21 @@ const AddEditProduct = () => {
           },
           error => {
             setLoading(false);
-            toast.show({
-              title: error.message,
-              placement: 'top',
-              backgroundColor: 'red.600',
-              variant: 'solid',
-            });
+            // toast.show({
+            //   title: error.message,
+            //   placement: 'top',
+            //   backgroundColor: 'red.600',
+            //   variant: 'solid',
+            // });
+            setAlertMsg(error.message);
+            if (scrollViewRef.current && alertViewRef.current) {
+              alertViewRef.current.measureLayout(
+                scrollViewRef.current.getInnerViewNode(),
+                (x, y, width, height) => {
+                  scrollViewRef.current.scrollTo({y, animated: true});
+                },
+              );
+            }
           },
         );
       }
@@ -596,6 +608,7 @@ const AddEditProduct = () => {
   return (
     <View style={{flex: 1}}>
       <ScrollView
+        ref={scrollViewRef}
         showsVerticalScrollIndicator={false}
         style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={styles.mainContainer}>
@@ -608,14 +621,33 @@ const AddEditProduct = () => {
             <Text style={styles.addBranchText}>
               {editableProductData ? 'Edit' : 'Add'} Product
             </Text>
-            <CustomSwitch
-              onClickLeft={() => onChangeRentLeftSwitch()}
-              onClickRight={() => onChangeRentRightSwitch()}
-              switchVisibility={productListingType}
-              textLeft="Rent"
-              textRight="Sell"
-              textName={true}
-            />
+          </View>
+
+          {alertMsg && (
+            <View ref={alertViewRef} style={styles.alertPromtDiv}>
+              <View style={styles.alertSubMain}>
+                <Icon name="exclamation-circle" size={22} color="red" />
+                <Text style={styles.alertMsgText}>{alertMsg}</Text>
+              </View>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('SubscriptionTab')}>
+                <Text style={styles.upgradeText}>Upgrade Your Plan</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={styles.priceSwitchMain}>
+            <Text style={styles.PriceVisibilityText}>Product Type : </Text>
+            <View>
+              <CustomSwitch
+                onClickLeft={() => onChangeRentLeftSwitch()}
+                onClickRight={() => onChangeRentRightSwitch()}
+                switchVisibility={productListingType}
+                textLeft="Rent"
+                textRight="Sell"
+                textName={true}
+              />
+            </View>
           </View>
           <View>
             <View style={{marginBottom: 15}}>
@@ -757,9 +789,9 @@ const AddEditProduct = () => {
             <View style={{marginBottom: 15}}>
               <AddProductDropDown
                 name="product_type"
-                label="Product Type"
+                label="Product Category"
                 rules={{
-                  required: 'Product Type is required *',
+                  required: 'Product Category is required *',
                 }}
                 listData={productTypeData}
                 control={control}
@@ -783,7 +815,7 @@ const AddEditProduct = () => {
                         <Select
                           selectedValue={value}
                           height="50"
-                          placeholder="Product Category"
+                          placeholder="Product Sub Category"
                           _selectedItem={{
                             bg: 'green.200',
                           }}
@@ -810,7 +842,7 @@ const AddEditProduct = () => {
                   }}
                   name="product_category"
                   rules={{
-                    required: 'Product Category is required *',
+                    required: 'Product Sub Category is required *',
                   }}
                 />
                 {errors?.product_category && (
@@ -1131,5 +1163,28 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
     fontWeight: '500',
+  },
+  alertPromtDiv: {
+    width: '100%',
+    backgroundColor: '#fdeded',
+    marginBottom: 20,
+    borderRadius: 8,
+    padding: 20,
+  },
+  alertSubMain: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  upgradeText: {
+    textAlign: 'center',
+    paddingTop: 2,
+    textDecorationLine: 'underline',
+    color: 'black',
+    fontWeight: '600',
+  },
+  alertMsgText: {
+    color: 'black',
+    fontWeight: '400',
   },
 });
