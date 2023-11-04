@@ -58,7 +58,7 @@ const ShopCard = ({shop}) => {
             <FastImage
               source={{
                 uri: shop?.shop_logo,
-                cache: FastImage.cacheControl.web,
+                // cache: FastImage.cacheControl.web,
               }}
               style={{width: 35, height: 35, borderRadius: 17}}
               resizeMode="cover"

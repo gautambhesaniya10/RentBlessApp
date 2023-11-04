@@ -82,6 +82,13 @@ const UpperFilter = ({
     }
   };
 
+  const getSortData = GetSortByName(
+    productsFiltersReducer?.sortFilters.sortType.selectedValue,
+  );
+  const getSortByShopData = GetSortByNameForShop(
+    shopsFiltersReducer?.sortFilters?.sortType.selectedValue,
+  );
+
   return (
     <View style={styles.mainContainer}>
       <View
@@ -102,18 +109,37 @@ const UpperFilter = ({
                   {...triggerProps}
                   onPress={() => setIsOpenPopOver(true)}>
                   <View style={styles.sortFilMain}>
-                    <Text style={styles.latestText}>
-                      {byShop
-                        ? GetSortByNameForShop(
-                            shopsFiltersReducer?.sortFilters?.sortType
-                              .selectedValue,
-                          )
-                        : GetSortByName(
-                            productsFiltersReducer?.sortFilters.sortType
-                              .selectedValue,
-                          )}
-                      <Icon name="angle-down" size={16} color="black" />
-                    </Text>
+                    {byShop ? (
+                      <Text
+                        style={[
+                          styles.latestText,
+                          {
+                            color:
+                              getSortByShopData === 'Sort by'
+                                ? 'gray'
+                                : '#151827',
+                            fontWeight:
+                              getSortByShopData === 'Sort by' ? '600' : '700',
+                          },
+                        ]}>
+                        {byShop ? getSortByShopData : getSortData}
+                      </Text>
+                    ) : (
+                      <Text
+                        style={[
+                          styles.latestText,
+                          {
+                            color:
+                              getSortData === 'Sort by' ? 'gray' : '#151827',
+                            fontWeight:
+                              getSortData === 'Sort by' ? '600' : '700',
+                          },
+                        ]}>
+                        {byShop ? getSortByShopData : getSortData}
+                      </Text>
+                    )}
+
+                    <Icon name="angle-down" size={16} color="black" />
                   </View>
                 </Button>
               );
@@ -184,9 +210,9 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(21, 24, 39, 0.10)',
   },
   latestText: {
-    color: '#151827',
+    // color: 'gray',
     fontSize: 14,
-    fontWeight: '700',
+    // fontWeight: '600',
     fontFamily: FontStyle,
   },
   radioTopMain: {

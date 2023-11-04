@@ -322,7 +322,7 @@ const HomePage = () => {
             />
           </View>
           <View style={styles.mainContainer}>
-            <View style={{paddingHorizontal: 0, paddingTop: 5}}>
+            <View>
               <UpperFilter
                 byShop={byShop}
                 setShowBottomLoader={setShowBottomLoader}
@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginBottom: 30,
-    marginTop: 10,
+    marginTop: 4,
     justifyContent: 'space-between',
     alignSelf: 'center',
     width: '100%',

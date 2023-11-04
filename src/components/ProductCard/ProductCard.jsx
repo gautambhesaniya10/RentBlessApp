@@ -128,7 +128,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
               <FastImage
                 source={{
                   uri: ProductImages[0],
-                  cache: FastImage.cacheControl.web,
+                  // cache: FastImage.cacheControl.web,
                 }}
                 style={{
                   height: '100%',
@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     backgroundColor: 'white',
     // width: '47%',
-    height: 343,
+    height: 335,
     borderRadius: 8,
     elevation: 2,
     marginBottom: 15,
@@ -230,9 +230,9 @@ const styles = StyleSheet.create({
   productNameText: {
     color: '#151827',
     fontWeight: '600',
-    fontSize: 14,
-    padding: 8,
-    marginTop: 4,
+    fontSize: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
   },
   shopNameText: {
     color: 'rgba(21, 24, 39, 0.40)',
@@ -246,7 +246,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     marginLeft: 8,
-    marginTop: 6,
     paddingVertical: 4,
   },
   heartIcon: {

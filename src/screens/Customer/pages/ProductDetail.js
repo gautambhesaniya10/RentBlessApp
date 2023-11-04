@@ -429,7 +429,7 @@ const ProductDetail = () => {
                 />
               </TouchableOpacity>
             </View>
-            <Divider bold={true} style={{marginBottom: 16}} />
+            <Divider bold={true} style={{marginVertical: 8}} />
 
             {productDetails?.data?.product?.data?.product_price_visible && (
               <View style={styles.priceMainDiv}>
@@ -460,16 +460,8 @@ const ProductDetail = () => {
               <RenderHTML
                 contentWidth={300}
                 source={{
-                  html: readMore
-                    ? productDetails?.data?.product?.data?.product_description
-                    : productDetails?.data?.product?.data?.product_description?.slice(
-                        0,
-                        350,
-                      ) +
-                      (productDetails?.data?.product?.data?.product_description
-                        ?.length > 350
-                        ? '...'
-                        : ' '),
+                  html: productDetails?.data?.product?.data
+                    ?.product_description,
                 }}
                 tagsStyles={{
                   p: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
@@ -483,17 +475,9 @@ const ProductDetail = () => {
                   b: {color: 'rgba(21, 24, 39, 0.56)', fontSize: 14},
                 }}
               />
-              {productDetails?.data?.product?.data?.product_description
-                ?.length > 350 && (
-                <TouchableOpacity onPress={() => setReadMore(!readMore)}>
-                  <Text style={styles.readMoreStyle}>
-                    {readMore ? 'read less' : 'read more'}
-                  </Text>
-                </TouchableOpacity>
-              )}
             </View>
             <Text style={styles.aboutNameText}>Item Details</Text>
-            <Text style={[styles.aboutText, {paddingBottom: 12}]}>
+            <Text style={[styles.aboutText, {paddingBottom: 6}]}>
               Category :{' '}
               <Text style={{color: '#151827'}}>
                 {
@@ -621,9 +605,7 @@ const ProductDetail = () => {
                         ?.manager_name
                     }
                   </Text>
-                  <Text style={[styles.modelTitleName, {paddingLeft: 60}]}>
-                    - Manager
-                  </Text>
+
                   <Text style={{color: 'rgba(21, 24, 39, 0.56)'}}>
                     {
                       productDetails?.data?.product?.data?.branchInfo
@@ -758,7 +740,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingBottom: 16,
   },
   aboutNameText: {
     color: '#151827',
@@ -854,14 +835,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: FontStyle,
   },
-  readMoreStyle: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: '600',
-    paddingBottom: 10,
-    paddingLeft: 10,
-    marginTop: -10,
-  },
+
   priceMainDiv: {
     paddingBottom: 8,
     flexDirection: 'row',
@@ -870,7 +844,7 @@ const styles = StyleSheet.create({
   },
   finalPriceText: {
     color: 'black',
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
   },
   productPriceText: {
@@ -881,7 +855,7 @@ const styles = StyleSheet.create({
   },
   percentageText: {
     color: '#29977E',
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '600',
   },
 });
