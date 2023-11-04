@@ -26,7 +26,7 @@ const ShopCard = ({shop}) => {
             <FastImage
               source={{
                 uri: shop?.shop_images[0]?.links,
-                cache: FastImage.cacheControl.web,
+                // cache: FastImage.cacheControl.web,
               }}
               style={{
                 height: 128,
