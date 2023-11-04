@@ -121,7 +121,7 @@ const SignUp = () => {
       },
       error => {
         console.log('eeeee', error);
-        handleAfterSignUpError(error);
+        handleAfterSignUpError(error.message);
       },
     );
   };
