@@ -235,7 +235,7 @@ const ProductDetail = () => {
               uri: item?.image,
               cache: FastImage.cacheControl.web,
             }}
-            resizeMode="stretch"
+            resizeMode="cover"
           />
         ) : (
           item?.video && (
