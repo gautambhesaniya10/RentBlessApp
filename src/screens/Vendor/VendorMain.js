@@ -1,18 +1,30 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
 import ShopSetUp from './shopSetup/ShopSetUp';
 import MainDashboard from './VendorDashboard/MainDashboard';
 import {checkInternetConnectivity} from '../../config/CheckInternetConnectivity';
 import NoInternetScreen from '../NoInternetScreen';
+import {useDispatch, useSelector} from 'react-redux';
+import {ActivityIndicator} from 'react-native-paper';
+import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
 
 const VendorMain = () => {
-  const storedValue = AsyncStorage.getItem('userHaveAnyShop');
+  const dispatch = useDispatch();
+  // const storedValue = AsyncStorage.getItem('userHaveAnyShop');
   const checkInternetStatus = checkInternetConnectivity();
+  const {userProfile} = useSelector(state => state?.user);
+
+  useEffect(() => {
+    dispatch(loadUserProfileStart());
+  }, []);
 
   return checkInternetStatus ? (
-    storedValue ? (
+    userProfile?.userHaveAnyShop ? (
       <MainDashboard />
+    ) : userProfile?.userHaveAnyShop === undefined ? (
+      <View style={styles.activityStyle}>
+        <ActivityIndicator color="#29977E" />
+      </View>
     ) : (
       <ShopSetUp />
     )
@@ -23,4 +35,10 @@ const VendorMain = () => {
 
 export default VendorMain;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  activityStyle: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

@@ -2,9 +2,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Image,
-  TouchableOpacity,
   ScrollView,
   BackHandler,
 } from 'react-native';
@@ -18,9 +16,6 @@ import {useForm} from 'react-hook-form';
 import ShopSetUpScreenOne from './ShopSetUpScreenOne';
 import ShopSetUpScreenTwo from './ShopSetUpScreenTwo';
 import ShopSetUpScreenThree from './ShopSetUpScreenThree';
-import {SingleImageUploadFile} from '../../../services/SingleImageUploadFile';
-import {MultipleImageUploadFile} from '../../../services/MultipleImageUploadFile';
-import {VideoUploadFile} from '../../../services/VideoUploadFile';
 import {shopRegistration} from '../../../graphql/mutations/shops';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {setShopRegisterId} from '../../../redux/LoginUserProfileSlice/userSlice';
@@ -243,8 +238,8 @@ const ShopSetUp = () => {
           ...(subBranch.length > 0 ? subBranch?.map(returnSubBranchData) : []),
         ],
       }).then(
-        res => {
-          AsyncStorage.setItem('userHaveAnyShop', JSON.stringify('true'));
+        async res => {
+          await AsyncStorage.setItem('userHaveAnyShop', JSON.stringify('true'));
           dispatch(setShopRegisterId(res.data.createShop.shopInfo.id));
           setLoading(false);
           toast.show({

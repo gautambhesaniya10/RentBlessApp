@@ -6,7 +6,7 @@ export const loadUserProfileStart = createAsyncThunk(
   'user/fetchUser',
   async () => {
     const response = await getUserProfile();
-    AsyncStorage.setItem(
+    await AsyncStorage.setItem(
       'userHaveAnyShop',
       JSON.stringify(response?.data?.user?.userHaveAnyShop),
     );
