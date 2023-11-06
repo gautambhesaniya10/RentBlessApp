@@ -208,18 +208,19 @@ const ShopIndividual = () => {
   }, [isAuthenticate, shopId, userProfile]);
 
   useEffect(() => {
-    getShopDetailFromApi();
+    shopId && getShopDetailFromApi();
   }, [shopId]);
 
   useEffect(() => {
-    dispatch(
-      changeAppliedProductsFilters({
-        key: 'shopId',
-        value: {
-          selectedValue: [shopId],
-        },
-      }),
-    );
+    shopId &&
+      dispatch(
+        changeAppliedProductsFilters({
+          key: 'shopId',
+          value: {
+            selectedValue: [shopId],
+          },
+        }),
+      );
   }, [dispatch, shopId]);
 
   useEffect(() => {

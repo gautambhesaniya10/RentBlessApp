@@ -16,6 +16,7 @@ import {useDispatch} from 'react-redux';
 import {locationIcon} from '../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {capitalizeString} from '../../common/CapitalizeString';
 
 const FeaturedVendors = ({shop}) => {
   const navigation = useNavigation();
@@ -56,7 +57,13 @@ const FeaturedVendors = ({shop}) => {
       {shopData?.length > 0 ? (
         <View style={styles.featuredMain}>
           {shopData?.map((shop, index) => (
-            <View style={styles.mainContainer}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('ShopIndividual', {
+                  state: {shopId: shop?.id},
+                })
+              }
+              style={styles.mainContainer}>
               <TouchableOpacity
                 disabled
                 onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
@@ -71,7 +78,7 @@ const FeaturedVendors = ({shop}) => {
                     }}
                     source={{
                       uri: shop?.shop_images[0]?.links,
-                      cache: FastImage.cacheControl.web,
+                      // cache: FastImage.cacheControl.web,
                     }}
                   />
                 ) : (
@@ -91,18 +98,12 @@ const FeaturedVendors = ({shop}) => {
                   position: 'absolute',
                   bottom: 0,
                   width: '100%',
-                }}
-                //   onPress={() =>
-                //     navigation.navigate('ShopIndividual', {
-                //       state: {shopId: shop?.id},
-                //     })
-                //   }
-              >
+                }}>
                 {shop?.shop_logo ? (
                   <FastImage
                     source={{
                       uri: shop?.shop_logo,
-                      cache: FastImage.cacheControl.web,
+                      // cache: FastImage.cacheControl.web,
                     }}
                     style={{
                       width: 50,
@@ -125,7 +126,7 @@ const FeaturedVendors = ({shop}) => {
                 )}
                 <View>
                   <Text style={styles.shopNameText} numberOfLines={1}>
-                    {shop.shop_name}
+                    {capitalizeString(shop?.shop_name)}
                   </Text>
                   <View
                     style={{
@@ -170,7 +171,7 @@ const FeaturedVendors = ({shop}) => {
                   </View>
                 </View>
               </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           ))}
         </View>
       ) : (

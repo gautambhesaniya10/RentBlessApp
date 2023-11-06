@@ -9,6 +9,7 @@ import {useToast} from 'native-base';
 import {productLikeToggle} from '../../redux/LoginUserProfileSlice/userSlice';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {capitalizeString} from '../../common/CapitalizeString';
 
 const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
@@ -115,9 +116,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
       <View style={[styles.mainContainer]}>
         <View style={{position: 'relative'}}>
           <TouchableOpacity
-            disabled={landingPageCardWith ? true : false}
             onPress={() =>
-              !landingPageCardWith &&
               navigation.navigate('ProductDetail', {
                 state: {
                   productId: product?.id,
@@ -136,7 +135,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
                   borderTopLeftRadius: 8,
                   borderTopRightRadius: 8,
                 }}
-                resizeMode="stretch"
+                resizeMode="cover"
               />
             </View>
           </TouchableOpacity>
@@ -152,9 +151,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
         </View>
 
         <TouchableOpacity
-          disabled={landingPageCardWith ? true : false}
           onPress={() =>
-            !landingPageCardWith &&
             navigation.navigate('ProductDetail', {
               state: {
                 productId: product?.id,
@@ -162,15 +159,13 @@ const ProductCard = ({product, landingPageCardWith}) => {
             })
           }>
           <Text style={styles.productNameText} numberOfLines={1}>
-            {product?.product_name}
+            {capitalizeString(product?.product_name)}
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          disabled={landingPageCardWith ? true : false}
           onPress={() =>
-            !landingPageCardWith &&
             navigation.navigate('ShopIndividual', {
-              state: {shopId: product?.branchInfo?.shop_info?.id},
+              state: {shopId: product?.branchInfo?.shop_id},
             })
           }>
           <View style={styles.shopMain}>
@@ -192,7 +187,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
             )}
 
             <Text style={styles.shopNameText} numberOfLines={1}>
-              {product?.branchInfo?.shop_info?.shop_name}
+              {capitalizeString(product?.branchInfo?.shop_info?.shop_name)}
             </Text>
           </View>
         </TouchableOpacity>

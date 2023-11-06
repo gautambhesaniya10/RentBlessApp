@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {locationIcon} from '../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
+import {capitalizeString} from '../../common/CapitalizeString';
 
 const ShopCard = ({shop}) => {
   const navigation = useNavigation();
@@ -73,7 +74,7 @@ const ShopCard = ({shop}) => {
 
           <View>
             <Text style={styles.shopNameText} numberOfLines={1}>
-              {shop.shop_name}
+              {capitalizeString(shop?.shop_name)}
             </Text>
             <View
               style={{
