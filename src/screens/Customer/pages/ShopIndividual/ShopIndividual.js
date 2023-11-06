@@ -11,7 +11,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../../CommonStyle';
 import {useIsFocused, useNavigation, useRoute} from '@react-navigation/native';
-import {useToast} from 'native-base';
+import {Skeleton, useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../../../common/CustomButton';
@@ -273,10 +273,14 @@ const ShopIndividual = () => {
           ) : (
             <View
               style={{
-                backgroundColor: '#00000031',
                 width: '100%',
-                height: 160,
-              }}></View>
+              }}>
+              <Skeleton
+                startColor="#00000031"
+                endColor="gray.200"
+                height={160}
+              />
+            </View>
           )}
 
           <TouchableOpacity
@@ -296,11 +300,19 @@ const ShopIndividual = () => {
                     }}
                     resizeMode="cover"
                   />
-                ) : (
+                ) : shopDetails?.shop_name ? (
                   <Avatar.Text
                     size={64}
                     label={shopDetails?.shop_name?.charAt(0)}
                     backgroundColor="#29977E"
+                  />
+                ) : (
+                  <Skeleton
+                    startColor="#29977E"
+                    endColor="#00000031"
+                    height={100}
+                    width={100}
+                    borderRadius={50}
                   />
                 )}
               </View>

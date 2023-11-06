@@ -26,7 +26,7 @@ import {
   productLikeToggle,
   shopFollowToggle,
 } from '../../../redux/LoginUserProfileSlice/userSlice';
-import {useToast} from 'native-base';
+import {Skeleton, useToast} from 'native-base';
 import {shopFollow} from '../../../graphql/mutations/shops';
 import {Modal} from 'react-native';
 import {Share} from 'react-native';
@@ -307,13 +307,22 @@ const ProductDetail = () => {
                 }}
                 style={{width: 42, height: 42, borderRadius: 22}}
               />
-            ) : (
+            ) : productDetails?.data?.product?.data?.branchInfo?.shop_info
+                ?.shop_name ? (
               <Avatar.Text
                 size={42}
                 label={productDetails?.data?.product?.data?.branchInfo?.shop_info?.shop_name?.charAt(
                   0,
                 )}
                 backgroundColor="#29977E"
+              />
+            ) : (
+              <Skeleton
+                startColor="#00000031"
+                endColor="gray.200"
+                height={42}
+                width={42}
+                borderRadius={22}
               />
             )}
           </TouchableOpacity>
@@ -380,14 +389,22 @@ const ProductDetail = () => {
         <View style={{position: 'relative'}}>
           <View style={styles.carouselMain}>
             <View style={{position: 'relative'}}>
-              <Carousel
-                data={TopCarouselData}
-                renderItem={CarouselRenderItem}
-                sliderWidth={screenWidth}
-                itemWidth={screenWidth}
-                onSnapToItem={index => setActiveSlide(index)}
-                {...autoplayConfig}
-              />
+              {productDetails?.data?.product?.data?.product_image ? (
+                <Carousel
+                  data={TopCarouselData}
+                  renderItem={CarouselRenderItem}
+                  sliderWidth={screenWidth}
+                  itemWidth={screenWidth}
+                  onSnapToItem={index => setActiveSlide(index)}
+                  {...autoplayConfig}
+                />
+              ) : (
+                <Skeleton
+                  startColor="#00000031"
+                  endColor="gray.200"
+                  height={460}
+                />
+              )}
               <View style={styles.sliderPagination}>
                 <Pagination
                   dotsLength={TopCarouselData?.length}
@@ -735,11 +752,13 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: '700',
     fontFamily: FontStyle,
+    width: '90%',
   },
   proNameMain: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '100%',
   },
   aboutNameText: {
     color: '#151827',
