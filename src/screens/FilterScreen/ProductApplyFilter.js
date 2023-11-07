@@ -11,6 +11,7 @@ import {Button} from 'react-native-paper';
 import {arraysHaveSameValues} from '../../utils';
 import ProductTypeTab from './ProductFilterSubTab/ProductTypeTab';
 import ProductPriceTab from './ProductFilterSubTab/ProductPriceTab';
+import {changeAppliedShopProductsFilters} from '../../redux/ShopProductFilter/ShopProductFilterSlice';
 
 const ProductApplyFilter = ({
   handleFilterModelClose,
@@ -24,6 +25,14 @@ const ProductApplyFilter = ({
   const productsFiltersReducer = useSelector(
     state => state?.productsFiltersReducer,
   );
+
+  const shopProductsFiltersReducer = useSelector(
+    state => state?.shopProductsFiltersReducer,
+  );
+
+  const selectedFilter = showOnlyShopDetailPage
+    ? shopProductsFiltersReducer?.appliedShopProductsFilters
+    : productsFiltersReducer?.appliedProductsFilters;
 
   const [selectedCategory, setSelectedCategory] = useState('Types');
 
@@ -41,7 +50,11 @@ const ProductApplyFilter = ({
 
   const [selectedTypeData, setSelectedTypeData] = useState('');
 
-  const [selectedPriceData, setSelectedPriceData] = useState({});
+  const priceDefaultData = {
+    min: 0,
+    max: 0,
+  };
+  const [selectedPriceData, setSelectedPriceData] = useState(priceDefaultData);
 
   const [clearTextShow, setClearTextShow] = useState(false);
   const [clearAllBtnShow, setClearAllBtnShow] = useState(false);
@@ -49,33 +62,39 @@ const ProductApplyFilter = ({
   const [applyBtnDisable, setApplyBtnDisable] = useState(false);
 
   useEffect(() => {
-    setApplyBtnDisable(
-      arraysHaveSameValues(
-        [
-          ...categoryId,
-          ...selectedShopData,
-          ...selectedColorData,
-          ...[selectedTypeData],
-          ...[selectedPriceData],
-        ],
-        [
-          ...productsFiltersReducer?.appliedProductsFilters?.categoryId
-            ?.selectedValue,
-          ...productsFiltersReducer?.appliedProductsFilters?.shopId
-            .selectedValue,
-          ...productsFiltersReducer?.appliedProductsFilters?.productColor
-            .selectedValue,
-          ...[
-            productsFiltersReducer?.appliedProductsFilters?.productListingType
-              .selectedValue,
-          ],
-          ...[
-            productsFiltersReducer?.appliedProductsFilters?.productPrice
-              .selectedValue,
-          ],
-        ],
-      ),
+    const typeMatch = arraysHaveSameValues(
+      [selectedTypeData],
+      [selectedFilter?.productListingType.selectedValue],
     );
+
+    const categoriesMatch = arraysHaveSameValues(
+      categoryId,
+      selectedFilter?.categoryId?.selectedValue,
+    );
+
+    const shopMatch = arraysHaveSameValues(
+      selectedShopData,
+      productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue,
+    );
+
+    const colorsMatch = arraysHaveSameValues(
+      selectedColorData,
+      selectedFilter?.productColor.selectedValue,
+    );
+    const priceMatch = areObjectsEqual(
+      selectedPriceData,
+      selectedFilter?.productPrice.selectedValue,
+    );
+
+    if (showOnlyShopDetailPage) {
+      const areArraysEqual =
+        categoriesMatch && colorsMatch && typeMatch && priceMatch;
+      setApplyBtnDisable(areArraysEqual);
+    } else {
+      const areArraysEqual =
+        categoriesMatch && colorsMatch && typeMatch && priceMatch && shopMatch;
+      setApplyBtnDisable(areArraysEqual);
+    }
   }, [
     categoryId,
     selectedShopData,
@@ -83,11 +102,6 @@ const ProductApplyFilter = ({
     selectedTypeData,
     selectedPriceData,
   ]);
-
-  const priceDefaultData = {
-    min: 0,
-    max: 0,
-  };
 
   function areObjectsEqual(objA, objB) {
     const keysA = Object.keys(objA);
@@ -207,6 +221,10 @@ const ProductApplyFilter = ({
   };
 
   const handleApplyProductFilter = () => {
+    const changeFiltersAction = showOnlyShopDetailPage
+      ? changeAppliedShopProductsFilters
+      : changeAppliedProductsFilters;
+
     [
       {name: 'categoryId', value: categoryId},
       {name: 'productColor', value: selectedColorData},
@@ -215,7 +233,7 @@ const ProductApplyFilter = ({
       {name: 'productPrice', value: selectedPriceData},
     ]?.map(item =>
       dispatch(
-        changeAppliedProductsFilters({
+        changeFiltersAction({
           key: item?.name,
           value: {
             selectedValue: item?.value,
@@ -227,68 +245,56 @@ const ProductApplyFilter = ({
   };
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters &&
+    selectedFilter &&
       setSelectedMenCat(
-        productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+        selectedFilter?.categoryId?.selectedValue
           .map(itm => categories?.find(i => i.id === itm))
           .filter(ele => ele.category_type === 'Men')
           .map(i => i?.category_name),
       );
     setMenSelectedData(
-      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+      selectedFilter?.categoryId?.selectedValue
         .map(itm => categories?.find(i => i.id === itm))
         .filter(ele => ele.category_type === 'Men')
         .map(i => i?.id),
     );
 
     setSelectedWomenCat(
-      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+      selectedFilter?.categoryId?.selectedValue
         .map(itm => categories?.find(i => i.id === itm))
         .filter(ele => ele.category_type === 'Women')
         .map(i => i?.category_name),
     );
     setWomenSelectedData(
-      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue
+      selectedFilter?.categoryId?.selectedValue
         .map(itm => categories?.find(i => i.id === itm))
         .filter(ele => ele.category_type === 'Women')
         .map(i => i?.id),
     );
-  }, [categories, productsFiltersReducer?.appliedProductsFilters]);
+  }, [categories, selectedFilter]);
 
   useEffect(() => {
     setCategoryId([...menSelectedData, ...womenSelectedData]);
   }, [menSelectedData, setCategoryId, womenSelectedData]);
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters &&
-      setSelectedShopData(
-        productsFiltersReducer?.appliedProductsFilters?.shopId.selectedValue,
-      );
-  }, [productsFiltersReducer?.appliedProductsFilters]);
+    selectedFilter && setSelectedShopData(selectedFilter?.shopId.selectedValue);
+  }, [selectedFilter]);
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters &&
-      setSelectedTypeData(
-        productsFiltersReducer?.appliedProductsFilters.productListingType
-          .selectedValue,
-      );
-  }, [productsFiltersReducer?.appliedProductsFilters]);
+    selectedFilter &&
+      setSelectedTypeData(selectedFilter.productListingType.selectedValue);
+  }, [selectedFilter]);
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters &&
-      setSelectedPriceData(
-        productsFiltersReducer?.appliedProductsFilters.productPrice
-          .selectedValue,
-      );
-  }, [productsFiltersReducer?.appliedProductsFilters]);
+    selectedFilter &&
+      setSelectedPriceData(selectedFilter.productPrice.selectedValue);
+  }, [selectedFilter]);
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters &&
-      setSelectedColorData(
-        productsFiltersReducer?.appliedProductsFilters?.productColor
-          .selectedValue,
-      );
-  }, [productsFiltersReducer?.appliedProductsFilters]);
+    selectedFilter &&
+      setSelectedColorData(selectedFilter?.productColor.selectedValue);
+  }, [selectedFilter]);
 
   return (
     <View style={{position: 'relative'}}>

@@ -9,6 +9,7 @@ import ProductSlice from './ProductSlice/ProductSlice';
 import ShopSlice from './ShopSlice/ShopSlice';
 import AppVersionSlice from './AppVersionSlice/AppVersionSlice';
 import ShopConfigurationsSlice from './ShopConfigurationsSlice/ShopConfigurationsSlice';
+import ShopProductFilterSlice from './ShopProductFilter/ShopProductFilterSlice';
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     categories: CategoryListSlice,
     areaLists: AreaListSlice,
     productsFiltersReducer: ProductFilterSlice,
+    shopProductsFiltersReducer: ShopProductFilterSlice,
     shopsFiltersReducer: ShopFilterSlice,
     productsData: ProductSlice,
     shops: ShopSlice,

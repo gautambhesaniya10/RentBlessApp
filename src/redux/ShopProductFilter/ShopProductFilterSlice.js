@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-const productFilterSlice = createSlice({
-  name: 'productFilter',
+const shopProductFilterSlice = createSlice({
+  name: 'ShopProductFilter',
   initialState: {
-    appliedProductsFilters: {
+    appliedShopProductsFilters: {
       categoryId: {
         selectedValue: [],
       },
@@ -26,35 +26,34 @@ const productFilterSlice = createSlice({
         selectedValue: '',
       },
     },
-    sortFilters: {
+    shopSortFilters: {
       sortType: {selectedValue: ''},
     },
-    searchBarData: '',
   },
   reducers: {
-    changeAppliedProductsFilters: (state, action) => {
+    changeAppliedShopProductsFilters: (state, action) => {
       return {
         ...state,
-        appliedProductsFilters: {
-          ...state.appliedProductsFilters,
+        appliedShopProductsFilters: {
+          ...state.appliedShopProductsFilters,
           [`${action.payload.key}`]: {
             ...action?.payload.value,
           },
         },
       };
     },
-    changeSortProductsFilters: (state, action) => {
+    changeSortShopProductsFilters: (state, action) => {
       return {
         ...state,
-        sortFilters: {
-          ...state.sortFilters,
+        shopSortFilters: {
+          ...state.shopSortFilters,
           [`${action.payload.key}`]: action.payload.value,
         },
       };
     },
-    emptyProductFilter: (state, action) => {
+    emptyShopProductFilter: (state, action) => {
       return {
-        appliedProductsFilters: {
+        appliedShopProductsFilters: {
           categoryId: {
             selectedValue: [],
           },
@@ -77,10 +76,9 @@ const productFilterSlice = createSlice({
             selectedValue: '',
           },
         },
-        sortFilters: {
+        shopSortFilters: {
           sortType: {selectedValue: ''},
         },
-        searchBarData: '',
       };
     },
   },
@@ -88,8 +86,8 @@ const productFilterSlice = createSlice({
 });
 
 export const {
-  changeAppliedProductsFilters,
-  changeSortProductsFilters,
-  emptyProductFilter,
-} = productFilterSlice.actions;
-export default productFilterSlice.reducer;
+  changeAppliedShopProductsFilters,
+  changeSortShopProductsFilters,
+  emptyShopProductFilter,
+} = shopProductFilterSlice.actions;
+export default shopProductFilterSlice.reducer;

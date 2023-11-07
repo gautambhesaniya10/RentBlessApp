@@ -33,6 +33,7 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../components/CustomSwitch';
+import {useFocusEffect} from '@react-navigation/native';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -155,10 +156,16 @@ const HomePage = () => {
   //   dispatch(emptyProductFilter());
   // }, [IsFocused]);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //   }, []),
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      getAllProducts();
+    }, [
+      dispatch,
+      productsFiltersReducer.appliedProductsFilters,
+      productsFiltersReducer.sortFilters,
+      productsFiltersReducer.searchBarData,
+    ]),
+  );
 
   const handleProductScroll = event => {
     setShowBottomLoader(true);

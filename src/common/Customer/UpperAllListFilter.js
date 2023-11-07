@@ -10,12 +10,19 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useDispatch, useSelector} from 'react-redux';
 import {changeAppliedProductsFilters} from '../../redux/ProductFilter/ProductFilterSlice';
 import {changeAppliedShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
+import {changeAppliedShopProductsFilters} from '../../redux/ShopProductFilter/ShopProductFilterSlice';
 
 const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   const dispatch = useDispatch();
+
   const productsFiltersReducer = useSelector(
     state => state?.productsFiltersReducer,
   );
+
+  const shopProductsFiltersReducer = useSelector(
+    state => state?.shopProductsFiltersReducer,
+  );
+
   const {categories} = useSelector(state => state?.categories);
   const {allShopsLists, shopsCount} = useSelector(state => state?.shops);
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
@@ -36,15 +43,19 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState([]);
 
-  const passValueForProduct = itm => {
+  const passValueForSingleProduct = itm => {
+    const selectedFilter = showOnlyShopDetailPage
+      ? shopProductsFiltersReducer?.appliedProductsFilters
+      : productsFiltersReducer?.appliedProductsFilters;
+
     if (itm.type === 'searchBarData' || itm.type === 'productListingType') {
       return '';
     } else if (itm.type === 'productPrice') {
       return {min: 0, max: 0};
     } else {
-      return productsFiltersReducer?.appliedProductsFilters[
-        itm.type
-      ]?.selectedValue?.filter(item => item !== itm.value);
+      return selectedFilter[itm.type]?.selectedValue?.filter(
+        item => item !== itm.value,
+      );
     }
   };
 
@@ -65,11 +76,14 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
         }),
       );
     } else {
+      const changeFiltersAction = showOnlyShopDetailPage
+        ? changeAppliedShopProductsFilters
+        : changeAppliedProductsFilters;
       dispatch(
-        changeAppliedProductsFilters({
+        changeFiltersAction({
           key: itm.type,
           value: {
-            selectedValue: passValueForProduct(itm),
+            selectedValue: passValueForSingleProduct(itm),
           },
         }),
       );
@@ -79,25 +93,31 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   useEffect(() => {
     setSelectedProductFilters([
       ...selectedCategories,
-      ...(showOnlyShopDetailPage ? [] : selectedShops),
+      ...selectedShops,
       ...selectedColors,
       ...selectedPrices,
       ...selectedProductListingType,
       ...searchProducts,
     ]);
   }, [
+    searchProducts,
     selectedCategories,
+    selectedPrices,
+    selectedProductListingType,
     selectedColors,
     selectedShops,
     showOnlyShopDetailPage,
-    selectedPrices,
-    selectedProductListingType,
-    searchProducts,
   ]);
 
   useEffect(() => {
-    const selectedCategoryIds =
-      productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue;
+    const selectedCategoryIds = showOnlyShopDetailPage
+      ? shopProductsFiltersReducer?.appliedShopProductsFilters?.categoryId
+          ?.selectedValue
+      : productsFiltersReducer?.appliedProductsFilters?.categoryId
+          ?.selectedValue;
+
+    // const selectedCategoryIds =
+    //   productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue;
 
     const selectedCategories = categories?.filter(category =>
       selectedCategoryIds?.includes(category?.id),
@@ -111,13 +131,20 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
 
     setSelectedCategories(mappedCategories);
   }, [
+    showOnlyShopDetailPage,
     categories,
-    productsFiltersReducer.appliedProductsFilters.categoryId.selectedValue,
+    shopProductsFiltersReducer?.appliedShopProductsFilters?.categoryId
+      ?.selectedValue,
+    productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue,
   ]);
 
   useEffect(() => {
-    const selectedShopIds =
-      productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue;
+    const selectedShopIds = showOnlyShopDetailPage
+      ? []
+      : productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue;
+
+    // const selectedShopIds =
+    //   productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue;
 
     const selectedShopsData = allShopsLists?.data.filter(shop =>
       selectedShopIds?.includes(shop.id),
@@ -133,20 +160,27 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   }, [
     productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue,
     allShopsLists?.data,
+    showOnlyShopDetailPage,
   ]);
 
   useEffect(() => {
     setSelectedColors(
-      productsFiltersReducer?.appliedProductsFilters?.productColor?.selectedValue?.map(
-        color => ({
-          type: 'productColor',
-          label: color,
-          value: color,
-        }),
-      ),
+      (showOnlyShopDetailPage
+        ? shopProductsFiltersReducer?.appliedShopProductsFilters.productColor
+            .selectedValue
+        : productsFiltersReducer?.appliedProductsFilters.productColor
+            .selectedValue
+      )?.map(color => ({
+        type: 'productColor',
+        label: color,
+        value: color,
+      })),
     );
   }, [
     productsFiltersReducer?.appliedProductsFilters?.productColor?.selectedValue,
+    shopProductsFiltersReducer?.appliedShopProductsFilters.productColor
+      .selectedValue,
+    showOnlyShopDetailPage,
   ]);
 
   const priceFilterLabel = price => {
@@ -158,64 +192,82 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   };
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters.productPrice.selectedValue
-      .min === 0 &&
-    productsFiltersReducer?.appliedProductsFilters.productPrice.selectedValue
-      .max === 0
-      ? setSelectedPrices([])
-      : setSelectedPrices([
-          {
-            type: 'productPrice',
-            label: priceFilterLabel(
-              productsFiltersReducer?.appliedProductsFilters.productPrice
-                .selectedValue,
-            ),
-            value:
-              productsFiltersReducer?.appliedProductsFilters.productPrice
-                .selectedValue,
-          },
-        ]);
+    const selectedValue = showOnlyShopDetailPage
+      ? shopProductsFiltersReducer?.appliedShopProductsFilters.productPrice
+          .selectedValue
+      : productsFiltersReducer?.appliedProductsFilters.productPrice
+          .selectedValue;
+
+    const minPrice = selectedValue.min;
+    const maxPrice = selectedValue.max;
+
+    if (minPrice === 0 && maxPrice === 0) {
+      setSelectedPrices([]);
+    } else {
+      setSelectedPrices([
+        {
+          type: 'productPrice',
+          label: priceFilterLabel(selectedValue),
+          value: selectedValue,
+        },
+      ]);
+    }
   }, [
+    shopProductsFiltersReducer?.appliedShopProductsFilters.productPrice
+      .selectedValue,
     productsFiltersReducer?.appliedProductsFilters.productPrice.selectedValue,
+    showOnlyShopDetailPage,
   ]);
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters.productListingType
-      .selectedValue === ''
-      ? setSelectedProductListingType([])
-      : setSelectedProductListingType([
-          {
-            type: 'productListingType',
-            label: `Type: ${productsFiltersReducer?.appliedProductsFilters.productListingType.selectedValue}`,
-            value:
-              productsFiltersReducer?.appliedProductsFilters.productListingType
-                .selectedValue,
-          },
-        ]);
+    const selectedValue = showOnlyShopDetailPage
+      ? shopProductsFiltersReducer?.appliedShopProductsFilters
+          .productListingType.selectedValue
+      : productsFiltersReducer?.appliedProductsFilters.productListingType
+          .selectedValue;
+
+    if (selectedValue === '') {
+      setSelectedProductListingType([]);
+    } else {
+      setSelectedProductListingType([
+        {
+          type: 'productListingType',
+          label: `Type: ${selectedValue}`,
+          value: selectedValue,
+        },
+      ]);
+    }
   }, [
     productsFiltersReducer?.appliedProductsFilters.productListingType
       .selectedValue,
+    shopProductsFiltersReducer?.appliedShopProductsFilters.productListingType
+      .selectedValue,
+    showOnlyShopDetailPage,
   ]);
 
   useEffect(() => {
-    productsFiltersReducer?.appliedProductsFilters.searchBarData
-      .selectedValue &&
-    productsFiltersReducer?.appliedProductsFilters.searchBarData
-      .selectedValue !== ''
-      ? setSearchProducts([
-          {
-            type: 'searchBarData',
-            label:
-              productsFiltersReducer?.appliedProductsFilters.searchBarData
-                .selectedValue,
-            value:
-              productsFiltersReducer?.appliedProductsFilters.searchBarData
-                .selectedValue,
-          },
-        ])
-      : setSearchProducts([]);
+    const selectedValue = showOnlyShopDetailPage
+      ? shopProductsFiltersReducer?.appliedShopProductsFilters.searchBarData
+          .selectedValue
+      : productsFiltersReducer?.appliedProductsFilters.searchBarData
+          .selectedValue;
+
+    if (selectedValue && selectedValue !== '') {
+      setSearchProducts([
+        {
+          type: 'searchBarData',
+          label: selectedValue,
+          value: selectedValue,
+        },
+      ]);
+    } else {
+      setSearchProducts([]);
+    }
   }, [
+    shopProductsFiltersReducer?.appliedShopProductsFilters.searchBarData
+      .selectedValue,
     productsFiltersReducer?.appliedProductsFilters.searchBarData.selectedValue,
+    showOnlyShopDetailPage,
   ]);
 
   useEffect(() => {
@@ -322,6 +374,9 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
                   ),
                 );
               } else {
+                const changeFiltersAction = showOnlyShopDetailPage
+                  ? changeAppliedShopProductsFilters
+                  : changeAppliedProductsFilters;
                 [
                   'categoryId',
                   'productColor',
@@ -331,7 +386,7 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
                   'searchBarData',
                 ].map(itm =>
                   dispatch(
-                    changeAppliedProductsFilters({
+                    changeFiltersAction({
                       key: itm,
                       value: {
                         selectedValue: passValueForProduct(itm),

@@ -33,6 +33,10 @@ import FollowConfirmationModel from '../../../../common/Customer/FollowConfirmat
 import {shopFollow} from '../../../../graphql/mutations/shops';
 import {shopFollowToggle} from '../../../../redux/LoginUserProfileSlice/userSlice';
 import FastImage from 'react-native-fast-image';
+import {
+  changeAppliedShopProductsFilters,
+  emptyShopProductFilter,
+} from '../../../../redux/ShopProductFilter/ShopProductFilterSlice';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -52,8 +56,9 @@ const ShopIndividual = () => {
   } = useSelector(state => state?.productsData);
 
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
-  const productsFiltersReducer = useSelector(
-    state => state.productsFiltersReducer,
+
+  const shopProductsFiltersReducer = useSelector(
+    state => state?.shopProductsFiltersReducer,
   );
 
   const [shopDetails, setShopDetails] = useState({});
@@ -107,26 +112,28 @@ const ShopIndividual = () => {
         },
         filter: {
           category_id:
-            productsFiltersReducer.appliedProductsFilters.categoryId
+            shopProductsFiltersReducer?.appliedShopProductsFilters.categoryId
               .selectedValue,
           product_color:
-            productsFiltersReducer.appliedProductsFilters.productColor
+            shopProductsFiltersReducer?.appliedShopProductsFilters.productColor
               .selectedValue,
           product_price: {
-            min: productsFiltersReducer?.appliedProductsFilters.productPrice
-              .selectedValue.min,
-            max: productsFiltersReducer?.appliedProductsFilters.productPrice
-              .selectedValue.max,
+            min: shopProductsFiltersReducer?.appliedShopProductsFilters
+              .productPrice.selectedValue.min,
+            max: shopProductsFiltersReducer?.appliedShopProductsFilters
+              .productPrice.selectedValue.max,
           },
           product_listing_type:
-            productsFiltersReducer.appliedProductsFilters.productListingType
-              .selectedValue,
+            shopProductsFiltersReducer?.appliedShopProductsFilters
+              .productListingType.selectedValue,
         },
         shopId:
-          productsFiltersReducer.appliedProductsFilters.shopId.selectedValue,
-        sort: productsFiltersReducer.sortFilters.sortType.selectedValue,
+          shopProductsFiltersReducer?.appliedShopProductsFilters.shopId
+            .selectedValue,
+        sort: shopProductsFiltersReducer?.shopSortFilters?.sortType
+          .selectedValue,
         search:
-          productsFiltersReducer.appliedProductsFilters.searchBarData
+          shopProductsFiltersReducer?.appliedShopProductsFilters.searchBarData
             .selectedValue,
       }),
     );
@@ -212,9 +219,10 @@ const ShopIndividual = () => {
   }, [shopId]);
 
   useEffect(() => {
+    dispatch(emptyShopProductFilter());
     shopId &&
       dispatch(
-        changeAppliedProductsFilters({
+        changeAppliedShopProductsFilters({
           key: 'shopId',
           value: {
             selectedValue: [shopId],
@@ -230,16 +238,17 @@ const ShopIndividual = () => {
 
   useEffect(() => {
     if (
-      productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue
-        ?.length > 0
+      shopProductsFiltersReducer?.appliedShopProductsFilters?.shopId
+        ?.selectedValue?.length > 0 &&
+      shopProductsFiltersReducer?.appliedShopProductsFilters?.shopId
+        ?.selectedValue[0] === shopId
     ) {
       getAllProducts();
     }
   }, [
     dispatch,
-    productsFiltersReducer.appliedProductsFilters,
-    productsFiltersReducer.sortFilters,
-    productsFiltersReducer.searchBarData,
+    shopProductsFiltersReducer?.appliedShopProductsFilters,
+    shopProductsFiltersReducer.shopSortFilters,
     productPageSkip,
   ]);
 
@@ -285,7 +294,11 @@ const ShopIndividual = () => {
 
           <TouchableOpacity
             style={{position: 'absolute', top: 10, left: 14}}
-            onPress={() => navigation.goBack()}>
+            onPress={() =>
+              navigation.navigate('CustomerHomePage', {
+                state: {resetFilter: true},
+              })
+            }>
             <Icon name="angle-left" size={30} color="black" />
           </TouchableOpacity>
           <View style={{marginTop: -30}}>

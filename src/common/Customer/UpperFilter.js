@@ -9,6 +9,7 @@ import {changeSortProductsFilters} from '../../redux/ProductFilter/ProductFilter
 import {useDispatch, useSelector} from 'react-redux';
 import {changeSortShopsFilters} from '../../redux/ShopFilter/ShopFilterSlice';
 import UpperAllListFilter from './UpperAllListFilter';
+import {changeSortShopProductsFilters} from '../../redux/ShopProductFilter/ShopProductFilterSlice';
 
 const UpperFilter = ({
   byShop,
@@ -20,8 +21,17 @@ const UpperFilter = ({
   const dispatch = useDispatch();
 
   const productsFiltersReducer = useSelector(
-    state => state.productsFiltersReducer,
+    state => state?.productsFiltersReducer,
   );
+
+  const shopProductsFiltersReducer = useSelector(
+    state => state?.shopProductsFiltersReducer,
+  );
+
+  const shopProductSelectedFilter = showOnlyShopDetailPage
+    ? shopProductsFiltersReducer?.shopSortFilters
+    : productsFiltersReducer?.sortFilters;
+
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
   const [isOpenPopOver, setIsOpenPopOver] = useState(false);
 
@@ -30,8 +40,11 @@ const UpperFilter = ({
     !showOnlyShopDetailPage && setShowBottomLoader(false);
 
     if (!byShop) {
+      const changeFiltersAction = showOnlyShopDetailPage
+        ? changeSortShopProductsFilters
+        : changeSortProductsFilters;
       dispatch(
-        changeSortProductsFilters({
+        changeFiltersAction({
           key: 'sortType',
           value: {
             selectedValue: newValue,
@@ -83,7 +96,7 @@ const UpperFilter = ({
   };
 
   const getSortData = GetSortByName(
-    productsFiltersReducer?.sortFilters.sortType.selectedValue,
+    shopProductSelectedFilter?.sortType.selectedValue,
   );
   const getSortByShopData = GetSortByNameForShop(
     shopsFiltersReducer?.sortFilters?.sortType.selectedValue,
@@ -153,8 +166,7 @@ const UpperFilter = ({
                   value={
                     byShop
                       ? shopsFiltersReducer?.sortFilters?.sortType.selectedValue
-                      : productsFiltersReducer?.sortFilters.sortType
-                          .selectedValue
+                      : shopProductSelectedFilter?.sortType.selectedValue
                   }>
                   <View style={styles.radioParent}>
                     {options?.map((item, index) => (
@@ -168,7 +180,7 @@ const UpperFilter = ({
                                 (byShop
                                   ? shopsFiltersReducer?.sortFilters?.sortType
                                       .selectedValue
-                                  : productsFiltersReducer?.sortFilters.sortType
+                                  : shopProductSelectedFilter?.sortType
                                       .selectedValue) === item?.value
                                   ? '#151827'
                                   : 'rgba(21, 24, 39, 0.56)',
