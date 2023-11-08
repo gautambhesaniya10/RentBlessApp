@@ -74,6 +74,7 @@ export const getShopDetails = async payload => {
             id
             branch_address
             branch_pinCode
+            branch_state
             branch_city
             manager_name
             manager_contact
@@ -139,6 +140,7 @@ export const getVendorShopDetails = async payload => {
             same_as
             branch_address
             branch_pinCode
+            branch_state
             branch_city
             manager_name
             manager_contact

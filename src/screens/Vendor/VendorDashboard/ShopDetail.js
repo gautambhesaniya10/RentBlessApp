@@ -14,6 +14,7 @@ import ShopLayoutTab from './AllTabs/ShopLayoutTab';
 import VendorHeader from '../../../components/VendorHeader';
 import {RefreshControl} from 'react-native';
 import {loadVendorShopDetailsStart} from '../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
+import {getStateLists} from '../../../graphql/queries/areaListsQueries';
 
 const ShopDetail = () => {
   const toast = useToast();
@@ -66,6 +67,18 @@ const ShopDetail = () => {
           'Sub Branch',
           'Shop Layout',
         ];
+
+  const [stateDataLists, setStateDataLists] = useState([]);
+
+  const getApiState = async () => {
+    await getStateLists()
+      .then(res => setStateDataLists(res?.data?.stateList))
+      .catch(error => console.log('ee', error));
+  };
+
+  useEffect(() => {
+    getApiState();
+  }, []);
 
   const updateVendorShopDetailStore = () => {
     dispatch(loadVendorShopDetailsStart(useProfileData?.userCreatedShopId));
@@ -190,6 +203,7 @@ const ShopDetail = () => {
           branch_address: data.address,
           branch_pinCode: data.pin_code,
           branch_city: data.city,
+          branch_state: data.state,
           same_as: sameAsOwner === 'True' ? 'owner' : 'none',
           manager_name: data.manager_first_name + ' ' + data.manager_last_name,
           manager_contact: data.manager_user_contact,
@@ -241,7 +255,10 @@ const ShopDetail = () => {
         );
       } else {
         mainBranchInfoSetValue('address', mainBranch?.branch_address);
-        mainBranchInfoSetValue('pin_code', mainBranch?.branch_pinCode);
+
+        // mainBranchInfoSetValue('pin_code', mainBranch?.branch_pinCode);
+        // mainBranchInfoSetValue('state', mainBranch?.branch_state);
+        // mainBranchInfoSetValue('city', mainBranch?.branch_city);
 
         mainBranchInfoSetValue(
           'manager_first_name',
@@ -255,7 +272,6 @@ const ShopDetail = () => {
           'manager_user_contact',
           mainBranch?.manager_contact,
         );
-        mainBranchInfoSetValue('city', mainBranch?.branch_city);
         mainBranchInfoSetValue('manager_user_email', mainBranch?.manager_email);
       }
     }
@@ -394,6 +410,9 @@ const ShopDetail = () => {
               mainBranchControl={mainBranchControl}
               setSameAsOwner={setSameAsOwner}
               sameAsOwner={sameAsOwner}
+              stateDataLists={stateDataLists}
+              mainBranch={mainBranch}
+              mainBranchInfoSetValue={mainBranchInfoSetValue}
             />
           )}
           {activeTab === 'Sub Branch' && (

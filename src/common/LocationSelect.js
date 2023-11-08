@@ -14,6 +14,7 @@ const LocationSelect = ({
   pinCodeField,
   onChangeValue,
   subBranchSelect,
+  defaultValue,
 }) => {
   const LabelFunction = item => {
     if (stateField) {
@@ -87,7 +88,7 @@ const LocationSelect = ({
             search
             placeholder={placeholder}
             searchPlaceholder="Search..."
-            value={value}
+            value={value || defaultValue}
             onChange={item => {
               onChange(item.value);
               onChangeValue(item.value);

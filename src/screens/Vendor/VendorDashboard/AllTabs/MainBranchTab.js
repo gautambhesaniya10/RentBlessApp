@@ -4,6 +4,11 @@ import CustomButton from '../../../../common/CustomButton';
 import CustomTextInput from '../../../../common/CustomTextInput';
 import {FontStyle} from '../../../../../CommonStyle';
 import {RadioButton} from 'react-native-paper';
+import {
+  getAreaByCityLists,
+  getCityByStateLists,
+} from '../../../../graphql/queries/areaListsQueries';
+import LocationSelect from '../../../../common/LocationSelect';
 
 const MainBranchTab = ({
   mainBranchLoading,
@@ -13,7 +18,50 @@ const MainBranchTab = ({
   mainBranchControl,
   setSameAsOwner,
   sameAsOwner,
+  stateDataLists,
+  mainBranch,
+  mainBranchInfoSetValue,
 }) => {
+  const [getCityData, setGetCityData] = useState([]);
+  const [getAreaData, setGetAreaData] = useState([]);
+
+  useEffect(() => {
+    const getCityList = async () => {
+      await getCityByStateLists(mainBranch?.branch_state)
+        .then(res => setGetCityData(res?.data?.cityByState))
+        .catch(err => console.log('error', err));
+    };
+    if (mainBranch?.branch_state) {
+      mainBranchInfoSetValue('state', mainBranch?.branch_state);
+      getCityList();
+    }
+  }, [mainBranch]);
+
+  useEffect(() => {
+    const getAreaList = async () => {
+      await getAreaByCityLists(mainBranch?.branch_city)
+        .then(res => setGetAreaData(res?.data?.areaByCity))
+        .catch(err => console.log('error', err));
+    };
+    if (mainBranch?.branch_city) {
+      getAreaList();
+    }
+  }, [mainBranch]);
+
+  const onChangeState = async data => {
+    await getCityByStateLists(data)
+      .then(res => setGetCityData(res?.data?.cityByState))
+      .catch(err => console.log('error', err));
+  };
+  const onChangeCity = async data => {
+    await getAreaByCityLists(data)
+      .then(res => setGetAreaData(res?.data?.areaByCity))
+      .catch(err => console.log('error', err));
+  };
+  const onChangePinCode = data => {
+    console.log('pincode', data);
+  };
+
   return (
     <View style={{flex: 1}}>
       <View style={styles.mainContainer}>
@@ -34,16 +82,35 @@ const MainBranchTab = ({
             </Text>
           )}
         </View>
+
         <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="City"
-            mode="outlined"
+          <LocationSelect
+            control={mainBranchControl}
+            name="state"
+            rules={{required: 'State is required *'}}
+            placeholder="Select State"
+            arrayListItem={stateDataLists}
+            stateField={true}
+            onChangeValue={onChangeState}
+            defaultValue={mainBranch?.branch_state}
+          />
+          {mainBranchInfoErrors?.state && (
+            <Text style={{color: 'red'}}>
+              {mainBranchInfoErrors?.state?.message}
+            </Text>
+          )}
+        </View>
+
+        <View style={{marginBottom: 15}}>
+          <LocationSelect
             control={mainBranchControl}
             name="city"
-            rules={{
-              required: 'City is required *',
-            }}
-            activeOutlineColor="#29977E"
+            rules={{required: 'City is required *'}}
+            placeholder="Select City"
+            arrayListItem={getCityData}
+            cityField={true}
+            onChangeValue={onChangeCity}
+            defaultValue={mainBranch?.branch_city}
           />
           {mainBranchInfoErrors?.city && (
             <Text style={{color: 'red'}}>
@@ -51,17 +118,17 @@ const MainBranchTab = ({
             </Text>
           )}
         </View>
+
         <View style={{marginBottom: 15}}>
-          <CustomTextInput
-            label="Pin Code"
-            mode="outlined"
+          <LocationSelect
             control={mainBranchControl}
             name="pin_code"
-            rules={{
-              required: 'Pin Code is required *',
-            }}
-            activeOutlineColor="#29977E"
-            keyboardType="number-pad"
+            rules={{required: 'Pin Code is required *'}}
+            placeholder="Select Pin Code"
+            arrayListItem={getAreaData}
+            pinCodeField={true}
+            onChangeValue={onChangePinCode}
+            defaultValue={mainBranch?.branch_pinCode}
           />
           {mainBranchInfoErrors?.pin_code && (
             <Text style={{color: 'red'}}>
