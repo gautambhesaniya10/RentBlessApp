@@ -590,7 +590,7 @@ const SubBranchModal = ({
         .then(res => setGetCityData(res?.data?.cityByState))
         .catch(err => console.log('error', err));
     };
-    if (editableBranchData.branch_state) {
+    if (editableBranchData?.branch_state) {
       getCityList();
     }
   }, [editableBranchData]);
