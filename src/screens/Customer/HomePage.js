@@ -3,7 +3,11 @@ import React, {useState, useEffect, useRef} from 'react';
 import CustomerHeader from '../../components/CustomerHeader';
 import {BackGroundStyle} from '../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import {ActivityIndicator} from 'react-native-paper';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import {useDispatch, useSelector} from 'react-redux';
@@ -40,6 +44,8 @@ const HomePage = () => {
 
   const {width: screenWidth} = Dimensions.get('window');
   const [activeSlide, setActiveSlide] = useState(0);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
   const autoplayConfig = {
     autoplay: true,
     autoplayInterval: 2000,
@@ -156,16 +162,7 @@ const HomePage = () => {
   //   dispatch(emptyProductFilter());
   // }, [IsFocused]);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getAllProducts();
-    }, [
-      dispatch,
-      productsFiltersReducer.appliedProductsFilters,
-      productsFiltersReducer.sortFilters,
-      productsFiltersReducer.searchBarData,
-    ]),
-  );
+  useFocusEffect(React.useCallback(() => {}, []));
 
   const handleProductScroll = event => {
     setShowBottomLoader(true);
@@ -276,6 +273,16 @@ const HomePage = () => {
     dispatch(shopProductButtonChange(true));
   };
 
+  const handleRefresh = () => {
+    dispatch(changeProductCurrentPage(0));
+    dispatch(changeProductDataLimit(0));
+    getAllProducts();
+
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 2000);
+  };
+
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <FilterDrawerModel
@@ -306,6 +313,12 @@ const HomePage = () => {
 
       <View style={{flex: 1}}>
         <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
           onScroll={handleProductScroll}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}>

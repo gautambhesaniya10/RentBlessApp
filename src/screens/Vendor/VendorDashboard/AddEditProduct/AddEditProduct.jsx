@@ -141,11 +141,14 @@ const AddEditProduct = () => {
 
   useEffect(() => {
     if (userProfile?.userCreatedShopId) {
+      console.log(
+        'userProfile?.userCreatedShopId',
+        userProfile?.userCreatedShopId,
+      );
       getBranchLists().then(res => {
         const branches = res?.data.branchList.filter(
           branch => branch.shop_id === userProfile?.userCreatedShopId,
         );
-
         setBranchList(branches);
       });
     }

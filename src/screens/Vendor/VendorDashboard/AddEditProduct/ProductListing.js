@@ -74,6 +74,7 @@ const ProductListing = () => {
 
   const handlePageChange = pageNumber => {
     const newSkip = (pageNumber - 1) * PaginationProductLimit;
+    console.log('newSkip', newSkip);
     dispatch(changeProductPageSkip(newSkip));
   };
 

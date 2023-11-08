@@ -101,7 +101,6 @@ export const getVendorShopDetails = async payload => {
           createdAt
           subscriptionDate
           user_id
-          subscriptionId
           shop_name
           shop_time {
             close_time

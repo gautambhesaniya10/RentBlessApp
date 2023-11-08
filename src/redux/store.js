@@ -10,6 +10,7 @@ import ShopSlice from './ShopSlice/ShopSlice';
 import AppVersionSlice from './AppVersionSlice/AppVersionSlice';
 import ShopConfigurationsSlice from './ShopConfigurationsSlice/ShopConfigurationsSlice';
 import ShopProductFilterSlice from './ShopProductFilter/ShopProductFilterSlice';
+import ShopProductSlice from './ShopProductSlice/ShopProductSlice';
 
 const store = configureStore({
   reducer: {
@@ -21,6 +22,7 @@ const store = configureStore({
     shopProductsFiltersReducer: ShopProductFilterSlice,
     shopsFiltersReducer: ShopFilterSlice,
     productsData: ProductSlice,
+    shopProductsData: ShopProductSlice,
     shops: ShopSlice,
     appVersion: AppVersionSlice,
     shopConfigurations: ShopConfigurationsSlice,

@@ -16,8 +16,6 @@ import {useDispatch, useSelector} from 'react-redux';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../../../common/CustomButton';
 import ProductCard from '../../../../components/ProductCard/ProductCard';
-import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
-import {changeAppliedProductsFilters} from '../../../../redux/ProductFilter/ProductFilterSlice';
 import {
   getShopDetails,
   getShopFollowers,
@@ -37,6 +35,10 @@ import {
   changeAppliedShopProductsFilters,
   emptyShopProductFilter,
 } from '../../../../redux/ShopProductFilter/ShopProductFilterSlice';
+import {
+  changeShopProductPageSkip,
+  loadShopProductsStart,
+} from '../../../../redux/ShopProductSlice/ShopProductSlice';
 
 const ShopIndividual = () => {
   const route = useRoute();
@@ -47,13 +49,14 @@ const ShopIndividual = () => {
   const {shopId} = route?.params?.state;
 
   const {
-    productsLimit,
     productsCount,
     numOfPages,
     productsData,
+    PaginationProductLimit,
+    productPageSkip,
     productLoading,
     error,
-  } = useSelector(state => state?.productsData);
+  } = useSelector(state => state?.shopProductsData);
 
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
 
@@ -70,10 +73,6 @@ const ShopIndividual = () => {
   const [filterModelOpen, setFilterModelOpen] = useState(false);
   const scrollViewRef = useRef(null);
   const reviewSectionRef = useRef(null);
-
-  const [productPageSkip, setProductPageSkip] = useState(0);
-
-  const ProductLimit = 5;
 
   const handleScrollToReviewClick = () => {
     if (scrollViewRef.current && reviewSectionRef.current) {
@@ -105,10 +104,10 @@ const ShopIndividual = () => {
 
   const getAllProducts = () => {
     dispatch(
-      loadProductsStart({
+      loadShopProductsStart({
         pageData: {
           skip: productPageSkip,
-          limit: ProductLimit,
+          limit: PaginationProductLimit,
         },
         filter: {
           category_id:
@@ -140,8 +139,8 @@ const ShopIndividual = () => {
   };
 
   const handlePageChange = pageNumber => {
-    const newSkip = (pageNumber - 1) * ProductLimit;
-    setProductPageSkip(newSkip);
+    const newSkip = (pageNumber - 1) * PaginationProductLimit;
+    dispatch(changeShopProductPageSkip(newSkip));
   };
 
   const shareContent = async () => {
@@ -465,7 +464,7 @@ const ShopIndividual = () => {
               )}
 
               <View>
-                {productsCount > ProductLimit && (
+                {productsCount > PaginationProductLimit && (
                   <View
                     style={{
                       flexDirection: 'row',
