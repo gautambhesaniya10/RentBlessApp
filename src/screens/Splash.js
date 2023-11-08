@@ -2,7 +2,7 @@ import {StyleSheet, Image, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {logoImage} from '../common/AllLiveImageLink';
+import {whiteLogoSmall} from '../common/AllLiveImageLink';
 import DeviceInfo from 'react-native-device-info';
 import {getAppVersionLists} from '../graphql/queries/appVersionQueries';
 import {useDispatch} from 'react-redux';
@@ -78,10 +78,10 @@ const Splash = () => {
       <View style={{padding: 20}}>
         <Image
           source={{
-            uri: logoImage,
+            uri: whiteLogoSmall,
           }}
-          width={231}
-          height={86}
+          width={210}
+          height={160}
         />
       </View>
     </View>

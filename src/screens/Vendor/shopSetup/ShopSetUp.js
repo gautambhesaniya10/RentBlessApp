@@ -24,6 +24,7 @@ import {useToast} from 'native-base';
 import {homeCoverImage} from '../../../common/AllLiveImageLink';
 import VersionAppModel from '../../AppVersionModel/VersionApp';
 import {fileUpload} from '../../../wasabi';
+import {getStateLists} from '../../../graphql/queries/areaListsQueries';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -101,6 +102,18 @@ const ShopSetUp = () => {
     };
   }, []);
 
+  const [stateDataLists, setStateDataLists] = useState([]);
+
+  const getApiState = async () => {
+    await getStateLists()
+      .then(res => setStateDataLists(res?.data?.stateList))
+      .catch(error => console.log('ee', error));
+  };
+
+  useEffect(() => {
+    getApiState();
+  }, []);
+
   const handleClickIndividual = (option, active) => {
     setSelectedOption(option);
     setIndividual(active);
@@ -109,7 +122,8 @@ const ShopSetUp = () => {
     return {
       branch_address: val.subManagerAddress,
       branch_pinCode: val.subManagerPinCode,
-      branch_city: val.city,
+      branch_city: val.subManagerCity,
+      branch_state: val.subManagerState,
       same_as:
         (val?.managerValue === 'Same as owner' && 'owner') ||
         (val?.managerValue === 'same as main branch manager' &&
@@ -226,6 +240,7 @@ const ShopSetUp = () => {
         branchInfo: [
           {
             branch_address: data.address,
+            branch_state: data.state,
             branch_city: data.city,
             same_as: sameAsOwner === 'True' ? 'owner' : 'none',
             branch_pinCode: data.pin_code,
@@ -409,6 +424,7 @@ const ShopSetUp = () => {
                 setSubBranch={setSubBranch}
                 sameAsOwner={sameAsOwner}
                 setSameAsOwner={setSameAsOwner}
+                stateDataLists={stateDataLists}
               />
             )}
             <View

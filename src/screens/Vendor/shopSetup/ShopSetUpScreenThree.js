@@ -13,6 +13,13 @@ import CustomButton from '../../../common/CustomButton';
 import {RadioButton} from 'react-native-paper';
 import {Select, NativeBaseProvider} from 'native-base';
 import VendorSubBranchTextField from '../../../common/VendorSubBranchTextField';
+import LocationSelect from '../../../common/LocationSelect';
+import {loadAreaListsStart} from '../../../redux/AreaSlice/AreaListSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  getAreaByCityLists,
+  getCityByStateLists,
+} from '../../../graphql/queries/areaListsQueries';
 
 const ShopSetUpScreenThree = ({
   control,
@@ -26,12 +33,20 @@ const ShopSetUpScreenThree = ({
   setSubBranch,
   sameAsOwner,
   setSameAsOwner,
+  stateDataLists,
 }) => {
+  const dispatch = useDispatch();
+
   const [mainBranchShow, setMainBranchShow] = useState(true);
   const [managerShow, setManagerShow] = useState(true);
   const [managerSubBranchShow, setManagerSubBranchShow] = useState(true);
-
   const [subBranchEdit, setSubBranchEdit] = useState();
+
+  const {areaLists} = useSelector(state => state.areaLists);
+
+  useEffect(() => {
+    dispatch(loadAreaListsStart());
+  }, []);
 
   useEffect(() => {
     if (sameAsOwner === 'True') {
@@ -47,6 +62,22 @@ const ShopSetUpScreenThree = ({
     }
   }, [getValues, sameAsOwner, setValue, currentPosition]);
 
+  const [getCityData, setGetCityData] = useState([]);
+  const [getAreaData, setGetAreaData] = useState([]);
+
+  const onChangeState = async data => {
+    await getCityByStateLists(data)
+      .then(res => setGetCityData(res?.data?.cityByState))
+      .catch(err => console.log('error', err));
+  };
+  const onChangeCity = async data => {
+    await getAreaByCityLists(data)
+      .then(res => setGetAreaData(res?.data?.areaByCity))
+      .catch(err => console.log('error', err));
+  };
+  const onChangePinCode = data => {
+    console.log('pincode', data);
+  };
   return (
     <View style={{marginHorizontal: 16}}>
       <View>
@@ -76,7 +107,7 @@ const ShopSetUpScreenThree = ({
                 <Text style={{color: 'red'}}>{errors?.address?.message}</Text>
               )}
             </View>
-            <View style={{marginBottom: 15}}>
+            {/* <View style={{marginBottom: 15}}>
               <CustomTextInput
                 label="City"
                 mode="outlined"
@@ -88,8 +119,56 @@ const ShopSetUpScreenThree = ({
               {errors?.city && (
                 <Text style={{color: 'red'}}>{errors?.city?.message}</Text>
               )}
-            </View>
+            </View> */}
             <View style={{marginBottom: 15}}>
+              <LocationSelect
+                control={control}
+                name="state"
+                rules={{required: 'State is required *'}}
+                placeholder="Select State"
+                arrayListItem={stateDataLists}
+                stateField={true}
+                onChangeValue={onChangeState}
+              />
+              {errors?.state && (
+                <Text style={{color: 'red'}}>{errors?.state?.message}</Text>
+              )}
+            </View>
+            {getCityData?.length > 0 && (
+              <View style={{marginBottom: 15}}>
+                <LocationSelect
+                  control={control}
+                  name="city"
+                  rules={{required: 'City is required *'}}
+                  placeholder="Select City"
+                  arrayListItem={getCityData}
+                  cityField={true}
+                  onChangeValue={onChangeCity}
+                />
+                {errors?.city && (
+                  <Text style={{color: 'red'}}>{errors?.city?.message}</Text>
+                )}
+              </View>
+            )}
+            {getAreaData?.length > 0 && (
+              <View style={{marginBottom: 15}}>
+                <LocationSelect
+                  control={control}
+                  name="pin_code"
+                  rules={{required: 'Pin Code is required *'}}
+                  placeholder="Select Pin Code"
+                  arrayListItem={getAreaData}
+                  pinCodeField={true}
+                  onChangeValue={onChangePinCode}
+                />
+                {errors?.pin_code && (
+                  <Text style={{color: 'red'}}>
+                    {errors?.pin_code?.message}
+                  </Text>
+                )}
+              </View>
+            )}
+            {/* <View style={{marginBottom: 15}}>
               <CustomTextInput
                 label="Pin code"
                 mode="outlined"
@@ -104,7 +183,7 @@ const ShopSetUpScreenThree = ({
               {errors?.pin_code && (
                 <Text style={{color: 'red'}}>{errors?.pin_code?.message}</Text>
               )}
-            </View>
+            </View> */}
           </View>
         )}
 
@@ -289,6 +368,12 @@ const ShopSetUpScreenThree = ({
                           </Text>
                         </View>
                         <View style={styles.textInnerMain}>
+                          <Text style={styles.textLabelSub}>State : </Text>
+                          <Text style={styles.textSub}>
+                            {sub.subManagerState}
+                          </Text>
+                        </View>
+                        <View style={styles.textInnerMain}>
                           <Text style={styles.textLabelSub}>City : </Text>
                           <Text style={styles.textSub}>
                             {sub.subManagerCity}
@@ -336,6 +421,8 @@ const ShopSetUpScreenThree = ({
                   setSubBranch={setSubBranch}
                   subBranchEdit={subBranchEdit}
                   setSubBranchEdit={setSubBranchEdit}
+                  areaLists={areaLists}
+                  stateDataLists={stateDataLists}
                 />
               </>
             )}
@@ -464,8 +551,11 @@ const SubBranchModel = ({
   setSubBranch,
   setSubBranchEdit,
   subBranchEdit,
+  areaLists,
+  stateDataLists,
 }) => {
   const [subManagerAddress, setSubManagerAddress] = useState('');
+  const [subManagerState, setSubManagerState] = useState('');
   const [subManagerCity, setSubManagerCity] = useState('');
   const [subManagerPinCode, setSubManagerPinCode] = useState('');
 
@@ -477,6 +567,7 @@ const SubBranchModel = ({
 
   const [error, setError] = useState({
     subManagerAddressError: '',
+    subManagerStateError: '',
     subManagerCityError: '',
     subManagerPinCodeError: '',
     subManagerFirstNameError: '',
@@ -516,6 +607,7 @@ const SubBranchModel = ({
     if (subBranchEdit !== undefined) {
       setSubManagerAddress(subBranchEdit.subManagerAddress);
       setSubManagerCity(subBranchEdit.subManagerCity);
+      setSubManagerState(subBranchEdit.subManagerState);
       setSubManagerPinCode(subBranchEdit.subManagerPinCode);
       setSubManagerFirstName(subBranchEdit.subManagerFirstName);
       setSubManagerLastName(subBranchEdit.subManagerLastName);
@@ -530,6 +622,11 @@ const SubBranchModel = ({
       allError.subManagerAddressError = 'Address is require';
     } else {
       allError.subManagerAddressError = '';
+    }
+    if (!subManagerState) {
+      allError.subManagerStateError = 'State is require';
+    } else {
+      allError.subManagerStateError = '';
     }
     if (!subManagerCity) {
       allError.subManagerCityError = 'City is require';
@@ -573,6 +670,7 @@ const SubBranchModel = ({
 
     if (
       !subManagerAddress ||
+      !subManagerState ||
       !subManagerCity ||
       !subManagerPinCode ||
       !subManagerFirstName ||
@@ -588,6 +686,7 @@ const SubBranchModel = ({
           {
             id: subBranch.length + 1,
             subManagerAddress,
+            subManagerState,
             subManagerCity,
             subManagerPinCode,
             subManagerFirstName,
@@ -606,6 +705,7 @@ const SubBranchModel = ({
         editSelectedSubBranch[editSelectedSubBranchIndex] = {
           id: subBranchEdit.id,
           subManagerAddress,
+          subManagerState,
           subManagerCity,
           subManagerPinCode,
           subManagerFirstName,
@@ -622,6 +722,7 @@ const SubBranchModel = ({
 
   const handleSubBranchModalClose = () => {
     setSubManagerAddress('');
+    setSubManagerState('');
     setSubManagerCity('');
     setSubManagerPinCode('');
     setSubManagerFirstName('');
@@ -640,6 +741,30 @@ const SubBranchModel = ({
       subManagerEmailError: '',
       subManagerPhoneError: '',
     });
+  };
+
+  const [getCityData, setGetCityData] = useState([]);
+  const [getAreaData, setGetAreaData] = useState([]);
+
+  const onChangeSubBranchState = async data => {
+    await getCityByStateLists(data)
+      .then(res => setGetCityData(res?.data?.cityByState))
+      .catch(err => console.log('error', err));
+    setSubManagerState(data);
+    error.subManagerStateError = '';
+  };
+  const onChangeSubBranchCity = async data => {
+    await getAreaByCityLists(data)
+      .then(res => setGetAreaData(res?.data?.areaByCity))
+      .catch(err => console.log('error', err));
+
+    setSubManagerCity(data);
+    error.subManagerCityError = '';
+  };
+  const onChangeSubBranchPinCode = data => {
+    console.log('pincode', data);
+    setSubManagerPinCode(data);
+    error.subManagerPinCodeError = '';
   };
 
   return (
@@ -664,6 +789,7 @@ const SubBranchModel = ({
           )}
         </View>
         <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+          {/* 
           <View style={{width: '48%'}}>
             <VendorSubBranchTextField
               label="City"
@@ -681,8 +807,43 @@ const SubBranchModel = ({
                 {error.subManagerCityError || ''}
               </Text>
             )}
-          </View>
+          </View> */}
+
           <View style={{width: '48%'}}>
+            <LocationSelect
+              name="state"
+              placeholder="Select State"
+              arrayListItem={stateDataLists}
+              stateField={true}
+              onChangeValue={onChangeSubBranchState}
+              subBranchSelect={true}
+            />
+            {error.subManagerStateError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerStateError || ''}
+              </Text>
+            )}
+          </View>
+
+          {getCityData?.length > 0 && (
+            <View style={{width: '48%'}}>
+              <LocationSelect
+                name="city"
+                placeholder="Select City"
+                arrayListItem={getCityData}
+                cityField={true}
+                onChangeValue={onChangeSubBranchCity}
+                subBranchSelect={true}
+              />
+              {error.subManagerCityError && (
+                <Text style={{color: 'red', fontSize: 14}}>
+                  {error.subManagerCityError || ''}
+                </Text>
+              )}
+            </View>
+          )}
+
+          {/* <View style={{width: '48%'}}>
             <VendorSubBranchTextField
               label="PinCode"
               mode="outlined"
@@ -700,8 +861,26 @@ const SubBranchModel = ({
                 {error.subManagerPinCodeError || ''}
               </Text>
             )}
-          </View>
+          </View> */}
         </View>
+
+        {getAreaData?.length > 0 && (
+          <View style={{marginBottom: 15}}>
+            <LocationSelect
+              name="PinCode"
+              placeholder="Select PinCode"
+              arrayListItem={getAreaData}
+              pinCodeField={true}
+              onChangeValue={onChangeSubBranchPinCode}
+              subBranchSelect={true}
+            />
+            {error.subManagerPinCodeError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerPinCodeError || ''}
+              </Text>
+            )}
+          </View>
+        )}
 
         <View style={{marginBottom: 15}}>
           <NativeBaseProvider>
