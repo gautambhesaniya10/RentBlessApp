@@ -734,6 +734,7 @@ const SubBranchModel = ({
 
     setError({
       subManagerAddressError: '',
+      subManagerStateError: '',
       subManagerCityError: '',
       subManagerPinCodeError: '',
       subManagerFirstNameError: '',

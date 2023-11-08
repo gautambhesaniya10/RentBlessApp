@@ -11,6 +11,11 @@ import {
   updateBranch,
 } from '../../../../graphql/mutations/branch';
 import VendorSubBranchTextField from '../../../../common/VendorSubBranchTextField';
+import LocationSelect from '../../../../common/LocationSelect';
+import {
+  getAreaByCityLists,
+  getCityByStateLists,
+} from '../../../../graphql/queries/areaListsQueries';
 
 const SubBranchTab = ({
   vendorShopDetails,
@@ -18,6 +23,7 @@ const SubBranchTab = ({
   ownerInfoGetValue,
   mainBranchInfoGetValue,
   updateVendorShopDetailStore,
+  stateDataLists,
 }) => {
   const [subBranchList, setSubBranchList] = useState([]);
   const [branchDeleteModalOpen, setBranchDeleteModalOpen] = useState(false);
@@ -71,6 +77,7 @@ const SubBranchTab = ({
               ShopId={useProfileData?.userCreatedShopId}
               editableBranchData={editableBranchData}
               setEditableBranchData={setEditableBranchData}
+              stateDataLists={stateDataLists}
             />
           </View>
         ) : (
@@ -105,9 +112,21 @@ const SubBranchTab = ({
                       </Text>
                     </View>
                     <View style={styles.listMain}>
+                      <Text style={styles.titleLeftText}>State :</Text>
+                      <Text style={styles.titleRightText}>
+                        {item?.branch_state}
+                      </Text>
+                    </View>
+                    <View style={styles.listMain}>
                       <Text style={styles.titleLeftText}>City :</Text>
                       <Text style={styles.titleRightText}>
                         {item?.branch_city}
+                      </Text>
+                    </View>
+                    <View style={styles.listMain}>
+                      <Text style={styles.titleLeftText}>Pin Code :</Text>
+                      <Text style={styles.titleRightText}>
+                        {item?.branch_pinCode}
                       </Text>
                     </View>
                   </View>
@@ -312,11 +331,13 @@ const SubBranchModal = ({
   setEditableBranchData,
   ownerInfoGetValue,
   mainBranchInfoGetValue,
+  stateDataLists,
 }) => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [managerValue, setManagerValue] = useState('');
   const [subManagerAddress, setSubManagerAddress] = useState('');
+  const [subManagerState, setSubManagerState] = useState('');
   const [subManagerCity, setSubManagerCity] = useState('');
   const [subManagerPinCode, setSubManagerPinCode] = useState('');
 
@@ -327,6 +348,7 @@ const SubBranchModal = ({
 
   const [error, setError] = useState({
     subManagerAddressError: '',
+    subManagerStateError: '',
     subManagerCityError: '',
     subManagerPinCodeError: '',
     subManagerFirstNameError: '',
@@ -372,6 +394,7 @@ const SubBranchModal = ({
   useEffect(() => {
     if (editableBranchData) {
       setSubManagerAddress(editableBranchData.branch_address);
+      setSubManagerState(editableBranchData.branch_state);
       setSubManagerCity(editableBranchData.branch_city);
       setSubManagerPinCode(editableBranchData.branch_pinCode);
       setManagerValue(
@@ -389,6 +412,11 @@ const SubBranchModal = ({
       allError.subManagerAddressError = 'Address is require';
     } else {
       allError.subManagerAddressError = '';
+    }
+    if (!subManagerState) {
+      allError.subManagerStateError = 'State is require';
+    } else {
+      allError.subManagerStateError = '';
     }
     if (!subManagerCity) {
       allError.subManagerCityError = 'City is require';
@@ -431,6 +459,7 @@ const SubBranchModal = ({
 
     if (
       !subManagerAddress ||
+      !subManagerState ||
       !subManagerCity ||
       !subManagerPinCode ||
       !subManagerFirstName ||
@@ -446,6 +475,7 @@ const SubBranchModal = ({
           id: editableBranchData?.id,
           branchInfo: {
             branch_address: subManagerAddress,
+            branch_state: subManagerState,
             branch_city: subManagerCity,
             branch_pinCode: subManagerPinCode,
             same_as:
@@ -485,6 +515,7 @@ const SubBranchModal = ({
         createBranch({
           branchInfo: {
             branch_address: subManagerAddress,
+            branch_state: subManagerState,
             branch_city: subManagerCity,
             branch_pinCode: subManagerPinCode,
             same_as:
@@ -527,6 +558,7 @@ const SubBranchModal = ({
   const handleSubBranchModalClose = () => {
     setSubBranchModalOpen(false);
     setSubManagerAddress('');
+    setSubManagerState('');
     setSubManagerCity('');
     setSubManagerPinCode('');
     setSubManagerFirstName('');
@@ -536,17 +568,74 @@ const SubBranchModal = ({
     setSubManagerPhone('');
     setEditableBranchData();
     setLoading(false);
-    error.subManagerFirstNameError = '';
-    error.subManagerLastNameError = '';
-    error.subManagerEmailError = '';
-    error.subManagerPhoneError = '';
-    error.subManagerFirstNameError = '';
-    error.subManagerLastNameError = '';
-    error.subManagerEmailError = '';
-    error.subManagerPhoneError = '';
-    error.subManagerAddressError = '';
-    error.subManagerCityError = '';
-    error.subManagerPinCodeError = '';
+
+    setError({
+      subManagerAddressError: '',
+      subManagerStateError: '',
+      subManagerCityError: '',
+      subManagerPinCodeError: '',
+      subManagerFirstNameError: '',
+      subManagerLastNameError: '',
+      subManagerEmailError: '',
+      subManagerPhoneError: '',
+    });
+  };
+
+  const [getCityData, setGetCityData] = useState([]);
+  const [getAreaData, setGetAreaData] = useState([]);
+
+  useEffect(() => {
+    const getCityList = async () => {
+      await getCityByStateLists(editableBranchData?.branch_state)
+        .then(res => setGetCityData(res?.data?.cityByState))
+        .catch(err => console.log('error', err));
+    };
+    if (editableBranchData.branch_state) {
+      getCityList();
+    }
+  }, [editableBranchData]);
+
+  useEffect(() => {
+    const getAreaList = async () => {
+      await getAreaByCityLists(editableBranchData?.branch_city)
+        .then(res => setGetAreaData(res?.data?.areaByCity))
+        .catch(err => console.log('error', err));
+    };
+    if (editableBranchData?.branch_city) {
+      getAreaList();
+    }
+  }, [editableBranchData]);
+
+  const onChangeSubBranchState = async data => {
+    setError({
+      ...error,
+      subManagerStateError: '',
+    });
+
+    await getCityByStateLists(data)
+      .then(res => setGetCityData(res?.data?.cityByState))
+      .catch(err => console.log('error', err));
+    setSubManagerState(data);
+  };
+  const onChangeSubBranchCity = async data => {
+    setError({
+      ...error,
+      subManagerCityError: '',
+    });
+
+    await getAreaByCityLists(data)
+      .then(res => setGetAreaData(res?.data?.areaByCity))
+      .catch(err => console.log('error', err));
+
+    setSubManagerCity(data);
+  };
+  const onChangeSubBranchPinCode = data => {
+    console.log('pincode', data);
+    setSubManagerPinCode(data);
+    setError({
+      ...error,
+      subManagerPinCodeError: '',
+    });
   };
 
   return (
@@ -588,6 +677,40 @@ const SubBranchModal = ({
               {marginBottom: 15},
             ]}>
             <View style={{width: '48%'}}>
+              <LocationSelect
+                name="state"
+                placeholder="Select State"
+                arrayListItem={stateDataLists}
+                stateField={true}
+                onChangeValue={onChangeSubBranchState}
+                subBranchSelect={true}
+                defaultValue={editableBranchData?.branch_state}
+              />
+              {error.subManagerStateError && (
+                <Text style={{color: 'red', fontSize: 14}}>
+                  {error.subManagerStateError || ''}
+                </Text>
+              )}
+            </View>
+
+            <View style={{width: '48%'}}>
+              <LocationSelect
+                name="city"
+                placeholder="Select City"
+                arrayListItem={getCityData}
+                cityField={true}
+                onChangeValue={onChangeSubBranchCity}
+                subBranchSelect={true}
+                defaultValue={editableBranchData?.branch_city}
+              />
+              {error.subManagerCityError && (
+                <Text style={{color: 'red', fontSize: 14}}>
+                  {error.subManagerCityError || ''}
+                </Text>
+              )}
+            </View>
+
+            {/* <View style={{width: '48%'}}>
               <VendorSubBranchTextField
                 label="City"
                 mode="outlined"
@@ -604,28 +727,45 @@ const SubBranchModal = ({
                   {error.subManagerCityError || ''}
                 </Text>
               )}
-            </View>
-            <View style={{width: '48%'}}>
-              <VendorSubBranchTextField
-                label="PinCode"
-                mode="outlined"
-                name="PinCode"
-                activeOutlineColor="#29977E"
-                keyboardType="number-pad"
-                value={subManagerPinCode}
-                onChange={e => {
-                  setSubManagerPinCode(e);
-                  error.subManagerPinCodeError = '';
-                }}
-              />
-              {error.subManagerPinCodeError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerPinCodeError || ''}
-                </Text>
-              )}
-            </View>
+            </View> */}
           </View>
 
+          <View style={{marginBottom: 15}}>
+            <LocationSelect
+              name="PinCode"
+              placeholder="Select PinCode"
+              arrayListItem={getAreaData}
+              pinCodeField={true}
+              onChangeValue={onChangeSubBranchPinCode}
+              subBranchSelect={true}
+              defaultValue={editableBranchData?.branch_pinCode}
+            />
+            {error.subManagerPinCodeError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerPinCodeError || ''}
+              </Text>
+            )}
+          </View>
+          {/*             
+          <View style={{marginBottom: 15}}>
+            <VendorSubBranchTextField
+              label="PinCode"
+              mode="outlined"
+              name="PinCode"
+              activeOutlineColor="#29977E"
+              keyboardType="number-pad"
+              value={subManagerPinCode}
+              onChange={e => {
+                setSubManagerPinCode(e);
+                error.subManagerPinCodeError = '';
+              }}
+            />
+            {error.subManagerPinCodeError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerPinCodeError || ''}
+              </Text>
+            )}
+          </View> */}
           <View style={{marginBottom: 15}}>
             <NativeBaseProvider>
               <Select

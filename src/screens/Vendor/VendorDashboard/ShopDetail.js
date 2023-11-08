@@ -422,6 +422,7 @@ const ShopDetail = () => {
               mainBranchInfoGetValue={mainBranchInfoGetValue}
               ownerInfoGetValue={ownerInfoGetValue}
               updateVendorShopDetailStore={updateVendorShopDetailStore}
+              stateDataLists={stateDataLists}
             />
           )}
           {activeTab === 'Shop Layout' && (

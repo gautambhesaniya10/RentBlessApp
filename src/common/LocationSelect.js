@@ -61,7 +61,7 @@ const LocationSelect = ({
         search
         placeholder={placeholder}
         searchPlaceholder="Search..."
-        value={branchText}
+        value={branchText || defaultValue}
         onChange={item => {
           setBranchText(item.value);
           onChangeValue(item.value);
