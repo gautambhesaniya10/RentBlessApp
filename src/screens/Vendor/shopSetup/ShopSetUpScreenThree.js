@@ -14,7 +14,6 @@ import {RadioButton} from 'react-native-paper';
 import {Select, NativeBaseProvider} from 'native-base';
 import VendorSubBranchTextField from '../../../common/VendorSubBranchTextField';
 import LocationSelect from '../../../common/LocationSelect';
-import {loadAreaListsStart} from '../../../redux/AreaSlice/AreaListSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import {
   getAreaByCityLists,
@@ -43,10 +42,6 @@ const ShopSetUpScreenThree = ({
   const [subBranchEdit, setSubBranchEdit] = useState();
 
   const {areaLists} = useSelector(state => state.areaLists);
-
-  useEffect(() => {
-    dispatch(loadAreaListsStart());
-  }, []);
 
   useEffect(() => {
     if (sameAsOwner === 'True') {
@@ -551,7 +546,6 @@ const SubBranchModel = ({
   setSubBranch,
   setSubBranchEdit,
   subBranchEdit,
-  areaLists,
   stateDataLists,
 }) => {
   const [subManagerAddress, setSubManagerAddress] = useState('');
