@@ -208,8 +208,6 @@ const ShopSetUp = () => {
               return {links: itm};
             }) || [],
           shop_video: videoResponse || '',
-
-          form_steps: '3',
           shop_social_link: {
             facebook: individual ? '' : data.facebook_link,
             instagram: individual ? '' : data.instagram_link,

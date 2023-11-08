@@ -132,7 +132,6 @@ const ShopDetail = () => {
     shopUpdate({
       shopInfo: {
         id: useProfileData?.userCreatedShopId,
-        form_steps: '3',
         shop_social_link: {
           facebook: individual ? '' : data?.facebook_link,
           instagram: individual ? '' : data?.instagram_link,
