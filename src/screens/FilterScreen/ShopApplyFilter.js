@@ -25,6 +25,29 @@ const ShopApplyFilter = ({handleFilterModelClose, setShowBottomLoader}) => {
 
   const [applyBtnDisable, setApplyBtnDisable] = useState(false);
 
+  const [displayLimit, setDisplayLimit] = useState(11);
+  const [fetching, setFetching] = useState(false);
+
+  const handleProductScroll = event => {
+    const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent;
+    const isEndReached =
+      layoutMeasurement.height + contentOffset.y >= contentSize.height - 20;
+
+    if (isEndReached) {
+      fetchMoreItems();
+    }
+  };
+
+  const fetchMoreItems = () => {
+    setFetching(true);
+    setTimeout(() => {
+      setDisplayLimit(prevLimit => prevLimit + 11);
+      setFetching(false);
+    }, 1000); // Simulate delay
+  };
+
+  const handleOnEndReached = event => {};
+
   useEffect(() => {
     setApplyBtnDisable(
       arraysHaveSameValues(
@@ -139,12 +162,17 @@ const ShopApplyFilter = ({handleFilterModelClose, setShowBottomLoader}) => {
             )}
           </View>
           <View style={{marginTop: 10, paddingBottom: 55, height: '95%'}}>
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              onScroll={handleProductScroll}
+              onEndReached={handleOnEndReached}
+              showsVerticalScrollIndicator={false}>
               {selectedCategory === 'Location' && (
                 <ShopByLocation
                   areaLists={areaLists}
                   selectedLocationData={selectedLocationData}
                   setSelectedLocationData={setSelectedLocationData}
+                  displayLimit={displayLimit}
+                  fetching={fetching}
                 />
               )}
               {selectedCategory === 'Rating' && (

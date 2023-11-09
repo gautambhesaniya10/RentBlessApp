@@ -1,15 +1,19 @@
-import {StyleSheet, View} from 'react-native';
-import React, {useState} from 'react';
+import {StyleSheet, View, Text, ActivityIndicator} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {CheckBox} from 'react-native-elements';
 import {capitalizeString} from '../../../common/CapitalizeString';
 import SearchTextFiled from '../../../common/SearchTextFiled';
+import {TouchableOpacity} from 'react-native';
 
 const ShopByLocation = ({
   areaLists,
   selectedLocationData,
   setSelectedLocationData,
+  displayLimit,
+  fetching,
 }) => {
   const [searchText, setSearchText] = useState('');
+  const [displayedItems, setDisplayedItems] = useState([]);
 
   const handleMenCheckboxChange = itm => {
     const updatedSelection = selectedLocationData?.some(
@@ -21,8 +25,12 @@ const ShopByLocation = ({
     setSelectedLocationData(updatedSelection);
   };
 
+  useEffect(() => {
+    setDisplayedItems(areaLists?.slice(0, displayLimit));
+  }, [areaLists, displayLimit]);
+
   return (
-    <View>
+    <View style={{position: 'relative'}}>
       <SearchTextFiled
         value={searchText}
         handleTextSearch={value => setSearchText(value.toLowerCase())}
@@ -31,7 +39,7 @@ const ShopByLocation = ({
         ? areaLists?.filter(data =>
             data?.area?.toLowerCase().includes(searchText),
           )
-        : areaLists
+        : displayedItems
       )?.map((itm, index) => (
         <View key={index}>
           <CheckBox
@@ -49,10 +57,21 @@ const ShopByLocation = ({
           />
         </View>
       ))}
+      {fetching && (
+        <View style={styles.activityIndiCator}>
+          <ActivityIndicator color="#29977E" />
+        </View>
+      )}
     </View>
   );
 };
 
 export default ShopByLocation;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  activityIndiCator: {
+    position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
+  },
+});

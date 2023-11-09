@@ -65,7 +65,7 @@ const MenCollection = () => {
 
   return (
     <View style={{marginBottom: 20}}>
-      <Text style={styles.headingText}>Men’s Collections</Text>
+      <Text style={styles.headingText}>Men’s Collection</Text>
       <Text style={styles.descriptionText}>
         Lorem Ipsum is simply dummy text of the printing
       </Text>
