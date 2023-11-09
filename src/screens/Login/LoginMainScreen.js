@@ -10,6 +10,7 @@ import {
   shop_vendorIcon,
 } from '../../common/AllLiveImageLink';
 import {capitalizeString} from '../../common/CapitalizeString';
+import FastImage from 'react-native-fast-image';
 
 const LoginMainScreen = () => {
   const [loginType, setLoginType] = useState('customer');
@@ -27,9 +28,13 @@ const LoginMainScreen = () => {
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <View style={styles.main}>
-        <Image
-          source={{uri: rentBlessBlackLogo}}
-          style={{width: 231, height: 86, alignSelf: 'center'}}
+        <FastImage
+          style={{width: '60%', height: '7%', alignSelf: 'center'}}
+          source={{
+            uri: rentBlessBlackLogo,
+            // cache: FastImage.cacheControl.web,
+          }}
+          resizeMode="stretch"
         />
         <View style={{alignSelf: 'center', width: '90%'}}>
           <Text style={styles.joinText}>How you would like to join us ?</Text>

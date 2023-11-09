@@ -14,7 +14,11 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
-import {locationIcon, logoImage} from '../common/AllLiveImageLink';
+import {
+  locationIcon,
+  logoImage,
+  whiteLogoSmall,
+} from '../common/AllLiveImageLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {changeAppliedShopsFilters} from '../redux/ShopFilter/ShopFilterSlice';
 import {changeAppliedCityFilters} from '../redux/CityFilterSlice/CityFilterSlice';
@@ -26,6 +30,7 @@ import {
   changeProductCurrentPage,
   changeProductDataLimit,
 } from '../redux/ProductSlice/ProductSlice';
+import FastImage from 'react-native-fast-image';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
@@ -132,12 +137,13 @@ const CustomerHeader = ({homeScreen}) => {
             <Icon name="bars" size={22} color="white" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate('LandingPage')}>
-            <Image
+            <FastImage
+              style={{width: 80, height: 50, alignSelf: 'center'}}
               source={{
-                uri: logoImage,
+                uri: whiteLogoSmall,
+                // cache: FastImage.cacheControl.web,
               }}
-              width={100}
-              height={37}
+              resizeMode="stretch"
             />
           </TouchableOpacity>
         </View>
