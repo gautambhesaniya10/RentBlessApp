@@ -1,17 +1,10 @@
 import {NEXT_PUBLIC_WASABI_URL} from '@env';
 
-// export const logoImage = `${NEXT_PUBLIC_WASABI_URL}/imgs/rentblessLogo.png`;
-// export const rentBlessBlackLogo = `${NEXT_PUBLIC_WASABI_URL}/imgs/rentblessBlackLogo.png`;
-
 export const logoImage = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolWhite.png`;
 export const rentBlessBlackLogo = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolBlack.png`;
 
 export const appBlackLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/BlackLogo.png`;
-// export const whiteLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/whiteLogo.png`;
-
 export const whiteLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolWhiteSmall.png`;
-
-// export const landingBanner1 = `${NEXT_PUBLIC_WASABI_URL}/banners/bannerImg1.png`;
 
 export const landingBanner1 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner1Mobile.png`;
 export const landingBanner2 = `${NEXT_PUBLIC_WASABI_URL}/banners/banner2Mobile.png`;

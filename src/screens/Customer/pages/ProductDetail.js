@@ -229,7 +229,7 @@ const ProductDetail = () => {
             style={{
               height: '100%',
               width: '100%',
-              borderRadius: 8,
+              // borderRadius: 8,
             }}
             source={{
               uri: item?.image,
@@ -257,7 +257,10 @@ const ProductDetail = () => {
   const shareContent = async () => {
     try {
       const result = await Share.share({
-        message: `https://rentbless.com/product/${productId}/`,
+        message: `https://www.fitmecool.com/product/${productDetails?.data?.product?.data?.product_name?.replaceAll(
+          ' ',
+          '-',
+        )}/${productId}/`,
         // url: `https://rentbless.com/product/${productId}/`,
       });
     } catch (error) {
@@ -431,6 +434,23 @@ const ProductDetail = () => {
                 <Icon name="exclamation-circle" size={22} color="black" />
               </TouchableOpacity>
             </View>
+            {productDetails?.data?.product?.data?.product_listing_type && (
+              <View
+                style={[
+                  styles.rentSellRebinMain,
+                  {
+                    backgroundColor:
+                      productDetails?.data?.product?.data
+                        ?.product_listing_type === 'rent'
+                        ? '#ff3b3b'
+                        : '#29977E',
+                  },
+                ]}>
+                <Text style={styles.rebinText}>
+                  {productDetails?.data?.product?.data?.product_listing_type}
+                </Text>
+              </View>
+            )}
           </View>
 
           <View style={styles.mainContainer}>
@@ -876,5 +896,21 @@ const styles = StyleSheet.create({
     color: '#29977E',
     fontSize: 16,
     fontWeight: '600',
+  },
+  rentSellRebinMain: {
+    height: 30,
+    width: 55,
+    position: 'absolute',
+    top: 15,
+    left: 0,
+    zIndex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  rebinText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '600',
+    textTransform: 'capitalize',
   },
 });

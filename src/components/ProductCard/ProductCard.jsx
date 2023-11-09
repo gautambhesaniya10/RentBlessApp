@@ -91,10 +91,8 @@ const ProductCard = ({product, landingPageCardWith}) => {
     <View
       style={{
         position: 'relative',
-        paddingTop: 4,
-        paddingLeft: 4,
         width: landingPageCardWith ? 200 : '48%',
-        overflow: 'hidden',
+        // overflow: 'hidden',
       }}>
       {product?.product_listing_type && (
         <View
@@ -105,8 +103,6 @@ const ProductCard = ({product, landingPageCardWith}) => {
                 product?.product_listing_type === 'rent'
                   ? '#ff3b3b'
                   : '#29977E',
-              top: landingPageCardWith ? 6 : 5,
-              right: landingPageCardWith ? 120 : 105,
             },
           ]}>
           <Text style={styles.rebinText}>{product?.product_listing_type}</Text>
@@ -173,7 +169,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
               <FastImage
                 source={{
                   uri: product?.branchInfo?.shop_info?.shop_logo,
-                  cache: FastImage.cacheControl.web,
+                  // cache: FastImage.cacheControl.web,
                 }}
                 style={{width: 25, height: 25, borderRadius: 12}}
                 resizeMode="cover"
@@ -287,14 +283,12 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
   rentSellRebinMain: {
-    height: 35,
-    width: 100,
-    backgroundColor: '#29977E',
+    height: 25,
+    width: 40,
     position: 'absolute',
-    transform: [{rotate: '320deg'}],
+    top: 10,
+    left: 0,
     zIndex: 1,
-    borderWidth: 5,
-    borderColor: '#f5cd79',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -302,6 +296,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontWeight: '600',
-    textTransform: 'uppercase',
+    textTransform: 'capitalize',
   },
 });

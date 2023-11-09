@@ -92,12 +92,15 @@ const HomePage = () => {
   const [showBottomLoader, setShowBottomLoader] = useState(false);
   const [filterModelOpen, setFilterModelOpen] = useState(false);
 
+  const pageProductLimit = 12;
+  const pageShopLimit = 12;
+
   const getAllMoreProducts = () => {
     dispatch(
       loadMoreProductsStart({
         pageData: {
           skip: productDataLimit,
-          limit: 10,
+          limit: pageProductLimit,
         },
         filter: {
           category_id:
@@ -132,7 +135,7 @@ const HomePage = () => {
       loadProductsStart({
         pageData: {
           skip: 0,
-          limit: 10,
+          limit: pageProductLimit,
         },
         filter: {
           category_id:
@@ -178,14 +181,14 @@ const HomePage = () => {
       if (isEndReached && !productLoading) {
         if (productCurrentPage < numOfPages) {
           dispatch(changeProductCurrentPage(productCurrentPage + 1));
-          dispatch(changeProductDataLimit(productDataLimit + 10));
+          dispatch(changeProductDataLimit(productDataLimit + pageProductLimit));
         }
       }
     } else {
       if (isEndReached && !shopLoading) {
         if (shopCurrentPage < shopNumOfPages) {
           dispatch(changeShopCurrentPage(shopCurrentPage + 1));
-          dispatch(changeShopDataLimit(shopDataLimit + 10));
+          dispatch(changeShopDataLimit(shopDataLimit + pageShopLimit));
         }
       }
     }
@@ -196,7 +199,7 @@ const HomePage = () => {
       loadMoreShopStart({
         pageData: {
           skip: shopDataLimit,
-          limit: 10,
+          limit: pageShopLimit,
         },
         area: shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue?.map(
           itm => itm.pin,
@@ -212,7 +215,7 @@ const HomePage = () => {
       loadShopsStart({
         pageData: {
           skip: 0,
-          limit: 10,
+          limit: pageShopLimit,
         },
         area: shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue?.map(
           itm => itm.pin,

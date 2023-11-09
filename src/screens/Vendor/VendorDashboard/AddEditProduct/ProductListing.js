@@ -157,11 +157,9 @@ const ProductListing = () => {
                         <View
                           style={{
                             position: 'relative',
-                            overflow: 'hidden',
-                            padding: 3,
                           }}>
                           <FastImage
-                            style={{width: 70, height: 70, alignSelf: 'center'}}
+                            style={{width: 80, height: 70, alignSelf: 'center'}}
                             source={{
                               uri: item?.product_image?.front,
                               cache: FastImage.cacheControl.web,
@@ -476,15 +474,12 @@ const styles = StyleSheet.create({
     color: '#31333E',
   },
   rentSellRebinMain: {
-    height: 30,
-    width: 70,
+    height: 20,
+    width: 30,
     position: 'absolute',
-    top: 0,
-    right: 32,
-    transform: [{rotate: '320deg'}],
+    top: 5,
+    left: 0,
     zIndex: 1,
-    borderWidth: 5,
-    borderColor: '#f5cd79',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -492,7 +487,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 10,
     fontWeight: '600',
-    textTransform: 'uppercase',
+    textTransform: 'capitalize',
   },
   loadingDiv: {
     position: 'absolute',

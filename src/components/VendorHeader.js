@@ -19,8 +19,9 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useToast} from 'native-base';
 import {Divider} from 'react-native-paper';
 import {Avatar} from 'react-native-paper';
-import {logoImage} from '../common/AllLiveImageLink';
+import {logoImage, whiteLogoSmall} from '../common/AllLiveImageLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import FastImage from 'react-native-fast-image';
 
 const VendorHeader = () => {
   const toast = useToast();
@@ -71,12 +72,13 @@ const VendorHeader = () => {
                 <Icon name="bars" size={22} color="white" />
               </TouchableOpacity>
             )}
-          <Image
+          <FastImage
+            style={{width: 80, height: 50, alignSelf: 'center'}}
             source={{
-              uri: logoImage,
+              uri: whiteLogoSmall,
+              // cache: FastImage.cacheControl.web,
             }}
-            width={100}
-            height={37}
+            resizeMode="stretch"
           />
         </View>
         {useProfileData?.userHaveAnyShop && vendorShopDetails && (

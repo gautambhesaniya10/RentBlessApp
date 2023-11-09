@@ -146,7 +146,10 @@ const ShopIndividual = () => {
   const shareContent = async () => {
     try {
       await Share.share({
-        message: `https://rentbless.com/shop/${shopId}/`,
+        message: `https://www.fitmecool.com/shop/${shopDetails?.shop_name?.replaceAll(
+          ' ',
+          '-',
+        )}/${shopId}/`,
         // url: `https://rentbless.com/product/${productId}/`,
       });
     } catch (error) {

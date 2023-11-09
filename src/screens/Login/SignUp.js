@@ -166,7 +166,7 @@ const SignUp = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-left" size={22} color="black" />
         </TouchableOpacity>
-        <Text style={styles.appNameText}>Rentbless</Text>
+        <Text style={styles.appNameText}>FitMeCool</Text>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false} style={styles.main}>
