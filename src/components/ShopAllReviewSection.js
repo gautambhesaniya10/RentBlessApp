@@ -76,7 +76,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
         />
       </View>
 
-      <View style={{marginTop: 20}}>
+      <View style={{marginTop: 8}}>
         <Text style={styles.DistributionText}>Rating Distribution</Text>
         {shopReviews?.length > 0
           ? [5, 4, 3, 2, 1]?.map?.((star, index) => (
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     paddingBottom: 2,
   },
   supMain: {
-    marginTop: 8,
+    marginTop: 2,
   },
   avgRatingMain: {
     flexDirection: 'row',
@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
     color: '#31333E',
     fontSize: 16,
     fontWeight: '600',
-    marginBottom: 14,
+    marginBottom: 10,
   },
   progressBarMain: {
     flexDirection: 'row',
