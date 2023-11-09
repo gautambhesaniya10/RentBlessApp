@@ -71,7 +71,7 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
                 ? '0'
                 : shopsFiltersReducer?.appliedShopsFilters[
                     itm?.type
-                  ].selectedValue?.filter(item => item !== itm.value),
+                  ].selectedValue?.filter(item => item?.pin !== itm.value),
           },
         }),
       );
@@ -116,9 +116,6 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
       : productsFiltersReducer?.appliedProductsFilters?.categoryId
           ?.selectedValue;
 
-    // const selectedCategoryIds =
-    //   productsFiltersReducer?.appliedProductsFilters?.categoryId?.selectedValue;
-
     const selectedCategories = categories?.filter(category =>
       selectedCategoryIds?.includes(category?.id),
     );
@@ -142,9 +139,6 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
     const selectedShopIds = showOnlyShopDetailPage
       ? []
       : productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue;
-
-    // const selectedShopIds =
-    //   productsFiltersReducer?.appliedProductsFilters?.shopId?.selectedValue;
 
     const selectedShopsData = allShopsLists?.data.filter(shop =>
       selectedShopIds?.includes(shop.id),
@@ -279,19 +273,21 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
       shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue;
 
     const selectedLocations = areaLists?.filter(area =>
-      selectedLocationPins?.includes(area?.pin),
+      selectedLocationPins.some(
+        item => item.area === area.area && item.pin === area.pin,
+      ),
     );
 
     const mappedLocations = selectedLocations?.map(location => ({
       type: 'locations',
-      label: location?.area,
-      value: location?.pin,
+      label: location.area,
+      value: location.pin,
     }));
 
     setSelectedLocations(mappedLocations);
   }, [
     areaLists,
-    shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue,
+    shopsFiltersReducer?.appliedShopsFilters.locations.selectedValue,
   ]);
 
   useEffect(() => {

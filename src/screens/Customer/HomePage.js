@@ -85,6 +85,8 @@ const HomePage = () => {
     error: shopError,
   } = useSelector(state => state?.shops);
 
+  const {appliedCityFilter} = useSelector(state => state?.cityFiltersReducer);
+
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
 
   const [showBottomLoader, setShowBottomLoader] = useState(false);
@@ -120,6 +122,7 @@ const HomePage = () => {
         search:
           productsFiltersReducer.appliedProductsFilters.searchBarData
             .selectedValue,
+        city: appliedCityFilter?.city?.selectedValue,
       }),
     );
   };
@@ -154,6 +157,7 @@ const HomePage = () => {
         search:
           productsFiltersReducer.appliedProductsFilters.searchBarData
             .selectedValue,
+        city: appliedCityFilter?.city?.selectedValue,
       }),
     );
   };
@@ -194,13 +198,15 @@ const HomePage = () => {
           skip: shopDataLimit,
           limit: 10,
         },
-        area: shopsFiltersReducer.appliedShopsFilters.locations.selectedValue,
+        area: shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue?.map(
+          itm => itm.pin,
+        ),
         sort: shopsFiltersReducer.sortFilters.sortType.selectedValue,
         stars: shopsFiltersReducer.appliedShopsFilters.stars.selectedValue,
+        city: appliedCityFilter?.city?.selectedValue,
       }),
     );
   };
-
   const getAllShops = () => {
     dispatch(
       loadShopsStart({
@@ -208,9 +214,12 @@ const HomePage = () => {
           skip: 0,
           limit: 10,
         },
-        area: shopsFiltersReducer.appliedShopsFilters.locations.selectedValue,
+        area: shopsFiltersReducer?.appliedShopsFilters?.locations?.selectedValue?.map(
+          itm => itm.pin,
+        ),
         sort: shopsFiltersReducer.sortFilters.sortType.selectedValue,
         stars: shopsFiltersReducer.appliedShopsFilters.stars.selectedValue,
+        city: appliedCityFilter?.city?.selectedValue,
       }),
     );
   };
@@ -223,6 +232,7 @@ const HomePage = () => {
     dispatch,
     shopsFiltersReducer.appliedShopsFilters,
     shopsFiltersReducer.sortFilters,
+    appliedCityFilter?.city?.selectedValue,
   ]);
 
   useEffect(() => {
@@ -240,6 +250,7 @@ const HomePage = () => {
     productsFiltersReducer.appliedProductsFilters,
     productsFiltersReducer.sortFilters,
     productsFiltersReducer.searchBarData,
+    appliedCityFilter?.city?.selectedValue,
   ]);
 
   useEffect(() => {

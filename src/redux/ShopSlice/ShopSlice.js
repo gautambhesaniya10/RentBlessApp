@@ -18,8 +18,8 @@ export const loadMoreShopStart = createAsyncThunk(
 
 export const loadAllShopsListsStart = createAsyncThunk(
   'getAllShop/loadGetAllShops',
-  async () => {
-    const response = await getAllShopsList();
+  async filterData => {
+    const response = await getAllShopsList(filterData);
     return response?.data?.getAllShops;
   },
 );

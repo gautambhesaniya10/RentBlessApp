@@ -9,6 +9,7 @@ export const getProducts = async payload => {
         $search: String
         $filter: productFilterInput
         $sort: String
+        $city: String
         $shopId: [String]
       ) {
         productList(
@@ -16,6 +17,7 @@ export const getProducts = async payload => {
           search: $search
           filter: $filter
           sort: $sort
+          city: $city
           shop_id: $shopId
         ) {
           data {
@@ -62,6 +64,7 @@ export const getProducts = async payload => {
       filter: payload.filter,
       shopId: payload.shopId,
       sort: payload.sort,
+      city: payload.city,
       search: payload.search,
     },
     fetchPolicy: 'no-cache',

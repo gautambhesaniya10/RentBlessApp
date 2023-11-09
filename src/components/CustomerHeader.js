@@ -16,14 +16,25 @@ import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
 import {locationIcon, logoImage} from '../common/AllLiveImageLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {changeAppliedShopsFilters} from '../redux/ShopFilter/ShopFilterSlice';
+import {changeAppliedCityFilters} from '../redux/CityFilterSlice/CityFilterSlice';
+import {
+  changeShopCurrentPage,
+  changeShopDataLimit,
+} from '../redux/ShopSlice/ShopSlice';
+import {
+  changeProductCurrentPage,
+  changeProductDataLimit,
+} from '../redux/ProductSlice/ProductSlice';
 
 const CustomerHeader = ({homeScreen}) => {
   const toast = useToast();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
-  const {areaLists} = useSelector(state => state.areaLists);
   const {userProfile} = useSelector(state => state?.user);
+
+  const {cityLists} = useSelector(state => state.cityLists);
 
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
   const [AccessToken, setAccessToken] = useState('');
@@ -66,7 +77,13 @@ const CustomerHeader = ({homeScreen}) => {
     AsyncStorage.getItem('userId') && dispatch(loadUserProfileStart());
   }, [isFocused]);
 
-  const [selectedLocation, setSelectedLocation] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState('');
+
+  const {appliedCityFilter} = useSelector(state => state.cityFiltersReducer);
+  useEffect(() => {
+    appliedCityFilter &&
+      setSelectedLocation(appliedCityFilter.city.selectedValue);
+  }, [appliedCityFilter]);
 
   const renderLocationLabel = () => {
     return (
@@ -77,6 +94,33 @@ const CustomerHeader = ({homeScreen}) => {
         />{' '}
         Location
       </Text>
+    );
+  };
+
+  const onChangeSelectedCity = async city => {
+    console.log('city', city);
+    setSelectedLocation(city);
+    await AsyncStorage.setItem('selected_city', city);
+
+    dispatch(changeShopCurrentPage(0));
+    dispatch(changeShopDataLimit(0));
+
+    dispatch(changeProductCurrentPage(0));
+    dispatch(changeProductDataLimit(0));
+
+    dispatch(
+      changeAppliedShopsFilters({
+        key: 'locations',
+        value: {selectedValue: []},
+      }),
+    );
+    dispatch(
+      changeAppliedCityFilters({
+        key: 'city',
+        value: {
+          selectedValue: city,
+        },
+      }),
     );
   };
 
@@ -106,15 +150,15 @@ const CustomerHeader = ({homeScreen}) => {
             selectedTextStyle={styles.selectedTextStyle}
             inputSearchStyle={styles.inputSearchStyle}
             iconStyle={styles.iconStyle}
-            labelField="area"
-            valueField="pin"
-            data={areaLists}
+            labelField="city"
+            valueField="city"
+            data={cityLists}
             search
             placeholder={'Select item'}
             searchPlaceholder="Search..."
             value={selectedLocation}
             onChange={item => {
-              setSelectedLocation(item.pin);
+              onChangeSelectedCity(item.city);
             }}
           />
         </View>

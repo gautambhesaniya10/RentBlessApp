@@ -11,6 +11,8 @@ import AppVersionSlice from './AppVersionSlice/AppVersionSlice';
 import ShopConfigurationsSlice from './ShopConfigurationsSlice/ShopConfigurationsSlice';
 import ShopProductFilterSlice from './ShopProductFilter/ShopProductFilterSlice';
 import ShopProductSlice from './ShopProductSlice/ShopProductSlice';
+import CityListSlice from './CityListSlice/CityListSlice';
+import CityFilterSlice from './CityFilterSlice/CityFilterSlice';
 
 const store = configureStore({
   reducer: {
@@ -26,6 +28,8 @@ const store = configureStore({
     shops: ShopSlice,
     appVersion: AppVersionSlice,
     shopConfigurations: ShopConfigurationsSlice,
+    cityLists: CityListSlice,
+    cityFiltersReducer: CityFilterSlice,
   },
 });
 

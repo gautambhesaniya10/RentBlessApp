@@ -1,11 +1,16 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {getAreaLists} from '../../graphql/queries/areaListsQueries';
+import {
+  getAreaByCityLists,
+  getAreaLists,
+} from '../../graphql/queries/areaListsQueries';
 
 export const loadAreaListsStart = createAsyncThunk(
   'area/fetchArea',
-  async () => {
-    const response = await getAreaLists();
-    return response?.data.areaList;
+  async city => {
+    const response = city
+      ? await getAreaByCityLists(city)
+      : await getAreaLists();
+    return city ? response?.data?.areaByCity : response?.data.areaList;
   },
 );
 

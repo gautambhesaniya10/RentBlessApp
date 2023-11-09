@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import React from 'react';
 import {CheckBox} from 'react-native-elements';
 import {capitalizeString} from '../../../common/CapitalizeString';
@@ -8,10 +8,12 @@ const ShopByLocation = ({
   selectedLocationData,
   setSelectedLocationData,
 }) => {
-  const handleMenCheckboxChange = item => {
-    const updatedSelection = selectedLocationData?.includes(item)
-      ? selectedLocationData?.filter(id => id !== item)
-      : [...selectedLocationData, item];
+  const handleMenCheckboxChange = itm => {
+    const updatedSelection = selectedLocationData?.some(
+      item => item.area === itm.area && item.pin === itm.pin,
+    )
+      ? selectedLocationData?.filter(val => val.pin !== itm.pin)
+      : [...selectedLocationData, {area: itm.area, pin: itm.pin}];
 
     setSelectedLocationData(updatedSelection);
   };
@@ -22,8 +24,10 @@ const ShopByLocation = ({
         <View key={index}>
           <CheckBox
             title={capitalizeString(itm?.area)}
-            checked={selectedLocationData?.includes(itm?.pin)}
-            onPress={() => handleMenCheckboxChange(itm?.pin)}
+            checked={selectedLocationData?.some(
+              item => item.area === itm.area && item.pin === itm.pin,
+            )}
+            onPress={() => handleMenCheckboxChange(itm)}
             containerStyle={{
               backgroundColor: 'transparent',
               borderWidth: 0,
