@@ -5,6 +5,7 @@ const SearchTextFiled = ({value, handleTextSearch}) => {
   return (
     <TextInput
       placeholder="Search Here.."
+      placeholderTextColor="black"
       value={value}
       onChangeText={handleTextSearch}
       style={styles.searchTextDiv}
