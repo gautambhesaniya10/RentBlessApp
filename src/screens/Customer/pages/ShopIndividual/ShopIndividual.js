@@ -505,7 +505,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     marginHorizontal: 20,
     marginBottom: 25,
-    marginTop: 13,
+    marginTop: 2,
   },
   mainHeaderContainer: {
     width: '94%',
@@ -589,7 +589,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     alignSelf: 'center',
     width: '100%',
-    marginTop: 10,
+    marginTop: 6,
   },
 
   FilterBtnMain: {

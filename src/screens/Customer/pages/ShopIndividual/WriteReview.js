@@ -96,7 +96,7 @@ const WriteReview = () => {
           Review {shopDetails?.shop_name} Shop
         </Text>
         <Text style={styles.rateOurText}>Rate Our Of 5*</Text>
-        <View style={{marginLeft: -10, paddingBottom: 30}}>
+        <View style={{marginLeft: -10, paddingBottom: 15}}>
           <StarRating
             enableHalfStar={false}
             starSize={40}
@@ -162,13 +162,13 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 18,
     fontFamily: FontStyle,
-    paddingBottom: 30,
+    paddingBottom: 15,
   },
   rateOurText: {
     color: '#31333E',
     fontWeight: '600',
     fontSize: 16,
-    paddingBottom: 16,
+    paddingBottom: 8,
   },
   yourRevText: {
     color: '#31333E',
