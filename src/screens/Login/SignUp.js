@@ -176,10 +176,6 @@ const SignUp = () => {
             {loginType === 'vendor' ? 'Vendor' : 'Customer'}
           </Text>
         </Text>
-        <Text style={styles.childText}>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry.
-        </Text>
         <View style={{marginBottom: 16, width: '100%'}}>
           <TouchableOpacity
             onPress={() => GoogleSignUPPress()}
@@ -387,7 +383,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontStyle: 'normal',
     fontWeight: '700',
-    marginTop: 20,
+    paddingVertical: 20,
   },
   childText: {
     color: 'rgba(21, 24, 39, 0.56)',

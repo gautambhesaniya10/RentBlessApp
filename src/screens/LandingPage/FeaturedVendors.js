@@ -51,7 +51,8 @@ const FeaturedVendors = ({shop}) => {
     <View style={{marginBottom: 10}}>
       <Text style={styles.worksH1Text}>Featured Vendors</Text>
       <Text style={styles.worksH2Text}>
-        Lorem Ipsum is simply dummy text of the printing
+        Explore Incredible Individual Vendors OR Browse Through Trendy Boutiques
+        For The Latest In Fashion.
       </Text>
 
       {shopData?.length > 0 ? (

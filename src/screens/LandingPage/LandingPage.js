@@ -89,9 +89,6 @@ const LandingPage = () => {
           </View>
           <View style={styles.worksMain}>
             <Text style={styles.worksH1Text}>How It Works</Text>
-            <Text style={styles.worksH2Text}>
-              Lorem Ipsum is simply dummy text of the printing
-            </Text>
           </View>
           <View>
             <View style={styles.tabMain}>
@@ -120,9 +117,11 @@ const LandingPage = () => {
                     style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
                   <View style={{alignSelf: 'center'}}>
-                    <Text style={styles.chooseText}>Choose Cloth For Rent</Text>
+                    <Text style={styles.chooseText}>
+                      Choose Your Clothes For Rent/Buy
+                    </Text>
                     <Text style={styles.chooseDesText}>
-                      Choose your rental outfit from different collection
+                      Choose Your Outfit From Different Collection
                     </Text>
                   </View>
                 </View>
@@ -134,9 +133,9 @@ const LandingPage = () => {
                   <View style={{alignSelf: 'center'}}>
                     <Text style={styles.chooseText}>Connect With Vendors</Text>
                     <Text style={styles.chooseDesText}>
-                      After choosing your desired clothing reach out to the
-                      vendor directly through whatsapp or a direct phone call to
-                      inquire about pricing, availibity and other T&C.
+                      After Choosing Your Desired Clothing Reach Out To The
+                      Vendor Directly Through Whatsapp OR Direct Phone Call To
+                      Inquire About Pricing, Availibity And Other T&C.
                     </Text>
                   </View>
                 </View>
@@ -167,7 +166,7 @@ const LandingPage = () => {
                     <View style={{alignSelf: 'center'}}>
                       <Text style={styles.chooseText}>Upload Products</Text>
                       <Text style={styles.chooseDesText}>
-                        Upload list of rental products
+                        Upload Products For Rent/ Sell
                       </Text>
                     </View>
                   </View>
@@ -180,8 +179,8 @@ const LandingPage = () => {
                   <View style={{alignSelf: 'center'}}>
                     <Text style={styles.chooseText}>Get Inquiries</Text>
                     <Text style={styles.chooseDesText}>
-                      Wait patiently for inquires to arrive via whatsapp or
-                      phone calls
+                      Wait Patiently For Inquires To Arrive Via Whatsapp OR
+                      Direct Phone Call
                     </Text>
                   </View>
                 </View>

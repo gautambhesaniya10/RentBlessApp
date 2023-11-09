@@ -68,7 +68,7 @@ const WomenCollection = () => {
     <View style={{marginBottom: 40}}>
       <Text style={styles.headingText}>Women’s Collection</Text>
       <Text style={styles.descriptionText}>
-        Lorem Ipsum is simply dummy text of the printing
+        Take A Browse Through Our Fabulous Selection Of Women's Fashion.
       </Text>
 
       <View style={styles.menSlideColMain}>

@@ -294,11 +294,11 @@ const ShopSetUp = () => {
             <View style={styles.overlay}></View>
             <View style={styles.imgOverTextMain}>
               <Text style={styles.imgOverText}>
-                Selling{' '}
+                Set Up{' '}
                 <Text style={[styles.imgOverText, styles.imgOverTextInner]}>
-                  Only The Best Things
+                  Your Online
                 </Text>{' '}
-                Online
+                Shop
               </Text>
               <View
                 style={{
@@ -494,13 +494,15 @@ const styles = StyleSheet.create({
   imgOverText: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#FFF',
+    color: '#29977E',
     fontFamily: FontStyle,
+    width: 150,
+    alignSelf: 'center',
   },
   imgOverTextInner: {
     fontSize: 24,
     fontWeight: '300',
-    color: 'rgba(255, 255, 255, 0.56)',
+    color: 'white',
     fontFamily: FontStyle,
   },
 
