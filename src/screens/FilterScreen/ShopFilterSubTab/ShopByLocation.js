@@ -29,6 +29,10 @@ const ShopByLocation = ({
     setDisplayedItems(areaLists?.slice(0, displayLimit));
   }, [areaLists, displayLimit]);
 
+  const FilterDataAll = areaLists?.filter(data =>
+    data?.area?.toLowerCase().includes(searchText),
+  );
+
   return (
     <View style={{position: 'relative'}}>
       <SearchTextFiled
@@ -36,9 +40,7 @@ const ShopByLocation = ({
         handleTextSearch={value => setSearchText(value.toLowerCase())}
       />
       {(searchText !== ''
-        ? areaLists?.filter(data =>
-            data?.area?.toLowerCase().includes(searchText),
-          )
+        ? FilterDataAll?.slice(0, displayLimit)
         : displayedItems
       )?.map((itm, index) => (
         <View key={index}>
