@@ -294,49 +294,15 @@ const ShopSetUp = () => {
             <View style={styles.overlay}></View>
             <View style={styles.imgOverTextMain}>
               <Text style={styles.imgOverText}>
-                Set Up{' '}
+                Join{' '}
                 <Text style={[styles.imgOverText, styles.imgOverTextInner]}>
-                  Your Online
+                  Us
                 </Text>{' '}
-                Shop
+                As{' '}
+                <Text style={[styles.imgOverText, styles.imgOverTextInner]}>
+                  ?
+                </Text>
               </Text>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  width: '100%',
-                  gap: 20,
-                  marginTop: 24,
-                }}>
-                <View style={{width: '50%'}}>
-                  <CustomButton
-                    name="Shop"
-                    color="white"
-                    backgroundColor={
-                      selectedOption === 'Shop'
-                        ? '#29977E'
-                        : 'rgba(255, 255, 255, 0.00)'
-                    }
-                    borderColor={selectedOption === 'Shop' ? '#29977E' : 'gray'}
-                    onPress={() => handleClickIndividual('Shop', false)}
-                  />
-                </View>
-                <View style={{width: '50%'}}>
-                  <CustomButton
-                    name="Individual"
-                    color="white"
-                    backgroundColor={
-                      selectedOption === 'Individual'
-                        ? '#29977E'
-                        : 'rgba(255, 255, 255, 0.00)'
-                    }
-                    borderColor={
-                      selectedOption === 'Individual' ? '#29977E' : 'gray'
-                    }
-                    onPress={() => handleClickIndividual('Individual', true)}
-                  />
-                </View>
-              </View>
             </View>
           </View>
 
@@ -349,6 +315,45 @@ const ShopSetUp = () => {
                 paddingBottom: 30,
               },
             ]}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                width: '100%',
+                gap: 20,
+                marginTop: 24,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <View style={{width: '35%'}}>
+                <CustomButton
+                  name="Shop"
+                  color={selectedOption === 'Shop' ? 'white' : 'black'}
+                  backgroundColor={
+                    selectedOption === 'Shop'
+                      ? '#29977E'
+                      : 'rgba(255, 255, 255, 0.00)'
+                  }
+                  borderColor={selectedOption === 'Shop' ? '#29977E' : 'gray'}
+                  onPress={() => handleClickIndividual('Shop', false)}
+                />
+              </View>
+              <View style={{width: '35%'}}>
+                <CustomButton
+                  name="Single Person"
+                  color={selectedOption === 'Individual' ? 'white' : 'black'}
+                  backgroundColor={
+                    selectedOption === 'Individual'
+                      ? '#29977E'
+                      : 'rgba(255, 255, 255, 0.00)'
+                  }
+                  borderColor={
+                    selectedOption === 'Individual' ? '#29977E' : 'gray'
+                  }
+                  onPress={() => handleClickIndividual('Individual', true)}
+                />
+              </View>
+            </View>
             <View style={styles.labelContainer}>
               <Text
                 style={[
@@ -508,7 +513,7 @@ const styles = StyleSheet.create({
 
   mainBottomContainer: {
     position: 'relative',
-    bottom: 60,
+    bottom: '8%',
     borderRadius: 4,
   },
 

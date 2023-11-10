@@ -76,7 +76,7 @@ const LoginMainScreen = () => {
               <View style={styles.bottomMain}>
                 <Text style={styles.customerText}>Customer</Text>
                 <Text style={styles.customerTextChild}>
-                  Sign up as a customer
+                  Continue As a Customer
                 </Text>
               </View>
             </TouchableOpacity>
@@ -104,9 +104,9 @@ const LoginMainScreen = () => {
                 )}
               </View>
               <View style={styles.bottomMain}>
-                <Text style={styles.customerText}>Vendor</Text>
+                <Text style={styles.customerText}>Seller</Text>
                 <Text style={styles.customerTextChild}>
-                  Sign up as a business
+                  Continue As a Seller
                 </Text>
               </View>
             </TouchableOpacity>
@@ -116,7 +116,11 @@ const LoginMainScreen = () => {
         <View style={{marginTop: 65, alignSelf: 'center', width: '90%'}}>
           <View style={{marginBottom: 16, width: '100%'}}>
             <CustomButton
-              name={capitalizeString(`Continue as ${loginType}`)}
+              name={capitalizeString(
+                `Continue as ${
+                  loginType === 'customer' ? 'Customer' : 'Seller'
+                }`,
+              )}
               color="#FFFFFF"
               backgroundColor="#151827"
               borderColor="#151827"

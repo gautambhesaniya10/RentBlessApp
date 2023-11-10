@@ -152,7 +152,7 @@ const Login = () => {
         <Text style={styles.joinText}>
           Login As{' '}
           <Text style={{color: '#29977E'}}>
-            {loginType === 'vendor' ? 'Vendor' : 'Customer'}
+            {loginType === 'vendor' ? 'Seller' : 'Customer'}
           </Text>{' '}
           !
         </Text>

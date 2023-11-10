@@ -24,6 +24,7 @@ import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
 import {refactorPrice} from '../../../../utils';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
+import {colorsList} from '../../../../common/Customer/ColorList';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -73,18 +74,6 @@ const AddEditProduct = () => {
 
   const richtext = useRef(null);
 
-  const colorsList = [
-    'red',
-    'pink',
-    'yellow',
-    'wine',
-    'purple',
-    'blue',
-    'orange',
-    'green',
-    'white',
-    'black',
-  ];
   const productTypeData = ['Men', 'Women'];
 
   useEffect(() => {

@@ -49,9 +49,9 @@ const FeaturedVendors = ({shop}) => {
 
   return (
     <View style={{marginBottom: 10}}>
-      <Text style={styles.worksH1Text}>Featured Vendors</Text>
+      <Text style={styles.worksH1Text}>Featured Sellers</Text>
       <Text style={styles.worksH2Text}>
-        Explore Incredible Individual Vendors OR Browse Through Trendy Boutiques
+        Explore Incredible Individual sellers OR Browse Through Trendy Boutiques
         For The Latest In Fashion.
       </Text>
 

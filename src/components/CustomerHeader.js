@@ -41,10 +41,6 @@ const CustomerHeader = ({homeScreen}) => {
 
   const {cityLists} = useSelector(state => state.cityLists);
 
-  const AllCityArray = [{city: 'All City'}];
-
-  const cityListAllData = [...AllCityArray, ...cityLists];
-
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
   const [AccessToken, setAccessToken] = useState('');
 
@@ -108,8 +104,8 @@ const CustomerHeader = ({homeScreen}) => {
 
   const onChangeSelectedCity = async city => {
     console.log('city', city);
-    setSelectedLocation(city);
     await AsyncStorage.setItem('selected_city', city);
+    setSelectedLocation(city);
 
     dispatch(changeShopCurrentPage(0));
     dispatch(changeShopDataLimit(0));
@@ -167,7 +163,7 @@ const CustomerHeader = ({homeScreen}) => {
             iconStyle={styles.iconStyle}
             labelField="city"
             valueField="city"
-            data={cityListAllData}
+            data={cityLists}
             search
             placeholder={'Select item'}
             searchPlaceholder="Search..."

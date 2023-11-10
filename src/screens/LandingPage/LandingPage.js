@@ -106,7 +106,7 @@ const LandingPage = () => {
                   styles.venTextMain,
                   activeTab === 'vendor' && styles.bottomGreenTab,
                 ]}>
-                <Text style={styles.TextTab}>Vendors</Text>
+                <Text style={styles.TextTab}>Seller</Text>
               </TouchableOpacity>
             </View>
             {activeTab === 'customer' ? (
@@ -131,10 +131,10 @@ const LandingPage = () => {
                     style={{width: 40, height: 40, alignSelf: 'center'}}
                   />
                   <View style={{alignSelf: 'center'}}>
-                    <Text style={styles.chooseText}>Connect With Vendors</Text>
+                    <Text style={styles.chooseText}>Connect With Sellers</Text>
                     <Text style={styles.chooseDesText}>
                       After Choosing Your Desired Clothing Reach Out To The
-                      Vendor Directly Through Whatsapp OR Direct Phone Call To
+                      Seller Directly Through Whatsapp OR Direct Phone Call To
                       Inquire About Pricing, Availibity And Other T&C.
                     </Text>
                   </View>

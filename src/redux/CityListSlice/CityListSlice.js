@@ -12,7 +12,7 @@ export const loadCityListsStart = createAsyncThunk(
 const CityListSlice = createSlice({
   name: 'cityListSlice',
   initialState: {
-    cityLists: [],
+    cityLists: [{__typename: 'City', city: 'All City'}],
     loading: false,
     error: '',
   },
@@ -28,7 +28,7 @@ const CityListSlice = createSlice({
       return {
         ...state,
         loading: false,
-        cityLists: action.payload,
+        cityLists: [...state.cityLists, ...action.payload],
       };
     });
     builder.addCase(loadCityListsStart.rejected, (state, action) => {

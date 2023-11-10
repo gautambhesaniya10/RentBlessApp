@@ -173,7 +173,7 @@ const SignUp = () => {
         <Text style={styles.joinText}>
           Create an account As{' '}
           <Text style={{color: '#29977E'}}>
-            {loginType === 'vendor' ? 'Vendor' : 'Customer'}
+            {loginType === 'vendor' ? 'Seller' : 'Customer'}
           </Text>
         </Text>
         <View style={{marginBottom: 16, width: '100%'}}>

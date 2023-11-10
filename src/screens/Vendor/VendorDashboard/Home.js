@@ -19,6 +19,7 @@ const Home = ({}) => {
   const navigation = useNavigation();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const {versionData} = useSelector(state => state?.appVersion);
+  const {productsCount} = useSelector(state => state?.productsData);
 
   useEffect(() => {
     const handleBackButton = () => {
@@ -46,9 +47,7 @@ const Home = ({}) => {
               style={styles.boxMain}>
               <View>
                 <Text style={styles.totalText}>Total Products</Text>
-                <Text style={styles.TotalNumberText}>
-                  {vendorShopDetails?.balanceProduct}
-                </Text>
+                <Text style={styles.TotalNumberText}>{productsCount}</Text>
               </View>
               <View style={styles.iconParent}>
                 <Icon name="shopping-cart" color="black" size={22} />

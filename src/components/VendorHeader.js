@@ -81,7 +81,7 @@ const VendorHeader = () => {
             resizeMode="stretch"
           />
         </View>
-        {useProfileData?.userHaveAnyShop && vendorShopDetails && (
+        {useProfileData?.userCreatedShopId && vendorShopDetails && (
           <Text style={styles.centerText}>
             Available Product :{' '}
             {vendorShopDetails?.productLimit -
