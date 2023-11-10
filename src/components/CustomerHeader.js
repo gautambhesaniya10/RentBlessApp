@@ -41,6 +41,10 @@ const CustomerHeader = ({homeScreen}) => {
 
   const {cityLists} = useSelector(state => state.cityLists);
 
+  const AllCityArray = [{city: 'All City'}];
+
+  const cityListAllData = [...AllCityArray, ...cityLists];
+
   const [isLogoutTooltipVisible, setLogoutTooltipVisible] = useState(false);
   const [AccessToken, setAccessToken] = useState('');
 
@@ -119,11 +123,16 @@ const CustomerHeader = ({homeScreen}) => {
         value: {selectedValue: []},
       }),
     );
+
+    if (city === 'All City') {
+      AsyncStorage.removeItem('selected_city');
+    }
+
     dispatch(
       changeAppliedCityFilters({
         key: 'city',
         value: {
-          selectedValue: city,
+          selectedValue: city === 'All City' ? '' : city,
         },
       }),
     );
@@ -158,7 +167,7 @@ const CustomerHeader = ({homeScreen}) => {
             iconStyle={styles.iconStyle}
             labelField="city"
             valueField="city"
-            data={cityLists}
+            data={cityListAllData}
             search
             placeholder={'Select item'}
             searchPlaceholder="Search..."

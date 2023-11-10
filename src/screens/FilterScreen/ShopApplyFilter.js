@@ -25,7 +25,7 @@ const ShopApplyFilter = ({handleFilterModelClose, setShowBottomLoader}) => {
 
   const [applyBtnDisable, setApplyBtnDisable] = useState(false);
 
-  const [displayLimit, setDisplayLimit] = useState(11);
+  const [displayLimit, setDisplayLimit] = useState(25);
   const [fetching, setFetching] = useState(false);
 
   const handleProductScroll = event => {
@@ -41,7 +41,7 @@ const ShopApplyFilter = ({handleFilterModelClose, setShowBottomLoader}) => {
   const fetchMoreItems = () => {
     setFetching(true);
     setTimeout(() => {
-      setDisplayLimit(prevLimit => prevLimit + 11);
+      setDisplayLimit(prevLimit => prevLimit + 25);
       setFetching(false);
     }, 1000); // Simulate delay
   };
