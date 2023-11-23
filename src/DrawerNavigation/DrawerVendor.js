@@ -17,6 +17,7 @@ import CustomButton from '../common/CustomButton';
 import { Divider } from 'react-native-paper';
 import { Modal } from 'react-native';
 import { deleteAccount } from '../graphql/mutations/accountDelete';
+import { BackGroundStyle } from '../../CommonStyle';
 
 
 const DrawerVendor = ({ vendorShopDetails }) => {
@@ -188,17 +189,18 @@ const deltyles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
-    width: "70%",
+    alignItems: 'center',
+    // width: "70%",
     marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: 'white',
+    backgroundColor: BackGroundStyle,
     borderRadius: 20,
     padding: 15,
     alignItems: 'center',
     borderWidth: 1,
+    elevation : 10
   },
   modalText: {
     marginBottom: 15,
