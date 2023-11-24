@@ -1,4 +1,4 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
 import userProfileReducer from './LoginUserProfileSlice/userSlice';
 import ShopDetailSlice from './vendorShopDetailsSlice/ShopDetailSlice';
 import CategoryListSlice from './CategorySlice/CategoryListSlice';
@@ -13,6 +13,10 @@ import ShopProductFilterSlice from './ShopProductFilter/ShopProductFilterSlice';
 import ShopProductSlice from './ShopProductSlice/ShopProductSlice';
 import CityListSlice from './CityListSlice/CityListSlice';
 import CityFilterSlice from './CityFilterSlice/CityFilterSlice';
+
+const middleware = getDefaultMiddleware({
+  serializableCheck: false, // Disable serializable state check
+});
 
 const store = configureStore({
   reducer: {
@@ -31,6 +35,7 @@ const store = configureStore({
     cityLists: CityListSlice,
     cityFiltersReducer: CityFilterSlice,
   },
+  middleware
 });
 
 export default store;

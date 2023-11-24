@@ -46,5 +46,4 @@ const AreaSlice = createSlice({
   },
 });
 
-// export const {setShopRegisterId} = AreaSlice.actions;
 export default AreaSlice.reducer;

@@ -78,9 +78,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: '#F3F6F6',
-    // borderRadius: 20,
-    // borderTopRightRadius: 20,
-    // borderTopLeftRadius: 20,
   },
   textBranchName: {
     color: '#151827',

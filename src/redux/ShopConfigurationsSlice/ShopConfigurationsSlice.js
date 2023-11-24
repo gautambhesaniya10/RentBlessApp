@@ -41,5 +41,4 @@ const shopConfigurationsSlice = createSlice({
   },
 });
 
-// export const {setShopRegisterId} = shopConfigurationsSlice.actions;
 export default shopConfigurationsSlice.reducer;

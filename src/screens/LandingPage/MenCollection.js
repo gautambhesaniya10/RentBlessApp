@@ -76,7 +76,7 @@ const MenCollection = () => {
           {menCategoryLabel?.map((item, index) => {
             if (index < 6) {
               return (
-                <TouchableOpacity onPress={() => setSelectedMenCat([item?.id])}>
+                <TouchableOpacity key={index} onPress={() => setSelectedMenCat([item?.id])}>
                   <Text
                     style={
                       selectedMenCat[0] === item?.id

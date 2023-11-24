@@ -41,5 +41,4 @@ const CityListSlice = createSlice({
   },
 });
 
-// export const {setShopRegisterId} = CityListSlice.actions;
 export default CityListSlice.reducer;

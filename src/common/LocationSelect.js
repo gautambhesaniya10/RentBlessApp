@@ -127,12 +127,10 @@ const styles = StyleSheet.create({
   placeholderStyle: {
     fontSize: 16,
     color: 'black',
-    // paddingTop: 15,
   },
   selectedTextStyle: {
     fontSize: 16,
     color: 'black',
-    // paddingTop: 15,
   },
   iconStyle: {
     width: 30,

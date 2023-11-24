@@ -5,18 +5,18 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
-import {FontStyle} from '../../../CommonStyle';
-import {useSelector} from 'react-redux';
-import {capitalizeString} from '../../common/CapitalizeString';
-import {getProducts} from '../../graphql/queries/productQueries';
+import React, { useEffect, useState, useRef } from 'react';
+import { FontStyle } from '../../../CommonStyle';
+import { useSelector } from 'react-redux';
+import { capitalizeString } from '../../common/CapitalizeString';
+import { getProducts } from '../../graphql/queries/productQueries';
 import ProductCard from '../../components/ProductCard/ProductCard';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import Carousel from 'react-native-snap-carousel';
 
 const WomenCollection = () => {
   const navigation = useNavigation();
-  const {categories} = useSelector(state => state.categories);
+  const { categories } = useSelector(state => state.categories);
   const [woMenCategoryLabel, setWoMenCategoryLabel] = useState([]);
   const [selectedWomenCat, setSelectedWomenCat] = useState([]);
   const [woMenSelectedData, setWoMenProductData] = useState([]);
@@ -65,7 +65,7 @@ const WomenCollection = () => {
   }, [selectedWomenCat]);
 
   return (
-    <View style={{marginBottom: 40}}>
+    <View style={{ marginBottom: 40 }}>
       <Text style={styles.headingText}>Women’s Collection</Text>
       <Text style={styles.descriptionText}>
         Take A Browse Through Our Fabulous Selection Of Women's Fashion.
@@ -77,6 +77,7 @@ const WomenCollection = () => {
             if (index < 6) {
               return (
                 <TouchableOpacity
+                  key={index}
                   onPress={() => setSelectedWomenCat([item?.id])}>
                   <Text
                     style={
@@ -93,7 +94,7 @@ const WomenCollection = () => {
           <TouchableOpacity
             onPress={() => navigation.navigate('CustomerHomePage')}>
             <Text
-              style={[styles.viewAllBtn, {textDecorationLine: 'underline'}]}>
+              style={[styles.viewAllBtn, { textDecorationLine: 'underline' }]}>
               View All
             </Text>
           </TouchableOpacity>

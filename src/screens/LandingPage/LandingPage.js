@@ -1,11 +1,12 @@
 import {
+  LogBox,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState, useRef} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomerHeader from '../../components/CustomerHeader';
 import {Image} from 'react-native';
@@ -46,6 +47,10 @@ const LandingPage = () => {
     autoplayInterval: 2000,
     loop: true,
   };
+
+  useEffect(() => {
+    LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
+  }, []);
 
   const CarouselRenderItem = ({item}) => (
     <View style={styles.sliderMainView}>
