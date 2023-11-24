@@ -56,8 +56,8 @@ const DrawerVendor = ({ vendorShopDetails }) => {
           <View style={{ width: '60%', marginLeft: 30, paddingVertical: 10 }}>
             <CustomButton
               name="Delete Account"
-              color="#FFFFFF"
-              backgroundColor="red"
+              color="red"
+              backgroundColor="white"
               borderColor="red"
               onPress={() => setAccDelModalVisible(true)}
             />
