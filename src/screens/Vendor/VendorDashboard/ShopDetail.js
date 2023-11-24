@@ -103,6 +103,7 @@ const ShopDetail = () => {
         owner_lastName: data.last_name,
         owner_email: data.user_email,
         owner_contact: data.user_contact,
+        user_id: useProfileData?.id,
       },
     }).then(
       res => {
