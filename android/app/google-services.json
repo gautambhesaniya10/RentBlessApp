@@ -1,32 +1,33 @@
 {
   "project_info": {
     "project_number": "750471046151",
+    "firebase_url": "https://rn-rentbless-default-rtdb.firebaseio.com",
     "project_id": "rn-rentbless",
     "storage_bucket": "rn-rentbless.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:750471046151:android:2f002c31e8b8b7a10776a2",
+        "mobilesdk_app_id": "1:750471046151:android:718f2c55d5ce10d20776a2",
         "android_client_info": {
-          "package_name": "com.rentblessapp"
+          "package_name": "com.fot.fitmecool"
         }
       },
       "oauth_client": [
         {
-          "client_id": "750471046151-lv7eqkhjoe1aguam0h0mrrhp42tk7b31.apps.googleusercontent.com",
+          "client_id": "750471046151-9q6vh901etn9dfl8fpqbgikeu293g4ag.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.rentblessapp",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "package_name": "com.fot.fitmecool",
+            "certificate_hash": "11c72dea44e5d2bb8d544a294bafc08a74c8c7df"
           }
         },
         {
-          "client_id": "750471046151-s9j7rt77bhetbmolpofped6ifgnb962p.apps.googleusercontent.com",
+          "client_id": "750471046151-lcu2e783h8rj8hovkis23mq4idp81jr0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.rentblessapp",
-            "certificate_hash": "11c72dea44e5d2bb8d544a294bafc08a74c8c7df"
+            "package_name": "com.fot.fitmecool",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
         {
