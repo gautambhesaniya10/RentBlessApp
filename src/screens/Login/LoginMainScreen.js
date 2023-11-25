@@ -6,7 +6,7 @@ import CustomButton from '../../common/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  rentBlessBlackLogo,
+  fitMeCoolBlackLogo,
   shop_vendorIcon,
 } from '../../common/AllLiveImageLink';
 import {capitalizeString} from '../../common/CapitalizeString';
@@ -31,7 +31,7 @@ const LoginMainScreen = () => {
         <FastImage
           style={{width: '60%', height: '7%', alignSelf: 'center'}}
           source={{
-            uri: rentBlessBlackLogo,
+            uri: fitMeCoolBlackLogo,
             // cache: FastImage.cacheControl.web,
           }}
           resizeMode="stretch"

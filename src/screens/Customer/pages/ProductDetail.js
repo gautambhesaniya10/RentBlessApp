@@ -261,7 +261,6 @@ const ProductDetail = () => {
           ' ',
           '-',
         )}/${productId}/`,
-        // url: `https://rentbless.com/product/${productId}/`,
       });
     } catch (error) {
       console.error('Error sharing content:', error.message);

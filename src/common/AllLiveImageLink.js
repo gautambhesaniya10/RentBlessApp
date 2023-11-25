@@ -1,7 +1,7 @@
 import {NEXT_PUBLIC_WASABI_URL} from '@env';
 
 export const logoImage = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolWhite.png`;
-export const rentBlessBlackLogo = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolBlack.png`;
+export const fitMeCoolBlackLogo = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolBlack.png`;
 
 export const appBlackLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/BlackLogo.png`;
 export const whiteLogoSmall = `${NEXT_PUBLIC_WASABI_URL}/imgs/fitMeCoolWhiteSmall.png`;
