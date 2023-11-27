@@ -25,7 +25,10 @@ import ShopAllReviewSection from '../../../../components/ShopAllReviewSection';
 import UpperFilter from '../../../../common/Customer/UpperFilter';
 import FilterDrawerModel from '../../../../common/FilterDrawerModel';
 import TablePagination from '../../../../components/TablePagination';
-import {locationIcon} from '../../../../common/AllLiveImageLink';
+import {
+  locationIcon,
+  shopBackgroundCover3,
+} from '../../../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
 import FollowConfirmationModel from '../../../../common/Customer/FollowConfirmationModel';
 import {shopFollow} from '../../../../graphql/mutations/shops';
@@ -252,7 +255,6 @@ const ShopIndividual = () => {
     shopProductsFiltersReducer.shopSortFilters,
     productPageSkip,
   ]);
-
   return (
     <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
       <FilterDrawerModel
@@ -285,10 +287,18 @@ const ShopIndividual = () => {
               style={{
                 width: '100%',
               }}>
-              <Skeleton
+              {/* <Skeleton
                 startColor="#00000031"
                 endColor="gray.200"
                 height={160}
+              /> */}
+              <FastImage
+                style={{width: '100%', height: 160}}
+                source={{
+                  uri: shopBackgroundCover3,
+                  cache: FastImage.cacheControl.web,
+                }}
+                resizeMode="stretch"
               />
             </View>
           )}

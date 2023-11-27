@@ -6,19 +6,22 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { FontStyle } from '../../../CommonStyle';
-import { useNavigation } from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
+import {FontStyle} from '../../../CommonStyle';
+import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { getShops } from '../../graphql/queries/shopQueries';
-import { shopProductButtonChange } from '../../redux/ShopFilter/ShopFilterSlice';
-import { useDispatch } from 'react-redux';
-import { locationIcon } from '../../common/AllLiveImageLink';
-import { Avatar } from 'react-native-paper';
+import {getShops} from '../../graphql/queries/shopQueries';
+import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
+import {useDispatch} from 'react-redux';
+import {
+  locationIcon,
+  shopBackgroundCover3,
+} from '../../common/AllLiveImageLink';
+import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
-import { capitalizeString } from '../../common/CapitalizeString';
+import {capitalizeString} from '../../common/CapitalizeString';
 
-const FeaturedVendors = ({ shop }) => {
+const FeaturedVendors = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [ShopImagesModelShow, setShopImagesModelShow] = useState(false);
@@ -48,7 +51,7 @@ const FeaturedVendors = ({ shop }) => {
   }, []);
 
   return (
-    <View style={{ marginBottom: 10 }}>
+    <View style={{marginBottom: 10}}>
       <Text style={styles.worksH1Text}>Featured Sellers</Text>
       <Text style={styles.worksH2Text}>
         Explore Incredible Individual sellers OR Browse Through Trendy Boutiques
@@ -62,14 +65,14 @@ const FeaturedVendors = ({ shop }) => {
               key={index}
               onPress={() =>
                 navigation.navigate('ShopIndividual', {
-                  state: { shopId: shop?.id },
+                  state: {shopId: shop?.id},
                 })
               }
               style={styles.mainContainer}>
               <TouchableOpacity
                 disabled
                 onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
-                {shop?.shop_images[0]?.links ? (
+                {shop?.shop_cover_image ? (
                   <FastImage
                     style={{
                       height: 120,
@@ -79,19 +82,41 @@ const FeaturedVendors = ({ shop }) => {
                       objectFit: 'fill',
                     }}
                     source={{
-                      uri: shop?.shop_images[0]?.links,
-                      // cache: FastImage.cacheControl.web,
+                      uri: shop?.shop_cover_image,
+                      cache: FastImage.cacheControl.web,
                     }}
                   />
                 ) : (
                   <View
                     style={{
-                      backgroundColor: '#00000031',
                       width: '100%',
                       height: 120,
-                      borderTopLeftRadius: 8,
-                      borderTopRightRadius: 8,
-                    }}></View>
+                      position: 'relative',
+                    }}>
+                    <FastImage
+                      style={{
+                        width: '100%',
+                        height: 120,
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
+                      }}
+                      source={{
+                        uri: shopBackgroundCover3,
+                        cache: FastImage.cacheControl.web,
+                      }}
+                      resizeMode="stretch"
+                    />
+                    <View
+                      style={{
+                        backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                        width: '100%',
+                        height: 120,
+                        borderTopLeftRadius: 8,
+                        borderTopRightRadius: 8,
+                        position: 'absolute',
+                        top: 0,
+                      }}></View>
+                  </View>
                 )}
               </TouchableOpacity>
               <TouchableOpacity
@@ -141,15 +166,15 @@ const FeaturedVendors = ({ shop }) => {
                       paddingHorizontal: 15,
                     }}>
                     <Image
-                      source={{ uri: locationIcon }}
-                      style={{ width: 12, height: 12 }}
+                      source={{uri: locationIcon}}
+                      style={{width: 12, height: 12}}
                     />
                     <Text style={styles.addressNameText} numberOfLines={1}>
                       {shop?.branch_info?.length > 1
                         ? shop?.branch_info?.map(
-                          itm =>
-                            itm.branch_type === 'main' && itm.branch_address,
-                        )
+                            itm =>
+                              itm.branch_type === 'main' && itm.branch_address,
+                          )
                         : shop?.branch_info[0]?.branch_address}
                     </Text>
                   </View>

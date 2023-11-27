@@ -49,7 +49,7 @@ const ProductDetail = () => {
   const [showContactModalOpen, setShowContactModalOpen] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
   const [readMore, setReadMore] = useState(false);
-
+  const [shopOldDate, setShopOldDate] = useState('');
   const {width: screenWidth} = Dimensions.get('window');
 
   const finalPrice =
@@ -107,6 +107,20 @@ const ProductDetail = () => {
       navigation.navigate('LoginMainScreen');
     }
   };
+
+  const shopCreateDate = new Date(
+    Number(
+      productDetails?.data?.product?.data.branchInfo?.shop_info?.createdAt,
+    ),
+  );
+  useEffect(() => {
+    const currentDate = new Date();
+    const differenceInMilliseconds = currentDate - shopCreateDate;
+    const differenceInDays = Math.floor(
+      differenceInMilliseconds / (24 * 60 * 60 * 1000),
+    );
+    setShopOldDate(differenceInDays);
+  }, [shopCreateDate]);
 
   useEffect(() => {
     if (!isAuthenticate) {
@@ -344,7 +358,7 @@ const ProductDetail = () => {
                   ?.shop_name
               }
             </Text>
-            <Text style={styles.dayText}>25 days ago</Text>
+            <Text style={styles.dayText}>{shopOldDate} days ago</Text>
           </TouchableOpacity>
         </View>
 
