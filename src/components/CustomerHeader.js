@@ -167,7 +167,7 @@ const CustomerHeader = ({homeScreen}) => {
             search
             placeholder={'Select item'}
             searchPlaceholder="Search..."
-            value={selectedLocation}
+            value={selectedLocation === '' ? 'All City' : selectedLocation}
             onChange={item => {
               onChangeSelectedCity(item.city);
             }}
