@@ -40,6 +40,7 @@ const MainDashboard = () => {
         shopId: appliedProductsFilters?.shopId?.selectedValue,
         sort: sortFilters?.sortType?.selectedValue,
         search: appliedProductsFilters?.searchBarData?.selectedValue,
+        forDashboard: true,
       }),
     );
   };

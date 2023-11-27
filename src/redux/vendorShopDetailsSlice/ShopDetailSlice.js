@@ -4,7 +4,10 @@ import {getVendorShopDetails} from '../../graphql/queries/shopQueries';
 export const loadVendorShopDetailsStart = createAsyncThunk(
   'shop/shopDetail',
   async shopId => {
-    const response = await getVendorShopDetails({id: shopId});
+    const response = await getVendorShopDetails({
+      id: shopId,
+      forDashboard: true,
+    });
     return response;
   },
 );
