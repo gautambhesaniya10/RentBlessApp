@@ -5,7 +5,7 @@ import CustomButton from '../../common/CustomButton';
 const VersionAppModel = ({modalVisible, versionData}) => {
   const openGooglePlayStore = () => {
     const playStoreLink =
-      'https://play.google.com/store/apps/details?id=com.fot.mehndi_designs_app';
+      'https://play.google.com/store/apps/details?id=com.fot.fitmecool&pli=1';
 
     Linking.openURL(playStoreLink).catch(err =>
       console.error('An error occurred', err),
