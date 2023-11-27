@@ -18,7 +18,7 @@ const CustomerTab = () => {
   return (
     <Tab.Navigator
       tabBar={props => <CustomCustomerTabBar {...props} />}
-      initialRouteName={loginToken ? 'CustomerHomePage' : 'LandingPage'}>
+      initialRouteName={'LandingPage'}>
       <Tab.Screen
         name="LandingPage"
         component={LandingPage}

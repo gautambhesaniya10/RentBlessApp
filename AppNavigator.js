@@ -35,11 +35,11 @@ const AppNavigator = () => {
           component={CustomerMain}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="CustomerHomePage"
           component={HomePage}
           options={{headerShown: false}}
-        />
+        /> */}
         <Stack.Screen
           name="LoginMainScreen"
           component={LoginMainScreen}
