@@ -6,11 +6,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
 
 const ShopSetUpScreenTwo = ({
-  setCurrentPosition,
-  currentPosition,
-  uploadShopLogo,
   setUploadShopLogo,
-  uploadShopBackground,
   setUploadShopBackground,
   uploadShopImages,
   setUploadShopImages,
@@ -23,37 +19,11 @@ const ShopSetUpScreenTwo = ({
   const [shopVideo, setShopVideo] = useState('');
   const [error, setError] = useState({});
 
-  const Validate = () => {
-    let isValid = true;
-    const error = {};
-    if (shopLogo === '') {
-      isValid = false;
-      error['shopLogo'] = 'Please Select logo*';
-    }
-    if (shopBackground === '') {
-      isValid = false;
-      error['shopBackground'] = 'Please Select shop background*';
-    }
-    if (ShopImgsError.length !== 3) {
-      isValid = false;
-      error['shopImages'] = 'Please Select shop images*';
-    }
-
-    setError(error);
-    return isValid;
-  };
-
   useEffect(() => {
     if (ShopImgsError?.length === 3) {
       setError({...error, shopImages: ''});
     }
   }, [ShopImgsError?.length]);
-
-  const HandleNextScreen = () => {
-    if (Validate()) {
-      setCurrentPosition(currentPosition + 1);
-    }
-  };
 
   const ChooseShopLogoImage = () => {
     let options = {
@@ -336,7 +306,6 @@ const styles = StyleSheet.create({
   shopImagesMain: {
     backgroundColor: '#FFF',
     alignItems: 'center',
-    width: 112,
     height: 112,
     justifyContent: 'center',
     borderRadius: 10,

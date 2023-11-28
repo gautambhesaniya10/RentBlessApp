@@ -330,8 +330,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#151827',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 10,
     flexDirection: 'row',
   },

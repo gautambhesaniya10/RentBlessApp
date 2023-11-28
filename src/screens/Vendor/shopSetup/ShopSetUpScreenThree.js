@@ -14,7 +14,7 @@ import {RadioButton} from 'react-native-paper';
 import {Select, NativeBaseProvider} from 'native-base';
 import VendorSubBranchTextField from '../../../common/VendorSubBranchTextField';
 import LocationSelect from '../../../common/LocationSelect';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {
   getAreaByCityLists,
   getCityByStateLists,
@@ -26,7 +26,6 @@ const ShopSetUpScreenThree = ({
   getValues,
   setValue,
   individual,
-  setCurrentPosition,
   currentPosition,
   subBranch,
   setSubBranch,
@@ -34,8 +33,6 @@ const ShopSetUpScreenThree = ({
   setSameAsOwner,
   stateDataLists,
 }) => {
-  const dispatch = useDispatch();
-
   const [mainBranchShow, setMainBranchShow] = useState(true);
   const [managerShow, setManagerShow] = useState(true);
   const [managerSubBranchShow, setManagerSubBranchShow] = useState(true);
@@ -102,19 +99,6 @@ const ShopSetUpScreenThree = ({
                 <Text style={{color: 'red'}}>{errors?.address?.message}</Text>
               )}
             </View>
-            {/* <View style={{marginBottom: 15}}>
-              <CustomTextInput
-                label="City"
-                mode="outlined"
-                control={control}
-                name="city"
-                rules={{required: 'City is required *'}}
-                activeOutlineColor="#29977E"
-              />
-              {errors?.city && (
-                <Text style={{color: 'red'}}>{errors?.city?.message}</Text>
-              )}
-            </View> */}
             <View style={{marginBottom: 15}}>
               <LocationSelect
                 control={control}
@@ -163,22 +147,6 @@ const ShopSetUpScreenThree = ({
                 )}
               </View>
             )}
-            {/* <View style={{marginBottom: 15}}>
-              <CustomTextInput
-                label="Pin code"
-                mode="outlined"
-                keyboardType="number-pad"
-                control={control}
-                name="pin_code"
-                rules={{
-                  required: 'Pin code is required *',
-                }}
-                activeOutlineColor="#29977E"
-              />
-              {errors?.pin_code && (
-                <Text style={{color: 'red'}}>{errors?.pin_code?.message}</Text>
-              )}
-            </View> */}
           </View>
         )}
 
@@ -337,77 +305,71 @@ const ShopSetUpScreenThree = ({
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{flexDirection: 'row', gap: 15}}
                   style={{marginBottom: 15}}>
-                  {subBranch?.map((sub, index) => (
-                    <>
-                      <View style={styles.subListMain}>
-                        <View style={styles?.delEditMain}>
-                          <TouchableOpacity
-                            onPress={() => {
-                              setSubBranch(
-                                subBranch?.filter(itm => itm.id !== sub.id),
-                              );
-                            }}>
-                            <Text style={styles.delText}>Delete</Text>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={() => {
-                              setSubBranchEdit(sub);
-                            }}>
-                            <Text style={styles.editText}>Edit</Text>
-                          </TouchableOpacity>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>Address : </Text>
-                          <Text style={styles.textSub}>
-                            {sub?.subManagerAddress}
-                          </Text>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>State : </Text>
-                          <Text style={styles.textSub}>
-                            {sub.subManagerState}
-                          </Text>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>City : </Text>
-                          <Text style={styles.textSub}>
-                            {sub.subManagerCity}
-                          </Text>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>Pin Code : </Text>
-                          <Text style={styles.textSub}>
-                            {sub.subManagerPinCode}
-                          </Text>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>
-                            Manager Name :{' '}
-                          </Text>
-                          <Text style={styles.textSub}>
-                            {sub.subManagerFirstName +
-                              ' ' +
-                              sub.subManagerLastName}
-                          </Text>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>
-                            Manager Email :{' '}
-                          </Text>
-                          <Text style={styles.textSub}>
-                            {sub.subManagerEmail}
-                          </Text>
-                        </View>
-                        <View style={styles.textInnerMain}>
-                          <Text style={styles.textLabelSub}>
-                            Manager Phone Number :{' '}
-                          </Text>
-                          <Text style={styles.textSub}>
-                            {sub.subManagerPhone}
-                          </Text>
-                        </View>
+                  {subBranch?.map(sub => (
+                    <View key={sub?.id} style={styles.subListMain}>
+                      <View style={styles?.delEditMain}>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSubBranch(
+                              subBranch?.filter(itm => itm.id !== sub.id),
+                            );
+                          }}>
+                          <Text style={styles.delText}>Delete</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={() => {
+                            setSubBranchEdit(sub);
+                          }}>
+                          <Text style={styles.editText}>Edit</Text>
+                        </TouchableOpacity>
                       </View>
-                    </>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>Address : </Text>
+                        <Text style={styles.textSub}>
+                          {sub?.subManagerAddress}
+                        </Text>
+                      </View>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>State : </Text>
+                        <Text style={styles.textSub}>
+                          {sub.subManagerState}
+                        </Text>
+                      </View>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>City : </Text>
+                        <Text style={styles.textSub}>{sub.subManagerCity}</Text>
+                      </View>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>Pin Code : </Text>
+                        <Text style={styles.textSub}>
+                          {sub.subManagerPinCode}
+                        </Text>
+                      </View>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>Manager Name : </Text>
+                        <Text style={styles.textSub}>
+                          {sub.subManagerFirstName +
+                            ' ' +
+                            sub.subManagerLastName}
+                        </Text>
+                      </View>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>
+                          Manager Email :{' '}
+                        </Text>
+                        <Text style={styles.textSub}>
+                          {sub.subManagerEmail}
+                        </Text>
+                      </View>
+                      <View style={styles.textInnerMain}>
+                        <Text style={styles.textLabelSub}>
+                          Manager Phone Number :{' '}
+                        </Text>
+                        <Text style={styles.textSub}>
+                          {sub.subManagerPhone}
+                        </Text>
+                      </View>
+                    </View>
                   ))}
                 </ScrollView>
                 <SubBranchModel
@@ -757,269 +719,225 @@ const SubBranchModel = ({
     error.subManagerCityError = '';
   };
   const onChangeSubBranchPinCode = data => {
-    console.log('pincode', data);
     setSubManagerPinCode(data);
     error.subManagerPinCodeError = '';
   };
 
   return (
-    <>
-      <View>
-        <View style={{marginBottom: 15}}>
-          <VendorSubBranchTextField
-            label="Address"
-            mode="outlined"
-            name="address"
-            activeOutlineColor="#29977E"
-            onChange={value => {
-              setSubManagerAddress(value);
-              error.subManagerAddressError = '';
-            }}
-            value={subManagerAddress}
+    <View>
+      <View style={{marginBottom: 15}}>
+        <VendorSubBranchTextField
+          label="Address"
+          mode="outlined"
+          name="address"
+          activeOutlineColor="#29977E"
+          onChange={value => {
+            setSubManagerAddress(value);
+            error.subManagerAddressError = '';
+          }}
+          value={subManagerAddress}
+        />
+        {error.subManagerAddressError && (
+          <Text style={{color: 'red', fontSize: 14}}>
+            {error.subManagerAddressError || ''}
+          </Text>
+        )}
+      </View>
+      <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+        <View style={{width: '48%'}}>
+          <LocationSelect
+            name="state"
+            placeholder="Select State"
+            arrayListItem={stateDataLists}
+            stateField={true}
+            onChangeValue={onChangeSubBranchState}
+            subBranchSelect={true}
           />
-          {error.subManagerAddressError && (
+          {error.subManagerStateError && (
             <Text style={{color: 'red', fontSize: 14}}>
-              {error.subManagerAddressError || ''}
+              {error.subManagerStateError || ''}
             </Text>
           )}
         </View>
-        <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
-          {/* 
+
+        {getCityData?.length > 0 && (
           <View style={{width: '48%'}}>
-            <VendorSubBranchTextField
-              label="City"
-              mode="outlined"
+            <LocationSelect
               name="city"
-              activeOutlineColor="#29977E"
-              value={subManagerCity}
-              onChange={e => {
-                setSubManagerCity(e);
-                error.subManagerCityError = '';
-              }}
+              placeholder="Select City"
+              arrayListItem={getCityData}
+              cityField={true}
+              onChangeValue={onChangeSubBranchCity}
+              subBranchSelect={true}
             />
             {error.subManagerCityError && (
               <Text style={{color: 'red', fontSize: 14}}>
                 {error.subManagerCityError || ''}
               </Text>
             )}
-          </View> */}
-
-          <View style={{width: '48%'}}>
-            <LocationSelect
-              name="state"
-              placeholder="Select State"
-              arrayListItem={stateDataLists}
-              stateField={true}
-              onChangeValue={onChangeSubBranchState}
-              subBranchSelect={true}
-            />
-            {error.subManagerStateError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerStateError || ''}
-              </Text>
-            )}
-          </View>
-
-          {getCityData?.length > 0 && (
-            <View style={{width: '48%'}}>
-              <LocationSelect
-                name="city"
-                placeholder="Select City"
-                arrayListItem={getCityData}
-                cityField={true}
-                onChangeValue={onChangeSubBranchCity}
-                subBranchSelect={true}
-              />
-              {error.subManagerCityError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerCityError || ''}
-                </Text>
-              )}
-            </View>
-          )}
-
-          {/* <View style={{width: '48%'}}>
-            <VendorSubBranchTextField
-              label="PinCode"
-              mode="outlined"
-              name="PinCode"
-              activeOutlineColor="#29977E"
-              keyboardType="number-pad"
-              value={subManagerPinCode}
-              onChange={e => {
-                setSubManagerPinCode(e);
-                error.subManagerPinCodeError = '';
-              }}
-            />
-            {error.subManagerPinCodeError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerPinCodeError || ''}
-              </Text>
-            )}
-          </View> */}
-        </View>
-
-        {getAreaData?.length > 0 && (
-          <View style={{marginBottom: 15}}>
-            <LocationSelect
-              name="PinCode"
-              placeholder="Select PinCode"
-              arrayListItem={getAreaData}
-              pinCodeField={true}
-              onChangeValue={onChangeSubBranchPinCode}
-              subBranchSelect={true}
-            />
-            {error.subManagerPinCodeError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerPinCodeError || ''}
-              </Text>
-            )}
           </View>
         )}
-
+      </View>
+      {getAreaData?.length > 0 && (
         <View style={{marginBottom: 15}}>
-          <NativeBaseProvider>
-            <Select
-              selectedValue={managerValue}
-              minWidth="200"
-              height="50"
-              accessibilityLabel="Manager"
-              placeholder="Manager"
-              _selectedItem={{
-                bg: 'green.200',
-              }}
-              mt={1}
-              style={{fontSize: 16}}
-              onValueChange={itemValue => setManagerValue(itemValue)}>
-              <Select.Item label="None" value="" />
-              <Select.Item label="Same as owner" value="Same as owner" />
-              <Select.Item
-                label="same as main branch manager"
-                value="same as main branch manager"
-              />
-            </Select>
-          </NativeBaseProvider>
+          <LocationSelect
+            name="PinCode"
+            placeholder="Select PinCode"
+            arrayListItem={getAreaData}
+            pinCodeField={true}
+            onChangeValue={onChangeSubBranchPinCode}
+            subBranchSelect={true}
+          />
+          {error.subManagerPinCodeError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerPinCodeError || ''}
+            </Text>
+          )}
         </View>
+      )}
 
-        <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
-          <View style={{width: '48%'}}>
-            <VendorSubBranchTextField
-              label="First Name"
-              mode="outlined"
-              name="Manager_First_Name"
-              activeOutlineColor="#29977E"
-              disabled={
-                managerValue === 'Same as owner' ||
-                managerValue === 'same as main branch manager'
-              }
-              value={subManagerFirstName}
-              onChange={e => {
-                setSubManagerFirstName(e);
-                error.subManagerFirstNameError = '';
-              }}
+      <View style={{marginBottom: 15}}>
+        <NativeBaseProvider>
+          <Select
+            selectedValue={managerValue}
+            minWidth="200"
+            height="50"
+            accessibilityLabel="Manager"
+            placeholder="Manager"
+            _selectedItem={{
+              bg: 'green.200',
+            }}
+            mt={1}
+            style={{fontSize: 16}}
+            onValueChange={itemValue => setManagerValue(itemValue)}>
+            <Select.Item label="None" value="" />
+            <Select.Item label="Same as owner" value="Same as owner" />
+            <Select.Item
+              label="same as main branch manager"
+              value="same as main branch manager"
             />
-            {error.subManagerFirstNameError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerFirstNameError || ''}
-              </Text>
-            )}
-          </View>
-          <View style={{width: '48%'}}>
-            <VendorSubBranchTextField
-              label="Last Name"
-              mode="outlined"
-              name="Manager_last_Name"
-              activeOutlineColor="#29977E"
-              disabled={
-                managerValue === 'Same as owner' ||
-                managerValue === 'same as main branch manager'
-              }
-              value={subManagerLastName}
-              onChange={e => {
-                setSubManagerLastName(e);
-                error.subManagerLastNameError = '';
-              }}
-            />
-            {error.subManagerLastNameError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerLastNameError || ''}
-              </Text>
-            )}
-          </View>
+          </Select>
+        </NativeBaseProvider>
+      </View>
+
+      <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+        <View style={{width: '48%'}}>
+          <VendorSubBranchTextField
+            label="First Name"
+            mode="outlined"
+            name="Manager_First_Name"
+            activeOutlineColor="#29977E"
+            disabled={
+              managerValue === 'Same as owner' ||
+              managerValue === 'same as main branch manager'
+            }
+            value={subManagerFirstName}
+            onChange={e => {
+              setSubManagerFirstName(e);
+              error.subManagerFirstNameError = '';
+            }}
+          />
+          {error.subManagerFirstNameError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerFirstNameError || ''}
+            </Text>
+          )}
         </View>
-        <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
-          <View style={{width: '48%'}}>
-            <VendorSubBranchTextField
-              label="Email Address"
-              mode="outlined"
-              name="Manager_Email_Address"
-              activeOutlineColor="#29977E"
-              disabled={
-                managerValue === 'Same as owner' ||
-                managerValue === 'same as main branch manager'
-              }
-              value={subManagerEmail}
-              onChange={e => {
-                setSubManagerEmail(e);
-                error.subManagerEmailError = '';
-              }}
-            />
-            {error.subManagerEmailError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerEmailError || ''}
-              </Text>
-            )}
-          </View>
-          <View style={{width: '48%'}}>
-            <VendorSubBranchTextField
-              label="Phone Number"
-              mode="outlined"
-              name="Manager_Phone_Number"
-              activeOutlineColor="#29977E"
-              disabled={
-                managerValue === 'Same as owner' ||
-                managerValue === 'same as main branch manager'
-              }
-              keyboardType="number-pad"
-              value={subManagerPhone}
-              onChange={e => {
-                setSubManagerPhone(e);
-                if (e?.length != 10) {
-                  error.subManagerPhoneError = 'Number must be 10 numbers';
-                } else {
-                  error.subManagerPhoneError = '';
-                }
-              }}
-            />
-            {error.subManagerPhoneError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerPhoneError || ''}
-              </Text>
-            )}
-          </View>
-        </View>
-        {/* bottm cancel */}
-        <View style={branchStyles.bottomButtonMain}>
-          <View style={{width: '20%'}}>
-            <CustomButton
-              name="Reset"
-              color="#29977E"
-              backgroundColor="white"
-              borderColor="#29977E"
-              onPress={handleSubBranchModalClose}
-            />
-          </View>
-          <View style={{width: '20%'}}>
-            <CustomButton
-              name={subBranchEdit?.id ? 'Update' : 'Add'}
-              color="white"
-              backgroundColor="#29977E"
-              borderColor="#29977E"
-              onPress={() => subBranchSubmit()}
-            />
-          </View>
+        <View style={{width: '48%'}}>
+          <VendorSubBranchTextField
+            label="Last Name"
+            mode="outlined"
+            name="Manager_last_Name"
+            activeOutlineColor="#29977E"
+            disabled={
+              managerValue === 'Same as owner' ||
+              managerValue === 'same as main branch manager'
+            }
+            value={subManagerLastName}
+            onChange={e => {
+              setSubManagerLastName(e);
+              error.subManagerLastNameError = '';
+            }}
+          />
+          {error.subManagerLastNameError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerLastNameError || ''}
+            </Text>
+          )}
         </View>
       </View>
-    </>
+      <View style={[branchStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+        <View style={{width: '48%'}}>
+          <VendorSubBranchTextField
+            label="Email Address"
+            mode="outlined"
+            name="Manager_Email_Address"
+            activeOutlineColor="#29977E"
+            disabled={
+              managerValue === 'Same as owner' ||
+              managerValue === 'same as main branch manager'
+            }
+            value={subManagerEmail}
+            onChange={e => {
+              setSubManagerEmail(e);
+              error.subManagerEmailError = '';
+            }}
+          />
+          {error.subManagerEmailError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerEmailError || ''}
+            </Text>
+          )}
+        </View>
+        <View style={{width: '48%'}}>
+          <VendorSubBranchTextField
+            label="Phone Number"
+            mode="outlined"
+            name="Manager_Phone_Number"
+            activeOutlineColor="#29977E"
+            disabled={
+              managerValue === 'Same as owner' ||
+              managerValue === 'same as main branch manager'
+            }
+            keyboardType="number-pad"
+            value={subManagerPhone}
+            onChange={e => {
+              setSubManagerPhone(e);
+              if (e?.length != 10) {
+                error.subManagerPhoneError = 'Number must be 10 numbers';
+              } else {
+                error.subManagerPhoneError = '';
+              }
+            }}
+          />
+          {error.subManagerPhoneError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerPhoneError || ''}
+            </Text>
+          )}
+        </View>
+      </View>
+      {/* bottm cancel */}
+      <View style={branchStyles.bottomButtonMain}>
+        <View style={{width: '20%'}}>
+          <CustomButton
+            name="Reset"
+            color="#29977E"
+            backgroundColor="white"
+            borderColor="#29977E"
+            onPress={handleSubBranchModalClose}
+          />
+        </View>
+        <View style={{width: '20%'}}>
+          <CustomButton
+            name={subBranchEdit?.id ? 'Update' : 'Add'}
+            color="white"
+            backgroundColor="#29977E"
+            borderColor="#29977E"
+            onPress={() => subBranchSubmit()}
+          />
+        </View>
+      </View>
+    </View>
   );
 };

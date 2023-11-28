@@ -49,7 +49,7 @@ const ShopIndividual = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const {shopId} = route?.params?.state;
+  const {shopId} = route?.params?.state ?? route?.params?.state;
 
   const {
     productsCount,
@@ -58,7 +58,6 @@ const ShopIndividual = () => {
     PaginationProductLimit,
     productPageSkip,
     productLoading,
-    error,
   } = useSelector(state => state?.shopProductsData);
 
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
@@ -72,7 +71,7 @@ const ShopIndividual = () => {
   const [shopReviews, setShopReviews] = useState([]);
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
   const [followModalVisible, setFollowModalVisible] = useState(false);
-  const [showBottomLoader, setShowBottomLoader] = useState(false);
+  const [, setShowBottomLoader] = useState(false);
   const [filterModelOpen, setFilterModelOpen] = useState(false);
   const scrollViewRef = useRef(null);
   const reviewSectionRef = useRef(null);
@@ -453,7 +452,7 @@ const ShopIndividual = () => {
               ) : productsData?.length > 0 ? (
                 <View style={[styles.productCardMain]}>
                   {productsData?.map((product, index) => (
-                    <ProductCard product={product} key={index} />
+                    <ProductCard product={product} key={product?.id} />
                   ))}
                   {productLoading && productsData?.length > 0 && (
                     <View style={styles.loaderFilterDiv}>

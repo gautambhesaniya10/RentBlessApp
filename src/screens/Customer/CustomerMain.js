@@ -57,7 +57,7 @@ const CustomerMain = () => {
 
   return checkInternetStatus ? (
     <View style={{flex: 1}}>
-      <DrawerCustomer loginToken={loginToken ? true : false} />
+      <DrawerCustomer loginToken={!!loginToken} />
       {/* <CustomerTab /> */}
     </View>
   ) : (

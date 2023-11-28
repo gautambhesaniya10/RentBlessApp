@@ -82,57 +82,55 @@ const SubBranchTab = ({
           </View>
         ) : (
           subBranchList?.map((item, index) => (
-            <>
-              <BranchMultiDropDown
-                key={index}
-                item={item}
-                index={index}
-                cardTitle={`Branch ${index + 1}`}
-                onDeleteBranch={onDeleteBranch}
-                onEditBranch={onEditBranch}
-                onEditDelShow={true}
-                bottomComponent={
-                  <View>
-                    <View style={styles.listMain}>
-                      <Text style={styles.titleLeftText}>Manager Name :</Text>
-                      <Text style={styles.titleRightText}>
-                        {item?.manager_name}
-                      </Text>
-                    </View>
-                    <View style={styles.listMain}>
-                      <Text style={styles.titleLeftText}>Phone Number :</Text>
-                      <Text style={styles.titleRightText}>
-                        {item?.manager_contact}
-                      </Text>
-                    </View>
-                    <View style={styles.listMain}>
-                      <Text style={styles.titleLeftText}>Branch Address :</Text>
-                      <Text style={styles.titleRightText}>
-                        {item?.branch_address}
-                      </Text>
-                    </View>
-                    <View style={styles.listMain}>
-                      <Text style={styles.titleLeftText}>State :</Text>
-                      <Text style={styles.titleRightText}>
-                        {item?.branch_state}
-                      </Text>
-                    </View>
-                    <View style={styles.listMain}>
-                      <Text style={styles.titleLeftText}>City :</Text>
-                      <Text style={styles.titleRightText}>
-                        {item?.branch_city}
-                      </Text>
-                    </View>
-                    <View style={styles.listMain}>
-                      <Text style={styles.titleLeftText}>Pin Code :</Text>
-                      <Text style={styles.titleRightText}>
-                        {item?.branch_pinCode}
-                      </Text>
-                    </View>
+            <BranchMultiDropDown
+              key={index}
+              item={item}
+              index={index}
+              cardTitle={`Branch ${index + 1}`}
+              onDeleteBranch={onDeleteBranch}
+              onEditBranch={onEditBranch}
+              onEditDelShow={true}
+              bottomComponent={
+                <View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Manager Name :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.manager_name}
+                    </Text>
                   </View>
-                }
-              />
-            </>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Phone Number :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.manager_contact}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Branch Address :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.branch_address}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>State :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.branch_state}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>City :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.branch_city}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Pin Code :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.branch_pinCode}
+                    </Text>
+                  </View>
+                </View>
+              }
+            />
           ))
         )}
       </View>
@@ -639,285 +637,235 @@ const SubBranchModal = ({
   };
 
   return (
-    <>
+    <View>
+      <View style={AddEditModelStyles.addBranchHeader}>
+        <Icon
+          onPress={() => handleSubBranchModalClose()}
+          name="arrow-left"
+          size={20}
+          color="black"
+        />
+        <Text style={AddEditModelStyles.addBranchText}>
+          Back To All Branches
+        </Text>
+      </View>
       <View>
-        <View style={AddEditModelStyles.addBranchHeader}>
-          <Icon
-            onPress={() => handleSubBranchModalClose()}
-            name="arrow-left"
-            size={20}
-            color="black"
+        <View style={{marginBottom: 15}}>
+          <VendorSubBranchTextField
+            label="Address"
+            mode="outlined"
+            name="address"
+            activeOutlineColor="#29977E"
+            onChange={value => {
+              setSubManagerAddress(value);
+              error.subManagerAddressError = '';
+            }}
+            value={subManagerAddress}
           />
-          <Text style={AddEditModelStyles.addBranchText}>
-            Back To All Branches
-          </Text>
+          {error.subManagerAddressError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerAddressError || ''}
+            </Text>
+          )}
         </View>
-        <View>
-          <View style={{marginBottom: 15}}>
-            <VendorSubBranchTextField
-              label="Address"
-              mode="outlined"
-              name="address"
-              activeOutlineColor="#29977E"
-              onChange={value => {
-                setSubManagerAddress(value);
-                error.subManagerAddressError = '';
-              }}
-              value={subManagerAddress}
-            />
-            {error.subManagerAddressError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerAddressError || ''}
-              </Text>
-            )}
-          </View>
-          <View
-            style={[
-              AddEditModelStyles.subTextFieldTwoMain,
-              {marginBottom: 15},
-            ]}>
-            <View style={{width: '48%'}}>
-              <LocationSelect
-                name="state"
-                placeholder="Select State"
-                arrayListItem={stateDataLists}
-                stateField={true}
-                onChangeValue={onChangeSubBranchState}
-                subBranchSelect={true}
-                defaultValue={editableBranchData?.branch_state}
-              />
-              {error.subManagerStateError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerStateError || ''}
-                </Text>
-              )}
-            </View>
-
-            <View style={{width: '48%'}}>
-              <LocationSelect
-                name="city"
-                placeholder="Select City"
-                arrayListItem={getCityData}
-                cityField={true}
-                onChangeValue={onChangeSubBranchCity}
-                subBranchSelect={true}
-                defaultValue={editableBranchData?.branch_city}
-              />
-              {error.subManagerCityError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerCityError || ''}
-                </Text>
-              )}
-            </View>
-
-            {/* <View style={{width: '48%'}}>
-              <VendorSubBranchTextField
-                label="City"
-                mode="outlined"
-                name="city"
-                activeOutlineColor="#29977E"
-                value={subManagerCity}
-                onChange={e => {
-                  setSubManagerCity(e);
-                  error.subManagerCityError = '';
-                }}
-              />
-              {error.subManagerCityError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerCityError || ''}
-                </Text>
-              )}
-            </View> */}
-          </View>
-
-          <View style={{marginBottom: 15}}>
+        <View
+          style={[AddEditModelStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+          <View style={{width: '48%'}}>
             <LocationSelect
-              name="PinCode"
-              placeholder="Select PinCode"
-              arrayListItem={getAreaData}
-              pinCodeField={true}
-              onChangeValue={onChangeSubBranchPinCode}
+              name="state"
+              placeholder="Select State"
+              arrayListItem={stateDataLists}
+              stateField={true}
+              onChangeValue={onChangeSubBranchState}
               subBranchSelect={true}
-              defaultValue={editableBranchData?.branch_pinCode}
+              defaultValue={editableBranchData?.branch_state}
             />
-            {error.subManagerPinCodeError && (
+            {error.subManagerStateError && (
               <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerPinCodeError || ''}
+                {error.subManagerStateError || ''}
               </Text>
             )}
-          </View>
-          {/*             
-          <View style={{marginBottom: 15}}>
-            <VendorSubBranchTextField
-              label="PinCode"
-              mode="outlined"
-              name="PinCode"
-              activeOutlineColor="#29977E"
-              keyboardType="number-pad"
-              value={subManagerPinCode}
-              onChange={e => {
-                setSubManagerPinCode(e);
-                error.subManagerPinCodeError = '';
-              }}
-            />
-            {error.subManagerPinCodeError && (
-              <Text style={{color: 'red', fontSize: 14}}>
-                {error.subManagerPinCodeError || ''}
-              </Text>
-            )}
-          </View> */}
-          <View style={{marginBottom: 15}}>
-            <NativeBaseProvider>
-              <Select
-                selectedValue={managerValue}
-                minWidth="200"
-                height="50"
-                accessibilityLabel="Manager"
-                placeholder="Manager"
-                _selectedItem={{
-                  bg: 'green.200',
-                }}
-                mt={1}
-                style={{fontSize: 16}}
-                onValueChange={itemValue => setManagerValue(itemValue)}>
-                <Select.Item label="None" value="" />
-                <Select.Item label="Same as owner" value="Same as owner" />
-                <Select.Item
-                  label="same as main branch manager"
-                  value="same as main branch manager"
-                />
-              </Select>
-            </NativeBaseProvider>
           </View>
 
-          <View
-            style={[
-              AddEditModelStyles.subTextFieldTwoMain,
-              {marginBottom: 15},
-            ]}>
-            <View style={{width: '48%'}}>
-              <VendorSubBranchTextField
-                label="First Name"
-                mode="outlined"
-                name="Manager_First_Name"
-                activeOutlineColor="#29977E"
-                disabled={
-                  managerValue === 'Same as owner' ||
-                  managerValue === 'same as main branch manager'
-                }
-                value={subManagerFirstName}
-                onChange={e => {
-                  setSubManagerFirstName(e);
-                  error.subManagerFirstNameError = '';
-                }}
-              />
-              {error.subManagerFirstNameError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerFirstNameError || ''}
-                </Text>
-              )}
-            </View>
-            <View style={{width: '48%'}}>
-              <VendorSubBranchTextField
-                label="Last Name"
-                mode="outlined"
-                name="Manager_last_Name"
-                activeOutlineColor="#29977E"
-                disabled={
-                  managerValue === 'Same as owner' ||
-                  managerValue === 'same as main branch manager'
-                }
-                value={subManagerLastName}
-                onChange={e => {
-                  setSubManagerLastName(e);
-                  error.subManagerLastNameError = '';
-                }}
-              />
-              {error.subManagerLastNameError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerLastNameError || ''}
-                </Text>
-              )}
-            </View>
+          <View style={{width: '48%'}}>
+            <LocationSelect
+              name="city"
+              placeholder="Select City"
+              arrayListItem={getCityData}
+              cityField={true}
+              onChangeValue={onChangeSubBranchCity}
+              subBranchSelect={true}
+              defaultValue={editableBranchData?.branch_city}
+            />
+            {error.subManagerCityError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerCityError || ''}
+              </Text>
+            )}
           </View>
-          <View
-            style={[
-              AddEditModelStyles.subTextFieldTwoMain,
-              {marginBottom: 15},
-            ]}>
-            <View style={{width: '48%'}}>
-              <VendorSubBranchTextField
-                label="Email Address"
-                mode="outlined"
-                name="Manager_Email_Address"
-                activeOutlineColor="#29977E"
-                disabled={
-                  managerValue === 'Same as owner' ||
-                  managerValue === 'same as main branch manager'
-                }
-                value={subManagerEmail}
-                onChange={e => {
-                  setSubManagerEmail(e);
-                  error.subManagerEmailError = '';
-                }}
+        </View>
+
+        <View style={{marginBottom: 15}}>
+          <LocationSelect
+            name="PinCode"
+            placeholder="Select PinCode"
+            arrayListItem={getAreaData}
+            pinCodeField={true}
+            onChangeValue={onChangeSubBranchPinCode}
+            subBranchSelect={true}
+            defaultValue={editableBranchData?.branch_pinCode}
+          />
+          {error.subManagerPinCodeError && (
+            <Text style={{color: 'red', fontSize: 14}}>
+              {error.subManagerPinCodeError || ''}
+            </Text>
+          )}
+        </View>
+        <View style={{marginBottom: 15}}>
+          <NativeBaseProvider>
+            <Select
+              selectedValue={managerValue}
+              minWidth="200"
+              height="50"
+              accessibilityLabel="Manager"
+              placeholder="Manager"
+              _selectedItem={{
+                bg: 'green.200',
+              }}
+              mt={1}
+              style={{fontSize: 16}}
+              onValueChange={itemValue => setManagerValue(itemValue)}>
+              <Select.Item label="None" value="" />
+              <Select.Item label="Same as owner" value="Same as owner" />
+              <Select.Item
+                label="same as main branch manager"
+                value="same as main branch manager"
               />
-              {error.subManagerEmailError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerEmailError || ''}
-                </Text>
-              )}
-            </View>
-            <View style={{width: '48%'}}>
-              <VendorSubBranchTextField
-                label="Phone Number"
-                mode="outlined"
-                name="Manager_Phone_Number"
-                activeOutlineColor="#29977E"
-                disabled={
-                  managerValue === 'Same as owner' ||
-                  managerValue === 'same as main branch manager'
-                }
-                keyboardType="number-pad"
-                value={subManagerPhone}
-                onChange={e => {
-                  setSubManagerPhone(e);
-                  if (e?.length != 10) {
-                    error.subManagerPhoneError = 'Number must be 10 numbers';
-                  } else {
-                    error.subManagerPhoneError = '';
-                  }
-                }}
-              />
-              {error.subManagerPhoneError && (
-                <Text style={{color: 'red', fontSize: 14}}>
-                  {error.subManagerPhoneError || ''}
-                </Text>
-              )}
-            </View>
+            </Select>
+          </NativeBaseProvider>
+        </View>
+
+        <View
+          style={[AddEditModelStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+          <View style={{width: '48%'}}>
+            <VendorSubBranchTextField
+              label="First Name"
+              mode="outlined"
+              name="Manager_First_Name"
+              activeOutlineColor="#29977E"
+              disabled={
+                managerValue === 'Same as owner' ||
+                managerValue === 'same as main branch manager'
+              }
+              value={subManagerFirstName}
+              onChange={e => {
+                setSubManagerFirstName(e);
+                error.subManagerFirstNameError = '';
+              }}
+            />
+            {error.subManagerFirstNameError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerFirstNameError || ''}
+              </Text>
+            )}
           </View>
-          <View style={AddEditModelStyles.buttonMain}>
-            <View style={{width: '30%'}}>
-              <CustomButton
-                name="Cancel"
-                color="#29977E"
-                backgroundColor="white"
-                borderColor="#29977E"
-                onPress={() => handleSubBranchModalClose()}
-              />
-            </View>
-            <View style={{width: '30%'}}>
-              <CustomButton
-                name={editableBranchData ? 'Update' : 'Save'}
-                color="#FFFFFF"
-                backgroundColor="#29977E"
-                borderColor="#29977E"
-                onPress={() => subBranchSubmit()}
-                loading={loading}
-              />
-            </View>
+          <View style={{width: '48%'}}>
+            <VendorSubBranchTextField
+              label="Last Name"
+              mode="outlined"
+              name="Manager_last_Name"
+              activeOutlineColor="#29977E"
+              disabled={
+                managerValue === 'Same as owner' ||
+                managerValue === 'same as main branch manager'
+              }
+              value={subManagerLastName}
+              onChange={e => {
+                setSubManagerLastName(e);
+                error.subManagerLastNameError = '';
+              }}
+            />
+            {error.subManagerLastNameError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerLastNameError || ''}
+              </Text>
+            )}
+          </View>
+        </View>
+        <View
+          style={[AddEditModelStyles.subTextFieldTwoMain, {marginBottom: 15}]}>
+          <View style={{width: '48%'}}>
+            <VendorSubBranchTextField
+              label="Email Address"
+              mode="outlined"
+              name="Manager_Email_Address"
+              activeOutlineColor="#29977E"
+              disabled={
+                managerValue === 'Same as owner' ||
+                managerValue === 'same as main branch manager'
+              }
+              value={subManagerEmail}
+              onChange={e => {
+                setSubManagerEmail(e);
+                error.subManagerEmailError = '';
+              }}
+            />
+            {error.subManagerEmailError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerEmailError || ''}
+              </Text>
+            )}
+          </View>
+          <View style={{width: '48%'}}>
+            <VendorSubBranchTextField
+              label="Phone Number"
+              mode="outlined"
+              name="Manager_Phone_Number"
+              activeOutlineColor="#29977E"
+              disabled={
+                managerValue === 'Same as owner' ||
+                managerValue === 'same as main branch manager'
+              }
+              keyboardType="number-pad"
+              value={subManagerPhone}
+              onChange={e => {
+                setSubManagerPhone(e);
+                if (e?.length != 10) {
+                  error.subManagerPhoneError = 'Number must be 10 numbers';
+                } else {
+                  error.subManagerPhoneError = '';
+                }
+              }}
+            />
+            {error.subManagerPhoneError && (
+              <Text style={{color: 'red', fontSize: 14}}>
+                {error.subManagerPhoneError || ''}
+              </Text>
+            )}
+          </View>
+        </View>
+        <View style={AddEditModelStyles.buttonMain}>
+          <View style={{width: '30%'}}>
+            <CustomButton
+              name="Cancel"
+              color="#29977E"
+              backgroundColor="white"
+              borderColor="#29977E"
+              onPress={() => handleSubBranchModalClose()}
+            />
+          </View>
+          <View style={{width: '30%'}}>
+            <CustomButton
+              name={editableBranchData ? 'Update' : 'Save'}
+              color="#FFFFFF"
+              backgroundColor="#29977E"
+              borderColor="#29977E"
+              onPress={() => subBranchSubmit()}
+              loading={loading}
+            />
           </View>
         </View>
       </View>
-    </>
+    </View>
   );
 };

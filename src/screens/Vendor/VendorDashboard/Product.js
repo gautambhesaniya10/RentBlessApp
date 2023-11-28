@@ -1,5 +1,4 @@
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -21,7 +20,7 @@ const Product = () => {
   const navigation = useNavigation();
   const {userProfile} = useSelector(state => state?.user);
   const [filterModelOpen, setFilterModelOpen] = useState(false);
-  const [showBottomLoader, setShowBottomLoader] = useState(false);
+  const [, setShowBottomLoader] = useState(false);
 
   const dispatch = useDispatch();
 

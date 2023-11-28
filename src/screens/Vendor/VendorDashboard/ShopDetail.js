@@ -24,7 +24,6 @@ const ShopDetail = () => {
     formState: {errors: ownerInfoErrors},
     setValue: ownerInfoSetValue,
     getValues: ownerInfoGetValue,
-    reset: ownerInfoReset,
     control,
   } = useForm();
 
@@ -32,7 +31,6 @@ const ShopDetail = () => {
     handleSubmit: shopInfoHandleSubmit,
     formState: {errors: shopInfoErrors},
     setValue: shopInfoSetValue,
-    reset: shopInfoReset,
     control: shopInfoControl,
   } = useForm();
 
@@ -41,7 +39,6 @@ const ShopDetail = () => {
     formState: {errors: mainBranchInfoErrors},
     setValue: mainBranchInfoSetValue,
     getValues: mainBranchInfoGetValue,
-    reset: mainBranchInfoReset,
     control: mainBranchControl,
   } = useForm();
 
@@ -49,7 +46,6 @@ const ShopDetail = () => {
   const useProfileData = useSelector(state => state?.user.userProfile);
   const [activeTab, setActiveTab] = useState('Owner Details');
   const [individual, setIndividual] = useState(false);
-  const [shopOwnerId, setShopOwnerId] = useState('');
   const [ownerLoading, setOwnerLoading] = useState(false);
   const [shopLoading, setShopLoading] = useState(false);
   const [mainBranchLoading, setMainBranchLoading] = useState(false);
@@ -199,7 +195,7 @@ const ShopDetail = () => {
     shopUpdate({
       branchInfo: [
         {
-          id: mainBranch.id,
+          id: mainBranch?.id,
           branch_address: data.address,
           branch_pinCode: data.pin_code,
           branch_city: data.city,
@@ -208,7 +204,7 @@ const ShopDetail = () => {
           manager_name: data.manager_first_name + ' ' + data.manager_last_name,
           manager_contact: data.manager_user_contact,
           manager_email: data.manager_user_email,
-          branch_type: mainBranch.branch_type,
+          branch_type: mainBranch?.branch_type,
         },
       ],
     }).then(
@@ -255,10 +251,6 @@ const ShopDetail = () => {
         );
       } else {
         mainBranchInfoSetValue('address', mainBranch?.branch_address);
-
-        // mainBranchInfoSetValue('pin_code', mainBranch?.branch_pinCode);
-        // mainBranchInfoSetValue('state', mainBranch?.branch_state);
-        // mainBranchInfoSetValue('city', mainBranch?.branch_city);
 
         mainBranchInfoSetValue(
           'manager_first_name',
@@ -362,7 +354,7 @@ const ShopDetail = () => {
                         activeTab === item ? '#151827' : '#FAFCFC',
                     },
                   ]}
-                  key={index}>
+                  key={item}>
                   <Text
                     style={[
                       styles.sliderText,
@@ -383,7 +375,6 @@ const ShopDetail = () => {
               ownerInfoErrors={ownerInfoErrors}
               ownerInfoHandleSubmit={ownerInfoHandleSubmit}
               ownerInfoOnSubmit={ownerInfoOnSubmit}
-              setShopOwnerId={setShopOwnerId}
               ownerLoading={ownerLoading}
             />
           )}

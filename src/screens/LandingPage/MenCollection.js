@@ -76,7 +76,9 @@ const MenCollection = () => {
           {menCategoryLabel?.map((item, index) => {
             if (index < 6) {
               return (
-                <TouchableOpacity key={index} onPress={() => setSelectedMenCat([item?.id])}>
+                <TouchableOpacity
+                  key={item?.id}
+                  onPress={() => setSelectedMenCat([item?.id])}>
                   <Text
                     style={
                       selectedMenCat[0] === item?.id
@@ -100,7 +102,7 @@ const MenCollection = () => {
         <View style={styles.rightSliderMain}>
           {loading ? (
             <ActivityIndicator />
-          ) : menSelectedData?.length > 0 ? (
+          ) : menSelectedData && menSelectedData?.length > 0 ? (
             <Carousel
               ref={carouselRef}
               data={menSelectedData}
@@ -115,9 +117,7 @@ const MenCollection = () => {
               {...autoplayConfig}
             />
           ) : (
-            <>
-              <Text style={styles.noDataText}>No Data</Text>
-            </>
+            <Text style={styles.noDataText}>No Data</Text>
           )}
         </View>
       </View>

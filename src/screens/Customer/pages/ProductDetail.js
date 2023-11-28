@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -41,14 +41,13 @@ const ProductDetail = () => {
   const toast = useToast();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {productId} = route?.params?.state;
+  const {productId} = route?.params?.state ?? route?.params?.state;
   const [productDetails, setProductDetails] = useState({});
   const [productLikeByUser, setProductLikeByUser] = useState(false);
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
   const [showContactModalOpen, setShowContactModalOpen] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
-  const [readMore, setReadMore] = useState(false);
   const [shopOldDate, setShopOldDate] = useState('');
   const {width: screenWidth} = Dimensions.get('window');
 
@@ -270,7 +269,7 @@ const ProductDetail = () => {
 
   const shareContent = async () => {
     try {
-      const result = await Share.share({
+      await Share.share({
         message: `https://www.fitmecool.com/product/${productDetails?.data?.product?.data?.product_name?.replaceAll(
           ' ',
           '-',
@@ -585,7 +584,7 @@ const ProductDetail = () => {
               {productDetails?.data?.product?.related &&
                 productDetails?.data?.product?.related?.map(
                   (product, index) => (
-                    <ProductCard product={product} key={index} />
+                    <ProductCard product={product} key={product?.id} />
                   ),
                 )}
             </View>
@@ -855,8 +854,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#29977E',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 10,
     flexDirection: 'row',
   },
@@ -875,8 +872,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(21, 24, 39, 0.10)',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 10,
     flexDirection: 'row',
   },

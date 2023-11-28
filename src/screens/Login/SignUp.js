@@ -10,16 +10,15 @@ import React, {useEffect, useState} from 'react';
 import {BackGroundStyle, FontStyle} from '../../../CommonStyle';
 import CustomButton from '../../common/CustomButton';
 import CustomTextInput from '../../common/CustomTextInput';
-import {useNavigation, useIsFocused} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useForm} from 'react-hook-form';
 import {googleSignUp, signUp} from '../../graphql/mutations/authMutations';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
-import {useSelector, useDispatch} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {useToast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
-import auth from '@react-native-firebase/auth';
 import {facebookIcon, googleIcon} from '../../common/AllLiveImageLink';
 import {NEXT_PUBLIC_GOOGLE_CLIENT_ID} from '@env';
 
@@ -434,8 +433,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#151827',
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
     gap: 10,
     flexDirection: 'row',
   },

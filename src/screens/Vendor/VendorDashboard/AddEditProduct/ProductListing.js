@@ -29,14 +29,11 @@ const ProductListing = () => {
   const navigation = useNavigation();
 
   const {
-    productsLimit,
     productsCount,
-    productPageSkip,
     PaginationProductLimit,
     numOfPages,
     productsData,
     productLoading,
-    error,
   } = useSelector(state => state?.productsData);
 
   const {appliedProductsFilters, sortFilters} = useSelector(
@@ -104,7 +101,7 @@ const ProductListing = () => {
                   'Action',
                 ].map((itm, index) => (
                   <Text
-                    key={index}
+                    key={itm}
                     style={[
                       styles.tableHeader,
                       {
@@ -136,6 +133,7 @@ const ProductListing = () => {
 
                   return (
                     <View
+                      key={item}
                       style={[
                         styles.tableRow,
                         {
@@ -455,13 +453,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     backgroundColor: '#151827',
     color: '#FFFF',
-  },
-  tableCell: {
-    padding: 10,
-    textAlign: 'center',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#151827',
-    color: '#31333E',
   },
   tableCell: {
     padding: 10,

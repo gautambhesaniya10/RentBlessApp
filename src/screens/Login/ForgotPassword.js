@@ -27,7 +27,7 @@ const ForgotPassword = () => {
       <ScrollView>
         <Image
           source={{uri: logoImage}}
-          style={{width: 202, height: 75, alignSelf: 'center'}}
+          style={{width: '70%', height: 50, alignSelf: 'center'}}
         />
         {activeScreen === 1 && (
           <EmailScreen setActiveScreen={setActiveScreen} />

@@ -24,7 +24,7 @@ const Branches = () => {
   const route = useRoute();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const {shopDetails} = route?.params?.state;
+  const {shopDetails} = route?.params?.state ?? route?.params?.state;
   const [shopFollowByUser, setShopFollowByUser] = useState(false);
   const [followModalVisible, setFollowModalVisible] = useState(false);
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
@@ -89,109 +89,103 @@ const Branches = () => {
   }, [isAuthenticate, shopDetails, userProfile]);
 
   return (
-    <>
-      <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
-        <View style={styles.headerMain}>
-          <View style={styles.backMain}>
-            <TouchableOpacity
-              style={{padding: 10}}
-              onPress={() => navigation.goBack()}>
-              <Icon name="angle-left" size={24} color="white" />
-            </TouchableOpacity>
-            {shopDetails?.shop_logo ? (
-              <FastImage
-                style={{width: 45, height: 45, borderRadius: 24}}
-                source={{
-                  uri: shopDetails?.shop_logo,
-                  cache: FastImage.cacheControl.web,
-                }}
-                resizeMode="cover"
-              />
-            ) : (
-              <Avatar.Text
-                size={45}
-                label={shopDetails?.shop_name?.charAt(0)}
-                backgroundColor="#29977E"
-              />
-            )}
-
-            <View>
-              <Text numberOfLines={2} style={styles.shopNameText}>
-                {shopDetails?.shop_name}
-              </Text>
-              <Text style={{color: 'white'}}>
-                {shopDetails?.branch_info?.length} Branches
-              </Text>
-            </View>
-          </View>
-          <View style={{width: '25%'}}>
-            <CustomButton
-              name={shopFollowByUser ? 'Following' : 'Follow'}
-              color="white"
-              backgroundColor="#151827"
-              borderColor="white"
-              onPress={() => {
-                shopFollowByUser
-                  ? setFollowModalVisible(true)
-                  : clickedByFollow();
+    <View style={{flex: 1, backgroundColor: BackGroundStyle}}>
+      <View style={styles.headerMain}>
+        <View style={styles.backMain}>
+          <TouchableOpacity
+            style={{padding: 10}}
+            onPress={() => navigation.goBack()}>
+            <Icon name="angle-left" size={24} color="white" />
+          </TouchableOpacity>
+          {shopDetails?.shop_logo ? (
+            <FastImage
+              style={{width: 45, height: 45, borderRadius: 24}}
+              source={{
+                uri: shopDetails?.shop_logo,
+                cache: FastImage.cacheControl.web,
               }}
-              icon={!shopFollowByUser && true}
-              iconName="plus"
+              resizeMode="cover"
             />
+          ) : (
+            <Avatar.Text
+              size={45}
+              label={shopDetails?.shop_name?.charAt(0)}
+              backgroundColor="#29977E"
+            />
+          )}
+
+          <View>
+            <Text numberOfLines={2} style={styles.shopNameText}>
+              {shopDetails?.shop_name}
+            </Text>
+            <Text style={{color: 'white'}}>
+              {shopDetails?.branch_info?.length} Branches
+            </Text>
           </View>
-          <FollowConfirmationModel
-            followModalVisible={followModalVisible}
-            setFollowModalVisible={setFollowModalVisible}
-            shopFollowByUser={shopFollowByUser}
-            shopDetails={shopDetails}
+        </View>
+        <View style={{width: '25%'}}>
+          <CustomButton
+            name={shopFollowByUser ? 'Following' : 'Follow'}
+            color="white"
+            backgroundColor="#151827"
+            borderColor="white"
+            onPress={() => {
+              shopFollowByUser
+                ? setFollowModalVisible(true)
+                : clickedByFollow();
+            }}
+            icon={!shopFollowByUser && true}
+            iconName="plus"
           />
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={styles.branchListContainer}>
-            {shopDetails?.branch_info?.map((item, index) => (
-              <>
-                <BranchMultiDropDown
-                  key={index}
-                  item={item}
-                  index={index}
-                  cardTitle={`Branch ${index + 1}`}
-                  bottomComponent={
-                    <View>
-                      <View style={styles.listMain}>
-                        <Text style={styles.titleLeftText}>Manager Name :</Text>
-                        <Text style={styles.titleRightText}>
-                          {item?.manager_name}
-                        </Text>
-                      </View>
-                      <View style={styles.listMain}>
-                        <Text style={styles.titleLeftText}>Phone Number :</Text>
-                        <Text style={styles.titleRightText}>
-                          {item?.manager_contact}
-                        </Text>
-                      </View>
-                      <View style={styles.listMain}>
-                        <Text style={styles.titleLeftText}>
-                          Branch Address :
-                        </Text>
-                        <Text style={styles.titleRightText}>
-                          {item?.branch_address}
-                        </Text>
-                      </View>
-                      <View style={styles.listMain}>
-                        <Text style={styles.titleLeftText}>City :</Text>
-                        <Text style={styles.titleRightText}>
-                          {item?.branch_city}
-                        </Text>
-                      </View>
-                    </View>
-                  }
-                />
-              </>
-            ))}
-          </View>
-        </ScrollView>
+        <FollowConfirmationModel
+          followModalVisible={followModalVisible}
+          setFollowModalVisible={setFollowModalVisible}
+          shopFollowByUser={shopFollowByUser}
+          shopDetails={shopDetails}
+        />
       </View>
-    </>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.branchListContainer}>
+          {shopDetails?.branch_info?.map((item, index) => (
+            <BranchMultiDropDown
+              key={item?.id}
+              item={item}
+              index={index}
+              cardTitle={`Branch ${index + 1}`}
+              bottomComponent={
+                <View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Manager Name :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.manager_name}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Phone Number :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.manager_contact}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>Branch Address :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.branch_address}
+                    </Text>
+                  </View>
+                  <View style={styles.listMain}>
+                    <Text style={styles.titleLeftText}>City :</Text>
+                    <Text style={styles.titleRightText}>
+                      {item?.branch_city}
+                    </Text>
+                  </View>
+                </View>
+              }
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

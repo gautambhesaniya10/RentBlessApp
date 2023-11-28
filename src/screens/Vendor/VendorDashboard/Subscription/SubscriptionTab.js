@@ -6,21 +6,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
-import { BackGroundStyle } from '../../../../../CommonStyle';
+import React, {useState} from 'react';
+import {BackGroundStyle} from '../../../../../CommonStyle';
 import VendorHeader from '../../../../components/VendorHeader';
 import CustomButton from '../../../../common/CustomButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 import CustomTextInput from '../../../../common/CustomTextInput';
-import { useForm } from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import moment from 'moment';
 
 const SubscriptionTab = () => {
-  const { vendorShopDetails } = useSelector(state => state?.shopDetail);
+  const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const [contactModalVisible, setContactModalVisible] = useState(false);
 
-  const { shopConfigurationsData } = useSelector(
+  const {shopConfigurationsData} = useSelector(
     state => state.shopConfigurations,
   );
 
@@ -54,11 +54,11 @@ const SubscriptionTab = () => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <VendorHeader />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        style={{ flex: 1, backgroundColor: BackGroundStyle }}>
+        style={{flex: 1, backgroundColor: BackGroundStyle}}>
         <View style={styles.mainContainer}>
           <Text style={styles.headerText}>
             Choose the right plan for your business
@@ -74,7 +74,7 @@ const SubscriptionTab = () => {
               <Text
                 style={[
                   styles.bottomTitleText,
-                  { color: '#29977E', fontWeight: '600' },
+                  {color: '#29977E', fontWeight: '600'},
                 ]}>
                 Free Trail is expire on {formattedFutureDate}.
               </Text>
@@ -82,7 +82,7 @@ const SubscriptionTab = () => {
               <Text
                 style={[
                   styles.bottomTitleText,
-                  { color: 'red', fontWeight: '600' },
+                  {color: 'red', fontWeight: '600'},
                 ]}>
                 Free Trail is expired.
               </Text>
@@ -91,7 +91,7 @@ const SubscriptionTab = () => {
             <View style={styles.listMain}>
               <Icon name="check-circle" size={26} color="#29977E" />
               <Text style={styles.listText}>
-                <Text style={{ color: '#29977E', fontWeight: '600' }}>
+                <Text style={{color: '#29977E', fontWeight: '600'}}>
                   {FreeTrailProduct}
                 </Text>{' '}
                 Products Upload
@@ -103,7 +103,7 @@ const SubscriptionTab = () => {
               'AI based Auto Product title, description not supported',
               '24/7 Support',
             ]?.map((item, index) => (
-              <View key={index} style={styles.listMain}>
+              <View key={item} style={styles.listMain}>
                 <Icon name="check-circle" size={26} color="#29977E" />
                 <Text style={styles.listText}>{item}</Text>
               </View>
@@ -116,7 +116,7 @@ const SubscriptionTab = () => {
               Custom contract & additional features Volume-based discounting
               available
             </Text>
-            <View style={{ width: '100%', marginBottom: 20, marginTop: 10 }}>
+            <View style={{width: '100%', marginBottom: 20, marginTop: 10}}>
               <CustomButton
                 name="Contact Sales"
                 color="#FFFFFF"
@@ -133,7 +133,7 @@ const SubscriptionTab = () => {
               'AI based Auto Product title, description supported',
               '24/7 Support',
             ]?.map((item, index) => (
-              <View key={index} style={styles.listMain}>
+              <View key={item} style={styles.listMain}>
                 <Icon name="check-circle" size={26} color="#29977E" />
                 <Text style={styles.listText}>{item}</Text>
               </View>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     gap: 12,
     alignItems: 'center',
     marginBottom: 6,
-    width: "90%",
+    width: '90%',
   },
   listText: {
     color: 'black',
@@ -204,17 +204,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const ContactSaleModel = ({ contactModalVisible, setContactModalVisible }) => {
+const ContactSaleModel = ({contactModalVisible, setContactModalVisible}) => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
-    setValue,
+    formState: {errors},
     reset,
   } = useForm();
 
   const onSubmit = data => {
-    console.log('dataaa', data);
     setContactModalVisible(false);
     reset();
   };
@@ -232,7 +230,7 @@ const ContactSaleModel = ({ contactModalVisible, setContactModalVisible }) => {
           <View style={contactModelStyles.modalView}>
             <TouchableOpacity
               onPress={() => setContactModalVisible(false)}
-              style={{ alignItems: 'flex-end' }}>
+              style={{alignItems: 'flex-end'}}>
               <Icon name="close" color="black" size={22} />
             </TouchableOpacity>
             <Text style={contactModelStyles.topTitleText}>Contact Us</Text>
@@ -240,8 +238,8 @@ const ContactSaleModel = ({ contactModalVisible, setContactModalVisible }) => {
               Custom contract & additional features Volume-based discounting
               available
             </Text>
-            <View style={{ alignItems: 'center' }}>
-              <View style={{ width: '80%', marginBottom: 20 }}>
+            <View style={{alignItems: 'center'}}>
+              <View style={{width: '80%', marginBottom: 20}}>
                 <CustomTextInput
                   label={'Email'}
                   mode="outlined"
@@ -257,40 +255,40 @@ const ContactSaleModel = ({ contactModalVisible, setContactModalVisible }) => {
                     },
                   }}
                   activeOutlineColor="#151827"
-                  outlineStyle={{ borderRadius: 12 }}
+                  outlineStyle={{borderRadius: 12}}
                 />
                 {errors?.email && (
-                  <Text style={{ color: 'red', marginTop: 4 }}>
+                  <Text style={{color: 'red', marginTop: 4}}>
                     {errors.email.message}
                   </Text>
                 )}
               </View>
-              <View style={{ width: '80%', marginBottom: 20 }}>
+              <View style={{width: '80%', marginBottom: 20}}>
                 <CustomTextInput
                   label={'Anything Else'}
                   mode="outlined"
                   name="description"
                   control={control}
-                  rules={{ required: 'Description is required *' }}
+                  rules={{required: 'Description is required *'}}
                   activeOutlineColor="#151827"
-                  outlineStyle={{ borderRadius: 12 }}
+                  outlineStyle={{borderRadius: 12}}
                   multiline={true}
                   numberOfLines={5}
                 />
                 {errors?.description && (
-                  <Text style={{ color: 'red', marginTop: 4 }}>
+                  <Text style={{color: 'red', marginTop: 4}}>
                     {errors.description.message}
                   </Text>
                 )}
               </View>
-              <View style={{ width: '80%', marginBottom: 20 }}>
+              <View style={{width: '80%', marginBottom: 20}}>
                 <CustomButton
                   name="Contact Us"
                   color="#FFFFFF"
                   backgroundColor="#151827"
                   borderColor="#151827"
                   onPress={handleSubmit(onSubmit)}
-                // loading={loading}
+                  // loading={loading}
                 />
               </View>
             </View>

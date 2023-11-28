@@ -37,7 +37,6 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {shopProductButtonChange} from '../../redux/ShopFilter/ShopFilterSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../components/CustomSwitch';
-import {useFocusEffect} from '@react-navigation/native';
 
 const HomePage = () => {
   const dispatch = useDispatch();
@@ -64,25 +63,21 @@ const HomePage = () => {
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
 
   const {
-    productsLimit,
     productsCount,
     numOfPages,
     productCurrentPage,
     productDataLimit,
     productsData,
     productLoading,
-    error,
   } = useSelector(state => state.productsData);
 
   const {
-    shopsLimit,
     shopsCount,
     numOfPages: shopNumOfPages,
     shopCurrentPage,
     shopDataLimit,
     shopsData,
     loading: shopLoading,
-    error: shopError,
   } = useSelector(state => state?.shops);
 
   const {appliedCityFilter} = useSelector(state => state?.cityFiltersReducer);
@@ -165,11 +160,7 @@ const HomePage = () => {
     );
   };
 
-  // useEffect(() => {
-  //   dispatch(emptyProductFilter());
-  // }, [IsFocused]);
-
-  useFocusEffect(React.useCallback(() => {}, []));
+  // useFocusEffect(React.useCallback(() => {}, []));
 
   const handleProductScroll = event => {
     setShowBottomLoader(true);
@@ -374,7 +365,7 @@ const HomePage = () => {
                 ) : productsData?.length > 0 ? (
                   <View style={[styles.productCardMain]}>
                     {productsData?.map((product, index) => (
-                      <ProductCard key={index} product={product} />
+                      <ProductCard key={product?.id} product={product} />
                     ))}
                     {productLoading &&
                       productsData?.length > 0 &&
@@ -415,7 +406,7 @@ const HomePage = () => {
               ) : shopsData?.length > 0 ? (
                 <View style={[styles.productCardMain]}>
                   {shopsData?.map((shop, index) => (
-                    <ShopCard key={index} shop={shop} />
+                    <ShopCard key={shop?.id} shop={shop} />
                   ))}
                   {shopLoading &&
                     shopsData?.length > 0 &&

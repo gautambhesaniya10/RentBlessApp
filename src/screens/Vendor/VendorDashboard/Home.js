@@ -1,21 +1,20 @@
 import {
   BackHandler,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {BackGroundStyle, FontStyle} from '../../../../CommonStyle';
+import React, {useEffect} from 'react';
+import {BackGroundStyle} from '../../../../CommonStyle';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import VendorHeader from '../../../components/VendorHeader';
 import VersionAppModel from '../../AppVersionModel/VersionApp';
 
-const Home = ({}) => {
+const Home = () => {
   const navigation = useNavigation();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
   const {versionData} = useSelector(state => state?.appVersion);
@@ -23,7 +22,6 @@ const Home = ({}) => {
 
   useEffect(() => {
     const handleBackButton = () => {
-      // BackHandler.exitApp();
       navigation.navigate('Splash');
       return true;
     };

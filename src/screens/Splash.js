@@ -58,16 +58,18 @@ const Splash = () => {
   };
 
   useEffect(() => {
-    LogBox.ignoreLogs(['In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.']);
+    LogBox.ignoreLogs([
+      'In React 18, SSRProvider is not necessary and is a noop. You can remove it from your app.',
+    ]);
   }, []);
 
   useEffect(() => {
     retrieveLocalData();
   }, [isConnected, isFocused]);
 
-  useEffect(() => {
-    // updateVersionData(currVersion);
-  }, []);
+  // useEffect(() => {
+  //   updateVersionData(currVersion);
+  // }, []);
 
   return netWarningShow ? (
     <NoInternetScreen />

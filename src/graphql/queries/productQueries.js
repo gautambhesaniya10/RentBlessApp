@@ -38,6 +38,7 @@ export const getProducts = async payload => {
               back
               side
             }
+            product_video
             branchInfo {
               id
               shop_id
@@ -67,7 +68,6 @@ export const getProducts = async payload => {
       shopId: payload.shopId,
       sort: payload.sort,
       city: payload.city,
-      search: payload.search,
       forDashboard: payload.forDashboard,
     },
     fetchPolicy: 'no-cache',

@@ -47,7 +47,7 @@ const ShopReviewAll = () => {
             <Text style={styles.DistributionText}>Rating Distribution</Text>
             {shopReviews?.length > 0 ? (
               [5, 4, 3, 2, 1]?.map?.((star, index) => (
-                <View style={styles.progressBarMain}>
+                <View key={star} style={styles.progressBarMain}>
                   <Text>
                     {star} <Icon name="star" size={12} color="black" />
                   </Text>

@@ -1,26 +1,25 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import {StyleSheet, Text, View, Image, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import VendorTab from '../TabNavigation/VendorTab';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
   DrawerItemList,
 } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch, useSelector } from 'react-redux';
-import { useToast } from 'native-base';
+import {useDispatch, useSelector} from 'react-redux';
+import {useToast} from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import VendorSideBarContent from '../components/VendorSideBarContent';
-import { userLogout } from '../redux/LoginUserProfileSlice/userSlice';
+import {userLogout} from '../redux/LoginUserProfileSlice/userSlice';
 import CustomButton from '../common/CustomButton';
-import { Divider } from 'react-native-paper';
-import { Modal } from 'react-native';
-import { deleteAccount } from '../graphql/mutations/accountDelete';
-import { BackGroundStyle } from '../../CommonStyle';
+import {Divider} from 'react-native-paper';
+import {Modal} from 'react-native';
+import {deleteAccount} from '../graphql/mutations/accountDelete';
+import {BackGroundStyle} from '../../CommonStyle';
 
-
-const DrawerVendor = ({ vendorShopDetails }) => {
+const DrawerVendor = ({vendorShopDetails}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const toast = useToast();
@@ -45,7 +44,7 @@ const DrawerVendor = ({ vendorShopDetails }) => {
 
   const CustomDrawerContent = props => {
     return (
-      <View style={{ height: '100%', position: 'relative', }}>
+      <View style={{height: '100%', position: 'relative'}}>
         <DrawerContentScrollView {...props}>
           <VendorSideBarContent vendorShopDetails={vendorShopDetails} />
           {/* <DrawerItemList {...props} /> */}
@@ -53,9 +52,11 @@ const DrawerVendor = ({ vendorShopDetails }) => {
         <View style={styles.bottomMain}>
           <Divider bold={true} />
 
-          <View style={{ width: '60%', marginLeft: 30, paddingVertical: 10 }}>
+          <View style={{width: '60%', marginLeft: 30, paddingVertical: 10}}>
             <CustomButton
               name="Delete Account"
+              iconName="trash"
+              icon={true}
               color="red"
               backgroundColor="white"
               borderColor="red"
@@ -67,7 +68,11 @@ const DrawerVendor = ({ vendorShopDetails }) => {
             <Text style={styles.wishText}>logout</Text>
           </TouchableOpacity>
         </View>
-        <AccountDeleteModel userProfile={userProfile} accDelModalVisible={accDelModalVisible} setAccDelModalVisible={setAccDelModalVisible} />
+        <AccountDeleteModel
+          userProfile={userProfile}
+          accDelModalVisible={accDelModalVisible}
+          setAccDelModalVisible={setAccDelModalVisible}
+        />
       </View>
     );
   };
@@ -111,22 +116,25 @@ const styles = StyleSheet.create({
   },
 });
 
-
-const AccountDeleteModel = ({ userProfile , accDelModalVisible, setAccDelModalVisible }) => {
+const AccountDeleteModel = ({
+  userProfile,
+  accDelModalVisible,
+  setAccDelModalVisible,
+}) => {
   const toast = useToast();
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const HandleDeleteAccount = async() => {
+  const HandleDeleteAccount = async () => {
     await deleteAccount({id: userProfile?.id}).then(
       res => {
         toast.show({
-          title: "Account Delete Sucessfully",
+          title: 'Account Delete Sucessfully',
           placement: 'top',
           backgroundColor: 'green.600',
           variant: 'solid',
         });
-        setAccDelModalVisible(false)
+        setAccDelModalVisible(false);
         AsyncStorage.clear();
         dispatch(userLogout());
         setTimeout(() => {
@@ -140,10 +148,10 @@ const AccountDeleteModel = ({ userProfile , accDelModalVisible, setAccDelModalVi
           backgroundColor: 'red.600',
           variant: 'solid',
         });
-        setAccDelModalVisible(false)
+        setAccDelModalVisible(false);
       },
     );
-  }
+  };
   return (
     <View style={deltyles.centeredView}>
       <Modal
@@ -156,9 +164,12 @@ const AccountDeleteModel = ({ userProfile , accDelModalVisible, setAccDelModalVi
         <View style={deltyles.centeredView}>
           <View style={deltyles.modalView}>
             <Text style={deltyles.titleText}>Delete Account</Text>
-            <Text style={deltyles.modalText} >All of your records will get removed permanently. Be aware that this action is irreversible</Text>
+            <Text style={deltyles.modalText}>
+              All of your records will get removed permanently. Be aware that
+              this action is irreversible
+            </Text>
             <View style={deltyles.bottomBtnMain}>
-              <View style={{ width: '40%' }}>
+              <View style={{width: '40%'}}>
                 <CustomButton
                   name="Delete"
                   color="#FFFFFF"
@@ -167,7 +178,7 @@ const AccountDeleteModel = ({ userProfile , accDelModalVisible, setAccDelModalVi
                   onPress={() => HandleDeleteAccount()}
                 />
               </View>
-              <View style={{ width: '40%' }}>
+              <View style={{width: '40%'}}>
                 <CustomButton
                   name="Cancel"
                   color="black"
@@ -180,10 +191,9 @@ const AccountDeleteModel = ({ userProfile , accDelModalVisible, setAccDelModalVi
           </View>
         </View>
       </Modal>
-
     </View>
   );
-}
+};
 
 const deltyles = StyleSheet.create({
   centeredView: {
@@ -200,22 +210,22 @@ const deltyles = StyleSheet.create({
     padding: 15,
     alignItems: 'center',
     borderWidth: 1,
-    elevation : 10
+    elevation: 10,
   },
   modalText: {
     marginBottom: 15,
-    color: "black",
-    fontWeight: "400",
-    fontSize: 14
+    color: 'black',
+    fontWeight: '400',
+    fontSize: 14,
   },
   titleText: {
-    color: "black",
-    fontWeight: "600",
+    color: 'black',
+    fontWeight: '600',
     fontSize: 18,
-    paddingBottom: 5
+    paddingBottom: 5,
   },
-  bottomBtnMain : {
-    flexDirection : "row",
-    gap: 10
-  }
+  bottomBtnMain: {
+    flexDirection: 'row',
+    gap: 10,
+  },
 });

@@ -10,7 +10,6 @@ import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice'
 
 const VendorMain = () => {
   const dispatch = useDispatch();
-  // const storedValue = AsyncStorage.getItem('userHaveAnyShop');
   const checkInternetStatus = checkInternetConnectivity();
   const {userProfile} = useSelector(state => state?.user);
 

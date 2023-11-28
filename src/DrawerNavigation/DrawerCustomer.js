@@ -4,7 +4,6 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
-  DrawerItemList,
 } from '@react-navigation/drawer';
 import CustomerTab from '../TabNavigation/CustomerTab';
 import SideBarContent from '../common/Customer/SideBarContent';

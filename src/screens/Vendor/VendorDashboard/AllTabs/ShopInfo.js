@@ -17,7 +17,6 @@ import {ScrollView} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
-import {useIsFocused} from '@react-navigation/native';
 
 const ShopInfo = ({
   shopInfoHandleSubmit,
@@ -27,11 +26,9 @@ const ShopInfo = ({
   shopLoading,
   shopInfoControl,
   vendorShopDetails,
-  useProfileData,
   hours,
   setHours,
 }) => {
-  const isFocused = useIsFocused();
   const [shopTimeDetails, setShopTimeDetails] = useState(true);
 
   const [daysTimeModalOpen, setDaysTimeModalOpen] = useState(false);
@@ -315,7 +312,6 @@ const hourModelStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'rgba(0, 0, 0, 0.10)',
     display: 'flex',
-    alignItems: 'center',
     justifyContent: 'space-between',
     gap: 3,
     flexDirection: 'row',
@@ -351,182 +347,180 @@ const HoursModal = ({
   setSelectedWeek,
 }) => {
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isBottomSheetOpen}
-        onRequestClose={handleCloseBottomSheet}>
-        <View style={[hourModelStyles.modalContainer]}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isBottomSheetOpen}
+      onRequestClose={handleCloseBottomSheet}>
+      <View style={[hourModelStyles.modalContainer]}>
+        <View
+          style={[hourModelStyles.bottomSheet, {height: windowHeight * 0.7}]}>
           <View
-            style={[hourModelStyles.bottomSheet, {height: windowHeight * 0.7}]}>
+            style={{
+              width: '100%',
+            }}>
             <View
               style={{
-                width: '100%',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                paddingHorizontal: 20,
               }}>
+              <Text style={hourModelStyles.headerText}>HOURS</Text>
+              <TouchableOpacity onPress={handleCloseBottomSheet}>
+                <Icon name="close" size={20} color="rgba(21, 24, 39, 0.56)" />
+              </TouchableOpacity>
+            </View>
+            <Divider style={{marginVertical: 16}} bold={true} />
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{
+                paddingHorizontal: 20,
+                marginBottom: 50,
+              }}>
+              {hours?.map((day, index) => (
+                <View
+                  style={[hourModelStyles.mainDiv, {marginBottom: 16}]}
+                  key={index}>
+                  <View>
+                    <Text style={hourModelStyles.daysAll}>{day['key']}</Text>
+                  </View>
+                  {day['value'].map((time, index1) => (
+                    <View style={hourModelStyles.timeLeftMain} key={index1}>
+                      {time === 'Closed' || time === 'Open 24 hours' ? (
+                        <Text
+                          style={
+                            time === 'Open 24 hours'
+                              ? hourModelStyles.openEveryDaysText
+                              : hourModelStyles.closeEveryDaysText
+                          }>
+                          {time}
+                        </Text>
+                      ) : (
+                        <View
+                          style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 10,
+                          }}>
+                          <TimeCustomTextField
+                            value={time.split(' - ')[0]}
+                            label="Start"
+                            editable={false}
+                          />
+                          <TimeCustomTextField
+                            value={time.split(' - ')[1]}
+                            label="End"
+                            editable={false}
+                          />
+                        </View>
+                      )}
+
+                      <TouchableOpacity
+                        onPress={() => {
+                          setDaysTimeModalOpen(true);
+                          setSelectedDay(day['key'] + ' - ' + time);
+                        }}
+                        style={hourModelStyles.editDayHour}>
+                        <Icon name="pencil" size={15} color="white" />
+                      </TouchableOpacity>
+                    </View>
+                  ))}
+                </View>
+              ))}
+              <Divider style={{marginVertical: 16}} bold={true} />
+
               <View
                 style={{
+                  marginTop: 15,
+                  width: '100%',
                   display: 'flex',
                   flexDirection: 'row',
-                  alignItems: 'center',
                   justifyContent: 'space-between',
-                  paddingHorizontal: 20,
                 }}>
-                <Text style={hourModelStyles.headerText}>HOURS</Text>
-                <TouchableOpacity onPress={handleCloseBottomSheet}>
-                  <Icon name="close" size={20} color="rgba(21, 24, 39, 0.56)" />
+                <TouchableOpacity
+                  style={hourModelStyles.bottomThreeButton}
+                  onPress={() => {
+                    setDaysTimeModalOpen(true);
+
+                    setSelectedAllHours([
+                      'Sunday',
+                      'Monday',
+                      'Tuesday',
+                      'Wednesday',
+                      'Thursday',
+                      'Friday',
+                      'Saturday',
+                    ]);
+                  }}>
+                  <Icon
+                    name="pencil"
+                    size={12}
+                    color="rgba(21, 24, 39, 0.56)"
+                  />
+                  <Text style={hourModelStyles.bottomThreeButtonText}>
+                    EDIT ALL HOURS
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={hourModelStyles.bottomThreeButton}
+                  onPress={() => {
+                    setDaysTimeModalOpen(true);
+
+                    setSelectedWeek([
+                      'Monday',
+                      'Tuesday',
+                      'Wednesday',
+                      'Thursday',
+                      'Friday',
+                      'Saturday',
+                    ]);
+                  }}>
+                  <Icon
+                    name="pencil"
+                    size={12}
+                    color="rgba(21, 24, 39, 0.56)"
+                  />
+                  <Text style={hourModelStyles.bottomThreeButtonText}>
+                    EDIT MON TO SAT
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={hourModelStyles.bottomThreeButton}
+                  onPress={() => {
+                    setDaysTimeModalOpen(true);
+                    setSelectedDay(
+                      'Sunday' +
+                        ' - ' +
+                        hours[hours.findIndex(item => item.key === 'Sunday')]
+                          .value,
+                    );
+                  }}>
+                  <Icon
+                    name="pencil"
+                    size={12}
+                    color="rgba(21, 24, 39, 0.56)"
+                  />
+                  <Text style={hourModelStyles.bottomThreeButtonText}>
+                    EDIT SUNDAY
+                  </Text>
                 </TouchableOpacity>
               </View>
-              <Divider style={{marginVertical: 16}} bold={true} />
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={{
-                  paddingHorizontal: 20,
-                  marginBottom: 50,
-                }}>
-                {hours?.map((day, index) => (
-                  <View
-                    style={[hourModelStyles.mainDiv, {marginBottom: 16}]}
-                    key={index}>
-                    <View>
-                      <Text style={hourModelStyles.daysAll}>{day['key']}</Text>
-                    </View>
-                    {day['value'].map((time, index1) => (
-                      <View style={hourModelStyles.timeLeftMain} key={index1}>
-                        {time === 'Closed' || time === 'Open 24 hours' ? (
-                          <Text
-                            style={
-                              time === 'Open 24 hours'
-                                ? hourModelStyles.openEveryDaysText
-                                : hourModelStyles.closeEveryDaysText
-                            }>
-                            {time}
-                          </Text>
-                        ) : (
-                          <View
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'row',
-                              gap: 10,
-                            }}>
-                            <TimeCustomTextField
-                              value={time.split(' - ')[0]}
-                              label="Start"
-                              editable={false}
-                            />
-                            <TimeCustomTextField
-                              value={time.split(' - ')[1]}
-                              label="End"
-                              editable={false}
-                            />
-                          </View>
-                        )}
 
-                        <TouchableOpacity
-                          onPress={() => {
-                            setDaysTimeModalOpen(true);
-                            setSelectedDay(day['key'] + ' - ' + time);
-                          }}
-                          style={hourModelStyles.editDayHour}>
-                          <Icon name="pencil" size={15} color="white" />
-                        </TouchableOpacity>
-                      </View>
-                    ))}
-                  </View>
-                ))}
-                <Divider style={{marginVertical: 16}} bold={true} />
-
-                <View
-                  style={{
-                    marginTop: 15,
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                  }}>
-                  <TouchableOpacity
-                    style={hourModelStyles.bottomThreeButton}
-                    onPress={() => {
-                      setDaysTimeModalOpen(true);
-
-                      setSelectedAllHours([
-                        'Sunday',
-                        'Monday',
-                        'Tuesday',
-                        'Wednesday',
-                        'Thursday',
-                        'Friday',
-                        'Saturday',
-                      ]);
-                    }}>
-                    <Icon
-                      name="pencil"
-                      size={12}
-                      color="rgba(21, 24, 39, 0.56)"
-                    />
-                    <Text style={hourModelStyles.bottomThreeButtonText}>
-                      EDIT ALL HOURS
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={hourModelStyles.bottomThreeButton}
-                    onPress={() => {
-                      setDaysTimeModalOpen(true);
-
-                      setSelectedWeek([
-                        'Monday',
-                        'Tuesday',
-                        'Wednesday',
-                        'Thursday',
-                        'Friday',
-                        'Saturday',
-                      ]);
-                    }}>
-                    <Icon
-                      name="pencil"
-                      size={12}
-                      color="rgba(21, 24, 39, 0.56)"
-                    />
-                    <Text style={hourModelStyles.bottomThreeButtonText}>
-                      EDIT MON TO SAT
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={hourModelStyles.bottomThreeButton}
-                    onPress={() => {
-                      setDaysTimeModalOpen(true);
-                      setSelectedDay(
-                        'Sunday' +
-                          ' - ' +
-                          hours[hours.findIndex(item => item.key === 'Sunday')]
-                            .value,
-                      );
-                    }}>
-                    <Icon
-                      name="pencil"
-                      size={12}
-                      color="rgba(21, 24, 39, 0.56)"
-                    />
-                    <Text style={hourModelStyles.bottomThreeButtonText}>
-                      EDIT SUNDAY
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-
-                <View style={{marginTop: 40, width: '100%'}}>
-                  <CustomButton
-                    name="Save"
-                    color="#FFFFFF"
-                    backgroundColor="#29977E"
-                    onPress={handleCloseBottomSheet}
-                  />
-                </View>
-              </ScrollView>
-            </View>
+              <View style={{marginTop: 40, width: '100%'}}>
+                <CustomButton
+                  name="Save"
+                  color="#FFFFFF"
+                  backgroundColor="#29977E"
+                  onPress={handleCloseBottomSheet}
+                />
+              </View>
+            </ScrollView>
           </View>
         </View>
-      </Modal>
-    </>
+      </View>
+    </Modal>
   );
 };
 
@@ -828,143 +822,141 @@ const DaysTimeModal = ({
   };
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={daysTimeModalOpen}
-        onRequestClose={() => {
-          setDaysTimeModalOpen(!daysTimeModalOpen);
-        }}>
-        <View style={daysStyles.centeredView}>
-          <View style={daysStyles.modalView}>
-            <Text style={daysStyles.headerText}>Select days & time</Text>
-            <View style={daysStyles.daysNameFirstMain}>
-              {[
-                'Sunday',
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-              ].map((itm, index) => (
-                <TouchableOpacity
-                  style={[
-                    daysStyles.charMainDiv,
-                    {
-                      backgroundColor:
-                        selectedDay?.split(' - ')[0] === itm
-                          ? '#bdbbbb'
-                          : selectedWeek?.find(day => day === itm)
-                          ? '#bdbbbb'
-                          : selectedAllHours?.find(day => day === itm)
-                          ? '#bdbbbb'
-                          : 'white',
-                    },
-                  ]}
-                  key={index}>
-                  <Text style={{color: 'black'}}>{itm?.charAt(0)}</Text>
-                </TouchableOpacity>
-              ))}
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={daysTimeModalOpen}
+      onRequestClose={() => {
+        setDaysTimeModalOpen(!daysTimeModalOpen);
+      }}>
+      <View style={daysStyles.centeredView}>
+        <View style={daysStyles.modalView}>
+          <Text style={daysStyles.headerText}>Select days & time</Text>
+          <View style={daysStyles.daysNameFirstMain}>
+            {[
+              'Sunday',
+              'Monday',
+              'Tuesday',
+              'Wednesday',
+              'Thursday',
+              'Friday',
+              'Saturday',
+            ].map((itm, index) => (
+              <TouchableOpacity
+                style={[
+                  daysStyles.charMainDiv,
+                  {
+                    backgroundColor:
+                      selectedDay?.split(' - ')[0] === itm
+                        ? '#bdbbbb'
+                        : selectedWeek?.find(day => day === itm)
+                        ? '#bdbbbb'
+                        : selectedAllHours?.find(day => day === itm)
+                        ? '#bdbbbb'
+                        : 'white',
+                  },
+                ]}
+                key={itm}>
+                <Text style={{color: 'black'}}>{itm?.charAt(0)}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+          <View style={daysStyles.checkBoxMain}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <CheckBox
+                value={open24Hours}
+                onValueChange={e => {
+                  setOpen24Hours(e);
+                  if (closed) {
+                    setClosed(!e);
+                  }
+                }}
+                tintColors={{
+                  true: '#29977E',
+                  false: '#151827',
+                  disabled: 'gray',
+                }}
+              />
+              <Text style={{color: 'black'}}>Open 24 Hours</Text>
             </View>
-            <View style={daysStyles.checkBoxMain}>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <CheckBox
-                  value={open24Hours}
-                  onValueChange={e => {
-                    setOpen24Hours(e);
-                    if (closed) {
-                      setClosed(!e);
-                    }
-                  }}
-                  tintColors={{
-                    true: '#29977E',
-                    false: '#151827',
-                    disabled: 'gray',
-                  }}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+              <CheckBox
+                value={closed}
+                onValueChange={e => {
+                  setClosed(e);
+                  if (open24Hours) {
+                    setOpen24Hours(!e);
+                  }
+                }}
+                tintColors={{
+                  true: '#29977E',
+                  false: '#151827',
+                  disabled: 'gray',
+                }}
+              />
+              <Text style={{color: 'black'}}>Closed</Text>
+            </View>
+          </View>
+
+          {!(closed || open24Hours) && (
+            <View style={daysStyles.mainTimeDiv}>
+              <View>
+                <Text style={daysStyles.startEndText}>Start Time</Text>
+                <DatePicker
+                  style={{width: 150, height: 100}}
+                  mode="time"
+                  date={selectedStartTime}
+                  onDateChange={handleStartTimeChange}
+                  is24hourSource="locale"
+                  textColor="black"
                 />
-                <Text style={{color: 'black'}}>Open 24 Hours</Text>
               </View>
-              <View
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <CheckBox
-                  value={closed}
-                  onValueChange={e => {
-                    setClosed(e);
-                    if (open24Hours) {
-                      setOpen24Hours(!e);
-                    }
-                  }}
-                  tintColors={{
-                    true: '#29977E',
-                    false: '#151827',
-                    disabled: 'gray',
-                  }}
+              <View>
+                <Text style={daysStyles.startEndText}>End Time</Text>
+                <DatePicker
+                  style={{width: 150, height: 100}}
+                  mode="time"
+                  date={selectedEndTime}
+                  onDateChange={handleEndTimeChange}
+                  is24hourSource="locale"
+                  textColor="black"
                 />
-                <Text style={{color: 'black'}}>Closed</Text>
               </View>
             </View>
+          )}
 
-            {!(closed || open24Hours) && (
-              <View style={daysStyles.mainTimeDiv}>
-                <View>
-                  <Text style={daysStyles.startEndText}>Start Time</Text>
-                  <DatePicker
-                    style={{width: 150, height: 100}}
-                    mode="time"
-                    date={selectedStartTime}
-                    onDateChange={handleStartTimeChange}
-                    is24hourSource="locale"
-                    textColor="black"
-                  />
-                </View>
-                <View>
-                  <Text style={daysStyles.startEndText}>End Time</Text>
-                  <DatePicker
-                    style={{width: 150, height: 100}}
-                    mode="time"
-                    date={selectedEndTime}
-                    onDateChange={handleEndTimeChange}
-                    is24hourSource="locale"
-                    textColor="black"
-                  />
-                </View>
-              </View>
-            )}
-
-            <View style={daysStyles.bottomButtonMain}>
-              <View style={{width: '30%'}}>
-                <CustomButton
-                  name="Cancel"
-                  color="#29977E"
-                  backgroundColor="white"
-                  borderColor="#29977E"
-                  onPress={() => handleCloseDaysTimeModal()}
-                />
-              </View>
-              <View style={{width: '30%'}}>
-                <CustomButton
-                  name="Save"
-                  color="white"
-                  backgroundColor="#29977E"
-                  borderColor="#29977E"
-                  onPress={() => saveDaysTimeData()}
-                />
-              </View>
+          <View style={daysStyles.bottomButtonMain}>
+            <View style={{width: '30%'}}>
+              <CustomButton
+                name="Cancel"
+                color="#29977E"
+                backgroundColor="white"
+                borderColor="#29977E"
+                onPress={() => handleCloseDaysTimeModal()}
+              />
+            </View>
+            <View style={{width: '30%'}}>
+              <CustomButton
+                name="Save"
+                color="white"
+                backgroundColor="#29977E"
+                borderColor="#29977E"
+                onPress={() => saveDaysTimeData()}
+              />
             </View>
           </View>
         </View>
-      </Modal>
-    </>
+      </View>
+    </Modal>
   );
 };

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableOpacity, Image} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomTextInput from '../../../../common/CustomTextInput';
@@ -497,12 +497,6 @@ const AddEditProduct = () => {
           },
           error => {
             setLoading(false);
-            // toast.show({
-            //   title: error.message,
-            //   placement: 'top',
-            //   backgroundColor: 'red.600',
-            //   variant: 'solid',
-            // });
             setAlertMsg(error.message);
             if (scrollViewRef.current && alertViewRef.current) {
               alertViewRef.current.measureLayout(
@@ -803,14 +797,14 @@ const AddEditProduct = () => {
                           {productType === 'Men'
                             ? menCategoryLabel?.map((item, index) => (
                                 <Select.Item
-                                  key={index}
+                                  key={item?.id}
                                   label={item?.category_name}
                                   value={item?.id}
                                 />
                               ))
                             : womenCategoryLabel?.map((item, index) => (
                                 <Select.Item
-                                  key={index}
+                                  key={item?.id}
                                   label={item?.category_name}
                                   value={item?.id}
                                 />
@@ -849,7 +843,7 @@ const AddEditProduct = () => {
                         onValueChange={onChange}>
                         {branchList?.map((item, index) => (
                           <Select.Item
-                            key={index}
+                            key={item?.id}
                             label={
                               item?.branch_address +
                               ' ' +
@@ -918,7 +912,7 @@ const AddEditProduct = () => {
                     {productImages[index] ? (
                       <TouchableOpacity
                         onPress={() => ChooseProductImages(index)}
-                        key={index}
+                        key={item}
                         style={styles.shopImagesMain}>
                         <FastImage
                           style={{width: 112, height: 112, borderRadius: 10}}
@@ -940,7 +934,7 @@ const AddEditProduct = () => {
                     ) : (
                       <TouchableOpacity
                         onPress={() => ChooseProductImages(index)}
-                        key={index}
+                        key={item}
                         style={[styles.shopImagesMain, {width: '30%'}]}>
                         <Icon name="image" size={23} color="black" />
                         <Text style={[styles.uploadText, {fontSize: 12}]}>
@@ -1064,7 +1058,6 @@ const styles = StyleSheet.create({
     position: 'relative',
     backgroundColor: '#FFF',
     alignItems: 'center',
-    width: 112,
     height: 112,
     justifyContent: 'center',
     borderRadius: 10,

@@ -1,8 +1,7 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import CustomTextInput from '../../../../common/CustomTextInput';
 import CustomButton from '../../../../common/CustomButton';
-import {getShopOwnerDetail} from '../../../../graphql/queries/shopQueries';
 
 const OwnerDetail = ({
   vendorShopDetails,

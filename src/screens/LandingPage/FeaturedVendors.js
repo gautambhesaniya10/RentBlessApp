@@ -1,11 +1,4 @@
-import {
-  Image,
-  Modal,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {FontStyle} from '../../../CommonStyle';
 import {useNavigation} from '@react-navigation/native';
@@ -62,7 +55,7 @@ const FeaturedVendors = () => {
         <View style={styles.featuredMain}>
           {shopData?.map((shop, index) => (
             <TouchableOpacity
-              key={index}
+              key={shop?.id}
               onPress={() =>
                 navigation.navigate('ShopIndividual', {
                   state: {shopId: shop?.id},
