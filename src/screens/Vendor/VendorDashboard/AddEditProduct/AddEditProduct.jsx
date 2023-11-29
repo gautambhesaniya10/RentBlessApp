@@ -22,7 +22,7 @@ import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
-import {refactorPrice} from '../../../../utils';
+import {isFileOfType, refactorPrice} from '../../../../utils';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {colorsList} from '../../../../common/Customer/ColorList';
 
@@ -175,13 +175,24 @@ const AddEditProduct = () => {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const newImage = [...productImages]; // Create a copy of the array
-        newImage[index] = response.assets[0].uri; // Update value at the specified index
-        setProductImages(newImage);
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          const newImage = [...productImages]; // Create a copy of the array
+          newImage[index] = response.assets[0].uri; // Update value at the specified index
+          setProductImages(newImage);
 
-        const newImageFile = [...uploadProductImages]; // Create a copy of the array
-        newImageFile[index] = response.assets[0]; // Update value at the specified index
-        setUploadProductImages(newImageFile);
+          const newImageFile = [...uploadProductImages]; // Create a copy of the array
+          newImageFile[index] = response.assets[0]; // Update value at the specified index
+          setUploadProductImages(newImageFile);
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };
@@ -917,7 +928,7 @@ const AddEditProduct = () => {
                         key={item}
                         style={styles.shopImagesMain}>
                         <FastImage
-                          style={{width: 112, height: 112, borderRadius: 10}}
+                          style={{width: '100%', height: 112, borderRadius: 10}}
                           source={{
                             uri: productImages[index],
                             cache: FastImage.cacheControl.web,
@@ -1064,7 +1075,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderRadius: 10,
     elevation: 2,
-    width: '26%',
+    width: '30%',
   },
   videoMainIcon: {
     position: 'absolute',

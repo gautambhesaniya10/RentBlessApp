@@ -9,6 +9,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
 import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
 import FastImage from 'react-native-fast-image';
+import {isFileOfType} from '../../../../utils';
 
 const ShopLayoutTab = ({
   vendorShopDetails,
@@ -108,9 +109,20 @@ const ShopLayoutTab = ({
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        setShopLogo(response.assets[0].uri);
-        setUploadShopLogo(response.assets[0]);
-        setDeleteShopLogo('');
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          setShopLogo(response.assets[0].uri);
+          setUploadShopLogo(response.assets[0]);
+          setDeleteShopLogo('');
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };
@@ -136,9 +148,20 @@ const ShopLayoutTab = ({
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        setShopBackground(response.assets[0].uri);
-        setUploadShopBackground(response.assets[0]);
-        setDeleteShopBackground('');
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          setShopBackground(response.assets[0].uri);
+          setUploadShopBackground(response.assets[0]);
+          setDeleteShopBackground('');
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };
@@ -171,20 +194,31 @@ const ShopLayoutTab = ({
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        let deleteShopImagesData = deleteShopImages;
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          let deleteShopImagesData = deleteShopImages;
 
-        deleteShopImagesData[index] = undefined;
-        setDeleteShopImages(() => [...deleteShopImagesData]);
+          deleteShopImagesData[index] = undefined;
+          setDeleteShopImages(() => [...deleteShopImagesData]);
 
-        let editableShopImagesData = editableShopImages;
-        editableShopImagesData[index] = {
-          oldLink: shopImagesWasabiUrl[index]?.links,
-          newData: response.assets[0],
-        };
+          let editableShopImagesData = editableShopImages;
+          editableShopImagesData[index] = {
+            oldLink: shopImagesWasabiUrl[index]?.links,
+            newData: response.assets[0],
+          };
 
-        const newImage = [...shopImages];
-        newImage[index] = {links: response.assets[0].uri};
-        setShopImages(newImage);
+          const newImage = [...shopImages];
+          newImage[index] = {links: response.assets[0].uri};
+          setShopImages(newImage);
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };

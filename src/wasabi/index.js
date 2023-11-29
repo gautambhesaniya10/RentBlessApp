@@ -12,6 +12,8 @@ const generateFileType = fileType => {
     return '.jpg';
   } else if (fileType === 'image/webp') {
     return '.webp';
+  } else if (fileType === 'image/heic') {
+    return '.heic';
   } else if (fileType === 'video/mp4') {
     return '.mp4';
   }
@@ -28,7 +30,8 @@ export const fileUpload = async selectedFile => {
       (selectedFile?.type === 'image/png' ||
       selectedFile?.type === 'image/jpeg' ||
       selectedFile?.type === 'image/jpg' ||
-      selectedFile?.type === 'image/webp'
+      selectedFile?.type === 'image/webp' ||
+      selectedFile?.type === 'image/heic'
         ? '/test-img'
         : '/test-videos'),
     Key:

@@ -60,3 +60,8 @@ export const refactorPrice = data => {
     return Number(Number(data).toFixed(2));
   }
 };
+
+export const isFileOfType = (fileName, fileTypes) => {
+  const extension = fileName.split('.').pop();
+  return fileTypes.includes(extension.toLowerCase());
+};

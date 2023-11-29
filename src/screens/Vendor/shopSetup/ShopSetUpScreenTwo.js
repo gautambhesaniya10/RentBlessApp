@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {FontStyle} from '../../../../CommonStyle';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
+import {useToast} from 'native-base';
+import {isFileOfType} from '../../../utils';
 
 const ShopSetUpScreenTwo = ({
   setUploadShopLogo,
@@ -12,6 +14,7 @@ const ShopSetUpScreenTwo = ({
   setUploadShopImages,
   setUploadShopVideo,
 }) => {
+  const toast = useToast();
   const [shopLogo, setShopLogo] = useState('');
   const [shopBackground, setShopBackground] = useState('');
   const [shopImages, setShopImages] = useState([]);
@@ -35,6 +38,9 @@ const ShopSetUpScreenTwo = ({
         skipBackup: true,
         path: 'images',
       },
+      mediaType: 'photo', // Set mediaType to photo to filter only images
+      // selectionLimit: 1,
+      // mimeTypes: ['image/png', 'image/jpeg', 'image/jpg'],
       // mediaType: 'video',
       // videoQuality: 'high',
     };
@@ -48,9 +54,20 @@ const ShopSetUpScreenTwo = ({
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        setShopLogo(response.assets[0].uri);
-        setUploadShopLogo(response.assets[0]);
-        setError({...error, shopLogo: ''});
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          setShopLogo(response.assets[0].uri);
+          setUploadShopLogo(response.assets[0]);
+          setError({...error, shopLogo: ''});
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };
@@ -76,9 +93,20 @@ const ShopSetUpScreenTwo = ({
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        setShopBackground(response.assets[0].uri);
-        setUploadShopBackground(response.assets[0]);
-        setError({...error, shopBackground: ''});
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          setShopBackground(response.assets[0].uri);
+          setUploadShopBackground(response.assets[0]);
+          setError({...error, shopBackground: ''});
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };
@@ -103,13 +131,24 @@ const ShopSetUpScreenTwo = ({
         console.log('User tapped custom button: ', response.customButton);
         alert(response.customButton);
       } else {
-        const newImage = [...shopImages]; // Create a copy of the array
-        newImage[index] = response.assets[0].uri; // Update value at the specified index
-        setShopImages(newImage);
+        const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
+        const fileName = response.assets[0].fileName || '';
+        if (isFileOfType(fileName, acceptedFileTypes)) {
+          const newImage = [...shopImages]; // Create a copy of the array
+          newImage[index] = response.assets[0].uri; // Update value at the specified index
+          setShopImages(newImage);
 
-        const newImageFile = [...uploadShopImages]; // Create a copy of the array
-        newImageFile[index] = response.assets[0]; // Update value at the specified index
-        setUploadShopImages(newImageFile);
+          const newImageFile = [...uploadShopImages]; // Create a copy of the array
+          newImageFile[index] = response.assets[0]; // Update value at the specified index
+          setUploadShopImages(newImageFile);
+        } else {
+          toast.show({
+            title: 'Selected file type is not supported',
+            placement: 'top',
+            backgroundColor: 'red.600',
+            variant: 'solid',
+          });
+        }
       }
     });
   };
@@ -210,7 +249,7 @@ const ShopSetUpScreenTwo = ({
                   <Image
                     resizeMode="cover"
                     source={{uri: shopImages[index]}}
-                    style={{width: 112, height: 112, borderRadius: 10}}
+                    style={{width: '100%', height: 112, borderRadius: 10}}
                   />
                 </TouchableOpacity>
               ) : (
