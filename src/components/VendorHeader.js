@@ -1,5 +1,4 @@
 import {
-  Image,
   Modal,
   StyleSheet,
   Text,
@@ -19,7 +18,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useToast} from 'native-base';
 import {Divider} from 'react-native-paper';
 import {Avatar} from 'react-native-paper';
-import {logoImage, whiteLogoSmall} from '../common/AllLiveImageLink';
+import {whiteLogoSmall} from '../common/AllLiveImageLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import FastImage from 'react-native-fast-image';
 
@@ -57,9 +56,12 @@ const VendorHeader = () => {
     }, 1000);
   };
 
+  const CallUserProfile = async () => {
+    (await AsyncStorage.getItem('userId')) && dispatch(loadUserProfileStart());
+  };
+
   useEffect(() => {
-    const getAccessToken = AsyncStorage.getItem('token');
-    AsyncStorage.getItem('userId') && dispatch(loadUserProfileStart());
+    CallUserProfile();
   }, []);
 
   return (

@@ -45,7 +45,7 @@ const SideBarContent = ({AccessToken}) => {
       'searchBarData',
       'productPrice',
       'productListingType',
-    ].map(itm =>
+    ]?.map(itm =>
       dispatch(
         changeAppliedProductsFilters({
           key: itm,

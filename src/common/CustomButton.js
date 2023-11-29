@@ -27,8 +27,6 @@ const CustomButton = ({
       borderWidth: 1,
       borderColor: borderColor,
       display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
       gap: 10,
       flexDirection: 'row',
     },

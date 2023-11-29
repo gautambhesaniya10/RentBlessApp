@@ -17,7 +17,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
   const [avgShopRating, setAvgShopRating] = useState(0);
 
   useEffect(() => {
-    var rating = 0;
+    let rating = 0;
     shopReviews.map(itm =>
       setAvgShopRating(Math.round((rating += itm.stars) / shopReviews.length)),
     );
@@ -80,7 +80,7 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
         <Text style={styles.DistributionText}>Rating Distribution</Text>
         {shopReviews?.length > 0
           ? [5, 4, 3, 2, 1]?.map?.((star, index) => (
-              <View style={styles.progressBarMain}>
+              <View key={star} style={styles.progressBarMain}>
                 <Text style={{color: '#31333E', fontWeight: '400'}}>
                   {star} {''} <Icon name="star" size={12} color="black" />
                 </Text>

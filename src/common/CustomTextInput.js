@@ -27,31 +27,29 @@ const CustomTextInput = ({
   };
 
   return (
-    <>
-      <Controller
-        control={control}
-        render={({field: {onChange, onBlur, value}}) => (
-          <TextInput
-            onChangeText={onChange}
-            value={value}
-            label={label}
-            mode={mode}
-            keyboardType={keyboardType}
-            secureTextEntry={secureTextEntry}
-            outlineColor="rgba(21, 24, 39, 0.10)"
-            outlineStyle={outlineStyle}
-            activeOutlineColor={activeOutlineColor}
-            theme={customTheme}
-            disabled={disabled}
-            onChange={onChangeTextPrice}
-            multiline={multiline}
-            numberOfLines={numberOfLines}
-          />
-        )}
-        name={name}
-        rules={rules}
-      />
-    </>
+    <Controller
+      control={control}
+      render={({field: {onChange, onBlur, value}}) => (
+        <TextInput
+          onChangeText={onChange}
+          value={value}
+          label={label}
+          mode={mode}
+          keyboardType={keyboardType}
+          secureTextEntry={secureTextEntry}
+          outlineColor="rgba(21, 24, 39, 0.10)"
+          outlineStyle={outlineStyle}
+          activeOutlineColor={activeOutlineColor}
+          theme={customTheme}
+          disabled={disabled}
+          onChange={onChangeTextPrice}
+          multiline={multiline}
+          numberOfLines={numberOfLines}
+        />
+      )}
+      name={name}
+      rules={rules}
+    />
   );
 };
 

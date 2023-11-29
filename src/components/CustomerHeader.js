@@ -14,11 +14,7 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {Divider} from 'react-native-paper';
 import {TouchableWithoutFeedback} from 'react-native';
 import {Avatar} from 'react-native-paper';
-import {
-  locationIcon,
-  logoImage,
-  whiteLogoSmall,
-} from '../common/AllLiveImageLink';
+import {locationIcon, whiteLogoSmall} from '../common/AllLiveImageLink';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {changeAppliedShopsFilters} from '../redux/ShopFilter/ShopFilterSlice';
 import {changeAppliedCityFilters} from '../redux/CityFilterSlice/CityFilterSlice';
@@ -78,8 +74,12 @@ const CustomerHeader = ({homeScreen}) => {
     retrieveLocalData();
   }, [isFocused]);
 
+  const CallUserProfile = async () => {
+    (await AsyncStorage.getItem('userId')) && dispatch(loadUserProfileStart());
+  };
+
   useEffect(() => {
-    AsyncStorage.getItem('userId') && dispatch(loadUserProfileStart());
+    CallUserProfile();
   }, [isFocused]);
 
   const [selectedLocation, setSelectedLocation] = useState('');

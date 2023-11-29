@@ -24,7 +24,7 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
   );
 
   const {categories} = useSelector(state => state?.categories);
-  const {allShopsLists, shopsCount} = useSelector(state => state?.shops);
+  const {allShopsLists} = useSelector(state => state?.shops);
   const {byShop} = useSelector(state => state?.shopsFiltersReducer);
   const shopsFiltersReducer = useSelector(state => state?.shopsFiltersReducer);
   const {areaLists} = useSelector(state => state?.areaLists);
@@ -359,7 +359,7 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
                 }
               };
               if (byShop && !showOnlyShopDetailPage) {
-                ['locations', 'stars'].map(itm =>
+                ['locations', 'stars']?.map(itm =>
                   dispatch(
                     changeAppliedShopsFilters({
                       key: itm,
@@ -380,7 +380,7 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
                   'productListingType',
                   ...(showOnlyShopDetailPage ? [] : ['shopId']),
                   'searchBarData',
-                ].map(itm =>
+                ]?.map(itm =>
                   dispatch(
                     changeFiltersAction({
                       key: itm,
