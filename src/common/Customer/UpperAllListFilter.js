@@ -320,28 +320,21 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
           }}>
           <ScrollView
             horizontal
-            showsHorizontalScrollIndicator={false}
+            showsHorizontalScrollIndicator={true}
             contentContainerStyle={{
               flexDirection: 'row',
-              gap: 15,
+              gap: 6,
               alignItems: 'center',
             }}>
             {(byShop && !showOnlyShopDetailPage
               ? selectedShopFilters
               : selectedProductFilters
             )?.map((item, index) => (
-              <View
-                key={index}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: 4,
-                }}>
+              <View key={index} style={styles.filterListMain}>
                 <Text style={styles.filterItemText}>{item?.label}</Text>
                 <TouchableOpacity
                   onPress={() => handleDeleteParticularFilterBadge(item)}>
-                  <Icon name="close" size={15} color="gray" />
+                  <Icon name="close" size={15} color="white" />
                 </TouchableOpacity>
               </View>
             ))}
@@ -403,10 +396,20 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
 export default UpperAllListFilter;
 
 const styles = StyleSheet.create({
+  filterListMain: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#29977E',
+    padding: 6,
+    borderRadius: 20,
+  },
   filterItemText: {
-    color: 'rgba(21, 24, 39, 0.56)',
+    color: 'white',
     fontWeight: '600',
     fontSize: 14,
+    // paddingBottom: 4,
   },
   clearAllText: {
     textDecorationLine: 'underline',

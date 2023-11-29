@@ -277,7 +277,7 @@ const ShopIndividual = () => {
               style={{width: '100%', height: 160}}
               source={{
                 uri: shopDetails?.shop_cover_image,
-                cache: FastImage.cacheControl.web,
+                // cache: FastImage.cacheControl.web,
               }}
               resizeMode="stretch"
             />
@@ -316,10 +316,15 @@ const ShopIndividual = () => {
               <View style={styles.shopLogoMainDiv}>
                 {shopDetails?.shop_logo ? (
                   <FastImage
-                    style={{width: 100, height: 100, borderRadius: 50}}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      borderRadius: 50,
+                      backgroundColor: 'rgba(255,255,255,0.5)',
+                    }}
                     source={{
                       uri: shopDetails?.shop_logo,
-                      cache: FastImage.cacheControl.web,
+                      // cache: FastImage.cacheControl.web,
                     }}
                     resizeMode="cover"
                   />
@@ -642,6 +647,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '400',
     alignSelf: 'center',
-    paddingVertical: 35,
+    paddingVertical: 120,
   },
 });

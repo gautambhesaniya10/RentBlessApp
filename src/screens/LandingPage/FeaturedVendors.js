@@ -65,7 +65,7 @@ const FeaturedVendors = () => {
               <TouchableOpacity
                 disabled
                 onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
-                {shop?.shop_cover_image ? (
+                {shop?.shop_images[0]?.links ? (
                   <FastImage
                     style={{
                       height: 120,
@@ -75,7 +75,7 @@ const FeaturedVendors = () => {
                       objectFit: 'fill',
                     }}
                     source={{
-                      uri: shop?.shop_cover_image,
+                      uri: shop?.shop_images[0]?.links,
                       cache: FastImage.cacheControl.web,
                     }}
                   />

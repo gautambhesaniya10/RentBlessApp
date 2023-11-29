@@ -10,7 +10,10 @@ import {
 import React, {useState} from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
-import {locationIcon} from '../../common/AllLiveImageLink';
+import {
+  locationIcon,
+  shopBackgroundCover3,
+} from '../../common/AllLiveImageLink';
 import {Avatar} from 'react-native-paper';
 import FastImage from 'react-native-fast-image';
 import {capitalizeString} from '../../common/CapitalizeString';
@@ -40,12 +43,34 @@ const ShopCard = ({shop}) => {
           ) : (
             <View
               style={{
-                backgroundColor: '#00000031',
                 width: '100%',
-                height: 120,
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-              }}></View>
+                height: 128,
+                position: 'relative',
+              }}>
+              <FastImage
+                style={{
+                  width: '100%',
+                  height: 128,
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                }}
+                source={{
+                  uri: shopBackgroundCover3,
+                  // cache: FastImage.cacheControl.web,
+                }}
+                resizeMode="stretch"
+              />
+              <View
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.1)',
+                  width: '100%',
+                  height: 128,
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                  position: 'absolute',
+                  top: 0,
+                }}></View>
+            </View>
           )}
         </TouchableOpacity>
       </View>

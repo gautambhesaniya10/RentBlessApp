@@ -31,11 +31,11 @@ const ProductListing = () => {
   const {
     productsCount,
     PaginationProductLimit,
+    productPageSkip,
     numOfPages,
     productsData,
     productLoading,
   } = useSelector(state => state?.productsData);
-
   const {appliedProductsFilters, sortFilters} = useSelector(
     state => state.productsFiltersReducer,
   );
@@ -46,7 +46,7 @@ const ProductListing = () => {
     dispatch(
       loadProductsStart({
         pageData: {
-          skip: 0,
+          skip: productPageSkip,
           limit: PaginationProductLimit,
         },
         filter: {

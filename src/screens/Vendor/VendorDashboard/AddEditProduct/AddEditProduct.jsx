@@ -45,7 +45,9 @@ const AddEditProduct = () => {
   const {userProfile} = useSelector(state => state?.user);
   const {categories} = useSelector(state => state?.categories);
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
-  const {PaginationProductLimit} = useSelector(state => state?.productsData);
+  const {PaginationProductLimit, productPageSkip} = useSelector(
+    state => state?.productsData,
+  );
   const {appliedProductsFilters, sortFilters} = useSelector(
     state => state.productsFiltersReducer,
   );
@@ -313,7 +315,7 @@ const AddEditProduct = () => {
     dispatch(
       loadProductsStart({
         pageData: {
-          skip: 0,
+          skip: productPageSkip,
           limit: PaginationProductLimit,
         },
         filter: {

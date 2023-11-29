@@ -10,6 +10,8 @@ const generateFileType = fileType => {
     return '.jpeg';
   } else if (fileType === 'image/jpg') {
     return '.jpg';
+  } else if (fileType === 'image/webp') {
+    return '.webp';
   } else if (fileType === 'video/mp4') {
     return '.mp4';
   }
@@ -25,7 +27,8 @@ export const fileUpload = async selectedFile => {
       destinationBucketName +
       (selectedFile?.type === 'image/png' ||
       selectedFile?.type === 'image/jpeg' ||
-      selectedFile?.type === 'image/jpg'
+      selectedFile?.type === 'image/jpg' ||
+      selectedFile?.type === 'image/webp'
         ? '/test-img'
         : '/test-videos'),
     Key:

@@ -11,6 +11,7 @@ const TablePagination = ({
   // const totalPages = Math.ceil(totalItems / itemsPerPage);
   const totalPages = numOfPages;
   const [currentPage, setCurrentPage] = useState(1);
+  console.log('currentPage', currentPage);
 
   useEffect(() => {
     onPageChange(currentPage);
