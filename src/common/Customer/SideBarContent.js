@@ -84,7 +84,7 @@ const SideBarContent = ({AccessToken}) => {
               {userProfile?.first_name} {userProfile?.last_name}
             </Text>
             <Text style={styles.userEmailText} numberOfLines={1}>
-              {userProfile?.user_email || 'Undefined..'} hgth fhfgh
+              {userProfile?.user_email || 'Undefined..'}
             </Text>
           </View>
         </View>
