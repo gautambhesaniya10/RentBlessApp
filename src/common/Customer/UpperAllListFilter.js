@@ -45,7 +45,7 @@ const UpperAllListFilter = ({showOnlyShopDetailPage, setShowBottomLoader}) => {
 
   const passValueForSingleProduct = itm => {
     const selectedFilter = showOnlyShopDetailPage
-      ? shopProductsFiltersReducer?.appliedProductsFilters
+      ? shopProductsFiltersReducer?.appliedShopProductsFilters
       : productsFiltersReducer?.appliedProductsFilters;
 
     if (itm.type === 'searchBarData' || itm.type === 'productListingType') {
