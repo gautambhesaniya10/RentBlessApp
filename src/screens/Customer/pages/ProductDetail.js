@@ -55,9 +55,10 @@ const ProductDetail = () => {
     productDetails?.data?.product?.data?.product_price -
     productDetails?.data?.product?.data?.product_price *
       (productDetails?.data?.product?.data?.product_discount / 100);
-
+  console.log('productId=-=-', productId);
   const getProductDetail = async () => {
     const productDetails = await getProductDetails({id: productId});
+    console.log('productDetails-=', productDetails);
     setProductDetails(productDetails);
   };
 
@@ -207,15 +208,15 @@ const ProductDetail = () => {
 
   const TopCarouselData = [
     {
-      image: productDetails?.data?.product?.data?.product_image?.front,
+      image: productDetails?.data?.product?.data?.product_image?.front?.medium,
       type: 'image',
     },
     {
-      image: productDetails?.data?.product?.data?.product_image?.back,
+      image: productDetails?.data?.product?.data?.product_image?.back?.medium,
       type: 'image',
     },
     {
-      image: productDetails?.data?.product?.data?.product_image?.side,
+      image: productDetails?.data?.product?.data?.product_image?.side?.medium,
       type: 'image',
     },
   ];

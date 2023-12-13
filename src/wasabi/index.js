@@ -32,7 +32,7 @@ export const fileUpload = async selectedFile => {
       selectedFile?.type === 'image/jpg' ||
       selectedFile?.type === 'image/webp' ||
       selectedFile?.type === 'image/heic'
-        ? '/test-img'
+        ? '/test-image2'
         : '/test-videos'),
     Key:
       new Date().getTime().toString() +
@@ -53,12 +53,13 @@ export const fileUpload = async selectedFile => {
 export const fileDelete = async (link, type) => {
   var objectKey =
     type === 'image'
-      ? link.split('/test-img/')[1]
+      ? link.split('/test-image2/')[1]
       : link.split('/test-videos/')[1];
 
   const params = {
     Bucket:
-      destinationBucketName + (type === 'image' ? '/test-img' : '/test-videos'),
+      destinationBucketName +
+      (type === 'image' ? '/test-image2' : '/test-videos'),
     Key: objectKey,
   };
 

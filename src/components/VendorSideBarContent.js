@@ -32,14 +32,22 @@ const VendorSideBarContent = ({vendorShopDetails}) => {
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
         style={styles.drawerHeader}>
-        <FastImage
-          style={styles.logo}
-          source={{
-            uri: vendorShopDetails?.shop_logo,
-            cache: FastImage.cacheControl.web,
-          }}
-          resizeMode="cover"
-        />
+        {vendorShopDetails?.shop_logo?.medium ? (
+          <FastImage
+            style={styles.logo}
+            source={{
+              uri: vendorShopDetails?.shop_logo?.medium,
+              cache: FastImage.cacheControl.web,
+            }}
+            resizeMode="cover"
+          />
+        ) : (
+          <Avatar.Text
+            size={120}
+            label={vendorShopDetails?.shop_name?.charAt(0).toUpperCase()}
+            backgroundColor="#29977E"
+          />
+        )}
         <Text style={styles.heading}>{vendorShopDetails?.shop_name}</Text>
       </TouchableOpacity>
     </View>
@@ -66,6 +74,7 @@ const styles = StyleSheet.create({
     fontFamily: FontStyle,
     textAlign: 'center',
     paddingTop: 25,
+    textTransform: 'capitalize',
   },
   sideMainContainer: {},
   authUserMain: {

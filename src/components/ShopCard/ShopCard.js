@@ -26,10 +26,10 @@ const ShopCard = ({shop}) => {
       <View style={{position: 'relative'}}>
         <TouchableOpacity
           onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
-          {shop?.shop_images[0]?.links ? (
+          {shop?.shop_images[0]?.links?.medium ? (
             <FastImage
               source={{
-                uri: shop?.shop_images[0]?.links,
+                uri: shop?.shop_images[0]?.links?.medium,
                 // cache: FastImage.cacheControl.web,
               }}
               style={{
@@ -80,10 +80,10 @@ const ShopCard = ({shop}) => {
           navigation.navigate('ShopIndividual', {state: {shopId: shop?.id}})
         }>
         <View style={styles.shopMain}>
-          {shop?.shop_logo ? (
+          {shop?.shop_logo?.small ? (
             <FastImage
               source={{
-                uri: shop?.shop_logo,
+                uri: shop?.shop_logo?.small,
                 // cache: FastImage.cacheControl.web,
               }}
               style={{width: 35, height: 35, borderRadius: 17}}
@@ -280,7 +280,7 @@ const ShopImageModel = ({
             {AllImages?.map((img, index) => (
               <FastImage
                 source={{
-                  uri: img?.links,
+                  uri: img?.links?.medium,
                   cache: FastImage.cacheControl.web,
                 }}
                 style={{

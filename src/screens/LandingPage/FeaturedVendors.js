@@ -42,7 +42,6 @@ const FeaturedVendors = () => {
     getAllShops();
     dispatch(shopProductButtonChange(false));
   }, []);
-
   return (
     <View style={{marginBottom: 10}}>
       <Text style={styles.worksH1Text}>Featured Sellers</Text>
@@ -65,7 +64,7 @@ const FeaturedVendors = () => {
               <TouchableOpacity
                 disabled
                 onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
-                {shop?.shop_images[0]?.links ? (
+                {shop?.shop_images[0]?.links?.medium ? (
                   <FastImage
                     style={{
                       height: 120,
@@ -75,7 +74,7 @@ const FeaturedVendors = () => {
                       objectFit: 'fill',
                     }}
                     source={{
-                      uri: shop?.shop_images[0]?.links,
+                      uri: shop?.shop_images[0]?.links?.medium,
                       cache: FastImage.cacheControl.web,
                     }}
                   />
@@ -119,11 +118,11 @@ const FeaturedVendors = () => {
                   bottom: 0,
                   width: '100%',
                 }}>
-                {shop?.shop_logo ? (
+                {shop?.shop_logo?.small ? (
                   <FastImage
                     source={{
-                      uri: shop?.shop_logo,
-                      // cache: FastImage.cacheControl.web,
+                      uri: shop?.shop_logo?.small,
+                      cache: FastImage.cacheControl.web,
                     }}
                     style={{
                       width: 50,

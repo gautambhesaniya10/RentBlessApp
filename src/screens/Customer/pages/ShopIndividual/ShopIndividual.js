@@ -272,11 +272,11 @@ const ShopIndividual = () => {
       </View>
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <View style={{position: 'relative'}}>
-          {shopDetails?.shop_cover_image ? (
+          {shopDetails?.shop_cover_image?.large ? (
             <FastImage
               style={{width: '100%', height: 160}}
               source={{
-                uri: shopDetails?.shop_cover_image,
+                uri: shopDetails?.shop_cover_image?.large,
                 // cache: FastImage.cacheControl.web,
               }}
               resizeMode="stretch"
@@ -314,7 +314,7 @@ const ShopIndividual = () => {
           <View style={{marginTop: -30}}>
             <View style={styles.mainHeaderContainer}>
               <View style={styles.shopLogoMainDiv}>
-                {shopDetails?.shop_logo ? (
+                {shopDetails?.shop_logo?.medium ? (
                   <FastImage
                     style={{
                       width: 100,
@@ -323,7 +323,7 @@ const ShopIndividual = () => {
                       backgroundColor: 'rgba(255,255,255,0.5)',
                     }}
                     source={{
-                      uri: shopDetails?.shop_logo,
+                      uri: shopDetails?.shop_logo?.medium,
                       // cache: FastImage.cacheControl.web,
                     }}
                     resizeMode="cover"

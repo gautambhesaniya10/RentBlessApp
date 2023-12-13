@@ -25,6 +25,7 @@ import CustomSwitch from '../../../../components/CustomSwitch';
 import {isFileOfType, refactorPrice} from '../../../../utils';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {colorsList} from '../../../../common/Customer/ColorList';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -60,7 +61,7 @@ const AddEditProduct = () => {
   const [errorDescription, setErrorDescription] = useState('');
 
   const [productImages, setProductImages] = useState([]);
-  const [uploadProductImages, setUploadProductImages] = useState([]);
+  // const [uploadProductImages, setUploadProductImages] = useState([]);
   const ProductImgError = productImages?.filter(item => item !== undefined);
 
   const [productVideo, setProductVideo] = useState('');
@@ -178,13 +179,17 @@ const AddEditProduct = () => {
         const acceptedFileTypes = ['png', 'jpg', 'jpeg', 'webp', 'heic'];
         const fileName = response.assets[0].fileName || '';
         if (isFileOfType(fileName, acceptedFileTypes)) {
+          updateProductKey(index);
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeImage(sourceURI, index);
+
           const newImage = [...productImages]; // Create a copy of the array
           newImage[index] = response.assets[0].uri; // Update value at the specified index
           setProductImages(newImage);
 
-          const newImageFile = [...uploadProductImages]; // Create a copy of the array
-          newImageFile[index] = response.assets[0]; // Update value at the specified index
-          setUploadProductImages(newImageFile);
+          // const newImageFile = [...uploadProductImages]; // Create a copy of the array
+          // newImageFile[index] = response.assets[0]; // Update value at the specified index
+          // setUploadProductImages(newImageFile);
         } else {
           toast.show({
             title: 'Selected file type is not supported',
@@ -195,6 +200,57 @@ const AddEditProduct = () => {
         }
       }
     });
+  };
+
+  const [resizeAllImagesFile, setResizeAllImagesFile] = useState([]);
+
+  const resizeImage = async (source, index) => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        126,
+        126,
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        300,
+        300,
+        'JPEG',
+        100,
+      );
+      const resizedImage3 = await ImageResizer.createResizedImage(
+        source.uri,
+        600,
+        600,
+        'JPEG',
+        100,
+      );
+
+      const img1 = {...resizedImage1, type: 'image/jpeg'};
+      const img2 = {...resizedImage2, type: 'image/jpeg'};
+      const img3 = {...resizedImage3, type: 'image/jpeg'};
+
+      const newImageFile = [...resizeAllImagesFile];
+      if (index === 0) {
+        newImageFile[0] = img1;
+        newImageFile[1] = img2;
+        newImageFile[2] = img3;
+      } else if (index === 1) {
+        newImageFile[3] = img1;
+        newImageFile[4] = img2;
+        newImageFile[5] = img3;
+      } else if (index === 2) {
+        newImageFile[6] = img1;
+        newImageFile[7] = img2;
+        newImageFile[8] = img3;
+      }
+
+      setResizeAllImagesFile(newImageFile);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
   };
 
   const ChooseProductVideo = () => {
@@ -270,17 +326,17 @@ const AddEditProduct = () => {
       editableProductData?.product_image?.front &&
         setProductImages(old => [
           ...old,
-          editableProductData?.product_image?.front,
+          editableProductData?.product_image?.front?.medium,
         ]);
       editableProductData?.product_image?.back &&
         setProductImages(old => [
           ...old,
-          editableProductData?.product_image?.back,
+          editableProductData?.product_image?.back?.medium,
         ]);
       editableProductData?.product_image?.side &&
         setProductImages(old => [
           ...old,
-          editableProductData?.product_image?.side,
+          editableProductData?.product_image?.side?.medium,
         ]);
 
       editableProductData?.product_video &&
@@ -288,11 +344,10 @@ const AddEditProduct = () => {
     }
   }, [editableProductData, router, setValue]);
 
-  const multipleImageUploadFile = async uploadProductImages => {
-    const uploadPromises = uploadProductImages?.map(uploadProduct => {
+  const multipleImageUploadFile = async resizeAllImagesFile => {
+    const uploadPromises = resizeAllImagesFile?.map(uploadProduct => {
       return fileUpload(uploadProduct);
     });
-
     try {
       const uploadProductImgs = await Promise.all(uploadPromises);
       return uploadProductImgs;
@@ -302,12 +357,28 @@ const AddEditProduct = () => {
     }
   };
 
+  const [oldImageLink, setOldImageLink] = useState([]);
+
   const updateProductKey = index => {
     const productImage = editableProductData?.product_image;
-
     if (productImage) {
       const keyMap = ['front', 'back', 'side'];
-      return productImage[keyMap[index]];
+      const newImageFile = [...oldImageLink];
+      const res = productImage[keyMap[index]];
+      if (index === 0) {
+        newImageFile[0] = res?.small;
+        newImageFile[1] = res?.medium;
+        newImageFile[2] = res?.large;
+      } else if (index === 1) {
+        newImageFile[3] = res?.small;
+        newImageFile[4] = res?.medium;
+        newImageFile[5] = res?.large;
+      } else if (index === 2) {
+        newImageFile[6] = res?.small;
+        newImageFile[7] = res?.medium;
+        newImageFile[8] = res?.large;
+      }
+      setOldImageLink(newImageFile);
     }
   };
 
@@ -362,26 +433,23 @@ const AddEditProduct = () => {
           await deleteImageFiles([deleteProductVideo], 'video');
         }
 
-        if (uploadProductImages.some(img => img)) {
-          const uploadPromises = uploadProductImages.map(
-            (uploadProduct, index) => {
-              if (uploadProduct) {
-                return fileUpdate(
-                  updateProductKey(index),
-                  'image',
-                  uploadProduct,
-                );
-              }
-            },
-          );
+        if (oldImageLink?.length > 0) {
+          oldImageLink?.map(async (oldImg, index) => {
+            await fileDelete(oldImg, 'image');
+          });
 
-          try {
-            const updateProductImgs = await Promise.all(uploadPromises);
+          if (resizeAllImagesFile.some(img => img)) {
+            const uploadPromises = resizeAllImagesFile?.map(uploadProduct => {
+              return fileUpload(uploadProduct);
+            });
 
-            imagesResponse = updateProductImgs;
-          } catch (error) {
-            console.error('Error during file upload:', error);
-            return;
+            try {
+              const updateProductImgs = await Promise.all(uploadPromises);
+              imagesResponse = updateProductImgs;
+            } catch (error) {
+              console.error('Error during file upload:', error);
+              return;
+            }
           }
         }
 
@@ -409,6 +477,22 @@ const AddEditProduct = () => {
           }
         }
 
+        const oldImageDataFront = Object.fromEntries(
+          Object.entries(editableProductData?.product_image?.front).filter(
+            ([key]) => key !== '__typename',
+          ),
+        );
+        const oldImageDataBack = Object.fromEntries(
+          Object.entries(editableProductData?.product_image?.back).filter(
+            ([key]) => key !== '__typename',
+          ),
+        );
+        const oldImageDataSide = Object.fromEntries(
+          Object.entries(editableProductData?.product_image?.side).filter(
+            ([key]) => key !== '__typename',
+          ),
+        );
+
         await updateProduct({
           id: editableProductData?.id,
           productInfo: {
@@ -421,9 +505,29 @@ const AddEditProduct = () => {
             product_type: data.product_type,
             product_image: {
               front:
-                imagesResponse[0] || editableProductData.product_image.front,
-              back: imagesResponse[1] || editableProductData.product_image.back,
-              side: imagesResponse[2] || editableProductData.product_image.side,
+                imagesResponse[0] && imagesResponse[1] && imagesResponse[2]
+                  ? {
+                      small: imagesResponse[0],
+                      medium: imagesResponse[1],
+                      large: imagesResponse[2],
+                    }
+                  : oldImageDataFront,
+              back:
+                imagesResponse[3] && imagesResponse[4] && imagesResponse[5]
+                  ? {
+                      small: imagesResponse[3],
+                      medium: imagesResponse[4],
+                      large: imagesResponse[5],
+                    }
+                  : oldImageDataBack,
+              side:
+                imagesResponse[6] && imagesResponse[7] && imagesResponse[8]
+                  ? {
+                      small: imagesResponse[6],
+                      medium: imagesResponse[7],
+                      large: imagesResponse[8],
+                    }
+                  : oldImageDataSide,
             },
             product_video:
               videoResponse ||
@@ -461,11 +565,12 @@ const AddEditProduct = () => {
         let productImagesRes = [];
         let productVideoRes = null;
 
-        if (uploadProductImages) {
-          await multipleImageUploadFile(uploadProductImages).then(
+        if (resizeAllImagesFile) {
+          await multipleImageUploadFile(resizeAllImagesFile).then(
             res => (productImagesRes = res),
           );
         }
+        console.log('productImagesRes====', productImagesRes);
         if (uploadProductVideo) {
           await fileUpload(uploadProductVideo)
             .then(res => (productVideoRes = res))
@@ -484,9 +589,21 @@ const AddEditProduct = () => {
             product_name: data.product_name,
             product_type: data.product_type,
             product_image: {
-              front: productImagesRes[0],
-              back: productImagesRes[1],
-              side: productImagesRes[2],
+              front: {
+                small: productImagesRes[0],
+                medium: productImagesRes[1],
+                large: productImagesRes[2],
+              },
+              back: {
+                small: productImagesRes[3],
+                medium: productImagesRes[4],
+                large: productImagesRes[5],
+              },
+              side: {
+                small: productImagesRes[6],
+                medium: productImagesRes[7],
+                large: productImagesRes[8],
+              },
             },
             product_video: productVideoRes || '',
             product_price: Math.round(data.product_price),
@@ -531,7 +648,7 @@ const AddEditProduct = () => {
 
     navigation.goBack();
     setProductVideo();
-    setUploadProductImages([]);
+    // setUploadProductImages([]);
     setUploadProductVideo();
     setProductImages([]);
   };

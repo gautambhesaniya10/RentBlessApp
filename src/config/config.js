@@ -9,6 +9,6 @@ AWS.config.update({
 
 export const s3 = new AWS.S3();
 
-export const destinationBucketName = 'rentbless-prod';
+// export const destinationBucketName = 'rentbless-prod';
 
-// export const destinationBucketName = 'rentbless-dev';
+export const destinationBucketName = 'rentbless-dev';

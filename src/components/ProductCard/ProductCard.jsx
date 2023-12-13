@@ -15,11 +15,6 @@ const ProductCard = ({product, landingPageCardWith}) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const ProductImages = [
-    product?.product_image?.front,
-    product?.product_image?.back,
-    product?.product_image?.side,
-  ];
   const {userProfile, isAuthenticate} = useSelector(state => state?.user);
 
   const [productLikeByUser, setProductLikeByUser] = useState(false);
@@ -122,7 +117,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
             <View style={{height: 210, width: '100%'}}>
               <FastImage
                 source={{
-                  uri: ProductImages[0],
+                  uri: product?.product_image?.front?.medium,
                   // cache: FastImage.cacheControl.web,
                 }}
                 style={{
@@ -165,10 +160,10 @@ const ProductCard = ({product, landingPageCardWith}) => {
             })
           }>
           <View style={styles.shopMain}>
-            {product?.branchInfo?.shop_info?.shop_logo ? (
+            {product?.branchInfo?.shop_info?.shop_logo?.extraSmall ? (
               <FastImage
                 source={{
-                  uri: product?.branchInfo?.shop_info?.shop_logo,
+                  uri: product?.branchInfo?.shop_info?.shop_logo?.extraSmall,
                   // cache: FastImage.cacheControl.web,
                 }}
                 style={{width: 25, height: 25, borderRadius: 12}}

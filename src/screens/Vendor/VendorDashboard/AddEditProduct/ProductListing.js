@@ -42,6 +42,8 @@ const ProductListing = () => {
   const [deletableProductsImages, setDeletableProductsImages] = useState([]);
   const [deletableProductVideo, setDeletableProductVideo] = useState();
 
+  console.log('deletableProductsImages', deletableProductsImages);
+
   const getAllProducts = () => {
     dispatch(
       loadProductsStart({
@@ -160,7 +162,7 @@ const ProductListing = () => {
                           <FastImage
                             style={{width: 80, height: 70, alignSelf: 'center'}}
                             source={{
-                              uri: item?.product_image?.front,
+                              uri: item?.product_image?.front?.small,
                               cache: FastImage.cacheControl.web,
                             }}
                             resizeMode="cover"
@@ -307,11 +309,19 @@ const ProductDeleteModel = ({
   const dispatch = useDispatch();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
 
+  const imageLinks = [];
+
+  deletableProductsImages?.forEach(product => {
+    imageLinks.push(product.large);
+    imageLinks.push(product.medium);
+    imageLinks.push(product.small);
+  });
+
   const deleteImageFiles = async (deletableProducts, type) => {
     try {
-      const deletionPromises = deletableProducts.map(deleteProduct =>
-        fileDelete(deleteProduct, type),
-      );
+      const deletionPromises = deletableProducts.map(deleteProduct => {
+        return fileDelete(deleteProduct, type);
+      });
       await Promise.all(deletionPromises);
     } catch (error) {
       console.error('Error deleting files:', error);
@@ -319,7 +329,7 @@ const ProductDeleteModel = ({
   };
 
   const deleteProductHandler = async () => {
-    await deleteImageFiles(deletableProductsImages, 'image');
+    await deleteImageFiles(imageLinks, 'image');
     if (deletableProductVideo) {
       await deleteImageFiles([deletableProductVideo], 'video');
     }
