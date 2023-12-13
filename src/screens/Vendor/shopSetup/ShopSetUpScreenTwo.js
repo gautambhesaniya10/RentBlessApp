@@ -116,10 +116,14 @@ const ShopSetUpScreenTwo = ({
         100,
       );
 
-      const img1 = {...resizedImage1, type: 'image/jpeg'};
-      const img2 = {...resizedImage2, type: 'image/jpeg'};
-      const img3 = {...resizedImage3, type: 'image/jpeg'};
-      const img4 = {...resizedImage4, type: 'image/jpeg'};
+      const img1 = {
+        ...resizedImage1,
+        type: 'image/jpeg',
+        imageSize: 'extraSmall',
+      };
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'small'};
+      const img3 = {...resizedImage3, type: 'image/jpeg', imageSize: 'medium'};
+      const img4 = {...resizedImage4, type: 'image/jpeg', imageSize: 'large'};
 
       setResizeShopLogoFile([img1, img2, img3, img4]);
     } catch (error) {
@@ -191,9 +195,9 @@ const ShopSetUpScreenTwo = ({
         100,
       );
 
-      const img1 = {...resizedImage1, type: 'image/jpeg'};
-      const img2 = {...resizedImage2, type: 'image/jpeg'};
-      const img3 = {...resizedImage3, type: 'image/jpeg'};
+      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+      const img3 = {...resizedImage3, type: 'image/jpeg', imageSize: 'large'};
 
       setResizeShopCoverImageFile([img1, img2, img3]);
     } catch (error) {
@@ -260,8 +264,8 @@ const ShopSetUpScreenTwo = ({
         100,
       );
 
-      const img1 = {...resizedImage1, type: 'image/jpeg'};
-      const img2 = {...resizedImage2, type: 'image/jpeg'};
+      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
 
       const newImageFile = [...resizeShopImagesFile];
       if (index === 0) {

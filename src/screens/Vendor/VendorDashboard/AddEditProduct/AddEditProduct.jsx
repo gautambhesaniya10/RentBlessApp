@@ -18,11 +18,20 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
+import {
+  deleteObjectsInFolder,
+  fileDelete,
+  fileUpdate,
+  fileUpload,
+} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
-import {isFileOfType, refactorPrice} from '../../../../utils';
+import {
+  generateRandomNumberString,
+  isFileOfType,
+  refactorPrice,
+} from '../../../../utils';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {colorsList} from '../../../../common/Customer/ColorList';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
@@ -227,9 +236,9 @@ const AddEditProduct = () => {
         100,
       );
 
-      const img1 = {...resizedImage1, type: 'image/jpeg'};
-      const img2 = {...resizedImage2, type: 'image/jpeg'};
-      const img3 = {...resizedImage3, type: 'image/jpeg'};
+      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+      const img3 = {...resizedImage3, type: 'image/jpeg', imageSize: 'large'};
 
       const newImageFile = [...resizeAllImagesFile];
       if (index === 0) {
@@ -343,13 +352,56 @@ const AddEditProduct = () => {
     }
   }, [editableProductData, router, setValue]);
 
-  const multipleImageUploadFile = async resizeAllImagesFile => {
-    const uploadPromises = resizeAllImagesFile?.map(uploadProduct => {
-      return fileUpload(uploadProduct);
-    });
+  // const multipleImageUploadFile = async resizeAllImagesFile => {
+  //   const uploadPromises = resizeAllImagesFile?.map(uploadProduct => {
+  //     return fileUpload(uploadProduct);
+  //   });
+  //   try {
+  //     const uploadProductImgs = await Promise.all(uploadPromises);
+  //     return uploadProductImgs;
+  //   } catch (error) {
+  //     console.error('Error during file upload:', error);
+  //     return [];
+  //   }
+  // };
+
+  const multipleProductImageUploadFile = async (
+    resizeAllImagesFile,
+    productFolderName,
+  ) => {
+    const keyMap = ['front', 'back', 'side'];
+    const folderStructure = `user_${userProfile?.id}/shop/products/${productFolderName}/product_img`;
+
     try {
+      const groupsOfThree = Array.from(
+        {length: Math.ceil(resizeAllImagesFile.length / 3)},
+        (_, index) => {
+          const startIndex = index * 3;
+          const endIndex = startIndex + 3;
+          return resizeAllImagesFile.slice(startIndex, endIndex);
+        },
+      );
+
+      const uploadPromises = groupsOfThree.map(async (group, groupIndex) => {
+        const folderName = `${folderStructure}/${keyMap[groupIndex]}`;
+        const groupUploadPromises = group.map(async (uploadProduct, index) => {
+          try {
+            const uploadResult = await fileUpload(uploadProduct, folderName);
+            return uploadResult;
+          } catch (error) {
+            console.error(
+              `Error uploading file ${index + 1} in ${folderName}:`,
+              error,
+            );
+            return null;
+          }
+        });
+        return Promise.all(groupUploadPromises);
+      });
+
       const uploadProductImgs = await Promise.all(uploadPromises);
-      return uploadProductImgs;
+      console.log('uploadProductImgs...............', uploadProductImgs.flat());
+      return uploadProductImgs.flat(); // Flatten the array of arrays
     } catch (error) {
       console.error('Error during file upload:', error);
       return [];
@@ -417,6 +469,11 @@ const AddEditProduct = () => {
     );
   };
 
+  const deleteWasabiFolder = async folderName => {
+    const folderStructure = `user_${userProfile?.id}/shop/${folderName}`;
+    await deleteObjectsInFolder(folderStructure);
+  };
+
   const onSubmitProduct = async data => {
     if (editorDescriptionContent === '') {
       setErrorDescription('Product description is required');
@@ -428,8 +485,13 @@ const AddEditProduct = () => {
         let imagesResponse = [];
         let videoResponse = null;
 
+        const productFolderName =
+          editableProductData?.product_image?.front?.small
+            ?.split('/products/')[1]
+            .split('/')[0];
+
         if (deleteProductVideo) {
-          await deleteImageFiles([deleteProductVideo], 'video');
+          deleteWasabiFolder(`products/${productFolderName}/video`);
         }
 
         if (oldImageLink?.length > 0) {
@@ -454,25 +516,20 @@ const AddEditProduct = () => {
 
         if (uploadProductVideo) {
           if (editableProductData?.product_video) {
-            try {
-              const productVideoRes = await fileUpdate(
-                editableProductData?.product_video,
-                'video',
-                uploadProductVideo,
-              );
-              videoResponse = productVideoRes;
-            } catch (error) {
-              console.error('Error during file upload:', error);
-              return;
-            }
-          } else {
-            try {
-              const productVideoRes = await fileUpload(uploadProductVideo);
-              videoResponse = productVideoRes;
-            } catch (error) {
-              console.error('Error during file upload:', error);
-              return;
-            }
+            deleteWasabiFolder(`products/${productFolderName}/video`);
+          }
+
+          try {
+            const folderStructure = `user_${userProfile?.id}/shop/products/${productFolderName}/video`;
+
+            const productVideoRes = await fileUpload(
+              uploadProductVideo,
+              folderStructure,
+            );
+            videoResponse = productVideoRes;
+          } catch (error) {
+            console.error('Error during file upload:', error);
+            return;
           }
         }
 
@@ -564,14 +621,19 @@ const AddEditProduct = () => {
         let productImagesRes = [];
         let productVideoRes = null;
 
+        const productFolderName =
+          new Date().getTime().toString() + generateRandomNumberString(5);
+
         if (resizeAllImagesFile) {
-          await multipleImageUploadFile(resizeAllImagesFile).then(
-            res => (productImagesRes = res),
-          );
+          await multipleProductImageUploadFile(
+            resizeAllImagesFile,
+            productFolderName,
+          ).then(res => (productImagesRes = res));
         }
         console.log('productImagesRes====', productImagesRes);
         if (uploadProductVideo) {
-          await fileUpload(uploadProductVideo)
+          const folderStructure = `user_${userProfile?.id}/shop/products/${productFolderName}/video`;
+          await fileUpload(uploadProductVideo, folderStructure)
             .then(res => (productVideoRes = res))
             .catch(error => {
               console.error('Error during file upload:', error);

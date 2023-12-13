@@ -18,6 +18,7 @@ import {Divider} from 'react-native-paper';
 import {Modal} from 'react-native';
 import {deleteAccount} from '../graphql/mutations/accountDelete';
 import {BackGroundStyle} from '../../CommonStyle';
+import {deleteObjectsInFolder} from '../wasabi';
 
 const DrawerVendor = ({vendorShopDetails}) => {
   const navigation = useNavigation();
@@ -124,16 +125,21 @@ const AccountDeleteModel = ({
   const toast = useToast();
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
   const HandleDeleteAccount = async () => {
+    setLoading(true);
     await deleteAccount({id: userProfile?.id}).then(
-      res => {
+      async res => {
+        const folderStructure = `user_${userProfile?.id}`;
+        await deleteObjectsInFolder(folderStructure);
         toast.show({
           title: 'Account Delete Sucessfully',
           placement: 'top',
           backgroundColor: 'green.600',
           variant: 'solid',
         });
+        setLoading(false);
         setAccDelModalVisible(false);
         AsyncStorage.clear();
         dispatch(userLogout());
@@ -176,6 +182,7 @@ const AccountDeleteModel = ({
                   backgroundColor="red"
                   borderColor="red"
                   onPress={() => HandleDeleteAccount()}
+                  loading={loading}
                 />
               </View>
               <View style={{width: '40%'}}>

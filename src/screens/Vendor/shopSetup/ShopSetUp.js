@@ -25,6 +25,7 @@ import {homeCoverImage} from '../../../common/AllLiveImageLink';
 import VersionAppModel from '../../AppVersionModel/VersionApp';
 import {fileUpload} from '../../../wasabi';
 import {getStateLists} from '../../../graphql/queries/areaListsQueries';
+import {generateRandomNumberString} from '../../../utils';
 
 const customStyles = {
   stepIndicatorSize: 25,
@@ -67,7 +68,7 @@ const ShopSetUp = () => {
     getValues,
   } = useForm();
 
-  const [currentPosition, setCurrentPosition] = useState(1);
+  const [currentPosition, setCurrentPosition] = useState(0);
   const [individual, setIndividual] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Shop');
 
@@ -137,15 +138,54 @@ const ShopSetUp = () => {
     };
   };
 
-  const multipleImageUploadFile = async uploadShopImages => {
+  const multipleImageUploadFile = async (uploadShopImages, folderStructure) => {
     const uploadPromises = uploadShopImages?.map(uploadShopImg => {
-      return fileUpload(uploadShopImg);
+      return fileUpload(uploadShopImg, folderStructure);
     });
 
     try {
       const uploadShopImgs = await Promise.all(uploadPromises);
-      console.log('uploadShopImgs :>> ', uploadShopImgs);
       return uploadShopImgs;
+    } catch (error) {
+      console.error('Error during file upload:', error);
+      return [];
+    }
+  };
+
+  const multipleShopImagesUploadFile = async uploadShopImages => {
+    const userFolder = `user_${userProfile?.id}/shop`;
+    const timestamp = new Date().getTime().toString();
+
+    // Determine the number of pairs based on the number of images available
+    const pairsCount = Math.ceil(uploadShopImages.length / 2);
+
+    const folderStructures = Array.from(
+      {length: pairsCount},
+      () =>
+        `${userFolder}/shop_img/${timestamp + generateRandomNumberString(5)}`,
+    );
+
+    const groupedUploads = Array.from({length: pairsCount}, (_, index) => [
+      index * 2,
+      Math.min(index * 2 + 1, uploadShopImages.length - 1),
+    ]);
+
+    const uploadPromises = groupedUploads.map(indices => {
+      const folderStructure = folderStructures[groupedUploads.indexOf(indices)];
+      const uploads = indices
+        .map(index =>
+          index < uploadShopImages.length ? uploadShopImages[index] : null,
+        )
+        .filter(Boolean);
+      return Promise.all(
+        uploads.map(uploadShopImg =>
+          fileUpload(uploadShopImg, folderStructure),
+        ),
+      );
+    });
+    try {
+      const uploadShopImgs = await Promise.all(uploadPromises);
+      return uploadShopImgs.flat();
     } catch (error) {
       console.error('Error during file upload:', error);
       return [];
@@ -164,25 +204,30 @@ const ShopSetUp = () => {
       let videoResponse = null;
 
       if (resizeShopLogoFile) {
-        await multipleImageUploadFile(resizeShopLogoFile).then(
+        const folderStructure = `user_${userProfile?.id}/shop/logo`;
+
+        await multipleImageUploadFile(resizeShopLogoFile, folderStructure).then(
           res => (logoResponse = res),
         );
       }
 
       if (resizeShopCoverImageFile) {
-        await multipleImageUploadFile(resizeShopCoverImageFile).then(
-          res => (backgroundResponse = res),
-        );
+        const folderStructure = `user_${userProfile?.id}/shop/cover `;
+        await multipleImageUploadFile(
+          resizeShopCoverImageFile,
+          folderStructure,
+        ).then(res => (backgroundResponse = res));
       }
 
       if (resizeShopImagesFile?.filter(item => item !== undefined).length > 0) {
-        await multipleImageUploadFile(
+        await multipleShopImagesUploadFile(
           resizeShopImagesFile?.filter(item => item !== undefined),
         ).then(res => (imagesResponse = res));
       }
 
       if (uploadShopVideo) {
-        await fileUpload(uploadShopVideo)
+        const folderStructure = `user_${userProfile?.id}/shop/video`;
+        await fileUpload(uploadShopVideo, folderStructure)
           .then(res => (videoResponse = res))
           .catch(error => {
             console.error('Error during file upload:', error);

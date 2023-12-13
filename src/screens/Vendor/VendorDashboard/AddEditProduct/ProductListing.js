@@ -20,7 +20,7 @@ import CustomButton from '../../../../common/CustomButton';
 import {deleteProduct} from '../../../../graphql/mutations/products';
 import {useToast} from 'native-base';
 import TablePagination from '../../../../components/TablePagination';
-import {fileDelete} from '../../../../wasabi';
+import {deleteObjectsInFolder, fileDelete} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 
@@ -69,6 +69,8 @@ const ProductListing = () => {
 
   const [productDeleteModalOpen, setProductDeleteModalOpen] = useState(false);
   const [deleteProductId, setDeleteProductId] = useState();
+  const [deletableProductFolderName, setDeletableProductFolderName] =
+    useState();
 
   const handlePageChange = pageNumber => {
     const newSkip = (pageNumber - 1) * PaginationProductLimit;
@@ -232,15 +234,11 @@ const ProductListing = () => {
                               setProductDeleteModalOpen(true);
                               setDeleteProductId(item?.id);
 
-                              setDeletableProductsImages(
-                                ['front', 'back', 'side'].map(
-                                  key => item?.product_image[key],
-                                ),
+                              setDeletableProductFolderName(
+                                item?.product_image?.front?.small
+                                  ?.split('/products/')[1]
+                                  .split('/')[0],
                               );
-
-                              if (item?.product_video) {
-                                setDeletableProductVideo(item?.product_video);
-                              }
                             }}
                             style={[
                               styles.pencilIcon,
@@ -286,8 +284,7 @@ const ProductListing = () => {
         setProductDeleteModalOpen={setProductDeleteModalOpen}
         deleteProductId={deleteProductId}
         getAllProducts={getAllProducts}
-        deletableProductsImages={deletableProductsImages}
-        deletableProductVideo={deletableProductVideo}
+        deletableProductFolderName={deletableProductFolderName}
       />
     </View>
   );
@@ -300,37 +297,23 @@ const ProductDeleteModel = ({
   setProductDeleteModalOpen,
   deleteProductId,
   getAllProducts,
-  deletableProductsImages,
-  deletableProductVideo,
+  // deletableProductsImages,
+  // deletableProductVideo,
+  deletableProductFolderName,
 }) => {
   const toast = useToast();
   const dispatch = useDispatch();
   const {vendorShopDetails} = useSelector(state => state?.shopDetail);
+  const {userProfile} = useSelector(state => state?.user);
+  const [loading, setLoading] = useState(false);
 
-  const imageLinks = [];
-
-  deletableProductsImages?.forEach(product => {
-    imageLinks.push(product.large);
-    imageLinks.push(product.medium);
-    imageLinks.push(product.small);
-  });
-
-  const deleteImageFiles = async (deletableProducts, type) => {
-    try {
-      const deletionPromises = deletableProducts.map(deleteProduct => {
-        return fileDelete(deleteProduct, type);
-      });
-      await Promise.all(deletionPromises);
-    } catch (error) {
-      console.error('Error deleting files:', error);
-    }
+  const deleteWasabiFolder = async folderName => {
+    const folderStructure = `user_${userProfile?.id}/shop/${folderName}`;
+    await deleteObjectsInFolder(folderStructure);
   };
-
   const deleteProductHandler = async () => {
-    await deleteImageFiles(imageLinks, 'image');
-    if (deletableProductVideo) {
-      await deleteImageFiles([deletableProductVideo], 'video');
-    }
+    setLoading(true);
+    await deleteWasabiFolder(`products/${deletableProductFolderName}`);
 
     deleteProduct({id: deleteProductId}).then(
       res => {
@@ -340,6 +323,7 @@ const ProductDeleteModel = ({
           backgroundColor: 'green.600',
           variant: 'solid',
         });
+        setLoading(false);
         getAllProducts();
         dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
       },
@@ -388,6 +372,7 @@ const ProductDeleteModel = ({
                   backgroundColor="#dc2626"
                   borderColor="#dc2626"
                   onPress={() => deleteProductHandler()}
+                  loading={loading}
                 />
               </View>
             </View>
