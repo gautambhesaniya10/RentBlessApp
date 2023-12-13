@@ -6,13 +6,25 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
 import {useToast} from 'native-base';
 import {isFileOfType} from '../../../utils';
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT} from '@env';
+
+import {NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT} from '@env';
+
+import {NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT} from '@env';
 
 const ShopSetUpScreenTwo = ({
-  setUploadShopLogo,
-  setUploadShopBackground,
-  uploadShopImages,
-  setUploadShopImages,
   setUploadShopVideo,
+  setResizeShopLogoFile,
+  setResizeShopCoverImageFile,
+  resizeShopImagesFile,
+  setResizeShopImagesFile,
 }) => {
   const toast = useToast();
   const [shopLogo, setShopLogo] = useState('');
@@ -58,7 +70,8 @@ const ShopSetUpScreenTwo = ({
         const fileName = response.assets[0].fileName || '';
         if (isFileOfType(fileName, acceptedFileTypes)) {
           setShopLogo(response.assets[0].uri);
-          setUploadShopLogo(response.assets[0]);
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeShopLogoImage(sourceURI);
           setError({...error, shopLogo: ''});
         } else {
           toast.show({
@@ -70,6 +83,48 @@ const ShopSetUpScreenTwo = ({
         }
       }
     });
+  };
+
+  const resizeShopLogoImage = async source => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage3 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage4 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
+        'JPEG',
+        100,
+      );
+
+      const img1 = {...resizedImage1, type: 'image/jpeg'};
+      const img2 = {...resizedImage2, type: 'image/jpeg'};
+      const img3 = {...resizedImage3, type: 'image/jpeg'};
+      const img4 = {...resizedImage4, type: 'image/jpeg'};
+
+      setResizeShopLogoFile([img1, img2, img3, img4]);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
   };
 
   const ChooseShopCoverImage = () => {
@@ -97,7 +152,8 @@ const ShopSetUpScreenTwo = ({
         const fileName = response.assets[0].fileName || '';
         if (isFileOfType(fileName, acceptedFileTypes)) {
           setShopBackground(response.assets[0].uri);
-          setUploadShopBackground(response.assets[0]);
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeShopCoverImage(sourceURI);
           setError({...error, shopBackground: ''});
         } else {
           toast.show({
@@ -110,6 +166,41 @@ const ShopSetUpScreenTwo = ({
       }
     });
   };
+
+  const resizeShopCoverImage = async source => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage3 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
+        'JPEG',
+        100,
+      );
+
+      const img1 = {...resizedImage1, type: 'image/jpeg'};
+      const img2 = {...resizedImage2, type: 'image/jpeg'};
+      const img3 = {...resizedImage3, type: 'image/jpeg'};
+
+      setResizeShopCoverImageFile([img1, img2, img3]);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
+  };
+
   const ChooseShopImages = index => {
     let options = {
       title: 'Select Shop Cover Image',
@@ -138,9 +229,8 @@ const ShopSetUpScreenTwo = ({
           newImage[index] = response.assets[0].uri; // Update value at the specified index
           setShopImages(newImage);
 
-          const newImageFile = [...uploadShopImages]; // Create a copy of the array
-          newImageFile[index] = response.assets[0]; // Update value at the specified index
-          setUploadShopImages(newImageFile);
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeShopImages(sourceURI, index);
         } else {
           toast.show({
             title: 'Selected file type is not supported',
@@ -151,6 +241,44 @@ const ShopSetUpScreenTwo = ({
         }
       }
     });
+  };
+
+  const resizeShopImages = async (source, index) => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+        'JPEG',
+        100,
+      );
+
+      const img1 = {...resizedImage1, type: 'image/jpeg'};
+      const img2 = {...resizedImage2, type: 'image/jpeg'};
+
+      const newImageFile = [...resizeShopImagesFile];
+      if (index === 0) {
+        newImageFile[0] = img1;
+        newImageFile[1] = img2;
+      } else if (index === 1) {
+        newImageFile[2] = img1;
+        newImageFile[3] = img2;
+      } else if (index === 2) {
+        newImageFile[4] = img1;
+        newImageFile[5] = img2;
+      }
+
+      setResizeShopImagesFile(newImageFile);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
   };
 
   const ChooseShopVideo = () => {

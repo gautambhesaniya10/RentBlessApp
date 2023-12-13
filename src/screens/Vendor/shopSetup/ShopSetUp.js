@@ -67,13 +67,14 @@ const ShopSetUp = () => {
     getValues,
   } = useForm();
 
-  const [currentPosition, setCurrentPosition] = useState(0);
+  const [currentPosition, setCurrentPosition] = useState(1);
   const [individual, setIndividual] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Shop');
 
-  const [uploadShopLogo, setUploadShopLogo] = useState('');
-  const [uploadShopBackground, setUploadShopBackground] = useState('');
-  const [uploadShopImages, setUploadShopImages] = useState([]);
+  const [resizeShopLogoFile, setResizeShopLogoFile] = useState([]);
+  const [resizeShopCoverImageFile, setResizeShopCoverImageFile] = useState([]);
+  const [resizeShopImagesFile, setResizeShopImagesFile] = useState([]);
+
   const [uploadShopVideo, setUploadShopVideo] = useState('');
   const [loading, setLoading] = useState(false);
   const [subBranch, setSubBranch] = useState([]);
@@ -157,30 +158,26 @@ const ShopSetUp = () => {
     } else {
       setLoading(true);
 
-      let logoResponse = '';
-      let backgroundResponse = '';
+      let logoResponse = [];
+      let backgroundResponse = [];
       let imagesResponse = [];
       let videoResponse = null;
 
-      if (uploadShopLogo) {
-        await fileUpload(uploadShopLogo)
-          .then(res => (logoResponse = res))
-          .catch(error => {
-            console.error('Error during file upload:', error);
-          });
+      if (resizeShopLogoFile) {
+        await multipleImageUploadFile(resizeShopLogoFile).then(
+          res => (logoResponse = res),
+        );
       }
 
-      if (uploadShopBackground) {
-        await fileUpload(uploadShopBackground)
-          .then(res => (backgroundResponse = res))
-          .catch(error => {
-            console.error('Error during file upload:', error);
-          });
+      if (resizeShopCoverImageFile) {
+        await multipleImageUploadFile(resizeShopCoverImageFile).then(
+          res => (backgroundResponse = res),
+        );
       }
 
-      if (uploadShopImages.filter(item => item !== undefined).length > 0) {
+      if (resizeShopImagesFile?.filter(item => item !== undefined).length > 0) {
         await multipleImageUploadFile(
-          uploadShopImages.filter(item => item !== undefined),
+          resizeShopImagesFile?.filter(item => item !== undefined),
         ).then(res => (imagesResponse = res));
       }
 
@@ -192,6 +189,16 @@ const ShopSetUp = () => {
           });
       }
 
+      const shopImagesPayload = Array.from(
+        {length: imagesResponse?.length / 2},
+        (_, index) => ({
+          links: {
+            small: imagesResponse[index * 2],
+            medium: imagesResponse[index * 2 + 1],
+          },
+        }),
+      );
+
       await shopRegistration({
         userId: userProfile?.id,
         ownerInfo: {
@@ -202,12 +209,24 @@ const ShopSetUp = () => {
           user_id: userProfile?.id,
         },
         shopInfo: {
-          shop_logo: logoResponse || '',
-          shop_cover_image: backgroundResponse || '',
-          shop_images:
-            imagesResponse?.map(itm => {
-              return {links: itm};
-            }) || [],
+          shop_logo:
+            logoResponse?.length > 0
+              ? {
+                  extraSmall: logoResponse[0],
+                  small: logoResponse[1],
+                  medium: logoResponse[2],
+                  large: logoResponse[3],
+                }
+              : {},
+          shop_cover_image:
+            backgroundResponse?.length > 0
+              ? {
+                  small: backgroundResponse[0],
+                  medium: backgroundResponse[1],
+                  large: backgroundResponse[2],
+                }
+              : {},
+          shop_images: shopImagesPayload || [],
           shop_video: videoResponse || '',
           shop_social_link: {
             facebook: individual ? '' : data.facebook_link,
@@ -402,15 +421,11 @@ const ShopSetUp = () => {
             )}
             {currentPosition === 1 && (
               <ShopSetUpScreenTwo
-                uploadShopLogo={uploadShopLogo}
-                setUploadShopLogo={setUploadShopLogo}
-                setUploadShopBackground={setUploadShopBackground}
-                uploadShopBackground={uploadShopBackground}
-                uploadShopImages={uploadShopImages}
-                setUploadShopImages={setUploadShopImages}
                 setUploadShopVideo={setUploadShopVideo}
-                currentPosition={currentPosition}
-                setCurrentPosition={setCurrentPosition}
+                setResizeShopLogoFile={setResizeShopLogoFile}
+                setResizeShopCoverImageFile={setResizeShopCoverImageFile}
+                resizeShopImagesFile={resizeShopImagesFile}
+                setResizeShopImagesFile={setResizeShopImagesFile}
               />
             )}
             {currentPosition === 2 && (
