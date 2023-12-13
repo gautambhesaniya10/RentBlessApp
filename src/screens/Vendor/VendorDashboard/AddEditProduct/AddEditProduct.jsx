@@ -26,6 +26,9 @@ import {isFileOfType, refactorPrice} from '../../../../utils';
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {colorsList} from '../../../../common/Customer/ColorList';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {NEXT_PUBLIC_PRODUCT_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT} from '@env';
+import {NEXT_PUBLIC_PRODUCT_LARGE_VARIANT} from '@env';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -133,10 +136,6 @@ const AddEditProduct = () => {
 
   useEffect(() => {
     if (userProfile?.userCreatedShopId) {
-      console.log(
-        'userProfile?.userCreatedShopId',
-        userProfile?.userCreatedShopId,
-      );
       getBranchLists().then(res => {
         const branches = res?.data.branchList.filter(
           branch => branch.shop_id === userProfile?.userCreatedShopId,
@@ -208,22 +207,22 @@ const AddEditProduct = () => {
     try {
       const resizedImage1 = await ImageResizer.createResizedImage(
         source.uri,
-        126,
-        126,
+        Number(NEXT_PUBLIC_PRODUCT_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_PRODUCT_SMALL_VARIANT),
         'JPEG',
         100,
       );
       const resizedImage2 = await ImageResizer.createResizedImage(
         source.uri,
-        300,
-        300,
+        Number(NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT),
         'JPEG',
         100,
       );
       const resizedImage3 = await ImageResizer.createResizedImage(
         source.uri,
-        600,
-        600,
+        Number(NEXT_PUBLIC_PRODUCT_LARGE_VARIANT),
+        Number(NEXT_PUBLIC_PRODUCT_LARGE_VARIANT),
         'JPEG',
         100,
       );

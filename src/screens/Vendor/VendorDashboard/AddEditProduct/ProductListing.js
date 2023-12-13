@@ -42,8 +42,6 @@ const ProductListing = () => {
   const [deletableProductsImages, setDeletableProductsImages] = useState([]);
   const [deletableProductVideo, setDeletableProductVideo] = useState();
 
-  console.log('deletableProductsImages', deletableProductsImages);
-
   const getAllProducts = () => {
     dispatch(
       loadProductsStart({

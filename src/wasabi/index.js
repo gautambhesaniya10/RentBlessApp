@@ -20,7 +20,7 @@ const generateFileType = fileType => {
 };
 
 export const fileUpload = async selectedFile => {
-  const fileUri = selectedFile.uri;
+  const fileUri = selectedFile?.uri;
   const fileData = await RNFetchBlob.fs.readFile(fileUri, 'base64');
   const arrayBuffer = decode(fileData);
 
@@ -39,7 +39,7 @@ export const fileUpload = async selectedFile => {
       generateRandomNumberString(5) +
       generateFileType(selectedFile?.type),
     Body: arrayBuffer,
-    ContentType: selectedFile.type,
+    ContentType: selectedFile?.type,
   };
 
   try {
@@ -53,8 +53,8 @@ export const fileUpload = async selectedFile => {
 export const fileDelete = async (link, type) => {
   var objectKey =
     type === 'image'
-      ? link.split('/test-image2/')[1]
-      : link.split('/test-videos/')[1];
+      ? link?.split('/test-image2/')[1]
+      : link?.split('/test-videos/')[1];
 
   const params = {
     Bucket:
