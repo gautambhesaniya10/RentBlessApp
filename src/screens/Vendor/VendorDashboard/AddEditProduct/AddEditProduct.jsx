@@ -352,19 +352,6 @@ const AddEditProduct = () => {
     }
   }, [editableProductData, router, setValue]);
 
-  // const multipleImageUploadFile = async resizeAllImagesFile => {
-  //   const uploadPromises = resizeAllImagesFile?.map(uploadProduct => {
-  //     return fileUpload(uploadProduct);
-  //   });
-  //   try {
-  //     const uploadProductImgs = await Promise.all(uploadPromises);
-  //     return uploadProductImgs;
-  //   } catch (error) {
-  //     console.error('Error during file upload:', error);
-  //     return [];
-  //   }
-  // };
-
   const multipleProductImageUploadFile = async (
     resizeAllImagesFile,
     productFolderName,
@@ -400,7 +387,6 @@ const AddEditProduct = () => {
       });
 
       const uploadProductImgs = await Promise.all(uploadPromises);
-      console.log('uploadProductImgs...............', uploadProductImgs.flat());
       return uploadProductImgs.flat(); // Flatten the array of arrays
     } catch (error) {
       console.error('Error during file upload:', error);
@@ -408,29 +394,18 @@ const AddEditProduct = () => {
     }
   };
 
-  const [oldImageLink, setOldImageLink] = useState([]);
+  const [selectedChangeIndex, setSelectedChangeIndex] = useState([]);
 
   const updateProductKey = index => {
-    const productImage = editableProductData?.product_image;
-    if (productImage) {
-      const keyMap = ['front', 'back', 'side'];
-      const newImageFile = [...oldImageLink];
-      const res = productImage[keyMap[index]];
-      if (index === 0) {
-        newImageFile[0] = res?.small;
-        newImageFile[1] = res?.medium;
-        newImageFile[2] = res?.large;
-      } else if (index === 1) {
-        newImageFile[3] = res?.small;
-        newImageFile[4] = res?.medium;
-        newImageFile[5] = res?.large;
-      } else if (index === 2) {
-        newImageFile[6] = res?.small;
-        newImageFile[7] = res?.medium;
-        newImageFile[8] = res?.large;
-      }
-      setOldImageLink(newImageFile);
+    const selectedIndex = [...selectedChangeIndex];
+    if (index === 0) {
+      selectedIndex[0] = 0;
+    } else if (index === 1) {
+      selectedIndex[1] = 1;
+    } else if (index === 2) {
+      selectedIndex[2] = 2;
     }
+    setSelectedChangeIndex(selectedIndex);
   };
 
   const deleteImageFiles = async (deletableProducts, type) => {
@@ -474,6 +449,16 @@ const AddEditProduct = () => {
     await deleteObjectsInFolder(folderStructure);
   };
 
+  const deleteUpdateProductKey = index => {
+    const productImage = editableProductData?.product_image;
+
+    if (productImage) {
+      const keyMap = ['front', 'back', 'side'];
+
+      return productImage[keyMap[index]];
+    }
+  };
+
   const onSubmitProduct = async data => {
     if (editorDescriptionContent === '') {
       setErrorDescription('Product description is required');
@@ -494,25 +479,66 @@ const AddEditProduct = () => {
           deleteWasabiFolder(`products/${productFolderName}/video`);
         }
 
-        if (oldImageLink?.length > 0) {
-          oldImageLink?.map(async (oldImg, index) => {
-            await fileDelete(oldImg, 'image');
-          });
+        if (selectedChangeIndex?.length > 0) {
+          try {
+            const updatePromises = selectedChangeIndex?.map(
+              async (item, index) => {
+                let folderStructure = '';
+                if (item !== undefined) {
+                  const data = deleteUpdateProductKey(item);
+                  const splitStringAfterShop = data?.small?.split('/shop/')[1];
 
-          if (resizeAllImagesFile.some(img => img)) {
-            const uploadPromises = resizeAllImagesFile?.map(uploadProduct => {
-              return fileUpload(uploadProduct);
-            });
+                  const urlParts = splitStringAfterShop.split('/');
+                  const lastPart = urlParts.pop();
+                  const stringWithoutLastWord = urlParts.join('/');
+                  await deleteWasabiFolder(stringWithoutLastWord);
 
-            try {
-              const updateProductImgs = await Promise.all(uploadPromises);
-              imagesResponse = updateProductImgs;
-            } catch (error) {
-              console.error('Error during file upload:', error);
-              return;
-            }
+                  folderStructure = `user_${userProfile.id}/shop/${stringWithoutLastWord}`;
+                }
+
+                if (index === 0) {
+                  const uploadPromises = resizeAllImagesFile
+                    ?.slice(0, 3)
+                    ?.map(uploadProduct => {
+                      return fileUpload(uploadProduct, folderStructure);
+                    });
+
+                  return Promise.all(uploadPromises);
+                }
+                if (index === 1) {
+                  const uploadPromises = resizeAllImagesFile
+                    ?.slice(3, 6)
+                    ?.map(uploadProduct => {
+                      return fileUpload(uploadProduct, folderStructure);
+                    });
+                  return Promise.all(uploadPromises);
+                }
+                if (index === 2) {
+                  const uploadPromises = resizeAllImagesFile
+                    ?.slice(6, 9)
+                    ?.map(uploadProduct => {
+                      return fileUpload(uploadProduct, folderStructure);
+                    });
+
+                  return Promise.all(uploadPromises);
+                }
+              },
+            );
+
+            const updateProductImgs = await Promise.all(updatePromises);
+            imagesResponse = updateProductImgs.flat();
+          } catch (error) {
+            console.error('Error occurred:', error);
           }
         }
+
+        imagesResponse = imagesResponse?.flatMap((item, index) => {
+          if (item === undefined) {
+            return [item, undefined, undefined];
+          } else {
+            return [item];
+          }
+        });
 
         if (uploadProductVideo) {
           if (editableProductData?.product_video) {
@@ -630,7 +656,6 @@ const AddEditProduct = () => {
             productFolderName,
           ).then(res => (productImagesRes = res));
         }
-        console.log('productImagesRes====', productImagesRes);
         if (uploadProductVideo) {
           const folderStructure = `user_${userProfile?.id}/shop/products/${productFolderName}/video`;
           await fileUpload(uploadProductVideo, folderStructure)
