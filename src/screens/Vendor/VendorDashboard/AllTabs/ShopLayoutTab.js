@@ -7,9 +7,28 @@ import {shopUpdate} from '../../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
-import {fileDelete, fileUpdate, fileUpload} from '../../../../wasabi';
+import {
+  deleteObjectsInFolder,
+  fileDelete,
+  fileUpdate,
+  fileUpload,
+} from '../../../../wasabi';
 import FastImage from 'react-native-fast-image';
-import {isFileOfType} from '../../../../utils';
+import {generateRandomNumberString, isFileOfType} from '../../../../utils';
+
+import ImageResizer from '@bam.tech/react-native-image-resizer';
+import {NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT} from '@env';
+
+import {NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT} from '@env';
+
+import {NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT} from '@env';
+import {NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT} from '@env';
+import {useSelector} from 'react-redux';
 
 const ShopLayoutTab = ({
   vendorShopDetails,
@@ -36,6 +55,7 @@ const ShopLayoutTab = ({
   const [deleteShopVideo, setDeleteShopVideo] = useState('');
 
   const [shopLayoutLoading, setShopLayoutLoading] = useState(false);
+  const {userProfile} = useSelector(state => state?.user);
 
   // const srcToFile = async (src, fileName, mimeType) => {
   //   const response = await RNFetchBlob.fetch('GET', src);
@@ -70,10 +90,8 @@ const ShopLayoutTab = ({
     setEditableShopImages([]);
 
     if (vendorShopDetails) {
-      setShopLogo(vendorShopDetails?.shop_logo);
-
-      setShopBackground(vendorShopDetails?.shop_cover_image);
-
+      setShopLogo(vendorShopDetails?.shop_logo?.medium);
+      setShopBackground(vendorShopDetails?.shop_cover_image?.medium);
       setShopImageWasabiUrl([...vendorShopDetails?.shop_images]);
       setShopImages([...vendorShopDetails?.shop_images]);
 
@@ -113,6 +131,9 @@ const ShopLayoutTab = ({
         const fileName = response.assets[0].fileName || '';
         if (isFileOfType(fileName, acceptedFileTypes)) {
           setShopLogo(response.assets[0].uri);
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeShopLogoImage(sourceURI);
+
           setUploadShopLogo(response.assets[0]);
           setDeleteShopLogo('');
         } else {
@@ -125,6 +146,53 @@ const ShopLayoutTab = ({
         }
       }
     });
+  };
+  const [resizeShopLogoFile, setResizeShopLogoFile] = useState([]);
+
+  const resizeShopLogoImage = async source => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage3 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage4 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
+        'JPEG',
+        100,
+      );
+
+      const img1 = {
+        ...resizedImage1,
+        type: 'image/jpeg',
+        imageSize: 'extraSmall',
+      };
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'small'};
+      const img3 = {...resizedImage3, type: 'image/jpeg', imageSize: 'medium'};
+      const img4 = {...resizedImage4, type: 'image/jpeg', imageSize: 'large'};
+
+      setResizeShopLogoFile([img1, img2, img3, img4]);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
   };
 
   const ChooseShopCoverImage = () => {
@@ -152,6 +220,9 @@ const ShopLayoutTab = ({
         const fileName = response.assets[0].fileName || '';
         if (isFileOfType(fileName, acceptedFileTypes)) {
           setShopBackground(response.assets[0].uri);
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeShopCoverImage(sourceURI);
+
           setUploadShopBackground(response.assets[0]);
           setDeleteShopBackground('');
         } else {
@@ -166,9 +237,45 @@ const ShopLayoutTab = ({
     });
   };
 
+  const [resizeShopCoverImageFile, setResizeShopCoverImageFile] = useState([]);
+
+  const resizeShopCoverImage = async source => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage3 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
+        'JPEG',
+        100,
+      );
+
+      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+      const img3 = {...resizedImage3, type: 'image/jpeg', imageSize: 'large'};
+
+      setResizeShopCoverImageFile([img1, img2, img3]);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
+  };
+
   function fillArrayWithEmptyValues(arr, targetLength) {
     while (arr.length < targetLength) {
-      arr.push({links: 'none'});
+      arr.push({links: `none${arr.length}`});
     }
     return arr;
   }
@@ -208,9 +315,17 @@ const ShopLayoutTab = ({
             newData: response.assets[0],
           };
 
+          let updatedShopImagesWasabiUrl = shopImagesWasabiUrl;
+          updatedShopImagesWasabiUrl[index] = {};
+
+          setShopImageWasabiUrl(() => [...updatedShopImagesWasabiUrl]);
+
           const newImage = [...shopImages];
-          newImage[index] = {links: response.assets[0].uri};
+          newImage[index] = {links: {medium: response.assets[0].uri}};
           setShopImages(newImage);
+
+          const sourceURI = {uri: response.assets[0].uri};
+          resizeShopImages(sourceURI, index);
         } else {
           toast.show({
             title: 'Selected file type is not supported',
@@ -221,6 +336,45 @@ const ShopLayoutTab = ({
         }
       }
     });
+  };
+  const [resizeShopImagesFile, setResizeShopImagesFile] = useState([]);
+
+  const resizeShopImages = async (source, index) => {
+    try {
+      const resizedImage1 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+        'JPEG',
+        100,
+      );
+      const resizedImage2 = await ImageResizer.createResizedImage(
+        source.uri,
+        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+        'JPEG',
+        100,
+      );
+
+      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
+      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+
+      const newImageFile = [...resizeShopImagesFile];
+      if (index === 0) {
+        newImageFile[0] = img1;
+        newImageFile[1] = img2;
+      } else if (index === 1) {
+        newImageFile[2] = img1;
+        newImageFile[3] = img2;
+      } else if (index === 2) {
+        newImageFile[4] = img1;
+        newImageFile[5] = img2;
+      }
+
+      setResizeShopImagesFile(newImageFile);
+    } catch (error) {
+      console.log('Image resizing error:', error);
+    }
   };
 
   const ChooseShopVideo = () => {
@@ -278,157 +432,260 @@ const ShopLayoutTab = ({
     setDeleteShopVideo('');
     setShopVideo('');
     setUploadShopVideo('');
+
+    setResizeShopLogoFile([]);
+    setResizeShopCoverImageFile([]);
+    setResizeShopImagesFile([]);
+  };
+
+  const deleteWasabiFolder = async folderName => {
+    const folderStructure = `user_${userProfile?.id}/shop/${folderName}`;
+    await deleteObjectsInFolder(folderStructure);
+  };
+
+  const multipleImageUploadFile = async (uploadShopImages, folderStructure) => {
+    const uploadPromises = uploadShopImages?.map(uploadShopImg => {
+      return fileUpload(uploadShopImg, folderStructure);
+    });
+
+    try {
+      const uploadShopImgs = await Promise.all(uploadPromises);
+      return uploadShopImgs;
+    } catch (error) {
+      console.error('Error during file upload:', error);
+      return [];
+    }
+  };
+
+  const multipleShopImagesUploadFile = async uploadShopImages => {
+    const userFolder = `user_${userProfile?.id}/shop`;
+    const timestamp = new Date().getTime().toString();
+
+    // Determine the number of pairs based on the number of images available
+    const pairsCount = Math.ceil(uploadShopImages.length / 2);
+
+    const folderStructures = Array.from(
+      {length: pairsCount},
+      () =>
+        `${userFolder}/shop_img/${timestamp + generateRandomNumberString(5)}`,
+    );
+
+    const groupedUploads = Array.from({length: pairsCount}, (_, index) => [
+      index * 2,
+      Math.min(index * 2 + 1, uploadShopImages.length - 1),
+    ]);
+
+    const uploadPromises = groupedUploads.map(indices => {
+      const folderStructure = folderStructures[groupedUploads.indexOf(indices)];
+      const uploads = indices
+        .map(index =>
+          index < uploadShopImages.length ? uploadShopImages[index] : null,
+        )
+        .filter(Boolean);
+      return Promise.all(
+        uploads.map(uploadShopImg =>
+          fileUpload(uploadShopImg, folderStructure),
+        ),
+      );
+    });
+    try {
+      const uploadShopImgs = await Promise.all(uploadPromises);
+      return uploadShopImgs.flat();
+    } catch (error) {
+      console.error('Error during file upload:', error);
+      return [];
+    }
   };
 
   const shopLayoutOnSubmit = async () => {
     setShopLayoutLoading(true);
 
-    let logoResponse = '';
-    let backgroundResponse = '';
+    let logoResponse = [];
+    let backgroundResponse = [];
     let imagesResponse = [];
     let videoResponse = null;
 
     if (deleteShopLogo) {
-      await deleteImageFiles([deleteShopLogo], 'image');
+      await deleteWasabiFolder('logo');
     }
 
     if (deleteShopBackground) {
-      await deleteImageFiles([deleteShopBackground], 'image');
-    }
-
-    if (deleteShopImages?.filter(itm => itm !== undefined).length > 0) {
-      await deleteImageFiles(
-        deleteShopImages?.filter(itm => itm !== undefined),
-        'image',
-      );
+      await deleteWasabiFolder('cover');
     }
 
     if (deleteShopVideo) {
-      await deleteImageFiles([deleteShopVideo], 'video');
+      await deleteWasabiFolder('video');
     }
 
-    if (uploadShopLogo) {
-      if (vendorShopDetails?.shop_logo) {
-        try {
-          const shopLogoRes = await fileUpdate(
-            vendorShopDetails?.shop_logo,
-            'image',
-            uploadShopLogo,
-          );
-          logoResponse = shopLogoRes;
-        } catch (error) {
-          console.error('Error during file upload:', error);
-          return;
-        }
-      } else {
-        try {
-          const shopLogoRes = await fileUpload(uploadShopLogo);
-          logoResponse = shopLogoRes;
-        } catch (error) {
-          console.error('Error during file upload:', error);
-          return;
-        }
-      }
-    }
-
-    if (uploadShopBackground) {
-      if (vendorShopDetails?.shop_cover_image) {
-        try {
-          const shopCoverRes = await fileUpdate(
-            vendorShopDetails?.shop_cover_image,
-            'image',
-            uploadShopBackground,
-          );
-          backgroundResponse = shopCoverRes;
-        } catch (error) {
-          console.error('Error during file upload:', error);
-          return;
-        }
-      } else {
-        try {
-          const shopCoverRes = await fileUpload(uploadShopBackground);
-          backgroundResponse = shopCoverRes;
-        } catch (error) {
-          console.error('Error during file upload:', error);
-          return;
-        }
-      }
-    }
-
-    if (editableShopImages?.length > 0) {
-      const uploadPromises = editableShopImages
+    if (deleteShopImages?.filter(itm => itm !== undefined).length > 0) {
+      deleteShopImages
         ?.filter(itm => itm !== undefined)
-        ?.map(shopImage => {
-          if (shopImage?.oldLink) {
-            return fileUpdate(shopImage?.oldLink, 'image', shopImage?.newData);
-          } else {
-            return fileUpload(shopImage?.newData);
-          }
+        ?.map(async item => {
+          const splitStringAfterShop = item?.medium?.split('/shop/')[1];
+          const urlParts = splitStringAfterShop?.split('/');
+          const lastPart = urlParts?.pop();
+          const stringWithoutLastWord = urlParts?.join('/');
+          await deleteWasabiFolder(stringWithoutLastWord);
         });
+    }
+
+    if (resizeShopLogoFile?.length > 0) {
+      if (vendorShopDetails?.shop_logo?.large) {
+        await deleteWasabiFolder('logo');
+      }
+      const folderStructure = `user_${userProfile?.id}/shop/logo`;
+
+      await multipleImageUploadFile(resizeShopLogoFile, folderStructure).then(
+        res => (logoResponse = res),
+      );
+    }
+
+    if (resizeShopCoverImageFile?.length > 0) {
+      if (vendorShopDetails?.shop_cover_image?.small) {
+        await deleteWasabiFolder('cover');
+      }
+
+      const folderStructure = `user_${userProfile?.id}/shop/cover`;
+
+      await multipleImageUploadFile(
+        resizeShopCoverImageFile,
+        folderStructure,
+      ).then(res => (backgroundResponse = res));
+    }
+
+    if (uploadShopVideo) {
+      if (vendorShopDetails?.shop_video) {
+        await deleteWasabiFolder('video');
+      }
 
       try {
-        const updateShopImgs = await Promise.all(uploadPromises);
-        imagesResponse = updateShopImgs;
+        const folderStructure = `user_${userProfile.id}/shop/video`;
+        const shopVideoRes = await fileUpload(uploadShopVideo, folderStructure);
+        videoResponse = shopVideoRes;
       } catch (error) {
         console.error('Error during file upload:', error);
         return;
       }
     }
 
-    if (uploadShopVideo) {
-      if (vendorShopDetails?.shop_video) {
-        try {
-          const shopVideoRes = await fileUpdate(
-            vendorShopDetails?.shop_video,
-            'video',
-            uploadShopVideo,
+    const newShopImagesWasabiUrl = shopImagesWasabiUrl?.map(item => {
+      const updatedItem = {...item};
+
+      // Remove "__typename" property from every key
+      Object.keys(updatedItem).forEach(key => {
+        if (key === '__typename') {
+          delete updatedItem[key];
+        } else if (
+          typeof updatedItem[key] === 'object' &&
+          updatedItem[key] !== null
+        ) {
+          // If the property is an object, apply the same process recursively
+          updatedItem[key] = Object.keys(updatedItem[key]).reduce(
+            (acc, innerKey) => {
+              if (innerKey !== '__typename') {
+                acc[innerKey] = updatedItem[key][innerKey];
+              }
+              return acc;
+            },
+            {},
           );
-          videoResponse = shopVideoRes;
-        } catch (error) {
-          console.error('Error during file upload:', error);
-          return;
         }
-      } else {
-        try {
-          const shopVideoRes = await fileUpload(uploadShopVideo);
-          videoResponse = shopVideoRes;
-        } catch (error) {
-          console.error('Error during file upload:', error);
-          return;
+      });
+
+      return updatedItem;
+    });
+
+    if (resizeShopImagesFile?.length > 0) {
+      if (resizeShopImagesFile[0] && resizeShopImagesFile[1]) {
+        if (vendorShopDetails?.shop_images[0]?.links?.medium) {
+          const splitStringAfterShop =
+            vendorShopDetails?.shop_images[0]?.links?.medium?.split(
+              '/shop/',
+            )[1];
+          const urlParts = splitStringAfterShop?.split('/');
+          const lastPart = urlParts?.pop();
+          const stringWithoutLastWord = urlParts?.join('/');
+
+          await deleteWasabiFolder(stringWithoutLastWord);
         }
       }
+      if (resizeShopImagesFile[2] && resizeShopImagesFile[3]) {
+        if (vendorShopDetails?.shop_images[1]?.links?.medium) {
+          const splitStringAfterShop =
+            vendorShopDetails?.shop_images[1]?.links?.medium?.split(
+              '/shop/',
+            )[1];
+          const urlParts = splitStringAfterShop?.split('/');
+          const lastPart = urlParts?.pop();
+          const stringWithoutLastWord = urlParts?.join('/');
+
+          await deleteWasabiFolder(stringWithoutLastWord);
+        }
+      }
+      if (resizeShopImagesFile[4] && resizeShopImagesFile[5]) {
+        if (vendorShopDetails?.shop_images[2]?.links?.medium) {
+          const splitStringAfterShop =
+            vendorShopDetails?.shop_images[2]?.links?.medium?.split(
+              '/shop/',
+            )[1];
+          const urlParts = splitStringAfterShop?.split('/');
+          const lastPart = urlParts?.pop();
+          const stringWithoutLastWord = urlParts?.join('/');
+
+          await deleteWasabiFolder(stringWithoutLastWord);
+        }
+      }
+
+      await multipleShopImagesUploadFile(resizeShopImagesFile).then(
+        res => (imagesResponse = res),
+      );
     }
 
-    const existingLinks = shopImagesWasabiUrl.map(item => item.links);
+    const {__typename: shopLogoTypename, ...newShopLogoVariants} =
+      vendorShopDetails?.shop_logo;
 
-    const filteredImageResponse = imagesResponse?.filter(
-      item => !existingLinks.includes(item),
+    const {__typename: shopCoverTypename, ...newShopCoverVariants} =
+      vendorShopDetails?.shop_cover_image;
+
+    const shopImagesPayload = Array.from(
+      {length: imagesResponse?.length / 2},
+      (_, index) => ({
+        links: {
+          small: imagesResponse[index * 2],
+          medium: imagesResponse[index * 2 + 1],
+        },
+      }),
     );
 
-    let combinedLinks = [
-      ...shopImagesWasabiUrl,
-      ...filteredImageResponse.map(links => ({links})),
-    ];
-
-    if (deleteShopImages?.filter(itm => itm !== undefined).length > 0) {
-      combinedLinks = combinedLinks.filter(linkObj => {
-        return !deleteShopImages
-          ?.filter(itm => itm !== undefined)
-          .includes(linkObj.links);
-      });
-    }
+    let combinedLinks = [...newShopImagesWasabiUrl, ...shopImagesPayload];
 
     await shopUpdate({
       shopLayout: {
         id: useProfileData?.userCreatedShopId,
         shop_logo:
-          logoResponse || (deleteShopLogo ? '' : vendorShopDetails?.shop_logo),
+          logoResponse?.length > 0
+            ? {
+                extraSmall: logoResponse[0],
+                small: logoResponse[1],
+                medium: logoResponse[2],
+                large: logoResponse[3],
+              }
+            : deleteShopLogo?.large
+            ? {}
+            : newShopLogoVariants,
         shop_cover_image:
-          backgroundResponse ||
-          (deleteShopBackground ? '' : vendorShopDetails?.shop_cover_image),
-        shop_images: combinedLinks?.map(item => ({
-          links: item.links,
-        })),
+          backgroundResponse?.length > 0
+            ? {
+                small: backgroundResponse[0],
+                medium: backgroundResponse[1],
+                large: backgroundResponse[2],
+              }
+            : deleteShopBackground?.large
+            ? {}
+            : newShopCoverVariants,
+        shop_images: combinedLinks?.filter(
+          item => Object.keys(item).length > 0,
+        ),
         shop_video:
           videoResponse ||
           (deleteShopVideo ? '' : vendorShopDetails?.shop_video),
@@ -464,7 +721,7 @@ const ShopLayoutTab = ({
           <TouchableOpacity
             onPress={() => ChooseShopLogoImage()}
             style={styles.logoMainDiv}>
-            {shopLogo === '' ? (
+            {shopLogo === '' || shopLogo === null ? (
               <>
                 <Icon name="image" size={25} color="black" />
                 <Text style={styles.uploadText}>Click to Upload </Text>
@@ -510,7 +767,7 @@ const ShopLayoutTab = ({
           <TouchableOpacity
             onPress={() => ChooseShopCoverImage()}
             style={styles.coverMainDiv}>
-            {shopBackground === '' ? (
+            {shopBackground === '' || shopBackground === null ? (
               <>
                 <Icon name="image" size={25} color="black" />
                 <Text style={styles.uploadText}>Click to Upload </Text>
@@ -576,7 +833,7 @@ const ShopLayoutTab = ({
                           <FastImage
                             style={{width: 112, height: 112, borderRadius: 10}}
                             source={{
-                              uri: shopImages[index]?.links,
+                              uri: shopImages[index]?.links?.medium,
                               cache: FastImage.cacheControl.web,
                             }}
                             resizeMode="cover"
@@ -613,6 +870,14 @@ const ShopLayoutTab = ({
                                   shopImagesWasabiUrl[index]?.links;
                                 setDeleteShopImages(() => [
                                   ...deleteShopImagesData,
+                                ]);
+
+                                let updatedShopImagesWasabiUrl =
+                                  shopImagesWasabiUrl;
+                                updatedShopImagesWasabiUrl[index] = {};
+
+                                setShopImageWasabiUrl(() => [
+                                  ...updatedShopImagesWasabiUrl,
                                 ]);
 
                                 let shopImagesData = shopImages;
