@@ -249,35 +249,37 @@ const ShopSetUpScreenTwo = ({
 
   const resizeShopImages = async (source, index) => {
     try {
-      const resizedImage1 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
-        'JPEG',
-        100,
-      );
-      const resizedImage2 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
-        'JPEG',
-        100,
-      );
+      const imageVariants = [
+        {
+          size: Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+          type: 'small',
+        },
+        {
+          size: Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+          type: 'medium',
+        },
+      ];
 
-      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
-      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+      const resizedImages = await Promise.all(
+        imageVariants.map(async variant => {
+          const resizedImage = await ImageResizer.createResizedImage(
+            source.uri,
+            variant.size,
+            variant.size,
+            'JPEG',
+            100,
+          );
+          return {...resizedImage, type: 'image/jpeg', imageSize: variant.type};
+        }),
+      );
 
       const newImageFile = [...resizeShopImagesFile];
-      if (index === 0) {
-        newImageFile[0] = img1;
-        newImageFile[1] = img2;
-      } else if (index === 1) {
-        newImageFile[2] = img1;
-        newImageFile[3] = img2;
-      } else if (index === 2) {
-        newImageFile[4] = img1;
-        newImageFile[5] = img2;
-      }
+
+      const startIndex = index * imageVariants.length;
+
+      resizedImages.forEach((img, i) => {
+        newImageFile[startIndex + i] = img;
+      });
 
       setResizeShopImagesFile(newImageFile);
     } catch (error) {

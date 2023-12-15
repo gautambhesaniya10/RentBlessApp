@@ -55,10 +55,8 @@ const ProductDetail = () => {
     productDetails?.data?.product?.data?.product_price -
     productDetails?.data?.product?.data?.product_price *
       (productDetails?.data?.product?.data?.product_discount / 100);
-  console.log('productId=-=-', productId);
   const getProductDetail = async () => {
     const productDetails = await getProductDetails({id: productId});
-    console.log('productDetails-=', productDetails);
     setProductDetails(productDetails);
   };
 
