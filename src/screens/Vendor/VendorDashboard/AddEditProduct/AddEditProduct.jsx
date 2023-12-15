@@ -18,12 +18,7 @@ import {
 import {useDispatch, useSelector} from 'react-redux';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {
-  deleteObjectsInFolder,
-  fileDelete,
-  fileUpdate,
-  fileUpload,
-} from '../../../../wasabi';
+import {deleteObjectsInFolder, fileUpload} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 import CustomSwitch from '../../../../components/CustomSwitch';
@@ -406,17 +401,6 @@ const AddEditProduct = () => {
       selectedIndex[2] = 2;
     }
     setSelectedChangeIndex(selectedIndex);
-  };
-
-  const deleteImageFiles = async (deletableProducts, type) => {
-    try {
-      const deletionPromises = deletableProducts.map(deleteProduct =>
-        fileDelete(deleteProduct, type),
-      );
-      await Promise.all(deletionPromises);
-    } catch (error) {
-      console.error('Error deleting files:', error);
-    }
   };
 
   const getAllProducts = () => {

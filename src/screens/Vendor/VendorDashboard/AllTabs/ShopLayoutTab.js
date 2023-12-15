@@ -7,15 +7,9 @@ import {shopUpdate} from '../../../../graphql/mutations/shops';
 import {useToast} from 'native-base';
 import {launchImageLibrary} from 'react-native-image-picker';
 import Video from 'react-native-video';
-import {
-  deleteObjectsInFolder,
-  fileDelete,
-  fileUpdate,
-  fileUpload,
-} from '../../../../wasabi';
+import {deleteObjectsInFolder, fileUpload} from '../../../../wasabi';
 import FastImage from 'react-native-fast-image';
 import {generateRandomNumberString, isFileOfType} from '../../../../utils';
-
 import ImageResizer from '@bam.tech/react-native-image-resizer';
 import {NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT} from '@env';
 import {NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT} from '@env';
@@ -37,16 +31,15 @@ const ShopLayoutTab = ({
 }) => {
   const toast = useToast();
   const [shopLogo, setShopLogo] = useState('');
-  const [uploadShopLogo, setUploadShopLogo] = useState('');
   const [deleteShopLogo, setDeleteShopLogo] = useState('');
+  const [resizeShopLogoFile, setResizeShopLogoFile] = useState([]);
 
   const [shopBackground, setShopBackground] = useState('');
-  const [uploadShopBackground, setUploadShopBackground] = useState('');
+  const [resizeShopCoverImageFile, setResizeShopCoverImageFile] = useState([]);
   const [deleteShopBackground, setDeleteShopBackground] = useState('');
 
   const [shopImages, setShopImages] = useState([]);
-  const [editableShopImages, setEditableShopImages] = useState([]);
-
+  const [resizeShopImagesFile, setResizeShopImagesFile] = useState([]);
   const [shopImagesWasabiUrl, setShopImageWasabiUrl] = useState([]);
   const [deleteShopImages, setDeleteShopImages] = useState([]);
 
@@ -87,7 +80,6 @@ const ShopLayoutTab = ({
 
   useEffect(() => {
     setShopImages([]);
-    setEditableShopImages([]);
 
     if (vendorShopDetails) {
       setShopLogo(vendorShopDetails?.shop_logo?.medium);
@@ -108,7 +100,6 @@ const ShopLayoutTab = ({
       ],
       storageOptions: {
         skipBackup: true,
-        path: 'images',
       },
       mediaType: 'photo',
       // selectionLimit: 10,
@@ -134,7 +125,6 @@ const ShopLayoutTab = ({
           const sourceURI = {uri: response.assets[0].uri};
           resizeShopLogoImage(sourceURI);
 
-          setUploadShopLogo(response.assets[0]);
           setDeleteShopLogo('');
         } else {
           toast.show({
@@ -147,7 +137,6 @@ const ShopLayoutTab = ({
       }
     });
   };
-  const [resizeShopLogoFile, setResizeShopLogoFile] = useState([]);
 
   const resizeShopLogoImage = async source => {
     try {
@@ -223,7 +212,6 @@ const ShopLayoutTab = ({
           const sourceURI = {uri: response.assets[0].uri};
           resizeShopCoverImage(sourceURI);
 
-          setUploadShopBackground(response.assets[0]);
           setDeleteShopBackground('');
         } else {
           toast.show({
@@ -236,8 +224,6 @@ const ShopLayoutTab = ({
       }
     });
   };
-
-  const [resizeShopCoverImageFile, setResizeShopCoverImageFile] = useState([]);
 
   const resizeShopCoverImage = async source => {
     try {
@@ -309,11 +295,11 @@ const ShopLayoutTab = ({
           deleteShopImagesData[index] = undefined;
           setDeleteShopImages(() => [...deleteShopImagesData]);
 
-          let editableShopImagesData = editableShopImages;
-          editableShopImagesData[index] = {
-            oldLink: shopImagesWasabiUrl[index]?.links,
-            newData: response.assets[0],
-          };
+          // let editableShopImagesData = editableShopImages;
+          // editableShopImagesData[index] = {
+          //   oldLink: shopImagesWasabiUrl[index]?.links,
+          //   newData: response.assets[0],
+          // };
 
           let updatedShopImagesWasabiUrl = shopImagesWasabiUrl;
           updatedShopImagesWasabiUrl[index] = {};
@@ -337,39 +323,78 @@ const ShopLayoutTab = ({
       }
     });
   };
-  const [resizeShopImagesFile, setResizeShopImagesFile] = useState([]);
+
+  // const resizeShopImages = async (source, index) => {
+  //   try {
+  //     const resizedImage1 = await ImageResizer.createResizedImage(
+  //       source.uri,
+  //       Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+  //       Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+  //       'JPEG',
+  //       100,
+  //     );
+  //     const resizedImage2 = await ImageResizer.createResizedImage(
+  //       source.uri,
+  //       Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+  //       Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+  //       'JPEG',
+  //       100,
+  //     );
+
+  //     const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
+  //     const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+
+  //     const newImageFile = [...resizeShopImagesFile];
+  //     if (index === 0) {
+  //       newImageFile[0] = img1;
+  //       newImageFile[1] = img2;
+  //     } else if (index === 1) {
+  //       newImageFile[2] = img1;
+  //       newImageFile[3] = img2;
+  //     } else if (index === 2) {
+  //       newImageFile[4] = img1;
+  //       newImageFile[5] = img2;
+  //     }
+
+  //     setResizeShopImagesFile(newImageFile);
+  //   } catch (error) {
+  //     console.log('Image resizing error:', error);
+  //   }
+  // };
 
   const resizeShopImages = async (source, index) => {
     try {
-      const resizedImage1 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
-        'JPEG',
-        100,
-      );
-      const resizedImage2 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
-        'JPEG',
-        100,
-      );
+      const imageVariants = [
+        {
+          size: Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+          type: 'small',
+        },
+        {
+          size: Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+          type: 'medium',
+        },
+      ];
 
-      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
-      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
+      const resizedImages = await Promise.all(
+        imageVariants.map(async variant => {
+          const resizedImage = await ImageResizer.createResizedImage(
+            source.uri,
+            variant.size,
+            variant.size,
+            'JPEG',
+            100,
+          );
+          return {...resizedImage, type: 'image/jpeg', imageSize: variant.type};
+        }),
+      );
 
       const newImageFile = [...resizeShopImagesFile];
-      if (index === 0) {
-        newImageFile[0] = img1;
-        newImageFile[1] = img2;
-      } else if (index === 1) {
-        newImageFile[2] = img1;
-        newImageFile[3] = img2;
-      } else if (index === 2) {
-        newImageFile[4] = img1;
-        newImageFile[5] = img2;
-      }
+
+      const startIndex = index * imageVariants.length;
+
+      resizedImages.forEach((img, i) => {
+        newImageFile[startIndex + i] = img;
+      });
 
       setResizeShopImagesFile(newImageFile);
     } catch (error) {
@@ -407,25 +432,11 @@ const ShopLayoutTab = ({
     });
   };
 
-  const deleteImageFiles = async (deletableProducts, type) => {
-    try {
-      const deletionPromises = deletableProducts.map(deleteProduct =>
-        fileDelete(deleteProduct, type),
-      );
-      await Promise.all(deletionPromises);
-    } catch (error) {
-      console.error('Error deleting files:', error);
-    }
-  };
-
   const emptyImageStates = () => {
     setShopLogo('');
-    setUploadShopLogo('');
     setShopBackground('');
-    setUploadShopBackground('');
     setShopImages([]);
     setShopImageWasabiUrl([]);
-    setEditableShopImages([]);
     setDeleteShopImages([]);
     setDeleteShopLogo('');
     setDeleteShopBackground('');
@@ -461,7 +472,6 @@ const ShopLayoutTab = ({
     const userFolder = `user_${userProfile?.id}/shop`;
     const timestamp = new Date().getTime().toString();
 
-    // Determine the number of pairs based on the number of images available
     const pairsCount = Math.ceil(uploadShopImages.length / 2);
 
     const folderStructures = Array.from(
@@ -596,43 +606,20 @@ const ShopLayoutTab = ({
     });
 
     if (resizeShopImagesFile?.length > 0) {
-      if (resizeShopImagesFile[0] && resizeShopImagesFile[1]) {
-        if (vendorShopDetails?.shop_images[0]?.links?.medium) {
-          const splitStringAfterShop =
-            vendorShopDetails?.shop_images[0]?.links?.medium?.split(
-              '/shop/',
-            )[1];
-          const urlParts = splitStringAfterShop?.split('/');
-          const lastPart = urlParts?.pop();
-          const stringWithoutLastWord = urlParts?.join('/');
+      for (let i = 0; i < resizeShopImagesFile?.length; i += 2) {
+        const shopImageIndex = i / 2;
 
-          await deleteWasabiFolder(stringWithoutLastWord);
-        }
-      }
-      if (resizeShopImagesFile[2] && resizeShopImagesFile[3]) {
-        if (vendorShopDetails?.shop_images[1]?.links?.medium) {
-          const splitStringAfterShop =
-            vendorShopDetails?.shop_images[1]?.links?.medium?.split(
-              '/shop/',
-            )[1];
-          const urlParts = splitStringAfterShop?.split('/');
-          const lastPart = urlParts?.pop();
-          const stringWithoutLastWord = urlParts?.join('/');
+        if (resizeShopImagesFile[i] && resizeShopImagesFile[i + 1]) {
+          const shopImage = vendorShopDetails?.shop_images[shopImageIndex];
+          if (shopImage?.links?.medium) {
+            const splitStringAfterShop =
+              shopImage.links.medium.split('/shop/')[1];
+            const urlParts = splitStringAfterShop.split('/');
+            urlParts.pop(); // Remove last part
+            const stringWithoutLastWord = urlParts.join('/');
 
-          await deleteWasabiFolder(stringWithoutLastWord);
-        }
-      }
-      if (resizeShopImagesFile[4] && resizeShopImagesFile[5]) {
-        if (vendorShopDetails?.shop_images[2]?.links?.medium) {
-          const splitStringAfterShop =
-            vendorShopDetails?.shop_images[2]?.links?.medium?.split(
-              '/shop/',
-            )[1];
-          const urlParts = splitStringAfterShop?.split('/');
-          const lastPart = urlParts?.pop();
-          const stringWithoutLastWord = urlParts?.join('/');
-
-          await deleteWasabiFolder(stringWithoutLastWord);
+            await deleteWasabiFolder(stringWithoutLastWord);
+          }
         }
       }
 
@@ -659,30 +646,45 @@ const ShopLayoutTab = ({
 
     let combinedLinks = [...newShopImagesWasabiUrl, ...shopImagesPayload];
 
+    const generateSizes = (
+      imageResponse,
+      deleteImage,
+      oldImageVariants,
+      type,
+    ) => {
+      let sizes = {};
+      const sizeLabels =
+        type === 'logo'
+          ? ['extraSmall', 'small', 'medium', 'large']
+          : ['small', 'medium', 'large'];
+
+      if (imageResponse && imageResponse.length > 0) {
+        sizeLabels.forEach((sizeLabel, index) => {
+          if (imageResponse[index]) {
+            sizes[sizeLabel] = imageResponse[index];
+          }
+        });
+      } else {
+        sizes = deleteImage?.large ? {} : oldImageVariants;
+      }
+      return sizes;
+    };
+
     await shopUpdate({
       shopLayout: {
         id: useProfileData?.userCreatedShopId,
-        shop_logo:
-          logoResponse?.length > 0
-            ? {
-                extraSmall: logoResponse[0],
-                small: logoResponse[1],
-                medium: logoResponse[2],
-                large: logoResponse[3],
-              }
-            : deleteShopLogo?.large
-            ? {}
-            : newShopLogoVariants,
-        shop_cover_image:
-          backgroundResponse?.length > 0
-            ? {
-                small: backgroundResponse[0],
-                medium: backgroundResponse[1],
-                large: backgroundResponse[2],
-              }
-            : deleteShopBackground?.large
-            ? {}
-            : newShopCoverVariants,
+        shop_logo: generateSizes(
+          logoResponse,
+          deleteShopLogo,
+          newShopLogoVariants,
+          'logo',
+        ),
+        shop_cover_image: generateSizes(
+          backgroundResponse,
+          deleteShopBackground,
+          newShopCoverVariants,
+          'cover',
+        ),
         shop_images: combinedLinks?.filter(
           item => Object.keys(item).length > 0,
         ),
@@ -753,7 +755,6 @@ const ShopLayoutTab = ({
                   <TouchableOpacity
                     onPress={() => {
                       setShopLogo('');
-                      setUploadShopLogo('');
                       setDeleteShopLogo(vendorShopDetails?.shop_logo);
                     }}
                     style={styles.trashIconMain}>
@@ -798,7 +799,6 @@ const ShopLayoutTab = ({
                   <TouchableOpacity
                     onPress={() => {
                       setShopBackground('');
-                      setUploadShopBackground('');
                       setDeleteShopBackground(
                         vendorShopDetails?.shop_cover_image,
                       );
@@ -857,13 +857,6 @@ const ShopLayoutTab = ({
                                     (itm, idx) => idx !== index,
                                   ),
                                 );
-
-                                setEditableShopImages(
-                                  editableShopImages.filter(
-                                    (itm, idx) => idx !== index,
-                                  ),
-                                );
-
                                 let deleteShopImagesData = deleteShopImages;
 
                                 deleteShopImagesData[index] =

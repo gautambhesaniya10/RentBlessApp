@@ -1,7 +1,6 @@
 import RNFetchBlob from 'rn-fetch-blob';
 import {destinationBucketName, s3} from '../config/config';
 import {decode} from 'base64-arraybuffer';
-import {generateRandomNumberString} from '../utils';
 
 const generateFileType = fileType => {
   if (fileType === 'image/png') {

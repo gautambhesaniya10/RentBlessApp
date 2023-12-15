@@ -20,7 +20,7 @@ import CustomButton from '../../../../common/CustomButton';
 import {deleteProduct} from '../../../../graphql/mutations/products';
 import {useToast} from 'native-base';
 import TablePagination from '../../../../components/TablePagination';
-import {deleteObjectsInFolder, fileDelete} from '../../../../wasabi';
+import {deleteObjectsInFolder} from '../../../../wasabi';
 import {loadVendorShopDetailsStart} from '../../../../redux/vendorShopDetailsSlice/ShopDetailSlice';
 import FastImage from 'react-native-fast-image';
 
