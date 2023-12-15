@@ -314,11 +314,11 @@ const ProductDetail = () => {
               })
             }>
             {productDetails?.data?.product?.data?.branchInfo?.shop_info
-              .shop_logo ? (
+              .shop_logo?.small ? (
               <FastImage
                 source={{
                   uri: productDetails?.data?.product?.data?.branchInfo
-                    ?.shop_info.shop_logo,
+                    ?.shop_info.shop_logo?.small,
                   cache: FastImage.cacheControl.web,
                 }}
                 style={{width: 42, height: 42, borderRadius: 22}}
@@ -405,7 +405,7 @@ const ProductDetail = () => {
         <View style={{position: 'relative'}}>
           <View style={styles.carouselMain}>
             <View style={{position: 'relative'}}>
-              {productDetails?.data?.product?.data?.product_image ? (
+              {productDetails?.data?.product?.data?.product_image?.front ? (
                 <Carousel
                   data={TopCarouselData}
                   renderItem={CarouselRenderItem}
@@ -608,14 +608,32 @@ const ProductDetail = () => {
             </TouchableOpacity>
             <View style={{padding: 20}}>
               <View style={{flexDirection: 'row', gap: 15, marginBottom: 18}}>
-                <FastImage
-                  source={{
-                    uri: productDetails?.data?.product?.data?.branchInfo
-                      ?.shop_info?.shop_logo,
-                    cache: FastImage.cacheControl.web,
-                  }}
-                  style={{width: 50, height: 50, borderRadius: 25}}
-                />
+                {productDetails?.data?.product?.data?.branchInfo?.shop_info
+                  ?.shop_logo?.small ? (
+                  <FastImage
+                    source={{
+                      uri: productDetails?.data?.product?.data?.branchInfo
+                        ?.shop_info?.shop_logo?.small,
+                      cache: FastImage.cacheControl.web,
+                    }}
+                    style={{width: 50, height: 50, borderRadius: 25}}
+                  />
+                ) : (
+                  <Avatar.Text
+                    size={50}
+                    label={
+                      productDetails?.data?.product?.data?.branchInfo?.shop_info?.shop_name
+                        ?.split(' ')[0]
+                        .charAt(0)
+                        .toUpperCase() +
+                      productDetails?.data?.product?.data?.branchInfo?.shop_info?.shop_name
+                        ?.split(' ')[1]
+                        .charAt(0)
+                        .toUpperCase()
+                    }
+                    backgroundColor="#29977E"
+                  />
+                )}
                 <View>
                   <Text numberOfLines={1} style={styles.modelTitleName}>
                     {

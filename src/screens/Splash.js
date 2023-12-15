@@ -5,10 +5,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {whiteLogoSmall} from '../common/AllLiveImageLink';
 import DeviceInfo from 'react-native-device-info';
 import {getAppVersionLists} from '../graphql/queries/appVersionQueries';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {appVersionAction} from '../redux/AppVersionSlice/AppVersionSlice';
 import {checkInternetConnectivity} from '../config/CheckInternetConnectivity';
 import NoInternetScreen from './NoInternetScreen';
+import {changeAppliedCityFilters} from '../redux/CityFilterSlice/CityFilterSlice';
+import {loadAreaListsStart} from '../redux/AreaSlice/AreaListSlice';
+import {loadAllShopsListsStart} from '../redux/ShopSlice/ShopSlice';
+import {loadCategoriesStart} from '../redux/CategorySlice/CategoryListSlice';
+import {loadCityListsStart} from '../redux/CityListSlice/CityListSlice';
 
 const Splash = () => {
   const navigation = useNavigation();
@@ -18,6 +23,42 @@ const Splash = () => {
   const [netWarningShow, setNetWarningShow] = useState(false);
 
   const isConnected = checkInternetConnectivity();
+
+  const {appliedCityFilter} = useSelector(state => state.cityFiltersReducer);
+
+  const AreaListApiCall = async () => {
+    const storedLocation = await AsyncStorage.getItem('selected_city');
+    if (storedLocation) {
+      if (storedLocation !== appliedCityFilter?.city?.selectedValue) {
+        dispatch(
+          changeAppliedCityFilters({
+            key: 'city',
+            value: {
+              selectedValue: storedLocation,
+            },
+          }),
+        );
+      }
+      dispatch(loadAreaListsStart(storedLocation));
+    } else {
+      dispatch(loadAreaListsStart());
+    }
+  };
+
+  useEffect(() => {
+    dispatch(
+      loadAllShopsListsStart({city: appliedCityFilter?.city?.selectedValue}),
+    );
+  }, [appliedCityFilter?.city?.selectedValue, dispatch]);
+
+  useEffect(() => {
+    AreaListApiCall();
+  }, [appliedCityFilter?.city?.selectedValue, dispatch]);
+
+  useEffect(() => {
+    dispatch(loadCategoriesStart());
+    dispatch(loadCityListsStart());
+  }, [dispatch]);
 
   const retrieveLocalData = async () => {
     if (isConnected) {
@@ -48,7 +89,7 @@ const Splash = () => {
             dispatch(appVersionAction({...data, versionModelVisible: false}));
             navigation.navigate('CustomerMain', {data: loginAccessToken});
           }
-        }, 1000);
+        }, 1500);
       }
     } else {
       setTimeout(() => {

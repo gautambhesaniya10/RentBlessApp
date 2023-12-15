@@ -97,11 +97,11 @@ const Branches = () => {
             onPress={() => navigation.goBack()}>
             <Icon name="angle-left" size={24} color="white" />
           </TouchableOpacity>
-          {shopDetails?.shop_logo ? (
+          {shopDetails?.shop_logo?.small ? (
             <FastImage
               style={{width: 45, height: 45, borderRadius: 24}}
               source={{
-                uri: shopDetails?.shop_logo,
+                uri: shopDetails?.shop_logo?.small,
                 cache: FastImage.cacheControl.web,
               }}
               resizeMode="cover"
