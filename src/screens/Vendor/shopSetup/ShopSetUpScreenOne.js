@@ -164,21 +164,21 @@ const ShopSetUpScreenOne = ({control, errors, individual, hours, setHours}) => {
                     mode="outlined"
                     control={control}
                     name="shop_email"
-                    rules={{
-                      required: 'Shop Email is required *',
-                      pattern: {
-                        value:
-                          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                        message: 'Please enter a valid email',
-                      },
-                    }}
+                    // rules={{
+                    //   required: 'Shop Email is required *',
+                    //   pattern: {
+                    //     value:
+                    //       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                    //     message: 'Please enter a valid email',
+                    //   },
+                    // }}
                     activeOutlineColor="#29977E"
                   />
-                  {errors?.shop_email && (
+                  {/* {errors?.shop_email && (
                     <Text style={{color: 'red'}}>
                       {errors?.shop_email?.message}
                     </Text>
-                  )}
+                  )} */}
                 </View>
                 <View style={{marginBottom: 15}}>
                   <CustomTextInput
