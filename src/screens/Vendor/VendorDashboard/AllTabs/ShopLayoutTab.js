@@ -324,44 +324,6 @@ const ShopLayoutTab = ({
     });
   };
 
-  // const resizeShopImages = async (source, index) => {
-  //   try {
-  //     const resizedImage1 = await ImageResizer.createResizedImage(
-  //       source.uri,
-  //       Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
-  //       Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
-  //       'JPEG',
-  //       100,
-  //     );
-  //     const resizedImage2 = await ImageResizer.createResizedImage(
-  //       source.uri,
-  //       Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
-  //       Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
-  //       'JPEG',
-  //       100,
-  //     );
-
-  //     const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
-  //     const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
-
-  //     const newImageFile = [...resizeShopImagesFile];
-  //     if (index === 0) {
-  //       newImageFile[0] = img1;
-  //       newImageFile[1] = img2;
-  //     } else if (index === 1) {
-  //       newImageFile[2] = img1;
-  //       newImageFile[3] = img2;
-  //     } else if (index === 2) {
-  //       newImageFile[4] = img1;
-  //       newImageFile[5] = img2;
-  //     }
-
-  //     setResizeShopImagesFile(newImageFile);
-  //   } catch (error) {
-  //     console.log('Image resizing error:', error);
-  //   }
-  // };
-
   const resizeShopImages = async (source, index) => {
     try {
       const imageVariants = [
@@ -755,6 +717,7 @@ const ShopLayoutTab = ({
                   <TouchableOpacity
                     onPress={() => {
                       setShopLogo('');
+                      setResizeShopLogoFile([]);
                       setDeleteShopLogo(vendorShopDetails?.shop_logo);
                     }}
                     style={styles.trashIconMain}>
@@ -799,6 +762,7 @@ const ShopLayoutTab = ({
                   <TouchableOpacity
                     onPress={() => {
                       setShopBackground('');
+                      setResizeShopCoverImageFile([]);
                       setDeleteShopBackground(
                         vendorShopDetails?.shop_cover_image,
                       );
@@ -860,7 +824,7 @@ const ShopLayoutTab = ({
                                 let deleteShopImagesData = deleteShopImages;
 
                                 deleteShopImagesData[index] =
-                                  shopImagesWasabiUrl[index]?.links;
+                                  vendorShopDetails?.shop_images[index]?.links;
                                 setDeleteShopImages(() => [
                                   ...deleteShopImagesData,
                                 ]);
@@ -876,6 +840,23 @@ const ShopLayoutTab = ({
                                 let shopImagesData = shopImages;
                                 shopImagesData[index] = undefined;
                                 setShopImages(() => [...shopImagesData]);
+
+                                let resizeShopImagesData = [
+                                  ...resizeShopImagesFile,
+                                ];
+                                if (resizeShopImagesFile?.length > 0) {
+                                  if (index === 0) {
+                                    resizeShopImagesData[0] = undefined;
+                                    resizeShopImagesData[1] = undefined;
+                                  } else if (index === 1) {
+                                    resizeShopImagesData[2] = undefined;
+                                    resizeShopImagesData[3] = undefined;
+                                  } else if (index === 2) {
+                                    resizeShopImagesData[4] = undefined;
+                                    resizeShopImagesData[5] = undefined;
+                                  }
+                                  setResizeShopImagesFile(resizeShopImagesData);
+                                }
                               }}
                               style={[styles.trashIconMain]}>
                               <Icon name="trash" size={16} color="white" />

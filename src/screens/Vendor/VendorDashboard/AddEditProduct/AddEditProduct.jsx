@@ -209,46 +209,41 @@ const AddEditProduct = () => {
 
   const resizeImage = async (source, index) => {
     try {
-      const resizedImage1 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_PRODUCT_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_PRODUCT_SMALL_VARIANT),
-        'JPEG',
-        100,
-      );
-      const resizedImage2 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT),
-        'JPEG',
-        100,
-      );
-      const resizedImage3 = await ImageResizer.createResizedImage(
-        source.uri,
-        Number(NEXT_PUBLIC_PRODUCT_LARGE_VARIANT),
-        Number(NEXT_PUBLIC_PRODUCT_LARGE_VARIANT),
-        'JPEG',
-        100,
-      );
+      const imageVariants = [
+        {
+          size: Number(NEXT_PUBLIC_PRODUCT_SMALL_VARIANT),
+          type: 'small',
+        },
+        {
+          size: Number(NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT),
+          type: 'medium',
+        },
+        {
+          size: Number(NEXT_PUBLIC_PRODUCT_LARGE_VARIANT),
+          type: 'large',
+        },
+      ];
 
-      const img1 = {...resizedImage1, type: 'image/jpeg', imageSize: 'small'};
-      const img2 = {...resizedImage2, type: 'image/jpeg', imageSize: 'medium'};
-      const img3 = {...resizedImage3, type: 'image/jpeg', imageSize: 'large'};
+      const resizedImages = await Promise.all(
+        imageVariants.map(async variant => {
+          const resizedImage = await ImageResizer.createResizedImage(
+            source.uri,
+            variant.size,
+            variant.size,
+            'JPEG',
+            100,
+          );
+          return {...resizedImage, type: 'image/jpeg', imageSize: variant.type};
+        }),
+      );
 
       const newImageFile = [...resizeAllImagesFile];
-      if (index === 0) {
-        newImageFile[0] = img1;
-        newImageFile[1] = img2;
-        newImageFile[2] = img3;
-      } else if (index === 1) {
-        newImageFile[3] = img1;
-        newImageFile[4] = img2;
-        newImageFile[5] = img3;
-      } else if (index === 2) {
-        newImageFile[6] = img1;
-        newImageFile[7] = img2;
-        newImageFile[8] = img3;
-      }
+
+      const startIndex = index * imageVariants.length;
+
+      resizedImages.forEach((img, i) => {
+        newImageFile[startIndex + i] = img;
+      });
 
       setResizeAllImagesFile(newImageFile);
     } catch (error) {
