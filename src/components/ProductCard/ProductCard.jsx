@@ -117,7 +117,7 @@ const ProductCard = ({product, landingPageCardWith}) => {
             <View style={{height: 210, width: '100%'}}>
               <FastImage
                 source={{
-                  uri: product?.product_image?.front?.medium,
+                  uri: product?.product_image?.front?.large,
                   // cache: FastImage.cacheControl.web,
                 }}
                 style={{
@@ -160,10 +160,10 @@ const ProductCard = ({product, landingPageCardWith}) => {
             })
           }>
           <View style={styles.shopMain}>
-            {product?.branchInfo?.shop_info?.shop_logo?.extraSmall ? (
+            {product?.branchInfo?.shop_info?.shop_logo?.medium ? (
               <FastImage
                 source={{
-                  uri: product?.branchInfo?.shop_info?.shop_logo?.extraSmall,
+                  uri: product?.branchInfo?.shop_info?.shop_logo?.medium,
                   // cache: FastImage.cacheControl.web,
                 }}
                 style={{width: 25, height: 25, borderRadius: 12}}

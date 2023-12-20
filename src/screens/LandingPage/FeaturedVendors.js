@@ -64,7 +64,7 @@ const FeaturedVendors = () => {
               <TouchableOpacity
                 disabled
                 onPress={() => setShopImagesModelShow(!ShopImagesModelShow)}>
-                {shop?.shop_images[0]?.links?.medium ? (
+                {shop?.shop_images[0]?.links?.large ? (
                   <FastImage
                     style={{
                       height: 120,
@@ -74,7 +74,7 @@ const FeaturedVendors = () => {
                       objectFit: 'fill',
                     }}
                     source={{
-                      uri: shop?.shop_images[0]?.links?.medium,
+                      uri: shop?.shop_images[0]?.links?.large,
                       cache: FastImage.cacheControl.web,
                     }}
                   />
@@ -118,10 +118,10 @@ const FeaturedVendors = () => {
                   bottom: 0,
                   width: '100%',
                 }}>
-                {shop?.shop_logo?.small ? (
+                {shop?.shop_logo?.medium ? (
                   <FastImage
                     source={{
-                      uri: shop?.shop_logo?.small,
+                      uri: shop?.shop_logo?.medium,
                       cache: FastImage.cacheControl.web,
                     }}
                     style={{

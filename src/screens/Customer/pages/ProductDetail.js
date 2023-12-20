@@ -206,15 +206,15 @@ const ProductDetail = () => {
 
   const TopCarouselData = [
     {
-      image: productDetails?.data?.product?.data?.product_image?.front?.medium,
+      image: productDetails?.data?.product?.data?.product_image?.front?.large,
       type: 'image',
     },
     {
-      image: productDetails?.data?.product?.data?.product_image?.back?.medium,
+      image: productDetails?.data?.product?.data?.product_image?.back?.large,
       type: 'image',
     },
     {
-      image: productDetails?.data?.product?.data?.product_image?.side?.medium,
+      image: productDetails?.data?.product?.data?.product_image?.side?.large,
       type: 'image',
     },
   ];
