@@ -352,8 +352,18 @@ const ProductDeleteModel = ({
           <View style={styles.modalView}>
             <Text style={styles.modalText}> Confirmation Modal</Text>
             <Text style={styles.sureText}>
-              Are you sure delete this product{' '}
-              <Text style={{fontWeight: '600'}}>{deleteProductId}</Text> ?
+              Are you sure delete this product ?{' '}
+              <Text style={{fontWeight: '600', color: 'black'}}>
+                {deleteProductId}
+              </Text>{' '}
+              ?
+            </Text>
+            <Text style={styles.warningText}>
+              Warning :{' '}
+              <Text style={{fontWeight: '400', color: 'black'}}>
+                Your available products count will not be increased after
+                deleting the product.
+              </Text>{' '}
             </Text>
             <View style={styles.buttonMain}>
               <View style={{width: 80}}>
@@ -423,6 +433,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'black',
     fontSize: 16,
+  },
+  warningText: {
+    marginBottom: 15,
+    textAlign: 'center',
+    color: 'red',
+    fontSize: 16,
+    fontWeight: '600',
   },
   buttonMain: {
     flexDirection: 'row',
