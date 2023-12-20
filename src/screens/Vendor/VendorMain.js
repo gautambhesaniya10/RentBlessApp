@@ -7,6 +7,7 @@ import NoInternetScreen from '../NoInternetScreen';
 import {useDispatch, useSelector} from 'react-redux';
 import {ActivityIndicator} from 'react-native-paper';
 import {loadUserProfileStart} from '../../redux/LoginUserProfileSlice/userSlice';
+import {loadImageVariantsStart} from '../../redux/ImageVariantsSlice/ImageVariantsSlice';
 
 const VendorMain = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,12 @@ const VendorMain = () => {
   useEffect(() => {
     dispatch(loadUserProfileStart());
   }, []);
+
+  useEffect(() => {
+    if (userProfile?.userCreatedShopId) {
+      dispatch(loadImageVariantsStart());
+    }
+  }, [userProfile]);
 
   return checkInternetStatus ? (
     userProfile?.userHaveAnyShop ? (

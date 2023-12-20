@@ -7,17 +7,7 @@ import Video from 'react-native-video';
 import {useToast} from 'native-base';
 import {isFileOfType} from '../../../utils';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT} from '@env';
-
-import {NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT} from '@env';
-
-import {NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT} from '@env';
+import {useSelector} from 'react-redux';
 
 const ShopSetUpScreenTwo = ({
   setUploadShopVideo,
@@ -33,6 +23,8 @@ const ShopSetUpScreenTwo = ({
   const ShopImgsError = shopImages?.filter(item => item !== undefined);
   const [shopVideo, setShopVideo] = useState('');
   const [error, setError] = useState({});
+
+  const {imagesVariantData} = useSelector(state => state?.imageVariants);
 
   useEffect(() => {
     if (ShopImgsError?.length === 3) {
@@ -89,29 +81,33 @@ const ShopSetUpScreenTwo = ({
     try {
       const resizedImage1 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
+        Number(
+          imagesVariantData?.imageVariants?.shop_logo_variants?.extraSmall,
+        ),
+        Number(
+          imagesVariantData?.imageVariants?.shop_logo_variants?.extraSmall,
+        ),
         'JPEG',
         100,
       );
       const resizedImage2 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.small),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.small),
         'JPEG',
         100,
       );
       const resizedImage3 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.medium),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.medium),
         'JPEG',
         100,
       );
       const resizedImage4 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.large),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.large),
         'JPEG',
         100,
       );
@@ -175,22 +171,22 @@ const ShopSetUpScreenTwo = ({
     try {
       const resizedImage1 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.small),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.small),
         'JPEG',
         100,
       );
       const resizedImage2 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.medium),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.medium),
         'JPEG',
         100,
       );
       const resizedImage3 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.large),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.large),
         'JPEG',
         100,
       );
@@ -251,11 +247,15 @@ const ShopSetUpScreenTwo = ({
     try {
       const imageVariants = [
         {
-          size: Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.shop_image_variants?.small,
+          ),
           type: 'small',
         },
         {
-          size: Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.shop_image_variants?.medium,
+          ),
           type: 'medium',
         },
       ];

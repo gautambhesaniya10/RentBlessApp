@@ -30,9 +30,6 @@ import {
 import {loadProductsStart} from '../../../../redux/ProductSlice/ProductSlice';
 import {colorsList} from '../../../../common/Customer/ColorList';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {NEXT_PUBLIC_PRODUCT_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT} from '@env';
-import {NEXT_PUBLIC_PRODUCT_LARGE_VARIANT} from '@env';
 
 const AddEditProduct = () => {
   const toast = useToast();
@@ -40,6 +37,8 @@ const AddEditProduct = () => {
   const navigation = useNavigation();
   const router = useRoute();
   const editableProductData = router?.params?.state?.editableProductData;
+
+  const {imagesVariantData} = useSelector(state => state?.imageVariants);
 
   const {
     handleSubmit,
@@ -211,15 +210,21 @@ const AddEditProduct = () => {
     try {
       const imageVariants = [
         {
-          size: Number(NEXT_PUBLIC_PRODUCT_SMALL_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.product_image_variants?.small,
+          ),
           type: 'small',
         },
         {
-          size: Number(NEXT_PUBLIC_PRODUCT_MEDIUM_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.product_image_variants?.medium,
+          ),
           type: 'medium',
         },
         {
-          size: Number(NEXT_PUBLIC_PRODUCT_LARGE_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.product_image_variants?.large,
+          ),
           type: 'large',
         },
       ];
@@ -679,10 +684,10 @@ const AddEditProduct = () => {
         }).then(
           res => {
             console.log('res:::', res);
+            handleProductListingModalClose();
             setLoading(false);
             dispatch(loadVendorShopDetailsStart(vendorShopDetails?.id));
             getAllProducts();
-            handleProductListingModalClose();
             toast.show({
               title: res.data.createProduct.message,
               placement: 'top',
@@ -708,10 +713,10 @@ const AddEditProduct = () => {
   };
 
   const handleProductListingModalClose = () => {
-    reset();
-    setProductType();
-
     navigation.goBack();
+    // reset();
+    setProductType('');
+
     setProductVideo();
     // setUploadProductImages([]);
     setUploadProductVideo();

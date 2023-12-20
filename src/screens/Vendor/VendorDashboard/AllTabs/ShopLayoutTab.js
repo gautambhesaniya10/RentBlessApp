@@ -11,17 +11,6 @@ import {deleteObjectsInFolder, fileUpload} from '../../../../wasabi';
 import FastImage from 'react-native-fast-image';
 import {generateRandomNumberString, isFileOfType} from '../../../../utils';
 import ImageResizer from '@bam.tech/react-native-image-resizer';
-import {NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT} from '@env';
-
-import {NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT} from '@env';
-
-import {NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT} from '@env';
-import {NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT} from '@env';
 import {useSelector} from 'react-redux';
 
 const ShopLayoutTab = ({
@@ -49,6 +38,7 @@ const ShopLayoutTab = ({
 
   const [shopLayoutLoading, setShopLayoutLoading] = useState(false);
   const {userProfile} = useSelector(state => state?.user);
+  const {imagesVariantData} = useSelector(state => state?.imageVariants);
 
   // const srcToFile = async (src, fileName, mimeType) => {
   //   const response = await RNFetchBlob.fetch('GET', src);
@@ -142,29 +132,33 @@ const ShopLayoutTab = ({
     try {
       const resizedImage1 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_EXTRA_SMALL_VARIANT),
+        Number(
+          imagesVariantData?.imageVariants?.shop_logo_variants?.extraSmall,
+        ),
+        Number(
+          imagesVariantData?.imageVariants?.shop_logo_variants?.extraSmall,
+        ),
         'JPEG',
         100,
       );
       const resizedImage2 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_SMALL_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.small),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.small),
         'JPEG',
         100,
       );
       const resizedImage3 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_MEDIUM_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.medium),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.medium),
         'JPEG',
         100,
       );
       const resizedImage4 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_LOGO_LARGE_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.large),
+        Number(imagesVariantData?.imageVariants?.shop_logo_variants?.large),
         'JPEG',
         100,
       );
@@ -229,22 +223,22 @@ const ShopLayoutTab = ({
     try {
       const resizedImage1 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_COVER_SMALL_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.small),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.small),
         'JPEG',
         100,
       );
       const resizedImage2 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_COVER_MEDIUM_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.medium),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.medium),
         'JPEG',
         100,
       );
       const resizedImage3 = await ImageResizer.createResizedImage(
         source.uri,
-        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
-        Number(NEXT_PUBLIC_SHOP_COVER_LARGE_VARIANT),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.large),
+        Number(imagesVariantData?.imageVariants?.shop_cover_variants?.large),
         'JPEG',
         100,
       );
@@ -328,11 +322,15 @@ const ShopLayoutTab = ({
     try {
       const imageVariants = [
         {
-          size: Number(NEXT_PUBLIC_SHOP_IMAGES_SMALL_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.shop_image_variants?.small,
+          ),
           type: 'small',
         },
         {
-          size: Number(NEXT_PUBLIC_SHOP_IMAGES_MEDIUM_VARIANT),
+          size: Number(
+            imagesVariantData?.imageVariants?.shop_image_variants?.medium,
+          ),
           type: 'medium',
         },
       ];

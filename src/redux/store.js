@@ -13,6 +13,7 @@ import ShopProductFilterSlice from './ShopProductFilter/ShopProductFilterSlice';
 import ShopProductSlice from './ShopProductSlice/ShopProductSlice';
 import CityListSlice from './CityListSlice/CityListSlice';
 import CityFilterSlice from './CityFilterSlice/CityFilterSlice';
+import ImageVariantsSlice from './ImageVariantsSlice/ImageVariantsSlice';
 
 const middleware = getDefaultMiddleware({
   serializableCheck: false, // Disable serializable state check
@@ -34,8 +35,9 @@ const store = configureStore({
     shopConfigurations: ShopConfigurationsSlice,
     cityLists: CityListSlice,
     cityFiltersReducer: CityFilterSlice,
+    imageVariants: ImageVariantsSlice,
   },
-  middleware
+  middleware,
 });
 
 export default store;
