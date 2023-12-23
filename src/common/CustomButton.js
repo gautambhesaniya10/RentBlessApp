@@ -27,7 +27,7 @@ const CustomButton = ({
       borderWidth: 1,
       borderColor: borderColor,
       display: 'flex',
-      gap: 10,
+      gap: 5,
       flexDirection: 'row',
     },
     loginBtn: {

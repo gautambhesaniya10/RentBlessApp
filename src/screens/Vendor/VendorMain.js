@@ -19,9 +19,7 @@ const VendorMain = () => {
   }, []);
 
   useEffect(() => {
-    if (userProfile?.userCreatedShopId) {
-      dispatch(loadImageVariantsStart());
-    }
+    dispatch(loadImageVariantsStart());
   }, [userProfile]);
 
   return checkInternetStatus ? (

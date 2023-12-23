@@ -385,13 +385,15 @@ const ShopSetUp = () => {
                 display: 'flex',
                 flexDirection: 'row',
                 width: '100%',
-                gap: 20,
+                gap: 10,
                 marginTop: 24,
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <View style={{width: '35%'}}>
+              <View style={{width: '40%'}}>
                 <CustomButton
+                  icon={true}
+                  iconName="building-o"
                   name="Shop"
                   color={selectedOption === 'Shop' ? 'white' : 'black'}
                   backgroundColor={
@@ -403,8 +405,10 @@ const ShopSetUp = () => {
                   onPress={() => handleClickIndividual('Shop', false)}
                 />
               </View>
-              <View style={{width: '35%'}}>
+              <View style={{width: '40%'}}>
                 <CustomButton
+                  icon={true}
+                  iconName="user-o"
                   name="Single Person"
                   color={selectedOption === 'Individual' ? 'white' : 'black'}
                   backgroundColor={
@@ -558,15 +562,14 @@ const styles = StyleSheet.create({
     width: 220,
   },
   imgOverText: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: '600',
     color: '#29977E',
     fontFamily: FontStyle,
-    width: 150,
     alignSelf: 'center',
   },
   imgOverTextInner: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: '300',
     color: 'white',
     fontFamily: FontStyle,
@@ -587,11 +590,11 @@ const styles = StyleSheet.create({
   },
   labelText: {
     textAlign: 'center',
-    fontSize: 13,
+    fontSize: 15,
     color: 'black', // Set the label color as needed
     marginBottom: 10,
   },
   currentLabel: {
-    fontWeight: 'bold', // Highlight the current label if needed
+    fontWeight: '900', // Highlight the current label if needed
   },
 });
