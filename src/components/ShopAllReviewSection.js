@@ -115,8 +115,8 @@ const ShopAllReviewSection = ({shopReviews, viewAllBtn, shopDetails}) => {
                 <Avatar.Text
                   size={50}
                   label={
-                    review?.user_name?.split(' ')[0].charAt(0).toUpperCase() +
-                    review?.user_name?.split(' ')[1].charAt(0).toUpperCase()
+                    review?.user_name?.split(' ')[0]?.charAt(0)?.toUpperCase() +
+                    review?.user_name?.split(' ')[1]?.charAt(0)?.toUpperCase()
                   }
                   backgroundColor="#29977E"
                 />

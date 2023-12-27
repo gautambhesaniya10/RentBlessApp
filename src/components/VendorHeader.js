@@ -32,7 +32,7 @@ const VendorHeader = () => {
 
   const logoName = `${useProfileData?.first_name
     ?.charAt(0)
-    .toUpperCase()}${useProfileData?.last_name?.charAt(0).toUpperCase()}`;
+    .toUpperCase()}${useProfileData?.last_name?.charAt(0)?.toUpperCase()}`;
 
   const clearGoogleSignInCaches = async () => {
     await GoogleSignin.signOut();

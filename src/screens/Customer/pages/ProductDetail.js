@@ -622,12 +622,12 @@ const ProductDetail = () => {
                     label={
                       productDetails?.data?.product?.data?.branchInfo?.shop_info?.shop_name
                         ?.split(' ')[0]
-                        .charAt(0)
-                        .toUpperCase() +
+                        ?.charAt(0)
+                        ?.toUpperCase() +
                       productDetails?.data?.product?.data?.branchInfo?.shop_info?.shop_name
                         ?.split(' ')[1]
-                        .charAt(0)
-                        .toUpperCase()
+                        ?.charAt(0)
+                        ?.toUpperCase()
                     }
                     backgroundColor="#29977E"
                   />
@@ -655,12 +655,12 @@ const ProductDetail = () => {
                   label={
                     productDetails?.data?.product?.data?.branchInfo?.manager_name
                       ?.split(' ')[0]
-                      .charAt(0)
-                      .toUpperCase() +
+                      ?.charAt(0)
+                      ?.toUpperCase() +
                     productDetails?.data?.product?.data?.branchInfo?.manager_name
                       ?.split(' ')[1]
-                      .charAt(0)
-                      .toUpperCase()
+                      ?.charAt(0)
+                      ?.toUpperCase()
                   }
                   backgroundColor="#29977E"
                 />

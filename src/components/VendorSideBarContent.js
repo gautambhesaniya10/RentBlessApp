@@ -13,7 +13,7 @@ const VendorSideBarContent = ({vendorShopDetails}) => {
   const {userProfile} = useSelector(state => state?.user);
   const logoName = `${userProfile?.first_name
     ?.charAt(0)
-    .toUpperCase()}${userProfile?.last_name?.charAt(0).toUpperCase()}`;
+    .toUpperCase()}${userProfile?.last_name?.charAt(0)?.toUpperCase()}`;
 
   return (
     <View style={styles.sideMainContainer}>
@@ -44,7 +44,7 @@ const VendorSideBarContent = ({vendorShopDetails}) => {
         ) : (
           <Avatar.Text
             size={120}
-            label={vendorShopDetails?.shop_name?.charAt(0).toUpperCase()}
+            label={vendorShopDetails?.shop_name?.charAt(0)?.toUpperCase()}
             backgroundColor="#29977E"
           />
         )}
